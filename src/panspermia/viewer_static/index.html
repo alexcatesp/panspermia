@@ -87,9 +87,11 @@
       <label><input type="checkbox" id="showRes" checked> comida (algas)</label>
       <label><input type="checkbox" id="showSig"> señales</label>
       <label><input type="checkbox" id="showAct" checked> comer / morder</label>
+      <label><input type="checkbox" id="showChem" checked> química (toxina · nutriente · feromona)</label>
       <div class="legend">
         <span style="--c:#ff6b5a">mordiendo (cuña) · mordido (anillo)</span>
-        <span style="--c:#8be38f">comiendo (punto)</span>
+        <span style="--c:#8be38f">comiendo (punto) · <b style="color:#ffd166">alga tóxica</b></span>
+        <span style="--c:#c77dff">emitiendo toxina (anillo)</span>
         <span style="--c:#ffffff">seleccionado</span>
       </div>
     </div>
@@ -176,6 +178,16 @@ function draw() {
       const v = A.resources[base + x * RY + y] / 255; const p = 4 * (y * RX + x);
       img.data[p] = 4 + 30 * v; img.data[p + 1] = 18 + 120 * v; img.data[p + 2] = 24 + 40 * v; img.data[p + 3] = 255;
     }
+    if (A.chem && $("showChem").checked) {
+      const cbase = ri * 3 * RX * RY, plane = RX * RY;
+      for (let x = 0; x < RX; x++) for (let y = 0; y < RY; y++) {
+        const q = x * RY + y, p = 4 * (y * RX + x);
+        const nut = A.chem[cbase + q] / 255, tox = A.chem[cbase + plane + q] / 255, phe = A.chem[cbase + 2 * plane + q] / 255;
+        img.data[p] = Math.min(255, img.data[p] + 230 * tox + 200 * nut);
+        img.data[p + 1] = Math.min(255, img.data[p + 1] + 170 * nut);
+        img.data[p + 2] = Math.min(255, img.data[p + 2] + 220 * phe);
+      }
+    }
     resCtx.putImageData(img, 0, 0);
     ctx.imageSmoothingEnabled = true; ctx.drawImage(resCanvas, 0, 0, W, W);
   }
@@ -200,7 +212,8 @@ function draw() {
     if (showAct) {
       if (fl & 2) { ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, r * 2.2, ang - .45, ang + .45); ctx.closePath(); ctx.fillStyle = "rgba(255,107,90,.55)"; ctx.fill(); }
       if (fl & 4) { ctx.beginPath(); ctx.arc(x, y, r + 2, 0, 2 * Math.PI); ctx.strokeStyle = "#ff6b5a"; ctx.lineWidth = 1.5; ctx.stroke(); }
-      if (fl & 1) { ctx.beginPath(); ctx.arc(x, y, Math.max(1, r * .35), 0, 2 * Math.PI); ctx.fillStyle = "#8be38f"; ctx.fill(); }
+      if (fl & 1) { ctx.beginPath(); ctx.arc(x, y, Math.max(1, r * .35), 0, 2 * Math.PI); ctx.fillStyle = fl & 16 ? "#ffd166" : "#8be38f"; ctx.fill(); }
+      if (fl & 8) { ctx.beginPath(); ctx.arc(x, y, r + 4, 0, 2 * Math.PI); ctx.strokeStyle = "#c77dff"; ctx.lineWidth = 1; ctx.stroke(); }
     }
     if (S.sel !== null && A.uid[idx] === S.sel) selIdx = idx;
   }
@@ -265,7 +278,7 @@ $("fwd").onclick = () => stepBy(1);
 $("speed").onchange = (e) => { S.speed = parseFloat(e.target.value); };
 $("scrub").oninput = (e) => { S.frame = parseInt(e.target.value, 10); draw(); };
 $("rec").onchange = (e) => loadRecording(e.target.value);
-for (const id of ["color", "showRes", "showSig", "showAct"]) $(id).onchange = draw;
+for (const id of ["color", "showRes", "showSig", "showAct", "showChem"]) $(id).onchange = draw;
 document.addEventListener("keydown", (e) => {
   if (e.target.tagName === "SELECT") return;
   if (e.code === "Space") { e.preventDefault(); togglePlay(); }
@@ -284,6 +297,9 @@ const CHARTS = [
   { title: "Valor del aprendizaje", series: [["learning_value", "#5fd4c4"]], points: true, ref: 0 },
   { title: "Comunicación (bits)", series: [["comm_mi_bits", "#78beff"]] },
   { title: "Clados vivos", series: [["clades_alive", "#e79bd6"]] },
+  { title: "Emisión de sustancias", series: [["emit_nutrient", "#ffd166", "nutriente"], ["emit_toxin", "#ff6b5a", "toxina"], ["emit_pheromone", "#78beff", "feromona"]] },
+  { title: "Ingesta tóxica (fracción)", series: [["toxic_intake_frac", "#ffd166"]] },
+  { title: "Muertes por veneno", series: [["deaths_poison", "#c77dff"]] },
 ];
 
 async function loadStats() {

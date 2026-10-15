@@ -40,6 +40,8 @@ class Behavior:
     sig_hist: jax.Array        # f32[N, SIGNAL_BINS] histograma de la señal emitida
     disp: jax.Array            # f32[N, 2] desplazamiento acumulado (desenrollado en el toro)
     first_repro_age: jax.Array # int32[N], -1 si no se ha reproducido
+    emitted: jax.Array         # f32[N, N_CHEM] Σ sustancias emitidas
+    toxic_intake: jax.Array    # Σ alga tóxica ingerida
 
 
 @struct.dataclass
@@ -48,6 +50,8 @@ class IslandState:
     key: jax.Array          # PRNG de la isla (uint32[2])
     env: EnvParams
     resources: jax.Array    # f32[128, 128]
+    chem: jax.Array         # f32[N_CHEM, 128, 128]: nutriente, toxina, feromona
+    toxic_type: jax.Array   # int32: 0 = alga A tóxica, 1 = alga B tóxica
     alive: jax.Array        # bool[N]
     pos: jax.Array          # f32[N, 2]
     vel: jax.Array          # f32[N, 2]
@@ -76,6 +80,12 @@ class StepStats:
     attacks: jax.Array
     drained: jax.Array
     intake: jax.Array
+    deaths_poison: jax.Array
+    toxic_intake: jax.Array
+    nutrient_intake: jax.Array
+    toxin_damage: jax.Array
+    emitted: jax.Array       # f32[N_CHEM]
+    toxic_type: jax.Array
 
 
 def setup_determinism() -> None:
@@ -97,7 +107,8 @@ def _empty_behavior(n: int) -> Behavior:
     return Behavior(speed=z, turn=z, intake=z, attack=z, neighbors=z,
                     sig_hist=jnp.zeros((n, C.SIGNAL_BINS), jnp.float32),
                     disp=jnp.zeros((n, 2), jnp.float32),
-                    first_repro_age=jnp.full((n,), -1, jnp.int32))
+                    first_repro_age=jnp.full((n,), -1, jnp.int32),
+                    emitted=jnp.zeros((n, C.N_CHEM), jnp.float32), toxic_intake=z)
 
 
 def _place(state: IslandState, idx, genomes, pheno, pos, angle, energy, uid, parent_uid, clade):
@@ -143,6 +154,8 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         key=k[4],
         env=env,
         resources=world.init_resources(env, k[1]),
+        chem=jnp.zeros((C.N_CHEM, C.RESOURCE_GRID, C.RESOURCE_GRID), jnp.float32),
+        toxic_type=jnp.int32(0),
         alive=alive,
         pos=jax.random.uniform(k[2], (n_max, 2), maxval=C.WORLD_L),
         vel=jnp.zeros((n_max, 2)),
@@ -224,21 +237,26 @@ def _context(obs: jax.Array) -> jax.Array:
 
 
 def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool = True):
-    """sensores → cerebro → física → comer/atacar → energía → muertes → nacimientos → plasticidad → recursos."""
+    """sensores → cerebro → física → comer/atacar/emitir/toxina → energía → muertes → nacimientos
+    → plasticidad → recursos, química y estación."""
     key = jax.random.fold_in(state.key, state.step)
-    k_birth = jax.random.split(key, 2)[0]
+    k_birth, k_flip = jax.random.split(key, 2)
     alive0 = state.alive
 
     cand = world.neighbors(state.pos, alive0)
     obs, n_near = world.sense(state, cand)
     actions, h_new, pre, post = brain.step(state.w, state.h, obs, state.genome.hid_mask)
     pos, vel, angle, thrust = world.physics(state, actions, cand)
-    intake, resources = world.eat(state.resources, pos, alive0, actions)
+    toxic = world.toxic_cells(state.env, state.step, state.toxic_type)
+    gain, intake, toxic_in, nutrient, resources, chem = world.eat(
+        state.resources, state.chem, pos, alive0, actions, toxic)
     signal = jnp.where(alive0, actions[:, 4], 0.0)
     state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
                           signal=signal)
     atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
-    energy = world.energy_update(state, thrust, intake, atk_delta, attempt)
+    emit_cost, emitted, chem = world.emit(chem, pos, alive0, actions)
+    tox_dmg, chem, resources = world.toxin(chem, resources, pos, alive0, state.energy)
+    energy = world.energy_update(state, thrust, gain - emit_cost - tox_dmg, atk_delta, attempt)
 
     # Observación (no afecta a la dinámica): conducta acumulada y comunicación
     f = alive0.astype(jnp.float32)
@@ -247,9 +265,11 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     joint = sbin * C.CONTEXT_BINS + _context(obs)
     comm = jax.ops.segment_sum(f, joint, num_segments=C.SIGNAL_BINS * C.CONTEXT_BINS)
     flags = ((alive0 & (actions[:, 2] > 0)).astype(jnp.uint8) | (attempt.astype(jnp.uint8) << 1)
-             | ((drained > 0).astype(jnp.uint8) << 2))
+             | ((drained > 0).astype(jnp.uint8) << 2) | ((emitted[:, 1] > 0).astype(jnp.uint8) << 3)
+             | ((toxic_in > 0).astype(jnp.uint8) << 4))
     state = state.replace(
         resources=resources,
+        chem=chem,
         flags=flags,
         comm_hist=state.comm_hist + comm.reshape(C.SIGNAL_BINS, C.CONTEXT_BINS),
         behavior=bh.replace(
@@ -260,12 +280,15 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
             neighbors=bh.neighbors + f * n_near,
             sig_hist=bh.sig_hist + f[:, None] * jax.nn.one_hot(sbin, C.SIGNAL_BINS),
             disp=bh.disp + f[:, None] * vel * C.DT,
+            emitted=bh.emitted + emitted,
+            toxic_intake=bh.toxic_intake + toxic_in,
         ),
     )
 
     died = alive0 & (energy <= 0)
     by_attack = died & (drained > 0)
-    by_age = died & ~by_attack & (state.age >= C.SENESCENCE_START)
+    by_poison = died & ~by_attack & ((tox_dmg > 0) | (toxic_in > 0))
+    by_age = died & ~by_attack & ~by_poison & (state.age >= C.SENESCENCE_START)
     alive = alive0 & ~died
     state = state.replace(energy=jnp.where(alive, energy, 0.0), alive=alive,
                           age=jnp.where(alive, state.age + 1, 0))
@@ -285,17 +308,26 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     else:
         w = state.w
     resources = world.resources_step(state.resources, state.env, state.step)
-    state = state.replace(w=w, resources=resources, step=state.step + 1)
+    chem, resources = world.chem_step(state.chem, resources)
+    flip = jax.random.uniform(k_flip) < C.TOXIC_FLIP_PROB
+    state = state.replace(w=w, resources=resources, chem=chem, step=state.step + 1,
+                          toxic_type=jnp.where(flip, 1 - state.toxic_type, state.toxic_type))
 
     stats = StepStats(
         population=jnp.sum(state.alive).astype(jnp.int32),
         births=n_births,
-        deaths_starvation=jnp.sum(died & ~by_attack & ~by_age).astype(jnp.int32),
+        deaths_starvation=jnp.sum(died & ~by_attack & ~by_age & ~by_poison).astype(jnp.int32),
         deaths_age=jnp.sum(by_age).astype(jnp.int32),
         deaths_attack=jnp.sum(by_attack).astype(jnp.int32),
         attacks=jnp.sum(attempt).astype(jnp.int32),
         drained=jnp.sum(drained),
         intake=jnp.sum(intake),
+        deaths_poison=jnp.sum(by_poison).astype(jnp.int32),
+        toxic_intake=jnp.sum(toxic_in),
+        nutrient_intake=jnp.sum(nutrient),
+        toxin_damage=jnp.sum(tox_dmg),
+        emitted=jnp.sum(emitted, axis=0),
+        toxic_type=state.toxic_type,
     )
     return state, stats
 
