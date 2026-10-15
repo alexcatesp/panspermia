@@ -10,3 +10,6 @@ checkpoints/
 *.sqlite
 *.mp4
 node_keys/
+.playwright-mcp/
+*.png
+!docs/**/*.png
