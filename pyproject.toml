@@ -33,3 +33,10 @@ packages = ["src/panspermia"]
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint]
+# La validación de genomas lanza ValueError ante cualquier anomalía, también de tipo (spec §Red P2P).
+ignore = ["TRY004"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
