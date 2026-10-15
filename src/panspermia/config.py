@@ -92,11 +92,20 @@ C_BASAL = 0.5                # c0
 C_NEURON = 0.02              # cb por neurona oculta expresada
 C_MASS = 0.1                 # cs
 C_MOVE = 0.002               # cm
-C_ATTACK = 0.0               # ca (sin ataque en fase 0)
+C_ATTACK = 0.5               # ca, por unidad de fuerza de ataque y de tiempo
 EAT_RATE = 5.0               # ingesta máxima por unidad de tiempo
 
+# Ataque (fase 1): el atacante drena energía del agente más cercano en su frente
+ATTACK_DAMAGE = 20.0         # energía drenada por unidad de tiempo a fuerza 1
+ATTACK_REACH = 2.0           # distancia máxima entre superficies
+ATTACK_HALF_ANGLE_DEG = 45.0
+ATTACK_EFFICIENCY = 0.6      # fracción drenada que gana el atacante; el resto queda como carroña
+
+# Paredes (solo en entornos de prueba de capacidad; vacías en las islas)
+WALL_SAMPLES = 8             # muestras por rayo para detectar paredes
+
 # Recursos: crecimiento logístico con Kmax en manchas derivantes (suma de ondas planas toroidales)
-RESOURCE_R = 0.5
+RESOURCE_R = 1.0
 RESOURCE_SEED = 0.002        # aporte mínimo para que celdas agotadas rebroten
 K_MEAN = 4.0
 K_WAVES = 8
@@ -108,7 +117,7 @@ K_CONTRAST = 0.8
 BIOGEO_SPREAD = 0.1
 
 # Nacimientos: tope de nacimientos por paso para vectorizar mutate+develop en lote fijo
-MAX_BIRTHS_PER_STEP = 16
+MAX_BIRTHS_PER_STEP = 32
 DEVELOP_BATCH = 64
 
 # --- Isla ---
@@ -124,6 +133,39 @@ NEIGHBORS = (4, 8)
 NEIGHBOR_ROTATE_EVERY = 50
 MAX_IMMIGRANT_FRAC = 0.02
 
+# --- Métricas de la fase 1 (spec §Métricas) ---
+DESCRIPTOR_MIN_AGE = 100     # pasos de vida mínimos para calcular el descriptor conductual
+SIGNAL_BINS = 4              # discretización de la señal en [-1, 1]
+CONTEXT_BINS = 4             # nada / comida delante / pariente visto / no pariente visto
+KIN_THRESHOLD = 0.8          # parentesco >= umbral => "pariente"
+FOOD_AHEAD_THRESHOLD = 1.0   # recurso relativo del rayo central para "comida delante"
+CLADE_DEPTH = 50             # un clado nuevo cada 50 generaciones de linaje
+GENOME_DISTANCE_PAIRS = 256
+NOVELTY_K = 15
+NOVELTY_SAMPLE = 512         # descriptores por época para novedad y clustering
+NOVELTY_THRESHOLD = 0.15     # distancia k-NN mínima para entrar al archivo
+NOVELTY_MAX_ADD = 32         # altas máximas en el archivo por época
+CLUSTER_K_RANGE = (2, 6)
+SILHOUETTE_GROUPS = 0.3      # criterio de aceptación de la fase 1
+ACTIVITY_THRESHOLD = 100.0   # Bedau-Packard: agentes·época acumulados para "actividad nueva"
+
 # --- Salvaguardas (spec §Salvaguardas) ---
 CAPABILITY_TEST_EVERY = 100
-CAPABILITY_PAUSE_THRESHOLDS: dict[str, float] = {}  # definir antes de la fase 1
+# ADR-007. Umbrales conservadores: superar cualquiera pausa la isla hasta revisión humana.
+CAPABILITY_PAUSE_THRESHOLDS: dict[str, float] = {
+    "comm_mi_bits": 0.5,     # información mutua señal↔contexto (máx. 2 bits)
+    "ring_gain": 0.5,        # éxito en comida en anillo − éxito de genomas aleatorios
+    "maze_gain": 0.25,       # éxito en laberinto − éxito de genomas aleatorios
+}
+PROBE_AGENTS = 64            # agentes adultos muestreados por prueba
+PROBE_RING_STEPS = 500
+PROBE_MAZE_STEPS = 1000
+PROBE_SUCCESS_INTAKE = 1.0   # ingesta mínima para contar éxito
+PROBE_ENERGY = 100.0         # energía inicial en las pruebas (sin reproducción)
+PROBE_FOOD = 4.0             # recurso por celda de comida en las pruebas
+PROBE_RING_RADIUS = (120.0, 136.0)
+
+# --- Visor (spec §Persistencia: vídeo cada 50 épocas) ---
+RECORD_STRIDE = 2            # se guarda 1 de cada RECORD_STRIDE pasos de la época grabada
+RECORD_RES_STRIDE = 20       # campo de recursos cada RECORD_RES_STRIDE pasos
+RECORD_RES_GRID = 64         # campo de recursos submuestreado a 64 × 64

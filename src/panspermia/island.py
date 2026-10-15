@@ -18,12 +18,28 @@ from . import genome as G
 from .develop import Phenotype, develop, develop_batch
 from .world import EnvParams
 
+NO_PARENT = 2**32 - 1
+
 
 @struct.dataclass
 class Lineage:
     uid: jax.Array          # uint32[N], identificador de nacimiento dentro de la isla
     parent_uid: jax.Array   # uint32[N]
     birth_step: jax.Array   # int32[N]
+    clade: jax.Array        # uint32[N], uid del fundador del clado (nuevo cada CLADE_DEPTH generaciones)
+
+
+@struct.dataclass
+class Behavior:
+    """Acumuladores por agente desde su nacimiento para el descriptor conductual (solo observan)."""
+    speed: jax.Array           # Σ |v|
+    turn: jax.Array            # Σ |giro|
+    intake: jax.Array          # Σ ingesta
+    attack: jax.Array          # Σ intentos de ataque
+    neighbors: jax.Array       # Σ vecinos en alcance (agregación)
+    sig_hist: jax.Array        # f32[N, SIGNAL_BINS] histograma de la señal emitida
+    disp: jax.Array            # f32[N, 2] desplazamiento acumulado (desenrollado en el toro)
+    first_repro_age: jax.Array # int32[N], -1 si no se ha reproducido
 
 
 @struct.dataclass
@@ -44,6 +60,9 @@ class IslandState:
     w: jax.Array            # f32[N, 134, 69]
     h: jax.Array            # f32[N, 64]
     lineage: Lineage
+    behavior: Behavior
+    comm_hist: jax.Array    # f32[SIGNAL_BINS, CONTEXT_BINS], se reinicia en cada época
+    flags: jax.Array        # uint8[N]: 1 come · 2 ataca · 4 atacado (último paso; para el visor)
     next_uid: jax.Array     # uint32
 
 
@@ -53,6 +72,9 @@ class StepStats:
     births: jax.Array
     deaths_starvation: jax.Array
     deaths_age: jax.Array
+    deaths_attack: jax.Array
+    attacks: jax.Array
+    drained: jax.Array
     intake: jax.Array
 
 
@@ -70,12 +92,52 @@ def setup_determinism() -> None:
     jax.config.update("jax_default_matmul_precision", "highest")
 
 
+def _empty_behavior(n: int) -> Behavior:
+    z = jnp.zeros((n,), jnp.float32)
+    return Behavior(speed=z, turn=z, intake=z, attack=z, neighbors=z,
+                    sig_hist=jnp.zeros((n, C.SIGNAL_BINS), jnp.float32),
+                    disp=jnp.zeros((n, 2), jnp.float32),
+                    first_repro_age=jnp.full((n,), -1, jnp.int32))
+
+
+def _place(state: IslandState, idx, genomes, pheno, pos, angle, energy, uid, parent_uid, clade):
+    """Ocupa los slots `idx` (índice n = descartar) con agentes recién nacidos."""
+    b = idx.shape[0]
+    set_ = lambda arr, val: arr.at[idx].set(val, mode="drop")
+    fresh = _empty_behavior(b)
+    return state.replace(
+        alive=set_(state.alive, True),
+        pos=set_(state.pos, pos),
+        vel=set_(state.vel, 0.0),
+        angle=set_(state.angle, angle),
+        energy=set_(state.energy, energy),
+        age=set_(state.age, 0),
+        signal=set_(state.signal, 0.0),
+        genome=_scatter(state.genome, idx, genomes),
+        pheno=_scatter(state.pheno, idx, pheno),
+        w=set_(state.w, pheno.w0.astype(jnp.float32)),
+        h=set_(state.h, 0.0),
+        lineage=Lineage(
+            uid=set_(state.lineage.uid, uid),
+            parent_uid=set_(state.lineage.parent_uid, parent_uid),
+            birth_step=set_(state.lineage.birth_step, state.step),
+            clade=set_(state.lineage.clade, clade),
+        ),
+        behavior=_scatter(state.behavior, idx, fresh),
+    )
+
+
+def _scatter(tree, idx, new):
+    return jax.tree.map(lambda a, b: a.at[idx].set(b.astype(a.dtype), mode="drop"), tree, new)
+
+
 @functools.partial(jax.jit, static_argnames=("n_max", "n_init"))
 def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandState:
     k = jax.random.split(key, 5)
     genomes = jax.vmap(G.random_minimal)(jax.random.split(k[0], n_max))
     pheno = develop_batch(genomes)
     alive = jnp.arange(n_max) < n_init
+    uid = jnp.arange(n_max, dtype=jnp.uint32)
     return IslandState(
         step=jnp.int32(0),
         key=k[4],
@@ -92,11 +154,11 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         pheno=pheno,
         w=pheno.w0.astype(jnp.float32),
         h=jnp.zeros((n_max, C.N_HIDDEN_MAX)),
-        lineage=Lineage(
-            uid=jnp.arange(n_max, dtype=jnp.uint32),
-            parent_uid=jnp.full((n_max,), jnp.uint32(2**32 - 1)),
-            birth_step=jnp.zeros((n_max,), jnp.int32),
-        ),
+        lineage=Lineage(uid=uid, parent_uid=jnp.full((n_max,), jnp.uint32(NO_PARENT)),
+                        birth_step=jnp.zeros((n_max,), jnp.int32), clade=uid),
+        behavior=_empty_behavior(n_max),
+        comm_hist=jnp.zeros((C.SIGNAL_BINS, C.CONTEXT_BINS), jnp.float32),
+        flags=jnp.zeros((n_max,), jnp.uint8),
         next_uid=jnp.uint32(n_init),
     )
 
@@ -106,10 +168,6 @@ def init_island(seed: int, node_id: bytes, n_max: int = C.N_MAX, n_init: int = C
     if not 0 < n_init <= n_max:
         raise ValueError("se requiere 0 < n_init <= n_max")
     return _init(jax.random.PRNGKey(seed), world.make_env(node_id), n_max, n_init)
-
-
-def _scatter(tree, idx, new):
-    return jax.tree.map(lambda a, b: a.at[idx].set(b.astype(a.dtype), mode="drop"), tree, new)
 
 
 def _births(state: IslandState, key: jax.Array):
@@ -126,89 +184,128 @@ def _births(state: IslandState, key: jax.Array):
     n_births = jnp.sum(valid).astype(jnp.int32)
 
     def do(state: IslandState):
-        child_keys = jax.random.split(k[1], b)
         parent_g = jax.tree.map(lambda x: x[parents], state.genome)
-        child_g = jax.vmap(G.mutate)(parent_g, child_keys)
+        child_g = jax.vmap(G.mutate)(parent_g, jax.random.split(k[1], b))
         child_p = jax.vmap(develop)(child_g)
         e_child = jnp.where(valid, state.pheno.offspring_frac[parents] * state.energy[parents], 0.0)
         p_idx = jnp.where(valid, parents, n)
-        energy = state.energy.at[p_idx].add(-e_child, mode="drop")
         theta = jax.random.uniform(k[2], (b,), maxval=2 * math.pi)
         offset = 2 * state.pheno.radius[parents][:, None] * jnp.stack([jnp.cos(theta), jnp.sin(theta)], -1)
-        pos = (state.pos[parents] + offset) % C.WORLD_L
-        c_idx = jnp.where(valid, slots, n)
         uid = state.next_uid + jnp.arange(b, dtype=jnp.uint32)
-        set_ = lambda arr, val: arr.at[c_idx].set(val, mode="drop")
-        return state.replace(
-            alive=set_(state.alive, True),
-            pos=set_(state.pos, pos),
-            vel=set_(state.vel, 0.0),
-            angle=set_(state.angle, jax.random.uniform(k[3], (b,), maxval=2 * math.pi)),
-            energy=set_(energy, e_child),
-            age=set_(state.age, 0),
-            signal=set_(state.signal, 0.0),
-            genome=_scatter(state.genome, c_idx, child_g),
-            pheno=_scatter(state.pheno, c_idx, child_p),
-            w=set_(state.w, child_p.w0.astype(jnp.float32)),
-            h=set_(state.h, 0.0),
-            lineage=Lineage(
-                uid=set_(state.lineage.uid, uid),
-                parent_uid=set_(state.lineage.parent_uid, state.lineage.uid[parents]),
-                birth_step=set_(state.lineage.birth_step, state.step),
-            ),
-            next_uid=state.next_uid + n_births.astype(jnp.uint32),
-        )
+        new_clade = (child_g.generation % C.CLADE_DEPTH) == 0
+        clade = jnp.where(new_clade, uid, state.lineage.clade[parents])
+        first = state.behavior.first_repro_age
+        first = first.at[p_idx].set(jnp.where(first[parents] < 0, state.age[parents], first[parents]),
+                                    mode="drop")
+        state = state.replace(energy=state.energy.at[p_idx].add(-e_child, mode="drop"),
+                              behavior=state.behavior.replace(first_repro_age=first))
+        state = _place(state, jnp.where(valid, slots, n), child_g, child_p,
+                       (state.pos[parents] + offset) % C.WORLD_L,
+                       jax.random.uniform(k[3], (b,), maxval=2 * math.pi), e_child, uid,
+                       state.lineage.uid[parents], clade)
+        return state.replace(next_uid=state.next_uid + n_births.astype(jnp.uint32))
 
     newborn = jnp.zeros((n,), bool).at[jnp.where(valid, slots, n)].set(True, mode="drop")
     state = jax.lax.cond(n_births > 0, do, lambda s: s, state)
     return state, n_births, newborn
 
 
-def world_step(state: IslandState, _=None):
+def _signal_bin(signal: jax.Array) -> jax.Array:
+    return jnp.clip(jnp.floor((signal + 1) / 2 * C.SIGNAL_BINS), 0, C.SIGNAL_BINS - 1).astype(jnp.int32)
+
+
+def _context(obs: jax.Array) -> jax.Array:
+    """0 nada · 1 comida delante · 2 pariente visto · 3 no pariente visto."""
+    rays = obs[:, :C.N_RAYS * C.RAY_CHANNELS].reshape(-1, C.N_RAYS, C.RAY_CHANNELS)
+    kin = jnp.max(rays[..., 2], axis=1)
+    mid = C.N_RAYS // 2
+    food = jnp.mean(rays[:, mid - 1:mid + 1, 1], axis=1) >= C.FOOD_AHEAD_THRESHOLD
+    return jnp.where(kin >= C.KIN_THRESHOLD, 2, jnp.where(kin > 0, 3, jnp.where(food, 1, 0)))
+
+
+def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool = True):
     """sensores → cerebro → física → comer/atacar → energía → muertes → nacimientos → plasticidad → recursos."""
     key = jax.random.fold_in(state.key, state.step)
     k_birth = jax.random.split(key, 2)[0]
+    alive0 = state.alive
 
-    cand = world.neighbors(state.pos, state.alive)
-    obs = world.sense(state, cand)
+    cand = world.neighbors(state.pos, alive0)
+    obs, n_near = world.sense(state, cand)
     actions, h_new, pre, post = brain.step(state.w, state.h, obs, state.genome.hid_mask)
     pos, vel, angle, thrust = world.physics(state, actions, cand)
-    intake, resources = world.eat(state.resources, pos, state.alive, actions)
-    state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(state.alive[:, None], h_new, 0.0),
-                          signal=jnp.where(state.alive, actions[:, 4], 0.0), resources=resources)
-    energy = world.energy_update(state, thrust, intake)
+    intake, resources = world.eat(state.resources, pos, alive0, actions)
+    signal = jnp.where(alive0, actions[:, 4], 0.0)
+    state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
+                          signal=signal)
+    atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
+    energy = world.energy_update(state, thrust, intake, atk_delta, attempt)
 
-    died = state.alive & (energy <= 0)
-    old = state.age >= C.SENESCENCE_START
-    alive = state.alive & ~died
+    # Observación (no afecta a la dinámica): conducta acumulada y comunicación
+    f = alive0.astype(jnp.float32)
+    bh = state.behavior
+    sbin = _signal_bin(signal)
+    joint = sbin * C.CONTEXT_BINS + _context(obs)
+    comm = jax.ops.segment_sum(f, joint, num_segments=C.SIGNAL_BINS * C.CONTEXT_BINS)
+    flags = ((alive0 & (actions[:, 2] > 0)).astype(jnp.uint8) | (attempt.astype(jnp.uint8) << 1)
+             | ((drained > 0).astype(jnp.uint8) << 2))
+    state = state.replace(
+        resources=resources,
+        flags=flags,
+        comm_hist=state.comm_hist + comm.reshape(C.SIGNAL_BINS, C.CONTEXT_BINS),
+        behavior=bh.replace(
+            speed=bh.speed + f * jnp.linalg.norm(vel, axis=-1),
+            turn=bh.turn + f * jnp.abs(actions[:, 1]),
+            intake=bh.intake + intake,
+            attack=bh.attack + attempt.astype(jnp.float32),
+            neighbors=bh.neighbors + f * n_near,
+            sig_hist=bh.sig_hist + f[:, None] * jax.nn.one_hot(sbin, C.SIGNAL_BINS),
+            disp=bh.disp + f[:, None] * vel * C.DT,
+        ),
+    )
+
+    died = alive0 & (energy <= 0)
+    by_attack = died & (drained > 0)
+    by_age = died & ~by_attack & (state.age >= C.SENESCENCE_START)
+    alive = alive0 & ~died
     state = state.replace(energy=jnp.where(alive, energy, 0.0), alive=alive,
                           age=jnp.where(alive, state.age + 1, 0))
 
-    state, n_births, newborn = _births(state, k_birth)
+    if births:
+        state, n_births, newborn = _births(state, k_birth)
+    else:
+        n_births, newborn = jnp.int32(0), jnp.zeros_like(alive)
 
-    def plastic(w):
-        m = brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type)
-        m = jnp.where(state.alive & ~newborn, m, 0.0)
-        return brain.plasticity(state.pheno, w, pre, post, m)
+    if plastic:
+        def plastic_fn(w):
+            m = brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type)
+            m = jnp.where(state.alive & ~newborn, m, 0.0)
+            return brain.plasticity(state.pheno, w, pre, post, m)
 
-    w = jax.lax.cond(state.step % C.PLASTICITY_EVERY == 0, plastic, lambda w: w, state.w)
+        w = jax.lax.cond(state.step % C.PLASTICITY_EVERY == 0, plastic_fn, lambda w: w, state.w)
+    else:
+        w = state.w
     resources = world.resources_step(state.resources, state.env, state.step)
     state = state.replace(w=w, resources=resources, step=state.step + 1)
 
     stats = StepStats(
         population=jnp.sum(state.alive).astype(jnp.int32),
         births=n_births,
-        deaths_starvation=jnp.sum(died & ~old).astype(jnp.int32),
-        deaths_age=jnp.sum(died & old).astype(jnp.int32),
+        deaths_starvation=jnp.sum(died & ~by_attack & ~by_age).astype(jnp.int32),
+        deaths_age=jnp.sum(by_age).astype(jnp.int32),
+        deaths_attack=jnp.sum(by_attack).astype(jnp.int32),
+        attacks=jnp.sum(attempt).astype(jnp.int32),
+        drained=jnp.sum(drained),
         intake=jnp.sum(intake),
     )
     return state, stats
 
 
-@functools.partial(jax.jit, static_argnames=("k",), donate_argnums=(0,))
-def epoch(state: IslandState, k: int = C.EPOCH_STEPS):
-    """Ejecuta k pasos y devuelve (state, EpochStats)."""
-    state, per_step = jax.lax.scan(world_step, state, None, length=k)
+@functools.partial(jax.jit, static_argnames=("k", "plastic"), donate_argnums=(0,))
+def epoch(state: IslandState, k: int = C.EPOCH_STEPS, plastic: bool = True):
+    """Ejecuta k pasos y devuelve (state, EpochStats). `plastic=False` congela el aprendizaje."""
+    state = state.replace(comm_hist=jnp.zeros_like(state.comm_hist))
+    step = functools.partial(world_step, plastic=plastic)
+    state, per_step = jax.lax.scan(step, state, None, length=k)
     return state, metrics.epoch_stats(state, per_step)
 
 
@@ -220,27 +317,11 @@ def reinject(state: IslandState, count: int = C.N_MIN_REINJECT) -> IslandState:
     k = jax.random.split(key, 4)
     slots = jnp.nonzero(~state.alive, size=count, fill_value=n)[0]
     valid = slots < n
-    idx = jnp.where(valid, slots, n)
     g = jax.vmap(G.random_minimal)(jax.random.split(k[0], count))
-    p = develop_batch(g)
     uid = state.next_uid + jnp.arange(count, dtype=jnp.uint32)
-    set_ = lambda arr, val: arr.at[idx].set(val, mode="drop")
-    return state.replace(
-        alive=set_(state.alive, True),
-        pos=set_(state.pos, jax.random.uniform(k[1], (count, 2), maxval=C.WORLD_L)),
-        vel=set_(state.vel, 0.0),
-        angle=set_(state.angle, jax.random.uniform(k[2], (count,), maxval=2 * math.pi)),
-        energy=set_(state.energy, C.E_INIT),
-        age=set_(state.age, 0),
-        signal=set_(state.signal, 0.0),
-        genome=_scatter(state.genome, idx, g),
-        pheno=_scatter(state.pheno, idx, p),
-        w=set_(state.w, p.w0.astype(jnp.float32)),
-        h=set_(state.h, 0.0),
-        lineage=Lineage(
-            uid=set_(state.lineage.uid, uid),
-            parent_uid=set_(state.lineage.parent_uid, jnp.uint32(2**32 - 1)),
-            birth_step=set_(state.lineage.birth_step, state.step),
-        ),
-        next_uid=state.next_uid + jnp.sum(valid).astype(jnp.uint32),
-    )
+    state = _place(state, jnp.where(valid, slots, n), g, develop_batch(g),
+                   jax.random.uniform(k[1], (count, 2), maxval=C.WORLD_L),
+                   jax.random.uniform(k[2], (count,), maxval=2 * math.pi),
+                   jnp.full((count,), C.E_INIT, jnp.float32), uid,
+                   jnp.full((count,), jnp.uint32(NO_PARENT)), uid)
+    return state.replace(next_uid=state.next_uid + jnp.sum(valid).astype(jnp.uint32))

@@ -20,6 +20,8 @@
 | Ray, T. S. (1991). *An approach to the synthesis of life*. Artificial Life II, 371–408 | Tierra: programas autorreplicantes; aparecen parásitos e hiperparásitos | Capítulo, sin DOI † |
 | Lenski, R. E., Ofria, C., Pennock, R. T. y Adami, C. (2003). *The evolutionary origin of complex features*. Nature 423, 139–144 | Avida: una función lógica compleja (EQU) surge por pasos intermedios | 10.1038/nature01568 † |
 | Ofria, C. y Wilke, C. O. (2004). *Avida: a software platform for research in computational evolutionary biology*. Artificial Life 10(2), 191–229 | Plataforma Avida | 10.1162/106454604773563612 † |
+| Ray, T. S. (finales de los 90). *Network Tierra*: evolución distribuida en ordenadores de voluntarios en internet, con migración entre máquinas | Precedente directo de la red P2P de islas; buscaba diferenciación «multicelular». Verificar resultados y referencia exacta | Sin identificador † |
+| Maynard Smith, J. y Szathmáry, E. (1995). *The Major Transitions in Evolution*. Oxford University Press | Las grandes transiciones de la evolución en la Tierra | Libro, sin DOI † |
 
 ## Neuroevolución
 

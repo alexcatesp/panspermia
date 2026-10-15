@@ -60,13 +60,16 @@ def eval_cppn(genome: Genome, inputs: jax.Array) -> jax.Array:
     """Evalúa la CPPN sobre un lote de entradas [P, CPPN_IN] → salidas [P, CPPN_OUT]."""
     W = genome.W.astype(jnp.float32)
     bias = genome.bias.astype(jnp.float32)
-    P = inputs.shape[0]
-    vals = jnp.zeros((P, C.CPPN_NODES), jnp.float32).at[:, :C.CPPN_IN].set(inputs)
-    for j in range(C.CPPN_IN, C.CPPN_NODES):  # orden topológico por índice (estático)
-        pre = jnp.sum(vals * W[:, j], axis=1) + bias[j]
+    # Una columna por nodo y suma explícita sobre i < j (orden topológico, estático): evita
+    # reescribir una matriz [P, 32] en cada nodo, que dominaba el coste de los nacimientos.
+    cols = [inputs[:, i] for i in range(C.CPPN_IN)]
+    for j in range(C.CPPN_IN, C.CPPN_NODES):
+        pre = bias[j]
+        for i in range(j):
+            pre = pre + W[i, j] * cols[i]
         out = _activation(genome.act_id[j], pre)
-        vals = vals.at[:, j].set(jnp.where(genome.node_mask[j], out, 0.0))
-    return vals[:, C.CPPN_OUT_START:]
+        cols.append(jnp.where(genome.node_mask[j], out, 0.0))
+    return jnp.stack(cols[C.CPPN_OUT_START:], axis=1)
 
 
 def develop(genome: Genome) -> Phenotype:

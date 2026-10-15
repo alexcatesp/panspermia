@@ -1,4 +1,4 @@
-"""Mundo 2D toroidal: física, recursos, sensores por rayos y energía (spec §Mundo).
+"""Mundo 2D toroidal: física, recursos, sensores por rayos, ataque y energía (spec §Mundo).
 
 Salvaguarda 1: este módulo es el ÚNICO interfaz de los agentes con algo externo, y solo expone
 la simulación. No añadir aquí acceso a red, ficheros ni procesos.
@@ -6,6 +6,9 @@ la simulación. No añadir aquí acceso a red, ficheros ni procesos.
 Vecindad por rejilla espacial de tamaño fijo: celdas de GRID_CELL unidades con hasta CELL_CAP
 agentes visibles cada una; cada agente consulta las 3 × 3 celdas que le rodean. El orden de la
 rejilla se obtiene con `argsort` estable sobre enteros, que es determinista.
+
+Paredes: rejilla booleana del tamaño de la de recursos. En las islas está vacía; solo la usan los
+entornos de prueba de capacidad (laberinto). Bloquean el movimiento y el canal de distancia.
 """
 from __future__ import annotations
 
@@ -36,6 +39,8 @@ class EnvParams:
     wave_phase: jax.Array  # f32[K_WAVES]
     wave_amp: jax.Array    # f32[K_WAVES]
     wave_speed: jax.Array  # f32[K_WAVES] (signo y magnitud relativa de la deriva)
+    regrow: jax.Array      # f32: 1 en las islas; 0 congela el campo (entornos de prueba)
+    walls: jax.Array       # bool[RES, RES]
 
 
 def make_env(node_id: bytes) -> EnvParams:
@@ -55,6 +60,8 @@ def make_env(node_id: bytes) -> EnvParams:
         wave_phase=jax.random.uniform(k[3], (C.K_WAVES,), maxval=2 * math.pi),
         wave_amp=jax.random.uniform(k[4], (C.K_WAVES,), minval=0.5, maxval=1.0),
         wave_speed=jax.random.uniform(k[5], (C.K_WAVES,), minval=-1.0, maxval=1.0),
+        regrow=jnp.float32(1.0),
+        walls=jnp.zeros((RES, RES), bool),
     )
 
 
@@ -73,7 +80,7 @@ def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
              + env.wave_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
     z = jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0)
     z = z / jnp.sqrt(jnp.sum(env.wave_amp ** 2) / 2)
-    return env.k_mean * jnp.maximum(0.0, 1.0 + C.K_CONTRAST * z)
+    return jnp.where(env.walls, 0.0, env.k_mean * jnp.maximum(0.0, 1.0 + C.K_CONTRAST * z))
 
 
 def init_resources(env: EnvParams, key: jax.Array) -> jax.Array:
@@ -87,7 +94,7 @@ def resources_step(resources: jax.Array, env: EnvParams, step: jax.Array) -> jax
     safe_K = jnp.maximum(K, 1e-6)
     growth = C.RESOURCE_R * resources * (1.0 - resources / safe_K)
     growth = jnp.where(K > 0, growth + C.RESOURCE_SEED, -C.RESOURCE_R * resources)
-    return jnp.maximum(resources + growth * C.DT, 0.0)
+    return jnp.maximum(resources + env.regrow * growth * C.DT, 0.0)
 
 
 def _res_index(p: jax.Array) -> jax.Array:
@@ -138,15 +145,16 @@ def _gather_neighbors(cand, pos, vel, radius, alive):
 
 _RAY_FRAC = jnp.linspace(-0.5, 0.5, C.N_RAYS)
 _SAMPLE_FRAC = (jnp.arange(C.RAY_SAMPLES, dtype=jnp.float32) + 1) / C.RAY_SAMPLES
+_WALL_FRAC = (jnp.arange(C.WALL_SAMPLES, dtype=jnp.float32) + 1) / C.WALL_SAMPLES
 
 
-def sense(state, cand: jax.Array) -> jax.Array:
-    """Observaciones [N, OBS_DIM].
+def sense(state, cand: jax.Array) -> tuple[jax.Array, jax.Array]:
+    """Observaciones [N, OBS_DIM] y nº de vecinos vivos dentro del alcance sensorial [N].
 
-    Por rayo (16, en el cono del cuerpo): proximidad del agente más cercano (1 − d/alcance),
-    recurso medio a lo largo del rayo (relativo a K_MEAN), parentesco del agente detectado
-    (1 − distancia de color/√3) y su señal. Después: energía, velocidad (adelante, lateral),
-    reloj (sen, cos) y señal recibida (media de los vecinos dentro del alcance).
+    Por rayo (16, en el cono del cuerpo): proximidad del obstáculo más cercano, agente o pared
+    (1 − d/alcance), recurso medio a lo largo del rayo (relativo a K_MEAN), parentesco del agente
+    detectado (1 − distancia de color/√3) y su señal. Después: energía, velocidad (adelante,
+    lateral), reloj (sen, cos) y señal recibida (media de los vecinos dentro del alcance).
     """
     ph = state.pheno
     safe, valid, rel, _, r_j = _gather_neighbors(cand, state.pos, state.vel, ph.radius, state.alive)
@@ -163,9 +171,19 @@ def sense(state, cand: jax.Array) -> jax.Array:
     dist = jnp.where(hit & (dist < rng[:, None, None]), dist, jnp.inf)
     nearest = jnp.argmin(dist, axis=1)                                           # [N, R]
     dmin = jnp.min(dist, axis=1)
-    seen = jnp.isfinite(dmin)
+
+    # Paredes: primera muestra del rayo que cae en una celda de pared
+    wpts = state.pos[:, None, None, :] + (rng[:, None, None, None] * _WALL_FRAC[None, None, :, None]
+                                          * u[:, :, None, :])                   # [N, R, W, 2]
+    is_wall = state.env.walls.ravel()[_res_index(wpts % L)]
+    first = jnp.argmax(is_wall, axis=-1)
+    wall_d = jnp.where(jnp.any(is_wall, axis=-1), rng[:, None] * _WALL_FRAC[first], jnp.inf)
+    agent_first = dmin <= wall_d
+    seen = jnp.isfinite(dmin) & agent_first
+    d_obst = jnp.minimum(dmin, wall_d)
+
     j = jnp.take_along_axis(safe, nearest, axis=1)                               # [N, R]
-    prox = jnp.where(seen, 1.0 - dmin / rng[:, None], 0.0)
+    prox = jnp.where(jnp.isfinite(d_obst), 1.0 - d_obst / rng[:, None], 0.0)
     color_d = jnp.linalg.norm(ph.color[j] - ph.color[:, None, :], axis=-1)
     kin = jnp.where(seen, 1.0 - color_d / math.sqrt(3.0), 0.0)
     sig = jnp.where(seen, state.signal[j], 0.0)
@@ -184,14 +202,15 @@ def sense(state, cand: jax.Array) -> jax.Array:
     clock = 2 * math.pi * (state.step % C.CLOCK_PERIOD).astype(jnp.float32) / C.CLOCK_PERIOD
     n = state.pos.shape[0]
     in_range = valid & (pp[..., 0] < rng[:, None] ** 2)
+    n_near = jnp.sum(in_range, axis=1)
     heard = jnp.sum(jnp.where(in_range, state.signal[safe], 0.0), axis=1)
-    recv = heard / jnp.maximum(jnp.sum(in_range, axis=1), 1)
+    recv = heard / jnp.maximum(n_near, 1)
     own = jnp.stack([
         jnp.tanh(state.energy / C.E_OBS_SCALE), v_fwd, v_lat,
         jnp.full((n,), jnp.sin(clock)), jnp.full((n,), jnp.cos(clock)), recv,
     ], axis=-1)
     obs = jnp.concatenate([rays, own], axis=-1)
-    return jnp.where(state.alive[:, None], obs, 0.0)
+    return jnp.where(state.alive[:, None], obs, 0.0), jnp.where(state.alive, n_near, 0)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -199,7 +218,10 @@ def sense(state, cand: jax.Array) -> jax.Array:
 # ---------------------------------------------------------------------------------------------
 
 def physics(state, actions: jax.Array, cand: jax.Array):
-    """Empuje, giro, fricción lineal y colisiones elásticas. Devuelve (pos, vel, angle, thrust)."""
+    """Empuje, giro, fricción lineal, colisiones elásticas y paredes.
+
+    Devuelve (pos, vel, angle, thrust).
+    """
     ph = state.pheno
     alive = state.alive
     thrust = actions[:, 0] * ph.max_thrust
@@ -221,6 +243,9 @@ def physics(state, actions: jax.Array, cand: jax.Array):
     correction = -jnp.sum(push[..., None] * normal, axis=1)
 
     pos = (state.pos + vel * C.DT + correction) % L
+    blocked = state.env.walls.ravel()[_res_index(pos)]
+    pos = jnp.where(blocked[:, None], state.pos, pos)
+    vel = jnp.where(blocked[:, None], 0.0, vel)
     alive2 = alive[:, None]
     return (jnp.where(alive2, pos, state.pos), jnp.where(alive2, vel, 0.0),
             jnp.where(alive, angle, state.angle), jnp.where(alive, thrust, 0.0))
@@ -238,10 +263,48 @@ def eat(resources: jax.Array, pos: jax.Array, alive: jax.Array, actions: jax.Arr
     return intake, jnp.maximum(flat - eaten, 0.0).reshape(RES, RES)
 
 
-def energy_update(state, thrust: jax.Array, intake: jax.Array) -> jax.Array:
-    """E += ingesta − (c0·senescencia + cb·n_neuronas + cs·masa + cm·|empuje|² + ca·ataque)·dt."""
+_COS_ATTACK = math.cos(math.radians(C.ATTACK_HALF_ANGLE_DEG))
+
+
+def attack(state, actions: jax.Array, cand: jax.Array, resources: jax.Array):
+    """Ataque frontal: drena energía del agente más cercano delante y en alcance.
+
+    El atacante gana ATTACK_EFFICIENCY de lo drenado; el resto se deposita como carroña en la
+    celda de recursos de la víctima, de modo que la energía se conserva. Si varios atacan a la
+    misma víctima, lo drenado se reparte en proporción al daño.
+
+    Devuelve (delta de energía [N], drenado recibido [N], intento de ataque [N] bool, recursos).
+    """
+    n = state.alive.shape[0]
+    ph = state.pheno
+    attempt = state.alive & (actions[:, 3] > 0)
+    safe, valid, rel, _, r_j = _gather_neighbors(cand, state.pos, state.vel, ph.radius, state.alive)
+    dist = jnp.sqrt(jnp.sum(rel * rel, axis=-1))
+    surface = dist - ph.radius[:, None] - r_j
+    heading = jnp.stack([jnp.cos(state.angle), jnp.sin(state.angle)], axis=-1)
+    cos = jnp.sum(rel * heading[:, None, :], axis=-1) / jnp.maximum(dist, 1e-6)
+    ok = valid & (surface <= C.ATTACK_REACH) & (cos >= _COS_ATTACK)
+    surface = jnp.where(ok, surface, jnp.inf)
+    best = jnp.argmin(surface, axis=1)
+    has_target = jnp.any(ok, axis=1)
+    target = jnp.where(has_target, jnp.take_along_axis(safe, best[:, None], 1)[:, 0], n)
+
+    damage = jnp.where(attempt & has_target, ph.attack * C.ATTACK_DAMAGE * C.DT, 0.0)
+    total = jax.ops.segment_sum(damage, target, num_segments=n + 1)[:n]
+    drained = jnp.minimum(total, jnp.maximum(state.energy, 0.0))
+    ratio = jnp.where(total > 0, drained / jnp.maximum(total, 1e-9), 0.0)
+    gain = C.ATTACK_EFFICIENCY * damage * jnp.concatenate([ratio, jnp.zeros(1)])[target]
+    carrion = jax.ops.segment_sum((1 - C.ATTACK_EFFICIENCY) * drained, _res_index(state.pos),
+                                  num_segments=RES * RES)
+    resources = resources + carrion.reshape(RES, RES)
+    return gain - drained, drained, attempt, resources
+
+
+def energy_update(state, thrust: jax.Array, intake: jax.Array, attack_delta: jax.Array,
+                  attempt: jax.Array) -> jax.Array:
+    """E += ingesta ± ataque − (c0·senescencia + cb·n_neuronas + cs·masa + cm·|empuje|² + ca·ataque)·dt."""
     ph = state.pheno
     senescence = 1.0 + C.SENESCENCE_RATE * jnp.maximum(0, state.age - C.SENESCENCE_START)
     cost = (state.env.c_basal * senescence + C.C_NEURON * ph.n_hidden + C.C_MASS * ph.mass
-            + C.C_MOVE * thrust ** 2)
-    return jnp.where(state.alive, state.energy + intake - cost * C.DT, 0.0)
+            + C.C_MOVE * thrust ** 2 + C.C_ATTACK * ph.attack * attempt)
+    return jnp.where(state.alive, state.energy + intake + attack_delta - cost * C.DT, 0.0)
