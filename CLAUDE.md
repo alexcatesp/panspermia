@@ -31,7 +31,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 - Estructura del estado (`island.IslandState`): arrays con eje N delante; `Genome`, `Phenotype`, `Lineage`, `Behavior` son `flax.struct.dataclass`. Cada paso usa `fold_in(key, step)`. Nacimientos en lote fijo de `MAX_BIRTHS_PER_STEP` dentro de `lax.cond`. `world_step(..., plastic=, births=)` con flags estáticos.
 - Las métricas en `metrics.py` y la batería en `capability.py` solo observan: nunca deben influir en la reproducción.
 - Salvaguarda 5: los umbrales están en `config.CAPABILITY_PAUSE_THRESHOLDS`; solo una persona puede subirlos (vía `CAPABILITY_REVIEW.json` o un ADR). No cambiarlos para que una ejecución «pase».
-- Visor: `python -m panspermia.viewer runs/<x>`; la página está en `src/panspermia/viewer_static/index.html` (sin dependencias externas). Probarla con Playwright.
+- Visor: `python -m panspermia.viewer runs/<x>` (desde Windows basta `PYTHONPATH=src python -m panspermia.viewer ...`: solo usa la biblioteca estándar); la página está en `src/panspermia/viewer_static/index.html` (sin dependencias externas). Probarla con Playwright. En esta máquina el Escudo Web de Avast cortaba las descargas grandes de `127.0.0.1` (siempre a los 19 s); hay una excepción para `http://127.0.0.1:8765/*`. Si se usa otro puerto, puede volver a pasar. En Windows `allow_reuse_address` deja a dos servidores escuchar en el mismo puerto: matar el viejo antes de relanzar.
 - Pendiente de decidir (propuesta tras la fase 1): islas con hipótesis distintas en la red, techo de tamaño del genoma, verificación de Network Tierra y MODES.
 
 ## Convenciones

@@ -56,8 +56,19 @@ def make_handler(run_dir: Path):
                 if f is not None:
                     ctype = "application/octet-stream" if f.suffix == ".gz" else (
                         mimetypes.guess_type(f.name)[0] or "application/octet-stream")
-                    return self._send_bytes(f.read_bytes(), ctype)
+                    return self._send_file(f, ctype)
             self.send_error(HTTPStatus.NOT_FOUND)
+
+        def _send_file(self, f: Path, ctype: str) -> None:
+            # Por trozos: un único write de ~12 MB se cortaba en Windows (ERR_CONNECTION_RESET).
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Content-Length", str(f.stat().st_size))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            with f.open("rb") as fh:
+                while chunk := fh.read(1 << 20):
+                    self.wfile.write(chunk)
 
     return Handler
 

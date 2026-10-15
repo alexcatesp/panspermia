@@ -114,7 +114,12 @@ async function loadRun() {
   const run = await json("/api/run");
   S.run = run;
   const m = run.meta || {};
-  $("runmeta").textContent = `${run.name} · semilla ${m.seed ?? "?"} · nodo ${m.node_id ?? "?"} · N=${m.n_max ?? "?"} · sustrato ${m.substrate_version ?? "?"}`;
+  let node = m.node_id ?? "?";
+  if (/^([0-9a-f]{2})+$/.test(node)) {
+    const txt = node.match(/../g).map((h) => String.fromCharCode(parseInt(h, 16))).join("");
+    if (/^[\x20-\x7e]+$/.test(txt)) node = txt;
+  }
+  $("runmeta").textContent = `${run.name} · semilla ${m.seed ?? "?"} · nodo ${node} · N=${m.n_max ?? "?"} · sustrato ${m.substrate_version ?? "?"}`;
   const sel = $("rec");
   sel.innerHTML = "";
   for (const name of run.recordings) {
