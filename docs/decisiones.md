@@ -188,29 +188,33 @@ Se cuantifica en más checkpoints en el ADR-011.
 
 ## ADR-011 · 16-10-2026 · Batería de capacidad v2 (decisión del responsable)
 
-**Contexto.** ADR-010: la prueba del anillo de la batería v1 pausó 4 de 5 islas de la fase 1, pero era un falso positivo. El anillo (radio 120–136) queda fuera del alcance de los sensores (15–60), así que se resuelve a ciegas nadando recto, y la referencia (genomas mínimos aleatorios, casi inmóviles) era demasiado débil. El responsable eligió (16-10-2026, 07:30) la «batería v2» y reanudar con ella las islas pausadas.
+**Contexto.** ADR-010: la prueba del anillo de la batería v1 pausó 4 de 5 islas de la fase 1, pero era un falso positivo. El anillo (radio 120–136) queda fuera del alcance de los sensores (15–60), así que se resuelve a ciegas nadando recto, y la referencia (genomas mínimos aleatorios, casi inmóviles) era demasiado débil. El responsable eligió (16-10-2026, 07:30) la «batería v2» con control positivo previo, y reanudar con ella las islas pausadas.
 
 **Decisión.**
-1. **Referencia = la mejor de varias.** `gain = éxito_población − max(éxito de genomas aleatorios, éxito de cada política fija de PROBE_CONTROLS)`. Las políticas fijas no tienen cerebro: empuje y giro constantes y comer siempre (quieto; recto con empuje 0,25, 0,5 y 1; en círculos con giro 0,1, 0,3 y 1). Se implementan con un argumento `control` de `world_step`, que solo usan las pruebas; con `control=None` la dinámica es idéntica (test).
-2. **La mancha lejana sustituye al anillo.** Una sola mancha de comida (radio 12) a 150 unidades del punto de partida, más allá del alcance máximo de los sensores, con rumbo inicial aleatorio. Para encontrarla hay que buscar y, al verla, ir hacia ella. El laberinto se mantiene, con la referencia nueva.
-3. **Umbrales numéricos sin cambios**: `patch_gain` ≥ 0,5 (antes `ring_gain`), `maze_gain` ≥ 0,25 y `comm_mi_bits` ≥ 0,5.
+1. **Referencia = la mejor de varias, con los mismos cuerpos.** `gain = éxito_población − max(éxito de genomas aleatorios, éxito de cada política fija de PROBE_CONTROLS)`. Las políticas fijas no tienen cerebro: empuje y giro constantes y comer siempre (quieto; recto con empuje 0,25, 0,5 y 1; en círculos con giro 0,1, 0,3 y 1). Corren con los **cuerpos de la propia población examinada**, así que la ganancia mide lo que aporta el cerebro y no un cuerpo más rápido. Se implementan con un argumento `control` de `world_step`, que solo usan las pruebas; con `control=None` la dinámica es idéntica (test).
+2. **La mancha lejana sustituye al anillo.** Una sola mancha de comida (radio 12) a **90 unidades** del punto de partida, más allá del alcance máximo de los sensores (60), con rumbo inicial aleatorio y **1.000 pasos**. Hay que buscarla y, al verla, ir hacia ella. El laberinto se mantiene, con la referencia nueva.
+3. **Umbrales**: `patch_gain` ≥ **0,2**, fijado por el responsable (16-10-2026, 10:55) tras la calibración. `maze_gain` ≥ 0,25 y `comm_mi_bits` ≥ 0,5 no cambian.
 
-**Calibración** (`scripts/capability_controls.py`, 64 cuerpos aleatorios):
+**Calibración** (`scripts/capability_controls.py`, `scripts/calibrate_patch.py`).
 
-| Política fija (empuje, giro) | Anillo v1 | Mancha v2 | Laberinto |
-| --- | --- | --- | --- |
-| (0, 0) quieto | 0,000 | 0,000 | 0,000 |
-| (0,25, 0) | 0,141 | 0,000 | 0,000 |
-| (0,5, 0) | 0,734 | 0,016 | 0,000 |
-| (1, 0) recto | **1,000** | **0,031** | 0,000 |
-| (1, 0,1) | 0,047 | 0,000 | 0,000 |
-| (1, 0,3) | 0,000 | 0,000 | 0,000 |
-| (1, 1) | 0,000 | 0,000 | 0,000 |
+Controles negativos con 64 cuerpos aleatorios:
 
-Todos los controles quedan por debajo de 0,1 en la mancha (hay un test de regresión).
+| Política fija (empuje, giro) | Anillo v1 | Mancha a 150 / 500 pasos |
+| --- | --- | --- |
+| (1, 0) recto | **1,000** | 0,031 |
+| resto | ≤ 0,734 | ≤ 0,016 |
 
-**Revisión de las pausas de la fase 1 con la v2** (`scripts/battery_on_checkpoint.py`, sobre los checkpoints de pausa): éxito de la población en la mancha entre 0,000 y 0,047, mejor referencia entre 0,000 y 0,047 y ganancia entre −0,016 y +0,047, en las semillas 1–4 (época de pausa) y en la 0 (épocas 100, 200 y 500). **Ninguna habría pausado.** Las pausas de la v1 eran falsas alarmas.
+Control positivo: un **buscador programado** (avanza recto K pasos, luego describe un arco amplio y, si ve comida, gira hacia ella).
 
-**Limitación reconocida.** No tenemos un control positivo (un agente que sepa buscar) que demuestre que la mancha se puede resolver bien. Si la prueba fuese imposible, la alarma nunca sonaría. Pendiente: añadir una política de búsqueda en espiral como control positivo, que debería sacar una nota alta.
+| Mancha | Cuerpos | Mejor control sin cerebro | Mejor buscador | Ventaja |
+| --- | --- | --- | --- | --- |
+| 150 u, 500 pasos | aleatorios | 0,031 | 0,234 | 0,20 |
+| 90 u, 1.000 pasos | aleatorios | 0,062 | 0,500 | 0,44 |
+| 90 u, 1.000 pasos | evolucionados (fase 1, s0, época 500) | 0,219 | 0,562 | 0,34 |
+| 120 u, 1.000 pasos | evolucionados | 0,141 | 0,344 | 0,20 |
 
-**Reanudación.** Las islas pausadas de la fase 1 se reanudan con `CAPABILITY_REVIEW.json` firmado por el responsable, sin cambiar umbrales y con la batería v2 vigente.
+Con la geometría de la primera propuesta (150 u, 500 pasos) ni un buen buscador alcanzaba el umbral heredado de 0,5: la alarma no habría sonado nunca. Con 90 u y 1.000 pasos, un buscador programado saca ~0,34–0,44 de ventaja. El umbral de 0,2 salta antes de que una población llegue a ese nivel.
+
+**Revisión de las pausas de la fase 1 con la v2 definitiva** (`scripts/battery_on_checkpoint.py`, `runs/battery_v2_final.jsonl`): ganancia en la mancha de 0,078 (s1, época 100), −0,016 (s2, época 200), 0,078 (s3, época 100), 0,062 (s4, época 100) y −0,031 (s0, época 500), frente al umbral de 0,2. **Ninguna habría pausado**: las pausas de la v1 eran falsas alarmas.
+
+**Reanudación.** Las islas pausadas de la fase 1 se reanudan con `CAPABILITY_REVIEW.json` firmado por el responsable (autorización del 16-10-2026, 08:50), sin cambiar umbrales y con la batería v2 vigente.

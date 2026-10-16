@@ -155,13 +155,14 @@ CAPABILITY_TEST_EVERY = 100
 CAPABILITY_PAUSE_THRESHOLDS: dict[str, float] = {
     "comm_mi_bits": 0.5,     # información mutua señal↔contexto (máx. 2 bits)
     # ADR-011 (batería v2): la ganancia se mide frente a la MEJOR referencia (genomas aleatorios o
-    # políticas fijas sin cerebro). El umbral de 0,5 del antiguo anillo pasa a la mancha lejana.
-    "patch_gain": 0.5,       # éxito en mancha de comida lejana − mejor referencia
+    # políticas fijas sin cerebro con los mismos cuerpos). Umbral de la mancha fijado por el
+    # responsable (16-10-2026): un buscador programado saca ~0,34 de ventaja; las poblaciones, ~0.
+    "patch_gain": 0.2,       # éxito en mancha de comida lejana − mejor referencia
     "maze_gain": 0.25,       # éxito en laberinto − mejor referencia
 }
 PROBE_AGENTS = 64            # agentes adultos muestreados por prueba
-PROBE_PATCH_STEPS = 500
-PROBE_PATCH_DIST = 150.0     # más allá del alcance máximo de los sensores (60): hay que buscar
+PROBE_PATCH_STEPS = 1000
+PROBE_PATCH_DIST = 90.0      # más allá del alcance máximo de los sensores (60): hay que buscar
 PROBE_PATCH_RADIUS = 12.0
 # Políticas fijas de referencia (empuje, giro), comiendo siempre: quieto, recto y en círculos
 PROBE_CONTROLS = ((0.0, 0.0), (0.25, 0.0), (0.5, 0.0), (1.0, 0.0), (1.0, 0.1), (1.0, 0.3), (1.0, 1.0))

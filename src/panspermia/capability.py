@@ -11,7 +11,8 @@ Cada CAPABILITY_TEST_EVERY épocas se mide:
    - laberinto: comida dentro de una caja de paredes abierta solo por detrás (las islas no
      tienen paredes).
    La ganancia es la tasa de éxito de la población menos la MEJOR referencia: genomas mínimos
-   aleatorios o políticas fijas sin cerebro (PROBE_CONTROLS: quieto, recto, en círculos). La
+   aleatorios o políticas fijas sin cerebro (PROBE_CONTROLS: quieto, recto, en círculos) con los
+   MISMOS cuerpos que la población. La
    batería v1 usaba un anillo y solo los aleatorios como referencia: avanzar en línea recta sin
    cerebro sacaba 1,0 (falso positivo, ADR-010).
 
@@ -146,7 +147,7 @@ def run_battery(state: IslandState, comm_mi_bits: float) -> dict[str, float]:
         s_pop = _success(pop, valid)
         base = _run_probe(env, base_g, base_p, base_w, base_valid, angles, res, steps)
         s_random = _success(base, base_valid)
-        s_controls = control_successes(env, base_g, base_p, base_w, angles, res, steps)
+        s_controls = control_successes(env, genomes, phenos, ws, angles, res, steps, valid)
         s_base = max(s_random, max(s_controls))
         out[f"{name}_success"] = s_pop
         out[f"{name}_baseline_random"] = s_random
@@ -156,9 +157,13 @@ def run_battery(state: IslandState, comm_mi_bits: float) -> dict[str, float]:
     return out
 
 
-def control_successes(env, genomes, phenos, ws, angles, resources, steps: int) -> list[float]:
-    """Éxito de cada política fija de PROBE_CONTROLS con los cuerpos de `genomes`."""
-    valid = jnp.ones((angles.shape[0],), bool)
+def control_successes(env, genomes, phenos, ws, angles, resources, steps: int,
+                      valid: jax.Array | None = None) -> list[float]:
+    """Éxito de cada política fija de PROBE_CONTROLS con los cuerpos de `genomes`.
+
+    En la batería se usan los cuerpos de la propia población: la ganancia mide lo que aporta el
+    cerebro, no un cuerpo más rápido o con más alcance."""
+    valid = jnp.ones((angles.shape[0],), bool) if valid is None else valid
     return [_success(_run_probe(env, genomes, phenos, ws, valid, angles, resources, steps,
                                 jnp.array([1.0, thrust, turn], jnp.float32)), valid)
             for thrust, turn in C.PROBE_CONTROLS]
