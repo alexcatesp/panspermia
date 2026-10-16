@@ -176,4 +176,12 @@ Un agente que solo avanza en línea recta y come siempre supera el umbral (0,5) 
 - **Los cerebros encogen.** Neuronas ocultas medias en la semilla 0: 8 → 7,4 (época 100) → 4,9 (200) → 3,1 (500). Sin valor del aprendizaje y con coste por neurona, la evolución recorta el cerebro.
 - **Depredación indiscriminada.** Gen de ataque 0,89 de media en las primeras 100 épocas (≈1 después) y más muertes por mordisco (1,3·10⁴ por época) que por hambre (5,8·10³). Comunicación ≈ 0 bits.
 
-**Conclusión.** La fase 1 está implementada y la ecología es estable, pero el mundo es demasiado simple para que aprender en vida compense: el entorno no cambia dentro de una vida, así que el genoma basta. Esta es exactamente la hipótesis de la fase 1b (ADR-008: química y algas estacionales cuyo tipo tóxico cambia dentro de una vida). La fase 1 queda **no aceptada formalmente** (criterio de aprendizaje fallido y 4 semillas incompletas por pausa) y se etiqueta como `fase1-base` para comparar con ella.
+**Corrección (16-10-2026, 07:00): la métrica del valor del aprendizaje está casi degenerada.** Mide la fracción de los vivos al inicio de una época que siguen vivos al final (1.000 pasos), pero la edad media es de ~140 pasos: esa fracción vale 0,2–0,8 % en ambos brazos, y en la fase 1b llega a 0 en los dos. La diferencia es ruido sobre casi nada, así que **no permite concluir que aprender no compense**. Una sonda emparejada a nivel de población (`scripts/learning_probe.py`: la misma época desde el mismo checkpoint y con la misma aleatoriedad, con y sin plasticidad) muestra en la semilla 0 de la fase 1 que la plasticidad **sí cambia la ecología**:
+- ingesta +6 % (época 100) y +14 % (época 500);
+- nacimientos +15–18 %;
+- −17–19 % de muertes por hambre y +26–41 % de muertes por mordisco;
+- población neta +5 % y −5 %.
+
+Se cuantifica en más checkpoints en el ADR-011.
+
+**Conclusión (original, matizada por la corrección).** La fase 1 está implementada y la ecología es estable, pero el mundo es demasiado simple para que aprender en vida compense: el entorno no cambia dentro de una vida, así que el genoma basta. Esta es exactamente la hipótesis de la fase 1b (ADR-008: química y algas estacionales cuyo tipo tóxico cambia dentro de una vida). La fase 1 queda **no aceptada formalmente** (criterio de aprendizaje fallido y 4 semillas incompletas por pausa) y se etiqueta como `fase1-base` para comparar con ella.
