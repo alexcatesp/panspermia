@@ -186,7 +186,9 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
 
         if e % C.CHECKPOINT_EVERY == 0 or paused:
             _flush(rows, all_rows, stats_dir)
-            mngr.save(e, args=ocp.args.StandardSave(state), force=bool(paused))
+            # vía host: tras un restore, la ruta de Orbax por memoria fija (pinned) se agota en
+            # WSL2 con N = 4096 (RESOURCE_EXHAUSTED en el primer guardado); device_get es exacto
+            mngr.save(e, args=ocp.args.StandardSave(jax.device_get(state)), force=bool(paused))
             np.save(out / "novelty_archive.npy", archive.archive)
             (out / "activity.json").write_text(json.dumps(activity.activity))
         if paused:
