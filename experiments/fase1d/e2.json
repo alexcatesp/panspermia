@@ -1,0 +1,215 @@
+[
+ {
+  "name": "E2-aleatorio-T035",
+  "block": "E2",
+  "description": "Programa aleatorio, periodo T = 35 pasos (~0.25 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 35
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-aleatorio-T140",
+  "block": "E2",
+  "description": "Programa aleatorio, periodo T = 140 pasos (~1 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 140
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-aleatorio-T560",
+  "block": "E2",
+  "description": "Programa aleatorio, periodo T = 560 pasos (~4 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 560
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-aleatorio-T2240",
+  "block": "E2",
+  "description": "Programa aleatorio, periodo T = 2240 pasos (~16 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 2240
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-periodico-T035",
+  "block": "E2",
+  "description": "Programa periodico, periodo T = 35 pasos (~0.25 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 35,
+   "clock_period": 35
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-periodico-T140",
+  "block": "E2",
+  "description": "Programa periodico, periodo T = 140 pasos (~1 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 140,
+   "clock_period": 140
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-periodico-T560",
+  "block": "E2",
+  "description": "Programa periodico, periodo T = 560 pasos (~4 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 560,
+   "clock_period": 560
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-periodico-T2240",
+  "block": "E2",
+  "description": "Programa periodico, periodo T = 2240 pasos (~16 vidas). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 2240,
+   "clock_period": 2240
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-fijo",
+  "block": "E2",
+  "description": "Control: asignación fija (T = ∞). Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "fijo"
+  },
+  "plastic": false
+ },
+ {
+  "name": "E2-sin-toxico",
+  "block": "E2",
+  "description": "Control: sin alga tóxica. Gemelo sin plasticidad durante toda la evolución.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "fijo",
+   "seasonal": 0.0
+  },
+  "plastic": false
+ }
+]

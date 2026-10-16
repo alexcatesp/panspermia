@@ -1,0 +1,205 @@
+[
+ {
+  "name": "E1-aleatorio-T035",
+  "block": "E1",
+  "description": "Programa aleatorio, periodo T = 35 pasos (~0.25 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 35
+  }
+ },
+ {
+  "name": "E1-aleatorio-T140",
+  "block": "E1",
+  "description": "Programa aleatorio, periodo T = 140 pasos (~1 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 140
+  }
+ },
+ {
+  "name": "E1-aleatorio-T560",
+  "block": "E1",
+  "description": "Programa aleatorio, periodo T = 560 pasos (~4 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 560
+  }
+ },
+ {
+  "name": "E1-aleatorio-T2240",
+  "block": "E1",
+  "description": "Programa aleatorio, periodo T = 2240 pasos (~16 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 2240
+  }
+ },
+ {
+  "name": "E1-periodico-T035",
+  "block": "E1",
+  "description": "Programa periodico, periodo T = 35 pasos (~0.25 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 35,
+   "clock_period": 35
+  }
+ },
+ {
+  "name": "E1-periodico-T140",
+  "block": "E1",
+  "description": "Programa periodico, periodo T = 140 pasos (~1 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 140,
+   "clock_period": 140
+  }
+ },
+ {
+  "name": "E1-periodico-T560",
+  "block": "E1",
+  "description": "Programa periodico, periodo T = 560 pasos (~4 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 560,
+   "clock_period": 560
+  }
+ },
+ {
+  "name": "E1-periodico-T2240",
+  "block": "E1",
+  "description": "Programa periodico, periodo T = 2240 pasos (~16 vidas).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 2240,
+   "clock_period": 2240
+  }
+ },
+ {
+  "name": "E1-fijo",
+  "block": "E1",
+  "description": "Control: asignación fija (T = ∞).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "fijo"
+  }
+ },
+ {
+  "name": "E1-sin-toxico",
+  "block": "E1",
+  "description": "Control: sin alga tóxica.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "fijo",
+   "seasonal": 0.0
+  }
+ }
+]
