@@ -80,6 +80,12 @@ def _clean(d: dict) -> dict:
     return {k: (v.item() if isinstance(v, np.generic) else v) for k, v in d.items()}
 
 
+def capability_adults(state: island.IslandState) -> int:
+    """Adultos elegibles para la batería (los mismos que muestrea `capability.sample_adults`)."""
+    alive, age = jax.device_get((state.alive, state.age))
+    return int((np.asarray(alive) & (np.asarray(age) >= C.MIN_REPRO_AGE)).sum())
+
+
 def next_extinct_streak(streak: int, population: int) -> int:
     """Épocas seguidas que acaban por debajo de N_MIN_REINJECT. No basta con exigir población 0:
     en E0 un superviviente suelto de la reinyección reiniciaba la cuenta y la parada no actuaba."""
@@ -134,6 +140,7 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
     extinct_streak = 0  # épocas seguidas que acaban por debajo de N_MIN_REINJECT (la reinyección no prende)
     stopped_extinct = False
     paused = None
+    battery_due = False  # tocaba batería, pero se aplazó por falta de adultos (ADR-013)
     for e in range(start + 1, epochs + 1):
         t0 = time.perf_counter()
         frozen_test = plastic and e % C.FROZEN_PLASTICITY_TEST_EVERY == 0
@@ -178,7 +185,12 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
             # sonda emparejada a nivel de población (ADR-010, fase 1d): misma época, mismo azar
             row.update(metrics.paired_learning_value(stats, st_f))
 
-        if e % C.CAPABILITY_TEST_EVERY == 0:
+        battery_due = battery_due or e % C.CAPABILITY_TEST_EVERY == 0
+        adults = capability_adults(state) if battery_due else 0
+        if battery_due and adults < C.CAPABILITY_MIN_AGENTS:
+            row["cap_deferred_adults"] = adults
+        elif battery_due:
+            battery_due = False
             battery = capability.run_battery(state, stats["comm_mi_bits"])
             row.update({f"cap_{k}": v for k, v in battery.items()})
             hit = capability.exceeded(battery, thresholds)

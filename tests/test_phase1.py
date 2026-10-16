@@ -224,6 +224,19 @@ def test_extinct_streak_ignores_stray_survivors():
     assert runner.next_extinct_streak(s, config.N_MIN_REINJECT) == 0
 
 
+def test_battery_deferred_without_enough_adults(tmp_path, monkeypatch):
+    """ADR-013: con menos de CAPABILITY_MIN_AGENTS adultos la batería se aplaza, no se pasa."""
+    from panspermia import run as runner
+    for name, value in (("EPOCH_STEPS", 40), ("CAPABILITY_TEST_EVERY", 1),
+                        ("CAPABILITY_MIN_AGENTS", 10_000), ("FROZEN_PLASTICITY_TEST_EVERY", 99),
+                        ("VIDEO_EVERY", 99)):
+        monkeypatch.setattr(config, name, value)
+    r = runner.run(0, 2, tmp_path / "run", b"t", 128, 64, verbose=False)
+    assert not r["paused"]
+    rows = json.loads((tmp_path / "run" / "stats" / "summary.json").read_text())
+    assert all("cap_deferred_adults" in row and "cap_patch_gain" not in row for row in rows)
+
+
 def test_runner_stops_when_extinct(tmp_path, monkeypatch):
     """Si la isla sigue extinguiéndose pese a reinyectar, el runner se detiene y lo indica."""
     from panspermia import run as runner

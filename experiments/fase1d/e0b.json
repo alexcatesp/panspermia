@@ -1,0 +1,64 @@
+[
+ {
+  "name": "E0b-fijo-tf03",
+  "description": "Control sin cambio con veneno suavizado (TOXIC_FACTOR 0,5 → 0,3).",
+  "env": {
+   "tox_mode": "fijo"
+  },
+  "block": "E0b",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E0b-aleatorio-T200-tf03",
+  "description": "Cambio aleatorio, T ≈ 1 τ_vida (τ_vida = 206 medido en E0), veneno 0,3.",
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 200
+  },
+  "block": "E0b",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E0b-aleatorio-T800-tf03",
+  "description": "Cambio aleatorio, T ≈ 4 τ_vida, veneno 0,3.",
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 800
+  },
+  "block": "E0b",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ }
+]

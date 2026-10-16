@@ -189,6 +189,9 @@ CAPABILITY_PAUSE_THRESHOLDS: dict[str, float] = {
     "maze_gain": 0.25,       # éxito en laberinto − mejor referencia
 }
 PROBE_AGENTS = 64            # agentes adultos muestreados por prueba
+# Decisión del responsable (16-10-2026, ADR-013): con menos adultos la batería no se pasa y se
+# aplaza a la siguiente época con muestra suficiente (en E0 saltó una pausa con 1 solo agente).
+CAPABILITY_MIN_AGENTS = 32
 PROBE_PATCH_STEPS = 1000
 PROBE_PATCH_DIST = 90.0      # más allá del alcance máximo de los sensores (60): hay que buscar
 PROBE_PATCH_RADIUS = 12.0
