@@ -4,6 +4,8 @@
 
 † = identificador de memoria, no comprobado: verificar antes de citar. El resto se comprobó el 15-10-2026.
 
+Bibliografía específica por fase, con fichas, BibTeX y síntesis del hueco que podemos cubrir: [`bibliografia/1d/`](bibliografia/1d/README.md) (condiciones del aprendizaje). Los PDF de acceso abierto se guardan en local (`pdf/`, fuera de git).
+
 ## Orden de lectura recomendado
 
 1. Clune (2019), *AI-GAs*: el programa de investigación más cercano al objetivo del proyecto.
