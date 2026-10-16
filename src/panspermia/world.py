@@ -43,6 +43,8 @@ class EnvParams:
     walls: jax.Array       # bool[RES, RES]
     type_phase: jax.Array  # f32[K_WAVES]: fases del campo que decide el tipo de alga (A/B)
     seasonal: jax.Array    # f32: 1 en las islas; 0 desactiva las algas tóxicas (pruebas)
+    region_k: jax.Array    # f32[2]: número de onda (entero, en un eje) de las regiones de toxicidad
+    region_phase: jax.Array  # f32
 
 
 def make_env(node_id: bytes) -> EnvParams:
@@ -66,6 +68,9 @@ def make_env(node_id: bytes) -> EnvParams:
         walls=jnp.zeros((RES, RES), bool),
         type_phase=jax.random.uniform(k[6], (C.K_WAVES,), maxval=2 * math.pi),
         seasonal=jnp.float32(1.0),
+        region_k=jnp.where(jax.random.bernoulli(k[7]), jnp.array([C.TOXIC_REGION_K, 0.0]),
+                           jnp.array([0.0, C.TOXIC_REGION_K])).astype(jnp.float32),
+        region_phase=jax.random.uniform(jax.random.fold_in(k[7], 1), maxval=2 * math.pi),
     )
 
 
@@ -96,10 +101,23 @@ def algae_type_a(env: EnvParams, step: jax.Array) -> jax.Array:
     return jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0) > 0
 
 
+def toxic_regions(env: EnvParams, step: jax.Array) -> jax.Array:
+    """bool[RES, RES]: franjas donde el tipo tóxico es B (fuera, A). Sus fronteras avanzan a
+    TOXIC_REGION_SPEED: quien se queda o viaja cruza cambios de régimen dentro de su vida, pero en
+    cada momento media isla sigue igual (sin colapsos sincronizados)."""
+    t = step.astype(jnp.float32) * C.DT
+    cx, cy = jnp.meshgrid(_RES_CENTERS, _RES_CENTERS, indexing="ij")
+    omega = 2 * math.pi * C.TOXIC_REGION_K * C.TOXIC_REGION_SPEED / C.WORLD_L
+    phase = 2 * math.pi * (env.region_k[0] * cx + env.region_k[1] * cy) + env.region_phase + omega * t
+    return jnp.sin(phase) > 0
+
+
 def toxic_cells(env: EnvParams, step: jax.Array, toxic_type: jax.Array) -> jax.Array:
-    """bool[RES, RES]: celdas cuya alga es tóxica ahora (toxic_type 0 = A, 1 = B)."""
+    """bool[RES, RES]: celdas cuya alga es tóxica ahora. El tipo tóxico depende de la región y se
+    invierte entero si toxic_type = 1."""
     a = algae_type_a(env, step)
-    return (env.seasonal > 0) & jnp.where(toxic_type == 0, a, ~a)
+    b_toxic = toxic_regions(env, step) ^ (toxic_type == 1)
+    return (env.seasonal > 0) & jnp.where(b_toxic, ~a, a)
 
 
 def init_resources(env: EnvParams, key: jax.Array) -> jax.Array:
@@ -297,10 +315,11 @@ def _take(field: jax.Array, demand: jax.Array, cell: jax.Array):
 
 
 def eat(resources: jax.Array, chem: jax.Array, pos: jax.Array, alive: jax.Array,
-        actions: jax.Array, toxic: jax.Array):
+        actions: jax.Array, toxic: jax.Array, toxicity: jax.Array | float = 1.0):
     """Comer: alga y nutriente de la celda bajo el centro, con reparto proporcional.
 
     El alga tóxica resta TOXIC_FACTOR × lo ingerido en vez de sumarlo (no conservativo: es veneno).
+    `toxicity` ∈ [0, 1] escala ese efecto (rampa): 0 = alimenta como las demás, 1 = veneno pleno.
     Devuelve (ganancia de energía, alga ingerida, alga tóxica ingerida, nutriente, recursos, química).
     """
     demand = jnp.where(alive & (actions[:, 2] > 0), C.EAT_RATE * C.DT, 0.0)
@@ -308,7 +327,7 @@ def eat(resources: jax.Array, chem: jax.Array, pos: jax.Array, alive: jax.Array,
     algae, resources = _take(resources, demand, cell)
     nutrient, nut_field = _take(chem[0], demand, cell)
     toxic_in = jnp.where(toxic.ravel()[cell], algae, 0.0)
-    gain = algae - (1.0 + C.TOXIC_FACTOR) * toxic_in + nutrient
+    gain = algae - toxicity * (1.0 + C.TOXIC_FACTOR) * toxic_in + nutrient
     return gain, algae, toxic_in, nutrient, resources, chem.at[0].set(nut_field)
 
 

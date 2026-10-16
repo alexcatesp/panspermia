@@ -114,14 +114,22 @@ CHEM_OBS_SCALE = 1.0
 CHEM_GRAD_DIST = 8.0                  # distancia de muestreo para los gradientes (una celda)
 
 # Algas estacionales (ADR-008): dos tipos en manchas; cuál es tóxico cambia al azar
-TOXIC_FLIP_PROB = 1.0 / 400           # por paso (proceso sin memoria: no predecible por reloj)
-TOXIC_FACTOR = 1.0                    # comer alga tóxica resta lo que habría sumado
+TOXIC_FLIP_PROB = 0.0                 # inversión global por paso; desactivada: con 1/400 o 1/1000 la
+                                      # población entera come veneno a la vez y se extingue
+TOXIC_REGION_K = 2                    # franjas de toxicidad: 2 de cada régimen en el toro
+TOXIC_REGION_SPEED = 5.0              # unidades de mundo por unidad de tiempo de las fronteras
+TOXIC_FACTOR = 0.5                    # comer alga tóxica resta la mitad de lo que habría sumado
+                                      # (con 1,0 las islas se extinguen; ADR-008, calibración)
+# Rampa (ADR-008, addendum): el alga tóxica pasa de alimentar como las demás (paso 0) a restar
+# TOXIC_FACTOR × lo ingerido (desde TOXIC_RAMP_STEPS). Sin rampa, una población aleatoria, que no
+# distingue algas, se extingue en 2–3 épocas y la evolución no tiene gradiente por el que empezar.
+TOXIC_RAMP_STEPS = 40_000                 # 40 épocas de 1.000 pasos
 
 # Paredes (solo en entornos de prueba de capacidad; vacías en las islas)
 WALL_SAMPLES = 8             # muestras por rayo para detectar paredes
 
 # Recursos: crecimiento logístico con Kmax en manchas derivantes (suma de ondas planas toroidales)
-RESOURCE_R = 1.0
+RESOURCE_R = 1.5                # fase 1: 1,0; ×1,5 en 2.x porque el alga tóxica reduce la comida útil (ADR-008)
 RESOURCE_SEED = 0.002        # aporte mínimo para que celdas agotadas rebroten
 K_MEAN = 4.0
 K_WAVES = 8

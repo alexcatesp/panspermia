@@ -52,9 +52,22 @@ def test_toxic_algae_subtract_energy():
     pos = jnp.array([[4.0, 4.0]])
     actions = jnp.zeros((1, config.ACT_DIM)).at[0, 2].set(1.0)
     toxic = jnp.ones((RES, RES), bool)
-    gain, intake, toxic_in, _, _, _ = world.eat(res, chem, pos, jnp.array([True]), actions, toxic)
+    gain, intake, toxic_in, _, _, _ = world.eat(res, chem, pos, jnp.array([True]), actions, toxic, 1.0)
     assert float(toxic_in[0]) == float(intake[0]) > 0
     assert np.isclose(float(gain[0]), -config.TOXIC_FACTOR * float(intake[0]))
+
+
+def test_toxicity_ramp_starts_as_food():
+    """Rampa: con toxicidad 0 el alga tóxica alimenta; con 0,5, nada; con 1, resta."""
+    res = jnp.full((RES, RES), 1.0)
+    chem = jnp.zeros((config.N_CHEM, RES, RES))
+    pos = jnp.array([[4.0, 4.0]])
+    actions = jnp.zeros((1, config.ACT_DIM)).at[0, 2].set(1.0)
+    toxic = jnp.ones((RES, RES), bool)
+    gains = [float(world.eat(res, chem, pos, jnp.array([True]), actions, toxic, t)[0][0])
+             for t in (0.0, 1.0 / (1.0 + config.TOXIC_FACTOR), 1.0)]
+    assert gains[0] > 0 and np.isclose(gains[1], 0.0, atol=1e-6) and gains[2] < 0
+    assert config.TOXIC_RAMP_STEPS > 0
 
 
 def test_toxic_cells_alternate_and_disable():
@@ -83,3 +96,13 @@ def test_island_runs_with_chemistry():
     for k in ("toxic_intake_frac", "emit_toxin", "deaths_poison", "chem_nutrient_total"):
         assert k in st and np.isfinite(float(st[k]))
     assert float(st["emit_nutrient"]) > 0  # cerebros aleatorios emiten
+
+
+def test_toxic_regions_split_island_and_move():
+    """Regiones de toxicidad: media isla en cada régimen y fronteras que se desplazan."""
+    env = world.make_env(b"x")
+    r0 = np.asarray(world.toxic_regions(env, jnp.int32(0)))
+    later = int(config.WORLD_L / (4 * config.TOXIC_REGION_K) / config.TOXIC_REGION_SPEED / config.DT)
+    r1 = np.asarray(world.toxic_regions(env, jnp.int32(later)))
+    assert 0.4 < r0.mean() < 0.6
+    assert 0.2 < (r0 != r1).mean()  # un cuarto de longitud de onda después ha cambiado mucho

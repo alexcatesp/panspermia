@@ -50,7 +50,7 @@ La energía es la única moneda: toda acción cuesta energía, solo la comida la
 #### Sustrato 2.x (ADR-008): química y algas estacionales
 
 - **Química**: tres campos de 128 × 128 (nutriente, toxina, feromona) con difusión y degradación. Tres actuadores más emiten cada sustancia (A = 8). Nutriente y toxina almacenan la energía de su emisión; comer absorbe nutriente; la toxina drena energía de quien esté en su celda. Nutriente y toxina degradados, y lo drenado por la toxina, vuelven como alga (energía conservada).
-- **Algas estacionales**: dos tipos de alga en manchas; el canal de recurso de los rayos lleva signo según el tipo. Uno de los tipos es tóxico (comerlo resta energía), y cuál lo es cambia al azar con probabilidad 1/400 por paso.
+- **Algas estacionales**: dos tipos de alga en manchas; el canal de recurso de los rayos lleva signo según el tipo. Uno de los tipos es tóxico (comerlo resta la mitad de lo que habría sumado), y cuál lo es depende de franjas de la isla cuyas fronteras se desplazan, de modo que un individuo cruza cambios de régimen dentro de su vida. La toxicidad entra con una rampa de 40 épocas desde el nacimiento de la isla (calibración en ADR-008).
 - **Sensores**: se añaden concentración local y gradientes adelante y lateral de cada sustancia (+9). Total O = 79.
 
 ### Fase 2+: mundo 3D (MJX)

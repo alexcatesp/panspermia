@@ -113,7 +113,7 @@ def test_genome_rejects_other_major_version():
     import zstandard
     _, blob = _valid_blob()
     doc = msgpack.unpackb(zstandard.ZstdDecompressor().decompress(blob), raw=False)
-    doc["v"] = "2.0.0"
+    doc["v"] = f"{int(config.SUBSTRATE_VERSION.split('.')[0]) + 1}.0.0"
     with pytest.raises(ValueError):
         G.from_bytes(zstandard.ZstdCompressor().compress(msgpack.packb(doc, use_bin_type=True)))
 
@@ -148,7 +148,8 @@ def test_epoch_split_invariance():
     """La clave por paso es fold_in(key, step): 2 épocas de k == 1 época de 2k (bit a bit)."""
     a = _run(3, 2, 100, n_max=256, n_init=64)
     b = _run(3, 1, 200, n_max=256, n_init=64)
-    assert _leaves_bitwise_equal(a, b)
+    # comm_hist es un acumulador de observación que se reinicia en cada época por diseño
+    assert _leaves_bitwise_equal(a.replace(comm_hist=None), b.replace(comm_hist=None))
 
 
 def test_different_seeds_differ():

@@ -136,6 +136,26 @@ Además: la ejecución no depende de cómo se trocee en épocas (2 × 100 pasos 
 
 **Alternativas descartadas por ahora**: quitar el mordisco (perderíamos la comparación con la fase 1); química con reacciones entre sustancias (más difícil de analizar; siguiente paso si esta funciona); genoma sin techo (los cerebros usan ~5 de 64 neuronas: el techo no es lo que limita).
 
+**Calibración (16-10-2026, 02:00–04:40, antes de la aceptación).** El diseño inicial no superaba el test de no extinción de la fase 0: **0 de 5 semillas** sobrevivían 100 épocas.
+- Con el diseño original, en la primera época morían 505 de 512 agentes. Un cerebro aleatorio no distingue algas: con la mitad tóxica, comer de todo da un balance nulo.
+- Ablaciones (semilla 0, 5 épocas): sin algas estacionales la población se recupera aunque haya emisión (167 → 1.606). Con ellas se extingue aunque nadie emita.
+- Una **rampa de toxicidad** salva el arranque: en el paso 0 el alga tóxica alimenta como las demás y llega a veneno pleno en `TOXIC_RAMP_STEPS` (40 épocas). Durante la rampa la población **evoluciona discriminación**: la fracción de ingesta tóxica baja de 0,53 a ~0,04–0,15 y deja de emitir toxina.
+- Aun así, el **cambio global** de tipo tóxico (1/400 o 1/1000 por paso) provocaba colapsos sincronizados: cuando cambia, toda la población come veneno a la vez. Hubo extinción en 2 de 5 semillas incluso con veneno a la mitad, y en 1 de 4 con el doble de rebrote.
+- Se sustituye por **regiones de toxicidad móviles**: el tipo tóxico depende de franjas (2 de cada régimen en el toro) cuyas fronteras avanzan a 5 unidades por unidad de tiempo. Un individuo cruza cambios de régimen dentro de su vida, sea quedándose quieto o viajando, pero en cada momento media isla sigue igual. `TOXIC_FLIP_PROB = 0`; el mecanismo global queda en el código.
+- Pilotos con regiones (semillas 0 y 2): con veneno pleno (`TOXIC_FACTOR = 1`) se extinguen; con **`TOXIC_FACTOR = 0,5` y `RESOURCE_R = 1,5`** sobreviven (mínimos de 1.150 y 308).
+
+| Parámetro | Diseño inicial | Calibrado |
+| --- | --- | --- |
+| Cambio de tipo tóxico | global, 1/400 por paso | regiones móviles (k = 2, 5 u/t); global desactivado |
+| `TOXIC_FACTOR` | 1,0 | 0,5 |
+| Rampa de toxicidad | — | 40 épocas |
+| `RESOURCE_R` | 1,0 (como la fase 1) | 1,5 (el alga tóxica reduce la comida útil) |
+
+- La rampa dura 40 épocas, y no 100, para que haya ~60 épocas de veneno pleno antes de la primera batería de capacidad (época 100), que con la prueba del anillo actual probablemente pause las islas (ADR-010).
+- Etiqueta `deaths_poison` contrafactual: cuenta una muerte como envenenamiento si, sin la toxina o la pérdida por alga tóxica de ese paso, el agente habría sobrevivido. Antes, cualquier traza de toxina difundida bastaba.
+- Comparabilidad con la fase 1: hay más rebrote de algas, así que las poblaciones no son comparables en número. El valor del aprendizaje, los grupos y las neuronas sí lo son.
+- Test arreglado: `test_epoch_split_invariance` excluye `comm_hist`, un acumulador de observación que se reinicia cada época por diseño. La dinámica es idéntica bit a bit.
+
 ## ADR-009 · 16-10-2026 · Peceras libres, peceras granja y fabricabilidad
 
 **Contexto.** El responsable plantea tres caminos complementarios: (1) muchas peceras por el mundo para tener riqueza evolutiva, (2) fabricar en el mundo real organismos evolucionados en la pecera y (3) dirigir la evolución para que surjan organismos que resuelvan un problema real. El camino 3 choca con el principio 1 («ninguna métrica externa decide la reproducción»). El responsable delegó las decisiones de este ADR (16-10-2026, 00:23).

@@ -248,8 +248,9 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     actions, h_new, pre, post = brain.step(state.w, state.h, obs, state.genome.hid_mask)
     pos, vel, angle, thrust = world.physics(state, actions, cand)
     toxic = world.toxic_cells(state.env, state.step, state.toxic_type)
+    toxicity = jnp.clip(state.step.astype(jnp.float32) / C.TOXIC_RAMP_STEPS, 0.0, 1.0)
     gain, intake, toxic_in, nutrient, resources, chem = world.eat(
-        state.resources, state.chem, pos, alive0, actions, toxic)
+        state.resources, state.chem, pos, alive0, actions, toxic, toxicity)
     signal = jnp.where(alive0, actions[:, 4], 0.0)
     state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
                           signal=signal)
@@ -287,7 +288,10 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
 
     died = alive0 & (energy <= 0)
     by_attack = died & (drained > 0)
-    by_poison = died & ~by_attack & ((tox_dmg > 0) | (toxic_in > 0))
+    # veneno: sin la toxina ni la pérdida neta por alga tóxica de este paso habría sobrevivido
+    # (la intoxicación lenta, repartida en muchos pasos, cuenta como hambre)
+    toxic_loss = jnp.maximum(toxic_in * (toxicity * (1.0 + C.TOXIC_FACTOR) - 1.0), 0.0)
+    by_poison = died & ~by_attack & (energy + tox_dmg + toxic_loss > 0)
     by_age = died & ~by_attack & ~by_poison & (state.age >= C.SENESCENCE_START)
     alive = alive0 & ~died
     state = state.replace(energy=jnp.where(alive, energy, 0.0), alive=alive,
