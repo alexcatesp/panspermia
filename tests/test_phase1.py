@@ -179,3 +179,16 @@ def test_viewer_serves_only_run_dir(tmp_path):
     assert viewer._inside(root, "../secret.txt") is None
     assert viewer._inside(root, "stats") is None  # sin listados de directorio
     assert (viewer.STATIC / "index.html").exists()
+
+
+def test_runner_stops_when_extinct(tmp_path, monkeypatch):
+    """Si la isla sigue extinguiéndose pese a reinyectar, el runner se detiene y lo indica."""
+    from panspermia import run as runner
+    for name, value in (("EPOCH_STEPS", 40), ("EXTINCT_STOP_EPOCHS", 2), ("C_BASAL", 1e4),
+                        ("FROZEN_PLASTICITY_TEST_EVERY", 99), ("VIDEO_EVERY", 99),
+                        ("CAPABILITY_TEST_EVERY", 99)):
+        monkeypatch.setattr(config, name, value)
+    r = runner.run(0, 10, tmp_path / "run", b"t", 128, 64, verbose=False)
+    assert r["stopped_extinct"] and r["extinct_at"] == 1
+    rows = json.loads((tmp_path / "run" / "stats" / "summary.json").read_text())
+    assert rows[-1]["epoch"] == 2

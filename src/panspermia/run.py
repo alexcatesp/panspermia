@@ -120,6 +120,8 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
 
     rows: list[dict] = []
     extinct_at = None
+    extinct_streak = 0  # épocas seguidas en las que la población llegó a 0 (pese a reinyectar)
+    stopped_extinct = False
     paused = None
     for e in range(start + 1, epochs + 1):
         t0 = time.perf_counter()
@@ -168,6 +170,8 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
 
         if stats["population_min"] == 0 and extinct_at is None:
             extinct_at = e
+        extinct_streak = extinct_streak + 1 if stats["population_min"] == 0 else 0
+        stopped_extinct = extinct_streak >= C.EXTINCT_STOP_EPOCHS
         if reinject and stats["population"] < C.N_MIN_REINJECT:
             before = stats["population"]
             state = island.reinject(state, C.N_MIN_REINJECT)
@@ -184,11 +188,12 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
                   f"ocultas {stats['hidden_mean']:.2f} · archivo {row['archive_size']} · "
                   f"silueta {row['groups_silhouette']:.2f} (k={row['groups_k']}){extra}", flush=True)
 
-        if e % C.CHECKPOINT_EVERY == 0 or paused:
+        if e % C.CHECKPOINT_EVERY == 0 or paused or stopped_extinct:
             _flush(rows, all_rows, stats_dir)
             # vía host: tras un restore, la ruta de Orbax por memoria fija (pinned) se agota en
             # WSL2 con N = 4096 (RESOURCE_EXHAUSTED en el primer guardado); device_get es exacto
-            mngr.save(e, args=ocp.args.StandardSave(jax.device_get(state)), force=bool(paused))
+            mngr.save(e, args=ocp.args.StandardSave(jax.device_get(state)),
+                      force=bool(paused) or stopped_extinct)
             np.save(out / "novelty_archive.npy", archive.archive)
             (out / "activity.json").write_text(json.dumps(activity.activity))
         if paused:
@@ -196,11 +201,16 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
             if verbose:
                 print(f"PAUSA por capacidad en la época {e}: {paused['exceeded']}", flush=True)
             break
+        if stopped_extinct:
+            if verbose:
+                print(f"PARADA: {C.EXTINCT_STOP_EPOCHS} épocas seguidas extinta (la reinyección no prende)",
+                      flush=True)
+            break
     _flush(rows, all_rows, stats_dir)
     mngr.wait_until_finished()
     mngr.close()
     return {"extinct_at": extinct_at, "final_population": int(np.asarray(state.alive).sum()),
-            "paused": paused is not None}
+            "paused": paused is not None, "stopped_extinct": stopped_extinct}
 
 
 def main() -> None:

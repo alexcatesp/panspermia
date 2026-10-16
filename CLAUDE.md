@@ -6,6 +6,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 
 - `docs/spec.md` es la especificación. Si el código y la spec discrepan, gana la spec; si la spec está mal, propón el cambio y regístralo en `docs/decisiones.md` antes de implementarlo.
 - `docs/bibliografia.md`: referencias. Las marcadas con † no están verificadas.
+- `docs/caminos.md`: registro de caminos descartados, aparcados (con su condición de reapertura) y en estudio. Actualizarlo cada vez que una opción se pruebe y falle o funcione.
 - `src/panspermia/config.py` concentra todas las constantes numéricas de la spec. No hardcodees números en otros módulos.
 
 ## Principios innegociables (spec §Objetivo y principios)
