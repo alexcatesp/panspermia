@@ -221,3 +221,23 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 ### 20:45 · E0b lanzado (calibración del veneno)
 - Qué: `TOXIC_FACTOR` 0,5 → 0,3 en todas las condiciones. Fijo, y aleatorio con T = 200 y T = 800; 3 semillas × 100 épocas, N = 4.096. Cola: `experiments/fase1d/e0b.json` (`29f0d75`). Datos: `runs/fase1d/E0b-*`.
+
+### 20:45–22:30 · E0b: calibración del veneno (`TOXIC_FACTOR` 0,3)
+- Datos: `runs/fase1d/E0b-*`, `runs/fase1d/e0b.log`. Código: `29f0d75`. 3 semillas × 100 épocas, N = 4.096.
+- Supervivencia: fijo 3/3, aleatorio T = 800 3/3, aleatorio T = 200 2/3 (s2 extinta en la época 44; **la parada nueva actuó**: `stopped_extinct`). En total 8 de 9 (89 %).
+- **Corrección de τ_vida**: el 206 de E0 era una media inflada por una semilla (s2: 521 pasos). Por semilla, la duración de la vida va de 91 a 521 pasos; la **mediana** es ~114 (E0 fijo) y ~134 (E0b fijo). τ_vida ≈ 130, cerca de los ~140 del diseño, así que **se mantienen los periodos 35 · 140 · 560 · 2.240**. τ_gen ≈ 270 (mediana).
+- **La medida relativa del VA explota** cuando el gemelo congelado casi se extingue: +32,4 en E0b-aleatorio-T800 s1, frente a −0,00 y +0,26 en las otras dos semillas. Con VA_log = log((plástico + 1) / (congelado + 1)), calculado a posteriori (épocas 51–100, población ≥ 64), y mediana entre semillas:
+
+| Condición | VA_log por semilla | Mediana (factor) |
+| --- | --- | --- |
+| E0 fijo, veneno 0,5 | 0,13 · 0,21 · 0,11 · 0,38 · 0,58 | +0,21 (×1,23) |
+| E0 aleatorio T = 560, veneno 0,5 | 0,77 · — · 0,22 · — · 1,13 | +0,77 (×2,15) |
+| E0b fijo, veneno 0,3 | 0,13 · 0,18 · 0,34 | +0,18 (×1,20) |
+| E0b aleatorio T = 200, veneno 0,3 | 0,02 · 0,03 · — | +0,02 (×1,02) |
+| E0b aleatorio T = 800, veneno 0,3 | −0,01 · 2,42 · 0,23 | +0,23 (×1,25) |
+
+- Decisiones del responsable (22:35): **lanzar E1 con veneno 0,3** (las extinciones se informan como resultado) y **VA_log con mediana** como medida primaria (diseño v0.4; la relativa se conserva). Implementado en `9b9fb9e`.
+- Indicios, pendientes de E1: (1) en **todas** las condiciones aprender ayuda (VA > 0 en 15 de 16 semillas vivas); (2) con cambio muy rápido (T = 200 ≈ 1,5 vidas) el beneficio casi desaparece (+0,02), aunque los cerebros son los mayores (15 neuronas ocultas); (3) el beneficio máximo aparece con cambio aleatorio a T = 560 y veneno fuerte (×2,15). Encaja con la campana de H1, pero con n = 2–3 por condición y veneno distinto entre bloques: **no es concluyente**.
+
+### 22:45 · E1 y E2 lanzados
+- Colas `experiments/fase1d/e1.json` y `e2.json`: 20 condiciones × 5 semillas × 300 épocas, N = 4.096, veneno 0,3. Código: `9b9fb9e`. Logs: `runs/fase1d/e1.log`, `e2.log`. Duración estimada: ~1,5–2 días.
