@@ -7,6 +7,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 - `docs/spec.md` es la especificación. Si el código y la spec discrepan, gana la spec; si la spec está mal, propón el cambio y regístralo en `docs/decisiones.md` antes de implementarlo.
 - `docs/bibliografia.md`: referencias. Las marcadas con † no están verificadas.
 - `docs/bibliografia/<fase>/`: bibliografía por fase para un posible artículo (README con síntesis, hueco y fichas; `refs.bib` con DOI comprobados; `pdf/` solo local y en `.gitignore`). Al citar en un ADR, usar estas claves.
+- `docs/bitacora.md`: **cuaderno de laboratorio cronológico**. Añadir una entrada por cada experimento, prueba o diagnóstico (qué, commit, datos en `runs/`, resultado con números y conclusión: firme, indicio, descartado o aparcado), incluido lo que falla. Es la base de la publicación.
 - `docs/caminos.md`: registro de caminos descartados, aparcados (con su condición de reapertura) y en estudio. Actualizarlo cada vez que una opción se pruebe y falle o funcione.
 - `src/panspermia/config.py` concentra todas las constantes numéricas de la spec. No hardcodees números en otros módulos.
 
