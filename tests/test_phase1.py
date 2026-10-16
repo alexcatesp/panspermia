@@ -7,6 +7,8 @@ import numpy as np
 import pytest
 
 from panspermia import capability, config, island, metrics, record, world
+from panspermia import genome as G
+from panspermia.develop import develop_batch
 
 
 def _small(seed=0, n_max=64, n_init=16):
@@ -130,18 +132,49 @@ def test_record_epoch_matches_epoch(tmp_path):
 def test_capability_layouts():
     food, walls = capability.maze_layout()
     assert walls.any() and food.sum() > 0 and not (walls & (food > 0)).any()
-    food, walls = capability.ring_layout()
+    food, walls = capability.patch_layout()
     assert food.sum() > 0 and not walls.any()
+    # la mancha queda fuera del alcance máximo de los sensores desde el punto de partida
+    x, y = capability._grid()
+    r = np.hypot(x - capability.CENTER, y - capability.CENTER)[food > 0]
+    assert r.min() > config.SENSOR_RANGE_BOUNDS[1]
 
 
 def test_capability_battery_runs_and_pause_logic():
     s = _small(n_max=256, n_init=128)
     s, st = island.epoch(s, 250)
     out = capability.run_battery(s, float(st["comm_mi_bits"]))
-    for k in ("ring_gain", "maze_gain", "ring_baseline", "maze_baseline", "comm_mi_bits"):
+    for k in ("patch_gain", "maze_gain", "patch_baseline", "maze_baseline", "comm_mi_bits",
+              "patch_baseline_controls", "patch_baseline_random"):
         assert k in out and np.isfinite(out[k])
     assert capability.exceeded({"maze_gain": 0.3}, {"maze_gain": 0.25}) == {"maze_gain": 0.3}
     assert capability.exceeded({"maze_gain": 0.1}, {"maze_gain": 0.25}) == {}
+    assert out["patch_baseline"] == max(out["patch_baseline_controls"], out["patch_baseline_random"])
+    assert out["patch_gain"] == out["patch_success"] - out["patch_baseline"]
+
+
+def test_control_policy_overrides_brain():
+    """Con control activo las acciones son las fijadas; con control inactivo, idéntico a None."""
+    s = _small(n_max=64, n_init=32)
+    a, _ = island.world_step(s, None, births=False)
+    b, _ = island.world_step(s, None, births=False, control=jnp.zeros((3,)))
+    assert np.array_equal(np.asarray(a.pos), np.asarray(b.pos))
+    c, _ = island.world_step(s, None, births=False, control=jnp.array([1.0, 0.0, 0.0]))
+    alive = np.asarray(s.alive)
+    assert np.allclose(np.asarray(c.angle)[alive], np.asarray(s.angle)[alive])  # sin giro
+
+
+def test_straight_walker_does_not_pass_patch():
+    """Regresión del falso positivo v1: avanzar recto sin cerebro no supera la mancha lejana."""
+    p = 32
+    g = jax.vmap(G.random_minimal)(jax.random.split(jax.random.PRNGKey(3), p))
+    ph = develop_batch(g)
+    angles = jax.random.uniform(jax.random.PRNGKey(4), (p,), maxval=2 * np.pi)
+    food, walls = capability.patch_layout()
+    env = capability._probe_env(walls)
+    s = capability.control_successes(env, g, ph, ph.w0.astype(jnp.float32), angles,
+                                     jnp.asarray(food), config.PROBE_PATCH_STEPS)
+    assert max(s) < 0.15, s
 
 
 def test_runner_pause_and_review(tmp_path, monkeypatch):
@@ -149,7 +182,7 @@ def test_runner_pause_and_review(tmp_path, monkeypatch):
     from panspermia import run as runner
     for name, value in (("EPOCH_STEPS", 60), ("CHECKPOINT_EVERY", 2), ("VIDEO_EVERY", 2),
                         ("FROZEN_PLASTICITY_TEST_EVERY", 2), ("CAPABILITY_TEST_EVERY", 2),
-                        ("PROBE_RING_STEPS", 30), ("PROBE_MAZE_STEPS", 30)):
+                        ("PROBE_PATCH_STEPS", 30), ("PROBE_MAZE_STEPS", 30)):
         monkeypatch.setattr(config, name, value)
     monkeypatch.setattr(config, "CAPABILITY_PAUSE_THRESHOLDS", {"comm_mi_bits": -1.0})
     out = tmp_path / "run"

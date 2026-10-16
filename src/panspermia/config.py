@@ -154,16 +154,21 @@ CAPABILITY_TEST_EVERY = 100
 # ADR-007. Umbrales conservadores: superar cualquiera pausa la isla hasta revisión humana.
 CAPABILITY_PAUSE_THRESHOLDS: dict[str, float] = {
     "comm_mi_bits": 0.5,     # información mutua señal↔contexto (máx. 2 bits)
-    "ring_gain": 0.5,        # éxito en comida en anillo − éxito de genomas aleatorios
-    "maze_gain": 0.25,       # éxito en laberinto − éxito de genomas aleatorios
+    # ADR-011 (batería v2): la ganancia se mide frente a la MEJOR referencia (genomas aleatorios o
+    # políticas fijas sin cerebro). El umbral de 0,5 del antiguo anillo pasa a la mancha lejana.
+    "patch_gain": 0.5,       # éxito en mancha de comida lejana − mejor referencia
+    "maze_gain": 0.25,       # éxito en laberinto − mejor referencia
 }
 PROBE_AGENTS = 64            # agentes adultos muestreados por prueba
-PROBE_RING_STEPS = 500
+PROBE_PATCH_STEPS = 500
+PROBE_PATCH_DIST = 150.0     # más allá del alcance máximo de los sensores (60): hay que buscar
+PROBE_PATCH_RADIUS = 12.0
+# Políticas fijas de referencia (empuje, giro), comiendo siempre: quieto, recto y en círculos
+PROBE_CONTROLS = ((0.0, 0.0), (0.25, 0.0), (0.5, 0.0), (1.0, 0.0), (1.0, 0.1), (1.0, 0.3), (1.0, 1.0))
 PROBE_MAZE_STEPS = 1000
 PROBE_SUCCESS_INTAKE = 1.0   # ingesta mínima para contar éxito
 PROBE_ENERGY = 100.0         # energía inicial en las pruebas (sin reproducción)
 PROBE_FOOD = 4.0             # recurso por celda de comida en las pruebas
-PROBE_RING_RADIUS = (120.0, 136.0)
 
 # --- Visor (spec §Persistencia: vídeo cada 50 épocas) ---
 RECORD_STRIDE = 2            # se guarda 1 de cada RECORD_STRIDE pasos de la época grabada
