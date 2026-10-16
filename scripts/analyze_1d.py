@@ -1,9 +1,10 @@
 """Resumen por condición de los experimentos de la fase 1d (solo lectura).
 
 Lee `<raíz>/<condición>/s<semilla>/{stats/summary.json,result.json,run.json}` y saca, por condición,
-media ± desviación entre semillas de: supervivencia, población, duración de la vida, tiempo de
-generación, valor del aprendizaje (VA, sonda emparejada), neuronas ocultas, fracción tóxica, uso del
-reloj, anticipación y segundos por época. Las medidas «tardías» usan la última mitad de las épocas.
+la **mediana** entre semillas (en el CSV, también la media y la desviación) de: supervivencia,
+población, duración de la vida, tiempo de generación, valor del aprendizaje (VA, sonda emparejada;
+primaria `va_log_population`, diseño v0.4), neuronas ocultas, fracción tóxica, uso del reloj,
+anticipación y segundos por época. Las medidas «tardías» usan la última mitad de las épocas.
 
 Uso: python scripts/analyze_1d.py runs/fase1d [--csv runs/fase1d/resumen.csv]
 """
@@ -19,6 +20,14 @@ from pathlib import Path
 def _mean(xs):
     xs = [x for x in xs if x is not None and not (isinstance(x, float) and math.isnan(x))]
     return sum(xs) / len(xs) if xs else None
+
+
+def _median(xs):
+    xs = sorted(x for x in xs if x is not None and not (isinstance(x, float) and math.isnan(x)))
+    n = len(xs)
+    if not n:
+        return None
+    return xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2
 
 
 def _sd(xs):
@@ -55,6 +64,8 @@ def seed_summary(d: Path) -> dict | None:
         "population_min": min(r["population_min"] for r in rows),
         "lifespan": _mean([r.get("lifespan_mean") for r in late]),
         "tau_gen": tau_gen,
+        "va_log_population": _mean([r.get("va_log_population") for r in late]),
+        "va_log_intake": _mean([r.get("va_log_intake") for r in late]),
         "va_population": _mean([r.get("va_population") for r in late]),
         "va_intake": _mean([r.get("va_intake") for r in late]),
         "va_toxic_frac": _mean([r.get("va_toxic_frac") for r in late]),
@@ -67,7 +78,8 @@ def seed_summary(d: Path) -> dict | None:
     }
 
 
-KEYS = ["population_late", "population_min", "lifespan", "tau_gen", "va_population", "va_intake",
+KEYS = ["population_late", "population_min", "lifespan", "tau_gen", "va_log_population",
+        "va_log_intake", "va_population", "va_intake",
         "va_toxic_frac", "hidden", "toxic_frac", "clock_rhythm", "anticipation", "attack_gene",
         "sec_per_epoch"]
 
@@ -88,7 +100,8 @@ def main() -> None:
                "extinct_epochs": [v["extinct_at"] for v in seeds.values() if v["extinct"]]}
         for k in KEYS:
             vals = [v[k] for v in alive] or [v[k] for v in seeds.values()]
-            row[k] = _mean(vals)
+            row[k] = _median(vals)
+            row[k + "_mean"] = _mean(vals)
             row[k + "_sd"] = _sd(vals)
         table.append(row)
     fmt = lambda v: "—" if v is None else (f"{v:.3g}" if isinstance(v, float) else str(v))

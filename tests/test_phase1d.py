@@ -104,6 +104,13 @@ def test_paired_learning_value():
     va = metrics.paired_learning_value(p, f)
     assert np.isclose(va["va_population"], 0.1) and np.isclose(va["va_intake"], 0.5)
     assert np.isclose(va["va_toxic_frac"], -0.1)
+    assert np.isclose(va["va_log_population"], np.log(1101 / 1001))
+    # simétrica y acotada aunque el gemelo congelado se extinga
+    up = metrics.paired_learning_value({**p, "population": 99}, {**f, "population": 49})
+    down = metrics.paired_learning_value({**p, "population": 49}, {**f, "population": 99})
+    assert np.isclose(up["va_log_population"], -down["va_log_population"])
+    dead = metrics.paired_learning_value(p, {**f, "population": 0})
+    assert np.isfinite(dead["va_log_population"]) and dead["va_log_population"] < 8
 
 
 def _small_run(tmp_path, monkeypatch, **kw):

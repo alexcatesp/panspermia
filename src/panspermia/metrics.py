@@ -283,9 +283,17 @@ class ActivityTracker:
 def paired_learning_value(plastic: dict, frozen: dict) -> dict:
     """Valor del aprendizaje emparejado a nivel de población: la misma época, desde el mismo estado y
     con la misma aleatoriedad, con plasticidad (`plastic`) y congelada (`frozen`). Diferencias
-    relativas; la fracción tóxica, en diferencia absoluta."""
+    relativas; la fracción tóxica, en diferencia absoluta.
+
+    Medida primaria (diseño 1d v0.4, decisión del responsable tras E0b): `va_log_*` =
+    log((plástico + 1) / (congelado + 1)), simétrica y acotada cuando el gemelo congelado se
+    extingue (la relativa llegó a +32 en E0b). Las relativas se conservan como secundarias."""
     rel = lambda k: (plastic[k] - frozen[k]) / max(abs(frozen[k]), 1e-9)
+    log = lambda k: float(np.log((plastic[k] + 1.0) / (frozen[k] + 1.0)))
     return {
+        "va_log_population": log("population"),
+        "va_log_intake": log("intake"),
+        "va_log_births": log("births"),
         "va_population": rel("population"),
         "va_intake": rel("intake"),
         "va_births": rel("births"),

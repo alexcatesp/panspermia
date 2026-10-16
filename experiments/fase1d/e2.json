@@ -18,7 +18,10 @@
    "tox_mode": "aleatorio",
    "tox_period": 35
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-aleatorio-T140",
@@ -39,7 +42,10 @@
    "tox_mode": "aleatorio",
    "tox_period": 140
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-aleatorio-T560",
@@ -60,7 +66,10 @@
    "tox_mode": "aleatorio",
    "tox_period": 560
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-aleatorio-T2240",
@@ -81,7 +90,10 @@
    "tox_mode": "aleatorio",
    "tox_period": 2240
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-periodico-T035",
@@ -103,7 +115,10 @@
    "tox_period": 35,
    "clock_period": 35
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-periodico-T140",
@@ -125,7 +140,10 @@
    "tox_period": 140,
    "clock_period": 140
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-periodico-T560",
@@ -147,7 +165,10 @@
    "tox_period": 560,
    "clock_period": 560
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-periodico-T2240",
@@ -169,7 +190,10 @@
    "tox_period": 2240,
    "clock_period": 2240
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-fijo",
@@ -189,7 +213,10 @@
   "env": {
    "tox_mode": "fijo"
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  },
  {
   "name": "E2-sin-toxico",
@@ -210,6 +237,9 @@
    "tox_mode": "fijo",
    "seasonal": 0.0
   },
-  "plastic": false
+  "plastic": false,
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
  }
 ]
