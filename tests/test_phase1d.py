@@ -80,6 +80,23 @@ def test_island_with_schedule_runs_and_reports():
     series = {k[7:]: np.asarray(v) for k, v in st.items() if k.startswith("series_")}
     tm = metrics.temporal_metrics(series, s.env, int(s.step) - 100)
     assert 0.0 <= tm["clock_rhythm"] <= 1.0 and tm["anticipation"] is not None
+    # curva de recuperación (v0.5): último cambio en el paso 100 y la curva reparte toda la ingesta
+    assert np.all(np.asarray(s.tox_since) == 100)
+    assert np.isclose(float(np.sum(st["recov_intake"])), float(st["intake"]), rtol=1e-5)
+    assert np.isclose(float(np.sum(st["recov_toxic"])), float(st["toxic_intake"]), rtol=1e-5)
+    # con cambios cada 20 pasos nunca pasan 32 pasos desde el último: solo intervalos 0–2
+    assert float(np.sum(st["recov_intake"][3:])) == 0.0
+
+
+def test_recovery_bin_and_columns():
+    rep = config.WORLD_L / config.TOX_PATCHES
+    since = jnp.zeros((config.TOX_PATCHES, config.TOX_PATCHES), jnp.int32).at[1, 2].set(990)
+    pos = jnp.array([[1.5 * rep, 2.5 * rep], [0.5 * rep, 0.5 * rep]], jnp.float32)
+    b = np.asarray(island._recovery_bin(pos, since, jnp.int32(1000)))
+    # 10 pasos desde el cambio → intervalo [8, 16); 1000 pasos → [512, 1024)
+    assert b[0] == 1 and b[1] == config.RECOVERY_EDGES.index(512) + 1
+    cols = metrics.recovery_columns(np.array([2.0, 0.0]), np.array([1.0, 0.0]))
+    assert cols["recov_toxic_frac_b0"] == 0.5 and cols["recov_toxic_frac_b1"] is None
 
 
 def test_temporal_metrics_detects_rhythm_and_anticipation():

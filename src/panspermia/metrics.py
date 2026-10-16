@@ -117,7 +117,10 @@ def epoch_stats(state, per_step) -> dict[str, jax.Array]:
         "nutrient_intake": jnp.sum(per_step.nutrient_intake),
         "toxin_damage": jnp.sum(per_step.toxin_damage),
         "toxic_flips": jnp.sum(jnp.abs(jnp.diff(per_step.toxic_type))),
-        "tox_patch_flips": jnp.sum(jnp.abs(jnp.diff(per_step.tox_state))) * C.TOX_PATCHES ** 2,
+        "tox_patch_flips": jnp.sum(per_step.patch_flips),
+        # curva de recuperación (v0.5): el runner la desglosa en columnas por intervalo
+        "recov_intake": jnp.sum(per_step.recov_intake, axis=0),
+        "recov_toxic": jnp.sum(per_step.recov_toxic, axis=0),
         # series por paso (fase 1d): el runner calcula con ellas anticipación y uso del reloj y no
         # las guarda en las estadísticas
         "series_intake": per_step.intake,
@@ -300,6 +303,22 @@ def paired_learning_value(plastic: dict, frozen: dict) -> dict:
         "va_toxic_frac": plastic["toxic_intake_frac"] - frozen["toxic_intake_frac"],
         "frozen_population": frozen["population"],
     }
+
+
+def recovery_columns(intake, toxic) -> dict:
+    """Curva de recuperación de una época (diseño 1d v0.5) en columnas planas.
+
+    Intervalo b: pasos desde el último cambio del parche en [RECOVERY_EDGES[b-1], RECOVERY_EDGES[b])
+    (el primero empieza en 0 y el último es abierto). `recov_toxic_frac_b` = alga tóxica / alga
+    ingerida en ese intervalo (None si no se comió nada); `recov_intake_b`, el alga ingerida.
+    Si los agentes captan el cambio, la fracción tóxica cae con el tiempo desde el cambio; si
+    aprenden a aprender, esa caída se acelera a lo largo de las generaciones."""
+    intake, toxic = np.asarray(intake, np.float64), np.asarray(toxic, np.float64)
+    out: dict = {}
+    for b in range(len(intake)):
+        out[f"recov_intake_b{b}"] = float(intake[b])
+        out[f"recov_toxic_frac_b{b}"] = float(toxic[b] / intake[b]) if intake[b] > 0 else None
+    return out
 
 
 def temporal_metrics(series: dict, env, step0: int) -> dict:

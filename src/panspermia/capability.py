@@ -71,6 +71,7 @@ def _single(env, genome, pheno, w, pos, angle, valid, resources) -> IslandState:
         chem=jnp.zeros((C.N_CHEM, C.RESOURCE_GRID, C.RESOURCE_GRID), jnp.float32),
         toxic_type=jnp.int32(0),
         tox_patches=jnp.zeros((C.TOX_PATCHES, C.TOX_PATCHES), bool),
+        tox_since=jnp.zeros((C.TOX_PATCHES, C.TOX_PATCHES), jnp.int32),
         alive=one(valid), pos=one(pos), vel=jnp.zeros((1, 2)), angle=one(angle),
         energy=one(jnp.where(valid, jnp.float32(C.PROBE_ENERGY), 0.0)),
         age=jnp.zeros((1,), jnp.int32), signal=jnp.zeros((1,)),

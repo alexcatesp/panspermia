@@ -157,9 +157,10 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
             state, stats = island.epoch(state, C.EPOCH_STEPS, plastic=plastic)
         stats = jax.device_get(stats)
         series = {k[7:]: np.asarray(stats.pop(k)) for k in list(stats) if k.startswith("series_")}
+        recovery = metrics.recovery_columns(stats.pop("recov_intake"), stats.pop("recov_toxic"))
         stats = {k: np.asarray(v).item() for k, v in stats.items()}
 
-        row: dict = {"epoch": e, "reinjected": 0, **stats}
+        row: dict = {"epoch": e, "reinjected": 0, **stats, **recovery}
         row.update(metrics.temporal_metrics(series, state.env, int(state.step) - C.EPOCH_STEPS))
         view = metrics.host_view(state)
         desc = metrics.descriptors(view)
@@ -176,7 +177,7 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
             clone, st_f = island.epoch(clone, C.EPOCH_STEPS, plastic=False)
             uid_f, alive_f = jax.device_get((clone.lineage.uid, clone.alive))
             st_f = {k: np.asarray(v).item() for k, v in jax.device_get(st_f).items()
-                    if not k.startswith("series_")}
+                    if not k.startswith(("series_", "recov_"))}
             del clone
             s_plastic = metrics.learning_survival(uid0, alive0, view["uid"], view["alive"])
             s_frozen = metrics.learning_survival(uid0, alive0, uid_f, alive_f)

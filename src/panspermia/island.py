@@ -53,6 +53,7 @@ class IslandState:
     chem: jax.Array         # f32[N_CHEM, 128, 128]: nutriente, toxina, feromona
     toxic_type: jax.Array   # int32: 0 = alga A tóxica, 1 = alga B tóxica
     tox_patches: jax.Array  # bool[P, P]: programa de toxicidad por parches (fase 1d)
+    tox_since: jax.Array    # int32[P, P]: paso del último cambio de cada parche (observación)
     alive: jax.Array        # bool[N]
     pos: jax.Array          # f32[N, 2]
     vel: jax.Array          # f32[N, 2]
@@ -91,6 +92,9 @@ class StepStats:
     eaters: jax.Array       # agentes comiendo en el paso
     death_age_sum: jax.Array  # suma de edades al morir (duración media de la vida)
     deaths: jax.Array
+    patch_flips: jax.Array    # parches que cambian en el paso
+    recov_intake: jax.Array   # f32[len(RECOVERY_EDGES) + 1]: alga ingerida por tiempo desde el cambio
+    recov_toxic: jax.Array    # f32[len(RECOVERY_EDGES) + 1]: alga tóxica ingerida, ídem
 
 
 def setup_determinism() -> None:
@@ -163,6 +167,7 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         chem=jnp.zeros((C.N_CHEM, C.RESOURCE_GRID, C.RESOURCE_GRID), jnp.float32),
         toxic_type=jnp.int32(0),
         tox_patches=world.initial_patches(env, k_patches),
+        tox_since=jnp.zeros((C.TOX_PATCHES, C.TOX_PATCHES), jnp.int32),
         alive=alive,
         pos=jax.random.uniform(k[2], (n_max, 2), maxval=C.WORLD_L),
         vel=jnp.zeros((n_max, 2)),
@@ -272,6 +277,10 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     gain, intake, toxic_in, nutrient, resources, chem = world.eat(
         state.resources, state.chem, pos, alive0, actions, toxic, toxicity)
     signal = jnp.where(alive0, actions[:, 4], 0.0)
+    rbin = _recovery_bin(pos, state.tox_since, state.step)
+    nb = len(C.RECOVERY_EDGES) + 1
+    recov_intake = jax.ops.segment_sum(intake, rbin, num_segments=nb)
+    recov_toxic = jax.ops.segment_sum(toxic_in, rbin, num_segments=nb)
     state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
                           signal=signal)
     atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
@@ -337,9 +346,11 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     flip = jax.random.uniform(k_flip) < C.TOXIC_FLIP_PROB
     patches = world.step_patches(state.env, state.tox_patches, state.step,
                                  jax.random.fold_in(k_flip, 0x70A))
+    changed = patches != state.tox_patches
     state = state.replace(w=w, resources=resources, chem=chem, step=state.step + 1,
                           toxic_type=jnp.where(flip, 1 - state.toxic_type, state.toxic_type),
-                          tox_patches=patches)
+                          tox_patches=patches,
+                          tox_since=jnp.where(changed, state.step + 1, state.tox_since))
 
     stats = StepStats(
         population=jnp.sum(state.alive).astype(jnp.int32),
@@ -360,8 +371,21 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         eaters=jnp.sum(alive0 & (actions[:, 2] > 0)).astype(jnp.int32),
         death_age_sum=jnp.sum(jnp.where(died, age_at_death, 0)).astype(jnp.float32),
         deaths=jnp.sum(died).astype(jnp.int32),
+        patch_flips=jnp.sum(changed).astype(jnp.int32),
+        recov_intake=recov_intake,
+        recov_toxic=recov_toxic,
     )
     return state, stats
+
+
+def _recovery_bin(pos: jax.Array, since: jax.Array, step: jax.Array) -> jax.Array:
+    """Intervalo de RECOVERY_EDGES de los pasos transcurridos desde el último cambio del parche
+    bajo cada agente (misma celda que `world.eat`)."""
+    cell = world._res_index(pos)
+    rep = C.RESOURCE_GRID // C.TOX_PATCHES
+    pi, pj = cell // C.RESOURCE_GRID // rep, cell % C.RESOURCE_GRID // rep
+    elapsed = step - since[pi, pj]
+    return jnp.searchsorted(jnp.asarray(C.RECOVERY_EDGES), elapsed, side="right")
 
 
 @functools.partial(jax.jit, static_argnames=("k", "plastic"), donate_argnums=(0,))

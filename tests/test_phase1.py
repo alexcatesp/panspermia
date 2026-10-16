@@ -182,7 +182,8 @@ def test_runner_pause_and_review(tmp_path, monkeypatch):
     from panspermia import run as runner
     for name, value in (("EPOCH_STEPS", 60), ("CHECKPOINT_EVERY", 2), ("VIDEO_EVERY", 2),
                         ("FROZEN_PLASTICITY_TEST_EVERY", 2), ("CAPABILITY_TEST_EVERY", 2),
-                        ("PROBE_PATCH_STEPS", 30), ("PROBE_MAZE_STEPS", 30)):
+                        ("PROBE_PATCH_STEPS", 30), ("PROBE_MAZE_STEPS", 30),
+                        ("CAPABILITY_MIN_AGENTS", 0)):  # épocas de 60 pasos: aún no hay adultos
         monkeypatch.setattr(config, name, value)
     monkeypatch.setattr(config, "CAPABILITY_PAUSE_THRESHOLDS", {"comm_mi_bits": -1.0})
     out = tmp_path / "run"
