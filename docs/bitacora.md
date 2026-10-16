@@ -241,3 +241,10 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 ### 22:45 · E1 y E2 lanzados
 - Colas `experiments/fase1d/e1.json` y `e2.json`: 20 condiciones × 5 semillas × 300 épocas, N = 4.096, veneno 0,3. Código: `9b9fb9e`. Logs: `runs/fase1d/e1.log`, `e2.log`. Duración estimada: ~1,5–2 días.
+
+### 23:05–23:50 · E1 parado y relanzado con la curva de recuperación (diseño v0.5)
+- Qué: a propuesta del responsable («¿descubren el patrón de la variabilidad?»), E1 se paró a los 20 minutos (datos parciales en `runs/fase1d/_abortado_e1_2245`). Se añadió la curva de recuperación: alga y alga tóxica ingeridas según los pasos desde el último cambio del parche, en 10 intervalos. Se añadió también E8 (fiabilidad del aviso) al diseño.
+- Código: `4126afc`. Tests: 13 de la 1d en verde. Suite sin lentas: 58 de 59; falló `test_runner_pause_and_review` porque, con épocas de 60 pasos, aún no hay adultos y la batería se aplaza (ADR-013, comportamiento correcto); se ajustó el test (`CAPABILITY_MIN_AGENTS = 0`).
+- Comprobaciones: las poblaciones de las épocas 1–3 de E1-aleatorio-T035 s0 coinciden con las del arranque abortado (331, 963, 1.580), así que la medida solo observa. En la época 10 hay 3.682 cambios de parcela (esperados ≈ 64 × 1.000 × 2/35 ≈ 3.657) y la fracción tóxica ronda 0,5 durante la rampa.
+- E1 y E2 relanzados a las 23:50. Se estima que E1 termine el 18-10 por la mañana y E2, el 19-10.
+- Artículo divulgativo vivo para el responsable: «Panspermia: el experimento explicado» (Claude Docs).
