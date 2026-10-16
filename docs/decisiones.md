@@ -262,6 +262,8 @@ Con la geometría de la primera propuesta (150 u, 500 pasos) ni un buen buscador
 
 **Reanudación.** Las islas pausadas de la fase 1 se reanudan con `CAPABILITY_REVIEW.json` firmado por el responsable (autorización del 16-10-2026, 08:50), sin cambiar umbrales y con la batería v2 vigente.
 
+**Resultado de la reanudación** (16-10-2026, 15:25; `runs/phase1`, `runs/phase1.log`). Las islas s1–s4 completan 500 épocas sin pausa, con poblaciones finales de 3.755, 3.827, 3.088 y 3.323. La mejor `cap_patch_gain` medida en vivo tras la época 100 es 0,125 (s1), 0,016 (s2), 0,016 (s3) y 0,156 (s4), siempre por debajo de 0,2. El laberinto da ≈ 0 y la comunicación ≤ 0,011 bits. La batería v2 funciona en ejecuciones reales y la fase 1 queda cerrada como línea base.
+
 ## ADR-012 · 16-10-2026 · Fase 1d (condiciones del aprendizaje) antes de la granja «fuga»
 
 **Contexto.** El ADR-009 ordenaba: fase 1b → granja «fuga» 2D (1c) → red 4a. Tras la noche del 16-10:

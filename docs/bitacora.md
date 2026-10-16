@@ -176,3 +176,19 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 ### 14:00 · Fase 1, isla 1 reanudada con la batería v2: 500 épocas sin pausa
 - Datos: `runs/phase1/s1` · Resultado: población final de 3.755, sin pausas. La batería v2 funciona en una ejecución real.
+
+### 15:25 · Fase 1, islas 2–4 reanudadas con la batería v2: aceptación completa
+- Qué: las cinco islas llegan a 500 épocas con la batería v2 activa. `phase1_acceptance.py eval --out runs/phase1`.
+- Datos: `runs/phase1/s0–s4`, `runs/phase1.log`.
+
+| Isla | Población final | Población (épocas 401–500) | Ocultas | Ataque | Mejor `cap_patch_gain` (épocas > 100) | Aprendizaje (cohortes) |
+| --- | --- | --- | --- | --- | --- | --- |
+| s0 | 3.533 | 3.485 | 3,5 | 0,98 | −0,031 (época 500, a posteriori) | −0,004 |
+| s1 | 3.755 | 3.793 | 5,6 | 0,92 | 0,125 | −0,082 |
+| s2 | 3.827 | 3.747 | 3,7 | 0,95 | 0,016 | −0,020 |
+| s3 | 3.088 | 3.222 | 3,3 | 0,96 | 0,016 | −0,005 |
+| s4 | 3.323 | 3.272 | 3,2 | 0,99 | 0,156 | −0,009 |
+
+- Criterios del `eval`: grupos estables **no** (solo s2 y s3 superan 200 épocas), aprendizaje **no** (cinco de cinco negativos, pero la métrica de cohortes está degenerada; ver 07:30), novedad **sí** (el archivo sigue creciendo en las cinco). Comunicación ≈ 0 bits; laberinto ≈ 0.
+- Ninguna isla pausa: la mejor ganancia en la mancha es 0,156 (s4), por debajo del umbral 0,2. La s0 terminó antes de la v2; su valor sale de `battery_on_checkpoint.py` sobre el checkpoint final.
+- Conclusión: **firme**. La ecología de la fase 1 es estable en 5 de 5 islas (3.100–3.800 bichos), con ataque fijado cerca de 1 y cerebros pequeños. Sin capacidad por encima de las referencias triviales. Con esto se cierra la fase 1 como línea base para la 1b y la 1d.
