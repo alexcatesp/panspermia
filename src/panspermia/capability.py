@@ -4,11 +4,17 @@ Cada CAPABILITY_TEST_EVERY épocas se mide:
 
 1. Comunicación: información mutua señal↔contexto de la última época (`comm_mi_bits`).
 2. Generalización a tareas no vistas, con PROBE_AGENTS adultos aislados (cada uno en su propio
-   mundo, sin reproducción, con sus pesos aprendidos) frente a genomas mínimos aleatorios:
-   - anillo: comida solo en un anillo alrededor del punto de partida (patrón nunca visto);
+   mundo, sin reproducción, con sus pesos aprendidos):
+   - mancha lejana (batería v2, ADR-011): una sola mancha de comida a PROBE_PATCH_DIST, más allá
+     del alcance de los sensores y en dirección aleatoria respecto al rumbo inicial: hay que
+     buscarla y, al verla, ir hacia ella;
    - laberinto: comida dentro de una caja de paredes abierta solo por detrás (las islas no
      tienen paredes).
-   La ganancia es la tasa de éxito de la población menos la de los aleatorios.
+   La ganancia es la tasa de éxito de la población menos la MEJOR referencia: genomas mínimos
+   aleatorios o políticas fijas sin cerebro (PROBE_CONTROLS: quieto, recto, en círculos) con los
+   MISMOS cuerpos que la población. La
+   batería v1 usaba un anillo y solo los aleatorios como referencia: avanzar en línea recta sin
+   cerebro sacaba 1,0 (falso positivo, ADR-010).
 
 Superar cualquier umbral de CAPABILITY_PAUSE_THRESHOLDS pausa la isla hasta revisión humana.
 Las pruebas solo observan: corren sobre copias y no alteran el estado de la isla.
@@ -36,12 +42,11 @@ def _grid():
     return np.meshgrid(_CELL_CENTERS, _CELL_CENTERS, indexing="ij")
 
 
-def ring_layout() -> tuple[np.ndarray, np.ndarray]:
-    """(recursos, paredes) del anillo de comida alrededor del centro."""
+def patch_layout() -> tuple[np.ndarray, np.ndarray]:
+    """(recursos, paredes): una mancha de comida a PROBE_PATCH_DIST del punto de partida."""
     x, y = _grid()
-    r = np.hypot(x - CENTER, y - CENTER)
-    lo, hi = C.PROBE_RING_RADIUS
-    food = np.where((r >= lo) & (r <= hi), C.PROBE_FOOD, 0.0).astype(np.float32)
+    r = np.hypot(x - CENTER - C.PROBE_PATCH_DIST, y - CENTER)
+    food = np.where(r <= C.PROBE_PATCH_RADIUS, C.PROBE_FOOD, 0.0).astype(np.float32)
     return food, np.zeros_like(food, bool)
 
 
@@ -80,12 +85,14 @@ def _single(env, genome, pheno, w, pos, angle, valid, resources) -> IslandState:
 
 
 @functools.partial(jax.jit, static_argnames=("steps",))
-def _run_probe(env, genomes, phenos, ws, valid, angles, resources, steps: int):
-    """Ingesta total por agente aislado tras `steps` pasos."""
+def _run_probe(env, genomes, phenos, ws, valid, angles, resources, steps: int,
+               control: jax.Array | None = None):
+    """Ingesta total por agente aislado tras `steps` pasos. `control` = (activo, empuje, giro)."""
     pos = jnp.array([CENTER, CENTER], jnp.float32)
     states = jax.vmap(lambda g, p, w, v, a: _single(env, g, p, w, pos, a, v, resources))(
         genomes, phenos, ws, valid, angles)
-    step = jax.vmap(functools.partial(world_step, births=False))
+    ctrl = jnp.zeros((3,), jnp.float32) if control is None else control
+    step = jax.vmap(functools.partial(world_step, births=False, control=ctrl))
 
     def body(s, _):
         s, st = step(s, None)
@@ -127,24 +134,41 @@ def run_battery(state: IslandState, comm_mi_bits: float) -> dict[str, float]:
     base_p = develop_batch(base_g)
     base_w = base_p.w0.astype(jnp.float32)
     base_valid = jnp.ones((p,), bool)
-    ring_angles = jax.random.uniform(k_angle, (p,), maxval=2 * math.pi)
+    patch_angles = jax.random.uniform(k_angle, (p,), maxval=2 * math.pi)
     maze_angles = jnp.zeros((p,))
 
     out = {"comm_mi_bits": float(comm_mi_bits), "probe_agents": int(np.asarray(valid).sum())}
     for name, (layout, steps, angles) in {
-        "ring": (ring_layout(), C.PROBE_RING_STEPS, ring_angles),
+        "patch": (patch_layout(), C.PROBE_PATCH_STEPS, patch_angles),
         "maze": (maze_layout(), C.PROBE_MAZE_STEPS, maze_angles),
     }.items():
         food, walls = layout
         env = _probe_env(walls)
         res = jnp.asarray(food)
         pop = _run_probe(env, genomes, phenos, ws, valid, angles, res, steps)
+        s_pop = _success(pop, valid)
         base = _run_probe(env, base_g, base_p, base_w, base_valid, angles, res, steps)
-        s_pop, s_base = _success(pop, valid), _success(base, base_valid)
+        s_random = _success(base, base_valid)
+        s_controls = control_successes(env, genomes, phenos, ws, angles, res, steps, valid)
+        s_base = max(s_random, max(s_controls))
         out[f"{name}_success"] = s_pop
+        out[f"{name}_baseline_random"] = s_random
+        out[f"{name}_baseline_controls"] = max(s_controls)
         out[f"{name}_baseline"] = s_base
         out[f"{name}_gain"] = s_pop - s_base
     return out
+
+
+def control_successes(env, genomes, phenos, ws, angles, resources, steps: int,
+                      valid: jax.Array | None = None) -> list[float]:
+    """Éxito de cada política fija de PROBE_CONTROLS con los cuerpos de `genomes`.
+
+    En la batería se usan los cuerpos de la propia población: la ganancia mide lo que aporta el
+    cerebro, no un cuerpo más rápido o con más alcance."""
+    valid = jnp.ones((angles.shape[0],), bool) if valid is None else valid
+    return [_success(_run_probe(env, genomes, phenos, ws, valid, angles, resources, steps,
+                                jnp.array([1.0, thrust, turn], jnp.float32)), valid)
+            for thrust, turn in C.PROBE_CONTROLS]
 
 
 def exceeded(metrics: dict[str, float], thresholds: dict[str, float]) -> dict[str, float]:

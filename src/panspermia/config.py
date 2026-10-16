@@ -18,6 +18,7 @@ ACT_DIM = 5 + N_CHEM  # empuje, giro, comer, atacar, señal, emitir nutriente/to
 N_MAX = 4096
 N_INIT = 512
 N_MIN_REINJECT = 64
+EXTINCT_STOP_EPOCHS = 20  # el runner se detiene si la isla sigue extinguiéndose pese a reinyectar
 MIN_REPRO_AGE = 200
 OFFSPRING_ENERGY_FRAC_BOUNDS = (0.2, 0.8)
 SENESCENCE_START = 5000
@@ -178,16 +179,22 @@ CAPABILITY_TEST_EVERY = 100
 # ADR-007. Umbrales conservadores: superar cualquiera pausa la isla hasta revisión humana.
 CAPABILITY_PAUSE_THRESHOLDS: dict[str, float] = {
     "comm_mi_bits": 0.5,     # información mutua señal↔contexto (máx. 2 bits)
-    "ring_gain": 0.5,        # éxito en comida en anillo − éxito de genomas aleatorios
-    "maze_gain": 0.25,       # éxito en laberinto − éxito de genomas aleatorios
+    # ADR-011 (batería v2): la ganancia se mide frente a la MEJOR referencia (genomas aleatorios o
+    # políticas fijas sin cerebro con los mismos cuerpos). Umbral de la mancha fijado por el
+    # responsable (16-10-2026): un buscador programado saca ~0,34 de ventaja; las poblaciones, ~0.
+    "patch_gain": 0.2,       # éxito en mancha de comida lejana − mejor referencia
+    "maze_gain": 0.25,       # éxito en laberinto − mejor referencia
 }
 PROBE_AGENTS = 64            # agentes adultos muestreados por prueba
-PROBE_RING_STEPS = 500
+PROBE_PATCH_STEPS = 1000
+PROBE_PATCH_DIST = 90.0      # más allá del alcance máximo de los sensores (60): hay que buscar
+PROBE_PATCH_RADIUS = 12.0
+# Políticas fijas de referencia (empuje, giro), comiendo siempre: quieto, recto y en círculos
+PROBE_CONTROLS = ((0.0, 0.0), (0.25, 0.0), (0.5, 0.0), (1.0, 0.0), (1.0, 0.1), (1.0, 0.3), (1.0, 1.0))
 PROBE_MAZE_STEPS = 1000
 PROBE_SUCCESS_INTAKE = 1.0   # ingesta mínima para contar éxito
 PROBE_ENERGY = 100.0         # energía inicial en las pruebas (sin reproducción)
 PROBE_FOOD = 4.0             # recurso por celda de comida en las pruebas
-PROBE_RING_RADIUS = (120.0, 136.0)
 
 # --- Visor (spec §Persistencia: vídeo cada 50 épocas) ---
 RECORD_STRIDE = 2            # se guarda 1 de cada RECORD_STRIDE pasos de la época grabada

@@ -13,3 +13,6 @@ node_keys/
 .playwright-mcp/
 *.png
 !docs/**/*.png
+
+# PDF de artículos: solo copia local (derechos de autor); en el repo van fichas, enlaces y BibTeX
+docs/bibliografia/**/pdf/

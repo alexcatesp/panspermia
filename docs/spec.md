@@ -33,7 +33,7 @@ Cada nodo ejecuta una isla completa. Los nodos solo intercambian genomas y métr
 
 Flujo por época: `island` ejecuta K pasos en GPU → `observatory` muestrea → `net` exporta emigrantes e importa inmigrantes → siguiente época.
 
-**Papeles de isla (ADR-009).** Las *peceras libres* hacen evolución abierta y son el banco de diversidad de la red. Las *peceras granja* tienen un entorno diseñado para que resolver un problema real sea la forma de obtener energía (sin selección explícita: el principio 1 se mantiene). El flujo genético va solo de libres a granjas. El primer problema es localizar la fuente de una fuga, con cuerpos equivalentes a un robot de tracción diferencial fabricable.
+**Papeles de isla (ADR-009).** Los *mundos libres* hacen evolución abierta y son el banco de diversidad de la red. Los *mundos granja* tienen un entorno diseñado para que resolver un problema real sea la forma de obtener energía (sin selección explícita: el principio 1 se mantiene). El flujo genético va solo de libres a granjas. El primer problema es localizar la fuente de una fuga, con cuerpos equivalentes a un robot de tracción diferencial fabricable.
 
 ## Mundo
 

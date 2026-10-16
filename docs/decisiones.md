@@ -117,7 +117,7 @@ Además: la ejecución no depende de cómo se trocee en épocas (2 × 100 pasos 
 
 **Contexto.** En la fase 1 (semilla 0, primeras 150 épocas) la evolución converge a una sola estrategia sencilla: casi todos muerden lo que tienen delante y comen algas, los cerebros encogen de ~10 a ~5 neuronas, el valor del aprendizaje oscila en torno a 0 y los grupos conductuales se diluyen. Diagnóstico: el mundo no premia ni la diversidad ni aprender. Las acciones son pocas y cerradas (morder ya viene hecho) y el entorno apenas cambia dentro de una vida. El responsable delegó la elección del siguiente paso (16-10-2026, 00:03); esta es la elección.
 
-**Decisión.** Dos cambios dentro de la pecera, sin abrir ningún canal al exterior:
+**Decisión.** Dos cambios dentro del mundo, sin abrir ningún canal al exterior:
 
 1. **Química artificial (primitivas componibles).** Tres sustancias en campos de 128 × 128 con difusión y degradación: **nutriente**, **toxina** y **feromona**. Tres acciones nuevas emiten cada una en la celda propia (hasta 2 por unidad de tiempo).
    - Nutriente y toxina **almacenan la energía** que cuesta emitirlas (1 por unidad); la feromona cuesta 0,1 y se disipa.
@@ -156,17 +156,17 @@ Además: la ejecución no depende de cómo se trocee en épocas (2 × 100 pasos 
 - Comparabilidad con la fase 1: hay más rebrote de algas, así que las poblaciones no son comparables en número. El valor del aprendizaje, los grupos y las neuronas sí lo son.
 - Test arreglado: `test_epoch_split_invariance` excluye `comm_hist`, un acumulador de observación que se reinicia cada época por diseño. La dinámica es idéntica bit a bit.
 
-## ADR-009 · 16-10-2026 · Peceras libres, peceras granja y fabricabilidad
+## ADR-009 · 16-10-2026 · Mundos libres, mundos granja y fabricabilidad
 
-**Contexto.** El responsable plantea tres caminos complementarios: (1) muchas peceras por el mundo para tener riqueza evolutiva, (2) fabricar en el mundo real organismos evolucionados en la pecera y (3) dirigir la evolución para que surjan organismos que resuelvan un problema real. El camino 3 choca con el principio 1 («ninguna métrica externa decide la reproducción»). El responsable delegó las decisiones de este ADR (16-10-2026, 00:23).
+**Contexto.** El responsable plantea tres caminos complementarios: (1) muchos mundos repartidos por el planeta para tener riqueza evolutiva, (2) fabricar en el mundo real organismos evolucionados en un mundo simulado y (3) dirigir la evolución para que surjan organismos que resuelvan un problema real. El camino 3 choca con el principio 1 («ninguna métrica externa decide la reproducción»). El responsable delegó las decisiones de este ADR (16-10-2026, 00:23).
 
 **Decisión.**
 
 1. **Dos papeles de isla en la red.**
-   - **Peceras libres**: evolución abierta, sin objetivo. Son el banco de diversidad de la red (fase 4) y siguen todas las reglas de la spec.
-   - **Peceras granja**: islas cuyo entorno está diseñado para que resolver un problema real sea la forma de obtener energía.
+   - **Mundos libres**: evolución abierta, sin objetivo. Son el banco de diversidad de la red (fase 4) y siguen todas las reglas de la spec.
+   - **Mundos granja**: islas cuyo entorno está diseñado para que resolver un problema real sea la forma de obtener energía.
 2. **Las granjas no usan selección explícita, solo diseño de nicho.** El principio 1 se mantiene sin excepciones en toda la red: nadie puntúa a nadie; se cambia el mundo, como en la domesticación. Motivos: no hace falta tocar un principio innegociable, y una función de puntuación invita a explotarla (la población converge al primer truco que puntúa), mientras que un nicho bien diseñado tiende a producir soluciones más generales. Si algún día se quisiera selección explícita, haría falta un ADR que enmiende el principio 1.
-3. **Flujo genético en un solo sentido: libre → granja.** Las granjas importan migrantes de las peceras libres, que aportan novedad, pero sus genomas nunca vuelven. Así el banco de diversidad no converge hacia soluciones de un problema concreto, y los organismos especializados quedan contenidos en su granja. Se implementará como un campo `role` firmado en la identidad del nodo (fase 4a) y como un rechazo en recepción.
+3. **Flujo genético en un solo sentido: libre → granja.** Las granjas importan migrantes de los mundos libres, que aportan novedad, pero sus genomas nunca vuelven. Así el banco de diversidad no converge hacia soluciones de un problema concreto, y los organismos especializados quedan contenidos en su granja. Se implementará como un campo `role` firmado en la identidad del nodo (fase 4a) y como un rechazo en recepción.
 4. **Primer problema real: localizar la fuente de una fuga** (gas o contaminante). Es un problema de robótica conocido (*odor source localization*), con aplicaciones en seguridad industrial y vigilancia ambiental. Encaja con la química del sustrato 2.x (sensores de concentración y gradiente). La granja tendrá fuentes que emiten una pluma con ruido y turbulencia; la comida aparece solo cerca de la fuente activa, y las fuentes cambian de sitio.
 5. **Fabricabilidad desde el diseño.** El cuerpo 2D actual, con empuje y giro, equivale a un robot de tracción diferencial: dos ruedas, un microcontrolador y sensores de gas baratos (tipo MOX). En la granja, sensores y actuadores se restringen a lo que ese robot puede tener (alcances, ruido, latencias realistas), para reducir la brecha simulación-realidad. Los cuerpos 3D imprimibles (fase 2, al estilo de GOLEM, Lipson y Pollack 2000) quedan para después.
 6. **Salvaguarda 2 intacta.** Llevar cualquier cerebro a un robot físico exige su propio ADR con análisis de riesgo y revisión explícita del responsable. Este ADR solo decide la arquitectura en simulación.
@@ -225,6 +225,79 @@ Un agente que solo avanza en línea recta y come siempre supera el umbral (0,5) 
 - −17–19 % de muertes por hambre y +26–41 % de muertes por mordisco;
 - población neta +5 % y −5 %.
 
-Se cuantifica en más checkpoints en el ADR-011.
+Se cuantificará de forma sistemática en la fase 1d (ADR-012).
 
 **Conclusión (original, matizada por la corrección).** La fase 1 está implementada y la ecología es estable, pero el mundo es demasiado simple para que aprender en vida compense: el entorno no cambia dentro de una vida, así que el genoma basta. Esta es exactamente la hipótesis de la fase 1b (ADR-008: química y algas estacionales cuyo tipo tóxico cambia dentro de una vida). La fase 1 queda **no aceptada formalmente** (criterio de aprendizaje fallido y 4 semillas incompletas por pausa) y se etiqueta como `fase1-base` para comparar con ella.
+
+## ADR-011 · 16-10-2026 · Batería de capacidad v2 (decisión del responsable)
+
+**Contexto.** ADR-010: la prueba del anillo de la batería v1 pausó 4 de 5 islas de la fase 1, pero era un falso positivo. El anillo (radio 120–136) queda fuera del alcance de los sensores (15–60), así que se resuelve a ciegas nadando recto, y la referencia (genomas mínimos aleatorios, casi inmóviles) era demasiado débil. El responsable eligió (16-10-2026, 07:30) la «batería v2» con control positivo previo, y reanudar con ella las islas pausadas.
+
+**Decisión.**
+1. **Referencia = la mejor de varias, con los mismos cuerpos.** `gain = éxito_población − max(éxito de genomas aleatorios, éxito de cada política fija de PROBE_CONTROLS)`. Las políticas fijas no tienen cerebro: empuje y giro constantes y comer siempre (quieto; recto con empuje 0,25, 0,5 y 1; en círculos con giro 0,1, 0,3 y 1). Corren con los **cuerpos de la propia población examinada**, así que la ganancia mide lo que aporta el cerebro y no un cuerpo más rápido. Se implementan con un argumento `control` de `world_step`, que solo usan las pruebas; con `control=None` la dinámica es idéntica (test).
+2. **La mancha lejana sustituye al anillo.** Una sola mancha de comida (radio 12) a **90 unidades** del punto de partida, más allá del alcance máximo de los sensores (60), con rumbo inicial aleatorio y **1.000 pasos**. Hay que buscarla y, al verla, ir hacia ella. El laberinto se mantiene, con la referencia nueva.
+3. **Umbrales**: `patch_gain` ≥ **0,2**, fijado por el responsable (16-10-2026, 10:55) tras la calibración. `maze_gain` ≥ 0,25 y `comm_mi_bits` ≥ 0,5 no cambian.
+
+**Calibración** (`scripts/capability_controls.py`, `scripts/calibrate_patch.py`).
+
+Controles negativos con 64 cuerpos aleatorios:
+
+| Política fija (empuje, giro) | Anillo v1 | Mancha a 150 / 500 pasos |
+| --- | --- | --- |
+| (1, 0) recto | **1,000** | 0,031 |
+| resto | ≤ 0,734 | ≤ 0,016 |
+
+Control positivo: un **buscador programado** (avanza recto K pasos, luego describe un arco amplio y, si ve comida, gira hacia ella).
+
+| Mancha | Cuerpos | Mejor control sin cerebro | Mejor buscador | Ventaja |
+| --- | --- | --- | --- | --- |
+| 150 u, 500 pasos | aleatorios | 0,031 | 0,234 | 0,20 |
+| 90 u, 1.000 pasos | aleatorios | 0,062 | 0,500 | 0,44 |
+| 90 u, 1.000 pasos | evolucionados (fase 1, s0, época 500) | 0,219 | 0,562 | 0,34 |
+| 120 u, 1.000 pasos | evolucionados | 0,141 | 0,344 | 0,20 |
+
+Con la geometría de la primera propuesta (150 u, 500 pasos) ni un buen buscador alcanzaba el umbral heredado de 0,5: la alarma no habría sonado nunca. Con 90 u y 1.000 pasos, un buscador programado saca ~0,34–0,44 de ventaja. El umbral de 0,2 salta antes de que una población llegue a ese nivel.
+
+**Revisión de las pausas de la fase 1 con la v2 definitiva** (`scripts/battery_on_checkpoint.py`, `runs/battery_v2_final.jsonl`): ganancia en la mancha de 0,078 (s1, época 100), −0,016 (s2, época 200), 0,078 (s3, época 100), 0,062 (s4, época 100) y −0,031 (s0, época 500), frente al umbral de 0,2. **Ninguna habría pausado**: las pausas de la v1 eran falsas alarmas.
+
+**Reanudación.** Las islas pausadas de la fase 1 se reanudan con `CAPABILITY_REVIEW.json` firmado por el responsable (autorización del 16-10-2026, 08:50), sin cambiar umbrales y con la batería v2 vigente.
+
+## ADR-012 · 16-10-2026 · Fase 1d (condiciones del aprendizaje) antes de la granja «fuga»
+
+**Contexto.** El ADR-009 ordenaba: fase 1b → granja «fuga» 2D (1c) → red 4a. Tras la noche del 16-10:
+- la métrica del valor del aprendizaje estaba casi degenerada (ADR-010);
+- la batería de capacidad v1 daba falsos positivos (ADR-010, ADR-011);
+- la 1b da resultados mixtos: cerebros que crecen en la semilla 0, extinción en la semilla 1 y cerebros pequeños en la 2.
+
+El responsable plantea (10:04) que es pronto para la granja: primero hay que saber en qué condiciones los bichos aprenden y evolucionan.
+
+**Decisión** (del responsable). Nuevo orden: 1b → **1d: condiciones del aprendizaje** → granja «fuga» → red 4a con papeles.
+
+**Fase 1d.** Experimentos en un mundo libre, cambiando **un factor cada vez** y con varias semillas por condición:
+1. **Ritmo del cambio ambiental** frente a la duración de una vida y de una generación: velocidad de las franjas de toxicidad, incluida la velocidad 0, sin cambio.
+2. **Intensidad del castigo** (`TOXIC_FACTOR`).
+3. **Información disponible**: alcance de los sentidos y presencia o ausencia de la química.
+4. **Coste neuronal** (`C_NEURON`).
+
+En cada condición se mide:
+- el valor del aprendizaje con la sonda emparejada a nivel de población (`scripts/learning_probe.py`: población, nacimientos, ingesta y fracción tóxica con y sin plasticidad);
+- el tamaño de los cerebros;
+- los grupos conductuales y la novedad.
+
+Predicción de referencia: aprender compensa cuando el entorno cambia más deprisa que las generaciones, pero no tan deprisa que lo aprendido caduque dentro de la vida. Comprobar si se cumple aquí, y dónde está el óptimo, es el resultado de la fase y la receta para diseñar la granja.
+
+**Requisitos previos.** Batería v2 integrada (ADR-011) y métrica del aprendizaje reemplazada por la sonda emparejada en el runner. La granja «fuga» y el robot físico (salvaguarda 2) siguen como en el ADR-009, solo que más tarde.
+
+**Addendum (16-10-2026, 10:20): los ritmos temporales como eje de la 1d** (decisión del responsable). Hoy los mundos casi no tienen estructura temporal:
+- no hay día ni noche: el reloj interno de los agentes (periodo de 500 pasos) no se corresponde con nada del mundo;
+- no hay estaciones ni mareas;
+- las manchas de algas solo derivan muy despacio (una vuelta cada ~31.000 pasos, unas 220 vidas);
+- en la 1b, el veneno cambia por franjas móviles (una franja tarda ~1.000 pasos en pasar, unas 7 vidas), sin regularidad.
+
+Hipótesis de trabajo: el cambio **predecible** favorece la anticipación (un reloj interno bien conectado), el cambio **impredecible** dentro de una vida favorece el aprendizaje, y el cambio **más lento que las generaciones** lo resuelve la evolución sola. Factores que se añaden a la 1d, primero de uno en uno y después combinados:
+1. **Día y noche**: el rebrote de las algas oscila con un periodo menor que una vida (~100 pasos) y el reloj interno se sincroniza con él. Pregunta: ¿surge la anticipación?
+2. **Estaciones**: la capacidad de carga oscila con un periodo de varias vidas (~1.000–2.000 pasos). Pregunta: ¿surgen el almacenamiento (nutriente) o la migración?
+3. **Mareas**: zonas que periódicamente quedan inaccesibles y luego dejan comida al descubierto. Requiere terreno o paredes móviles, así que va al final.
+4. **Cambio impredecible**: las franjas de veneno de la 1b, como referencia para comparar lo predecible con lo impredecible.
+
+Cada ritmo es una regla del mundo, no una nota a los agentes, así que el principio 1 se mantiene. Medidas añadidas: uso del reloj interno (información mutua entre la fase del ciclo y las acciones) y anticipación (cambio de conducta *antes* del cambio ambiental).

@@ -236,9 +236,14 @@ def _context(obs: jax.Array) -> jax.Array:
     return jnp.where(kin >= C.KIN_THRESHOLD, 2, jnp.where(kin > 0, 3, jnp.where(food, 1, 0)))
 
 
-def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool = True):
+def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool = True,
+               control: jax.Array | None = None):
     """sensores → cerebro → física → comer/atacar/emitir/toxina → energía → muertes → nacimientos
-    → plasticidad → recursos, química y estación."""
+    → plasticidad → recursos, química y estación.
+
+    `control` (solo pruebas de capacidad, ADR-011): f32[3] = (activo, empuje, giro). Si activo > 0,
+    las acciones del cerebro se sustituyen por una política fija sin cerebro (empuje y giro
+    constantes, comer siempre, sin atacar, señalizar ni emitir). Con None la dinámica no cambia."""
     key = jax.random.fold_in(state.key, state.step)
     k_birth, k_flip = jax.random.split(key, 2)
     alive0 = state.alive
@@ -246,6 +251,9 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     cand = world.neighbors(state.pos, alive0)
     obs, n_near = world.sense(state, cand)
     actions, h_new, pre, post = brain.step(state.w, state.h, obs, state.genome.hid_mask)
+    if control is not None:
+        fixed = jnp.zeros_like(actions).at[:, 0].set(control[1]).at[:, 1].set(control[2]).at[:, 2].set(1.0)
+        actions = jnp.where(control[0] > 0, fixed, actions)
     pos, vel, angle, thrust = world.physics(state, actions, cand)
     toxic = world.toxic_cells(state.env, state.step, state.toxic_type)
     toxicity = jnp.clip(state.step.astype(jnp.float32) / C.TOXIC_RAMP_STEPS, 0.0, 1.0)
