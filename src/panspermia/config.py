@@ -16,6 +16,7 @@ ACT_DIM = 5  # empuje, giro, comer, atacar, señal
 N_MAX = 4096
 N_INIT = 512
 N_MIN_REINJECT = 64
+EXTINCT_STOP_EPOCHS = 20  # el runner se detiene si la isla sigue extinguiéndose pese a reinyectar
 MIN_REPRO_AGE = 200
 OFFSPRING_ENERGY_FRAC_BOUNDS = (0.2, 0.8)
 SENESCENCE_START = 5000
