@@ -76,6 +76,14 @@ Con E1 aleatorio y T = 4 τ_vida, `C_NEURON` {0,005, 0,02, 0,08} → **3 condici
 
 Poblaciones de 300 épocas en el control T = ∞ se trasladan a E1 aleatorio con T = 4 τ_vida, de golpe o con una rampa de 40 épocas, y se comparan con poblaciones que siempre vivieron allí → **2 condiciones**.
 
+### E8 · Fiabilidad del aviso (añadido en la v0.5, a propuesta del responsable)
+
+En la naturaleza lo tóxico suele **avisar** (color, olor, sabor amargo), y los animales aprenden con un solo mal trago. En E1 no hay aviso: el tipo de alga se ve, pero no si es tóxica aquí y ahora. E8 añade un **olor de aviso** en las celdas de alga tóxica, presente con probabilidad **r ∈ {0, 0,5, 0,8, 1}** por parche y cambio (nunca en alga buena: si aparece, no miente). Las condiciones son E1 aleatorio con T = 4 τ_vida, veneno 0,3 y 5 semillas → **4 condiciones**.
+
+Predicción (Dunlap y Stephens 2009, `dunlap2009components`): con r = 1 gana el instinto («evita ese olor»), VA bajo y cerebros pequeños; con r = 0 aprender es la única vía; con r intermedio, mezcla de instinto y aprendizaje.
+
+Implementación pendiente: necesita un canal sensorial nuevo (un cuarto campo químico o una marca en el canal de recurso de los rayos). Si cambia `OBS_DIM`, el sustrato sube de versión mayor. Se decide al programarlo, después de E1 y E2.
+
 ### Aplazado
 
 - **Mareas**: requieren terreno o paredes móviles. Irán en la fase 1e.
@@ -99,6 +107,7 @@ Poblaciones de 300 épocas en el control T = ∞ se trasladan a E1 aleatorio con
 - η efectiva media (|Δw| por paso);
 - **uso del reloj**: información mutua entre la fase del reloj y las acciones (comer, empuje, emitir);
 - **anticipación**: en los programas periódicos, cambio en la fracción tóxica ingerida en los T/8 pasos **antes** frente a **después** de cada inversión;
+- **curva de recuperación** (v0.5): fracción de alga tóxica ingerida según los pasos transcurridos desde el último cambio del parche donde se come (intervalos 0–8, 8–16, …, ≥ 2.048). Responde a si los agentes **captan el cambio** (la fracción cae con el tiempo desde el cambio) y si **aprenden a aprender** (Harlow 1949: la caída se acelera con las generaciones; comparación de los primeros 64 pasos en las épocas 41–100 y en las últimas 100);
 - supervivencia, épocas hasta la extinción y colapsos (población < 10 % del máximo);
 - diversidad: grupos conductuales, archivo de novedad y clados.
 
@@ -150,3 +159,4 @@ A ~5 s por época (N = 4.096) son **~65 h**, unos 2,7 días de GPU continua. Con
 - 0.2 (16-10-2026, antes de tener datos): aprobación. En el programa aleatorio la probabilidad pasa de 1/T a 2/T para igualar la frecuencia de cambios con el periódico, de modo que la única diferencia entre ambos es la previsibilidad. Implementado en la rama `fase1d` (`58dfc48`): `panspermia.experiment`, colas en `experiments/fase1d/`.
 - 0.3 (16-10-2026, tras E0): **N = 4.096** (N = 2.048 llena el cupo y dobla τ_vida). **τ_vida = 206 pasos** medido, así que los periodos de E1 pasan a 50 · 200 · 800 · 3.200 pasos (0,25 · 1 · 4 · 16 τ_vida). El control sin cambio cumple la viabilidad (5/5), pero el aleatorio con T = 560 se extingue en 3 de 5. Por decisión del responsable se calibra el veneno (`TOXIC_FACTOR` 0,5 → 0,3, en todas las condiciones por igual) con E0b antes de E1. El criterio de viabilidad se amplía a las condiciones centrales de E1, no solo al control. La batería se aplaza con menos de 32 adultos (ADR-013).
 - 0.4 (16-10-2026, tras E0b y antes de E1): **corrección**: τ_vida se resume con la mediana entre semillas (~130 pasos; la media de 206 de la v0.3 estaba inflada por una semilla), así que **se mantienen los periodos 35 · 140 · 560 · 2.240**. Veneno calibrado: `TOXIC_FACTOR` = 0,3 en E1 y E2 (8 de 9 mundos viables en E0b; el responsable decide seguir e informar las extinciones). **Medida primaria**: VA_log = log((población_plástica + 1) / (población_congelada + 1)), con **mediana** entre semillas y *bootstrap*. La relativa explotaba con gemelos casi extintos (+32 en E0b). La relativa se conserva como secundaria.
+- 0.5 (16-10-2026, 23:10, E1 parado a los 20 min y relanzado, sin datos analizados): a propuesta del responsable («¿descubren los bichos el patrón de la variabilidad?») se añade la **curva de recuperación** tras cada cambio de parche y su comparación temprana/tardía («aprender a aprender»). Se añade **E8, fiabilidad del aviso**, para después de E1/E2. Observación pura: la dinámica no cambia (`tox_since` y los contadores no entran en ninguna decisión). `tox_patch_flips` pasa a contar los cambios reales (antes restaba cambios opuestos simultáneos).
