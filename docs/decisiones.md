@@ -303,3 +303,13 @@ Hipótesis de trabajo: el cambio **predecible** favorece la anticipación (un re
 4. **Cambio impredecible**: las franjas de veneno de la 1b, como referencia para comparar lo predecible con lo impredecible.
 
 Cada ritmo es una regla del mundo, no una nota a los agentes, así que el principio 1 se mantiene. Medidas añadidas: uso del reloj interno (información mutua entre la fase del ciclo y las acciones) y anticipación (cambio de conducta *antes* del cambio ambiental).
+
+## ADR-013 · 16-10-2026 · Batería: muestra mínima de 32 adultos (decisión del responsable)
+
+**Contexto.** En el experimento E0 de la fase 1d, un mundo casi extinto (`runs/fase1d/E0-aleatorio-T560-N2048/s4`, época 100) saltó la pausa de capacidad por el laberinto: `maze_gain` 0,3125 > 0,25, con `probe_agents = 1`. Con un único individuo, el éxito solo puede ser 0 o 1, y la diferencia con la referencia es ruido. No es capacidad real: el mundo llevaba 60 épocas por debajo de 6 bichos.
+
+**Decisión** (responsable, 16-10-2026, 20:30). Si al tocar la batería hay menos de `CAPABILITY_MIN_AGENTS = 32` adultos elegibles (los mismos que muestrea `capability.sample_adults`), la batería **no se pasa**. Se anota `cap_deferred_adults` y se **aplaza a la siguiente época** con muestra suficiente, así que ningún examen se pierde. **Los umbrales no cambian.** Implementado en la rama `fase1d` (`29f0d75`), con test.
+
+**Alternativas descartadas**: dejarla igual (pausas falsas en cada mundo moribundo) y pasarla sin poder pausar (deja constancia, pero no protege).
+
+**Nota.** Ese mundo quedó con `CAPABILITY_PAUSE.json`, pero ya había terminado sus 100 épocas: no se reanuda y no se ha creado ningún `CAPABILITY_REVIEW.json`.
