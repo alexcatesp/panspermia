@@ -1,6 +1,6 @@
 # Fase 1d · Diseño experimental (protocolo prerregistrado)
 
-**Versión 0.1 · 16-10-2026 · borrador para revisión del responsable.** Las hipótesis, las medidas y el plan de análisis se fijan **antes** de ver los datos. Cualquier cambio posterior se anota en el registro de cambios del final, con fecha y motivo. Bibliografía y claves: [`docs/bibliografia/1d/`](../bibliografia/1d/README.md).
+**Versión 0.2 · 16-10-2026 · aprobada por el responsable (E0–E2 primero; tamaño del mundo según E0).** Las hipótesis, las medidas y el plan de análisis se fijan **antes** de ver los datos. Cualquier cambio posterior se anota en el registro de cambios del final, con fecha y motivo. Bibliografía y claves: [`docs/bibliografia/1d/`](../bibliografia/1d/README.md).
 
 ## 1. Pregunta
 
@@ -45,7 +45,7 @@ Mundo de la 1b (química, dos tipos de alga con signo visible en los rayos, vene
 
 Cuál de los dos tipos de alga es tóxico cambia según un **programa** aplicado por **parches** (rejilla de 8 × 8 parches de 128 × 128 unidades):
 
-- **Aleatorio** (impredecible): cada parche invierte su estado de forma independiente con probabilidad 1/T por paso (proceso de Poisson). Los cambios son locales y no simultáneos, así que no hay colapsos sincronizados (ADR-008).
+- **Aleatorio** (impredecible): cada parche invierte su estado de forma independiente con probabilidad **2/T** por paso (proceso de Poisson, estancia media T/2, la misma frecuencia que el periódico). Los cambios son locales y no simultáneos, así que no hay colapsos sincronizados (ADR-008).
 - **Periódico** (predecible): todos los parches invierten su estado cada T/2 pasos con una fase común, y el **reloj interno** de los agentes tiene el mismo periodo (`CLOCK_PERIOD = T`), así que el ciclo es anticipable.
 - **Periodo T**, en escala logarítmica: **0,25 · 1 · 4 · 16 τ_vida** (≈ 35, 140, 560 y 2.240 pasos).
 - **Controles**: T = ∞ (asignación fija, que nunca cambia) y un mundo sin alga tóxica.
@@ -147,3 +147,4 @@ A ~5 s por época (N = 4.096) son **~65 h**, unos 2,7 días de GPU continua. Con
 ## Registro de cambios
 
 - 0.1 (16-10-2026): primer borrador.
+- 0.2 (16-10-2026, antes de tener datos): aprobación. En el programa aleatorio la probabilidad pasa de 1/T a 2/T para igualar la frecuencia de cambios con el periódico, de modo que la única diferencia entre ambos es la previsibilidad. Implementado en la rama `fase1d` (`58dfc48`): `panspermia.experiment`, colas en `experiments/fase1d/`.

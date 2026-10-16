@@ -168,3 +168,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 ### 13:08 · Diseño de la fase 1d (protocolo prerregistrado v0.1)
 - Aprobado por el responsable: E0–E2 primero; el tamaño del mundo se decide en E0 · Ver: `docs/fase1d/diseno.md`.
+
+### 13:20–14:00 · Implementación de la fase 1d (E0–E2)
+- Qué: toxicidad por parches 8 × 8 (aleatorio con probabilidad 2/T, periódico con inversión global cada T/2 y reloj sincronizable, fijo), gemelo sin plasticidad, VA emparejado dentro del runner, uso del reloj, anticipación, duración media de la vida y experimentos declarativos con barridos.
+- Código: `58dfc48` (rama `fase1d`) · Tests: 12 de la 1d y 18 de la 1d + 1b en verde en CPU.
+- Pendiente: suite completa en GPU y cola E0 (`experiments/fase1d/e0.json`: 4 condiciones × 5 semillas × 100 épocas).
+
+### 14:00 · Fase 1, isla 1 reanudada con la batería v2: 500 épocas sin pausa
+- Datos: `runs/phase1/s1` · Resultado: población final de 3.755, sin pausas. La batería v2 funciona en una ejecución real.
