@@ -11,6 +11,7 @@ Ecosistema de vida artificial distribuido: agentes que evolucionan por selecció
 - [Especificación](docs/spec.md) — arquitectura, genoma, cerebro, red P2P, métricas, fases, salvaguardas.
 - [Bibliografía](docs/bibliografia.md) — trabajos en los que se basa.
 - [Decisiones](docs/decisiones.md) — registro de decisiones de diseño.
+- [Bitácora](docs/bitacora.md) — cuaderno de laboratorio: cada experimento con su código, datos y resultado.
 - [Caminos](docs/caminos.md) — opciones probadas: descartadas, aparcadas (con su condición de reapertura) y en estudio.
 
 ## Requisitos
