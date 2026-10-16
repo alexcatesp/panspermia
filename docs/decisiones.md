@@ -113,17 +113,17 @@ Además: la ejecución no depende de cómo se trocee en épocas (2 × 100 pasos 
 
 **Otros**: el runner escribe `stats/summary.json` además del Parquet. Las partes Parquet pueden tener columnas distintas (pruebas cada 20/100 épocas): leer con `read_parquet('stats/*.parquet', union_by_name=true)`. El formato del genoma no cambia, así que `SUBSTRATE_VERSION` sigue en 1.0.0 aunque el mundo tenga reglas nuevas.
 
-## ADR-009 · 16-10-2026 · Peceras libres, peceras granja y fabricabilidad
+## ADR-009 · 16-10-2026 · Mundos libres, mundos granja y fabricabilidad
 
-**Contexto.** El responsable plantea tres caminos complementarios: (1) muchas peceras por el mundo para tener riqueza evolutiva, (2) fabricar en el mundo real organismos evolucionados en la pecera y (3) dirigir la evolución para que surjan organismos que resuelvan un problema real. El camino 3 choca con el principio 1 («ninguna métrica externa decide la reproducción»). El responsable delegó las decisiones de este ADR (16-10-2026, 00:23).
+**Contexto.** El responsable plantea tres caminos complementarios: (1) muchos mundos repartidos por el planeta para tener riqueza evolutiva, (2) fabricar en el mundo real organismos evolucionados en un mundo simulado y (3) dirigir la evolución para que surjan organismos que resuelvan un problema real. El camino 3 choca con el principio 1 («ninguna métrica externa decide la reproducción»). El responsable delegó las decisiones de este ADR (16-10-2026, 00:23).
 
 **Decisión.**
 
 1. **Dos papeles de isla en la red.**
-   - **Peceras libres**: evolución abierta, sin objetivo. Son el banco de diversidad de la red (fase 4) y siguen todas las reglas de la spec.
-   - **Peceras granja**: islas cuyo entorno está diseñado para que resolver un problema real sea la forma de obtener energía.
+   - **Mundos libres**: evolución abierta, sin objetivo. Son el banco de diversidad de la red (fase 4) y siguen todas las reglas de la spec.
+   - **Mundos granja**: islas cuyo entorno está diseñado para que resolver un problema real sea la forma de obtener energía.
 2. **Las granjas no usan selección explícita, solo diseño de nicho.** El principio 1 se mantiene sin excepciones en toda la red: nadie puntúa a nadie; se cambia el mundo, como en la domesticación. Motivos: no hace falta tocar un principio innegociable, y una función de puntuación invita a explotarla (la población converge al primer truco que puntúa), mientras que un nicho bien diseñado tiende a producir soluciones más generales. Si algún día se quisiera selección explícita, haría falta un ADR que enmiende el principio 1.
-3. **Flujo genético en un solo sentido: libre → granja.** Las granjas importan migrantes de las peceras libres, que aportan novedad, pero sus genomas nunca vuelven. Así el banco de diversidad no converge hacia soluciones de un problema concreto, y los organismos especializados quedan contenidos en su granja. Se implementará como un campo `role` firmado en la identidad del nodo (fase 4a) y como un rechazo en recepción.
+3. **Flujo genético en un solo sentido: libre → granja.** Las granjas importan migrantes de los mundos libres, que aportan novedad, pero sus genomas nunca vuelven. Así el banco de diversidad no converge hacia soluciones de un problema concreto, y los organismos especializados quedan contenidos en su granja. Se implementará como un campo `role` firmado en la identidad del nodo (fase 4a) y como un rechazo en recepción.
 4. **Primer problema real: localizar la fuente de una fuga** (gas o contaminante). Es un problema de robótica conocido (*odor source localization*), con aplicaciones en seguridad industrial y vigilancia ambiental. Encaja con la química del sustrato 2.x (sensores de concentración y gradiente). La granja tendrá fuentes que emiten una pluma con ruido y turbulencia; la comida aparece solo cerca de la fuente activa, y las fuentes cambian de sitio.
 5. **Fabricabilidad desde el diseño.** El cuerpo 2D actual, con empuje y giro, equivale a un robot de tracción diferencial: dos ruedas, un microcontrolador y sensores de gas baratos (tipo MOX). En la granja, sensores y actuadores se restringen a lo que ese robot puede tener (alcances, ruido, latencias realistas), para reducir la brecha simulación-realidad. Los cuerpos 3D imprimibles (fase 2, al estilo de GOLEM, Lipson y Pollack 2000) quedan para después.
 6. **Salvaguarda 2 intacta.** Llevar cualquier cerebro a un robot físico exige su propio ADR con análisis de riesgo y revisión explícita del responsable. Este ADR solo decide la arquitectura en simulación.
@@ -197,7 +197,7 @@ El responsable plantea (10:04) que es pronto para la granja: primero hay que sab
 
 **Decisión** (del responsable). Nuevo orden: 1b → **1d: condiciones del aprendizaje** → granja «fuga» → red 4a con papeles.
 
-**Fase 1d.** Experimentos en la pecera libre, cambiando **un factor cada vez** y con varias semillas por condición:
+**Fase 1d.** Experimentos en un mundo libre, cambiando **un factor cada vez** y con varias semillas por condición:
 1. **Ritmo del cambio ambiental** frente a la duración de una vida y de una generación: velocidad de las franjas de toxicidad, incluida la velocidad 0, sin cambio.
 2. **Intensidad del castigo** (`TOXIC_FACTOR`).
 3. **Información disponible**: alcance de los sentidos y presencia o ausencia de la química.

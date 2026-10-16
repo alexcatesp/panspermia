@@ -2,7 +2,7 @@
 
 Ecosistema de vida artificial distribuido: agentes que evolucionan por selección natural (sin función de fitness), aprenden durante su vida con plasticidad hebbiana evolucionada y migran entre "islas" que cada participante ejecuta en su PC.
 
-**Estado**: fase 0 cerrada (núcleo 2D determinista bit a bit). Fase 1 implementada: ataque con carroña (energía conservada), señal, senescencia, biogeografía, métricas de conducta, novedad, diversidad y comunicación, prueba de plasticidad congelada, batería de capacidad con pausa (salvaguarda 5) y visor web de la «pecera».
+**Estado**: fase 0 cerrada (núcleo 2D determinista bit a bit). Fase 1 implementada: ataque con carroña (energía conservada), señal, senescencia, biogeografía, métricas de conducta, novedad, diversidad y comunicación, prueba de plasticidad congelada, batería de capacidad con pausa (salvaguarda 5) y visor web del «mundo».
 
 **Resultado de la fase 1** (ADR-010, etiqueta `fase1-base`): ecología estable y sin extinciones, pero aprender en vida no compensa (valor del aprendizaje negativo en las 5 semillas), los cerebros encogen y los grupos de conducta se diluyen. La batería de capacidad pausó 4 de las 5 islas por la prueba del anillo, que resultó ser un falso positivo: un agente sin cerebro que solo avanza recto la supera (`scripts/capability_controls.py`). Las islas siguen pausadas a la espera de que el responsable decida sobre la batería v2 propuesta. La fase 1b (química y algas estacionales, ADR-008) está en la rama `fase1b`.
 
@@ -55,7 +55,7 @@ El runner guarda una fila de estadísticas por época (demografía y complejidad
 | `capability.py` | Batería de capacidad (salvaguarda 5): comunicación, anillo, laberinto |
 | `record.py` | Grabación de épocas para el visor |
 | `run.py` | Runner: Parquet, Orbax, pruebas periódicas y pausa por capacidad |
-| `viewer.py` + `viewer_static/` | Visor web local de la pecera |
+| `viewer.py` + `viewer_static/` | Visor web local del mundo |
 
 ## Licencias
 
