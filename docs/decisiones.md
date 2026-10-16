@@ -182,6 +182,32 @@ Un agente que solo avanza en línea recta y come siempre supera el umbral (0,5) 
 - −17–19 % de muertes por hambre y +26–41 % de muertes por mordisco;
 - población neta +5 % y −5 %.
 
-Se cuantifica en más checkpoints en el ADR-011.
+Se cuantificará de forma sistemática en la fase 1d (ADR-012).
 
 **Conclusión (original, matizada por la corrección).** La fase 1 está implementada y la ecología es estable, pero el mundo es demasiado simple para que aprender en vida compense: el entorno no cambia dentro de una vida, así que el genoma basta. Esta es exactamente la hipótesis de la fase 1b (ADR-008: química y algas estacionales cuyo tipo tóxico cambia dentro de una vida). La fase 1 queda **no aceptada formalmente** (criterio de aprendizaje fallido y 4 semillas incompletas por pausa) y se etiqueta como `fase1-base` para comparar con ella.
+
+## ADR-012 · 16-10-2026 · Fase 1d (condiciones del aprendizaje) antes de la granja «fuga»
+
+**Contexto.** El ADR-009 ordenaba: fase 1b → granja «fuga» 2D (1c) → red 4a. Tras la noche del 16-10:
+- la métrica del valor del aprendizaje estaba casi degenerada (ADR-010);
+- la batería de capacidad v1 daba falsos positivos (ADR-010, ADR-011);
+- la 1b da resultados mixtos: cerebros que crecen en la semilla 0, extinción en la semilla 1 y cerebros pequeños en la 2.
+
+El responsable plantea (10:04) que es pronto para la granja: primero hay que saber en qué condiciones los bichos aprenden y evolucionan.
+
+**Decisión** (del responsable). Nuevo orden: 1b → **1d: condiciones del aprendizaje** → granja «fuga» → red 4a con papeles.
+
+**Fase 1d.** Experimentos en la pecera libre, cambiando **un factor cada vez** y con varias semillas por condición:
+1. **Ritmo del cambio ambiental** frente a la duración de una vida y de una generación: velocidad de las franjas de toxicidad, incluida la velocidad 0, sin cambio.
+2. **Intensidad del castigo** (`TOXIC_FACTOR`).
+3. **Información disponible**: alcance de los sentidos y presencia o ausencia de la química.
+4. **Coste neuronal** (`C_NEURON`).
+
+En cada condición se mide:
+- el valor del aprendizaje con la sonda emparejada a nivel de población (`scripts/learning_probe.py`: población, nacimientos, ingesta y fracción tóxica con y sin plasticidad);
+- el tamaño de los cerebros;
+- los grupos conductuales y la novedad.
+
+Predicción de referencia: aprender compensa cuando el entorno cambia más deprisa que las generaciones, pero no tan deprisa que lo aprendido caduque dentro de la vida. Comprobar si se cumple aquí, y dónde está el óptimo, es el resultado de la fase y la receta para diseñar la granja.
+
+**Requisitos previos.** Batería v2 integrada (ADR-011) y métrica del aprendizaje reemplazada por la sonda emparejada en el runner. La granja «fuga» y el robot físico (salvaguarda 2) siguen como en el ADR-009, solo que más tarde.
