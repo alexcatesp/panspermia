@@ -8,6 +8,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 - `docs/bibliografia.md`: referencias. Las marcadas con † no están verificadas.
 - `docs/bibliografia/<fase>/`: bibliografía por fase para un posible artículo (README con síntesis, hueco y fichas; `refs.bib` con DOI comprobados; `pdf/` solo local y en `.gitignore`). Al citar en un ADR, usar estas claves.
 - `docs/bitacora.md`: **cuaderno de laboratorio cronológico**. Añadir una entrada por cada experimento, prueba o diagnóstico (qué, commit, datos en `runs/`, resultado con números y conclusión: firme, indicio, descartado o aparcado), incluido lo que falla. Es la base de la publicación.
+- **Artículo divulgativo vivo** para el responsable («Panspermia: el experimento explicado», Claude Docs: https://claude.ai/code/artifact/3d0eb38d-366f-4a32-9c08-f218d7f6768a). Actualizarlo con cada decisión, resultado o cambio de plan acordado, y anotarlo en su historial.
 - `docs/caminos.md`: registro de caminos descartados, aparcados (con su condición de reapertura) y en estudio. Actualizarlo cada vez que una opción se pruebe y falle o funcione.
 - `src/panspermia/config.py` concentra todas las constantes numéricas de la spec. No hardcodees números en otros módulos.
 
