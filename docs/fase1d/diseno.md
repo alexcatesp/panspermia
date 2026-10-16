@@ -91,7 +91,7 @@ Poblaciones de 300 épocas en el control T = ∞ se trasladan a E1 aleatorio con
 
 **Primaria**:
 - **VA, valor del aprendizaje**, con la sonda emparejada (`scripts/learning_probe.py`) en las épocas 100, 200 y 300: la misma época desde el mismo checkpoint y con la misma aleatoriedad, con y sin plasticidad.
-- `VA = (población_plástica − población_congelada) / población_congelada`.
+- `VA = log((población_plástica + 1) / (población_congelada + 1))` (v0.4); resumen por condición con la mediana entre semillas. La versión relativa, `(plástica − congelada) / congelada`, se conserva como secundaria.
 - También se registran la ingesta, los nacimientos y la fracción de alga tóxica ingerida.
 
 **Secundarias**:
@@ -149,3 +149,4 @@ A ~5 s por época (N = 4.096) son **~65 h**, unos 2,7 días de GPU continua. Con
 - 0.1 (16-10-2026): primer borrador.
 - 0.2 (16-10-2026, antes de tener datos): aprobación. En el programa aleatorio la probabilidad pasa de 1/T a 2/T para igualar la frecuencia de cambios con el periódico, de modo que la única diferencia entre ambos es la previsibilidad. Implementado en la rama `fase1d` (`58dfc48`): `panspermia.experiment`, colas en `experiments/fase1d/`.
 - 0.3 (16-10-2026, tras E0): **N = 4.096** (N = 2.048 llena el cupo y dobla τ_vida). **τ_vida = 206 pasos** medido, así que los periodos de E1 pasan a 50 · 200 · 800 · 3.200 pasos (0,25 · 1 · 4 · 16 τ_vida). El control sin cambio cumple la viabilidad (5/5), pero el aleatorio con T = 560 se extingue en 3 de 5. Por decisión del responsable se calibra el veneno (`TOXIC_FACTOR` 0,5 → 0,3, en todas las condiciones por igual) con E0b antes de E1. El criterio de viabilidad se amplía a las condiciones centrales de E1, no solo al control. La batería se aplaza con menos de 32 adultos (ADR-013).
+- 0.4 (16-10-2026, tras E0b y antes de E1): **corrección**: τ_vida se resume con la mediana entre semillas (~130 pasos; la media de 206 de la v0.3 estaba inflada por una semilla), así que **se mantienen los periodos 35 · 140 · 560 · 2.240**. Veneno calibrado: `TOXIC_FACTOR` = 0,3 en E1 y E2 (8 de 9 mundos viables en E0b; el responsable decide seguir e informar las extinciones). **Medida primaria**: VA_log = log((población_plástica + 1) / (población_congelada + 1)), con **mediana** entre semillas y *bootstrap*. La relativa explotaba con gemelos casi extintos (+32 en E0b). La relativa se conserva como secundaria.
