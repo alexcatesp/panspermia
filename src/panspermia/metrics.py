@@ -111,11 +111,20 @@ def epoch_stats(state, per_step) -> dict[str, jax.Array]:
         "comm_effective_symbols": symbols,
         "attack_gene_mean": _masked_mean(state.pheno.attack, alive),
         "deaths_poison": jnp.sum(per_step.deaths_poison),
+        "lifespan_mean": jnp.sum(per_step.death_age_sum) / jnp.maximum(jnp.sum(per_step.deaths), 1),
         "toxic_intake": jnp.sum(per_step.toxic_intake),
         "toxic_intake_frac": jnp.sum(per_step.toxic_intake) / jnp.maximum(jnp.sum(per_step.intake), 1e-9),
         "nutrient_intake": jnp.sum(per_step.nutrient_intake),
         "toxin_damage": jnp.sum(per_step.toxin_damage),
         "toxic_flips": jnp.sum(jnp.abs(jnp.diff(per_step.toxic_type))),
+        "tox_patch_flips": jnp.sum(jnp.abs(jnp.diff(per_step.tox_state))) * C.TOX_PATCHES ** 2,
+        # series por paso (fase 1d): el runner calcula con ellas anticipación y uso del reloj y no
+        # las guarda en las estadísticas
+        "series_intake": per_step.intake,
+        "series_toxic": per_step.toxic_intake,
+        "series_eaters": per_step.eaters,
+        "series_population": per_step.population,
+        "series_tox_state": per_step.tox_state,
         **{f"emit_{n}": jnp.sum(per_step.emitted[:, i]) for i, n in enumerate(C.CHEM_NAMES)},
         **{f"chem_{n}_total": jnp.sum(state.chem[i]) for i, n in enumerate(C.CHEM_NAMES)},
     }
@@ -269,6 +278,49 @@ class ActivityTracker:
                 "bp_total_activity": float(sum(alive_act)),
                 "bp_mean_activity": float(np.mean(alive_act)) if alive_act else 0.0,
                 "bp_components": len(self.activity)}
+
+
+def paired_learning_value(plastic: dict, frozen: dict) -> dict:
+    """Valor del aprendizaje emparejado a nivel de población: la misma época, desde el mismo estado y
+    con la misma aleatoriedad, con plasticidad (`plastic`) y congelada (`frozen`). Diferencias
+    relativas; la fracción tóxica, en diferencia absoluta."""
+    rel = lambda k: (plastic[k] - frozen[k]) / max(abs(frozen[k]), 1e-9)
+    return {
+        "va_population": rel("population"),
+        "va_intake": rel("intake"),
+        "va_births": rel("births"),
+        "va_toxic_frac": plastic["toxic_intake_frac"] - frozen["toxic_intake_frac"],
+        "frozen_population": frozen["population"],
+    }
+
+
+def temporal_metrics(series: dict, env, step0: int) -> dict:
+    """Uso del reloj y anticipación (fase 1d), a partir de las series por paso de la época.
+
+    - clock_rhythm: fracción de la varianza de la tasa de comer (comedores/población) que explica la
+      fase del reloj interno, en 8 intervalos (0 = sin ritmo, 1 = todo es ritmo).
+    - anticipation (solo programa periódico): fracción tóxica ingerida en la ventana anterior a cada
+      inversión menos la de la ventana posterior. Positiva: la población cambia de alga antes del
+      cambio (se anticipa); negativa: reacciona tarde.
+    """
+    pop = np.maximum(series["population"].astype(np.float64), 1.0)
+    rate = series["eaters"] / pop
+    steps = step0 + np.arange(len(rate))
+    period = float(np.asarray(env.clock_period))
+    phase = np.floor(np.mod(steps, period) / period * 8).astype(int)
+    total = rate.var()
+    means = np.array([rate[phase == b].mean() if np.any(phase == b) else rate.mean() for b in range(8)])
+    counts = np.array([np.sum(phase == b) for b in range(8)])
+    between = float(np.sum(counts * (means - rate.mean()) ** 2) / max(len(rate), 1))
+    out = {"clock_rhythm": between / total if total > 0 else 0.0, "anticipation": None}
+    if int(np.asarray(env.tox_mode)) == C.TOX_MODES["periodico"]:
+        flips = np.nonzero(np.diff(series["tox_state"]) != 0)[0] + 1
+        half = max(round(float(np.asarray(env.tox_period)) / 2), 1)
+        w = max(half // 4, 1)
+        frac = lambda a, b: float(series["toxic"][a:b].sum() / max(series["intake"][a:b].sum(), 1e-9))
+        vals = [frac(f - w, f) - frac(f, f + w) for f in flips if f - w >= 0 and f + w <= len(rate)]
+        out["anticipation"] = float(np.mean(vals)) if vals else None
+    return out
 
 
 def learning_survival(uid_start: np.ndarray, alive_start: np.ndarray, uid_end: np.ndarray,

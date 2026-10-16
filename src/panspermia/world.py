@@ -45,6 +45,12 @@ class EnvParams:
     seasonal: jax.Array    # f32: 1 en las islas; 0 desactiva las algas tóxicas (pruebas)
     region_k: jax.Array    # f32[2]: número de onda (entero, en un eje) de las regiones de toxicidad
     region_phase: jax.Array  # f32
+    # Fase 1d. tox_mode: 0 franjas móviles (1b), 1 parches aleatorios, 2 parches periódicos, 3 fijo.
+    # tox_period T (pasos): en 1 cada parche se invierte con prob. 2/T por paso (estancia media T/2);
+    # en 2 todos se invierten a la vez cada T/2 pasos (ciclo completo T, predecible).
+    tox_mode: jax.Array    # i32
+    tox_period: jax.Array  # f32
+    clock_period: jax.Array  # f32: periodo del reloj interno de los agentes (pasos)
 
 
 def make_env(node_id: bytes) -> EnvParams:
@@ -71,7 +77,46 @@ def make_env(node_id: bytes) -> EnvParams:
         region_k=jnp.where(jax.random.bernoulli(k[7]), jnp.array([C.TOXIC_REGION_K, 0.0]),
                            jnp.array([0.0, C.TOXIC_REGION_K])).astype(jnp.float32),
         region_phase=jax.random.uniform(jax.random.fold_in(k[7], 1), maxval=2 * math.pi),
+        tox_mode=jnp.int32(0),
+        tox_period=jnp.float32(1e9),
+        clock_period=jnp.float32(C.CLOCK_PERIOD),
     )
+
+
+def with_overrides(env: EnvParams, **kw) -> EnvParams:
+    """Copia de `env` con campos sustituidos (configuración de experimentos). Valida nombres y modos."""
+    fields = set(env.__dataclass_fields__)
+    unknown = set(kw) - fields
+    if unknown:
+        raise ValueError(f"campos de entorno desconocidos: {sorted(unknown)}")
+    if "tox_mode" in kw:
+        mode = kw["tox_mode"]
+        kw["tox_mode"] = C.TOX_MODES.get(mode, -1) if isinstance(mode, str) else int(mode)
+        if kw["tox_mode"] not in C.TOX_MODES.values():
+            raise ValueError(f"tox_mode inválido: {mode}")
+    if "tox_period" in kw and not float(kw["tox_period"]) >= 2.0:
+        raise ValueError("tox_period debe ser >= 2 pasos")
+    conv = {k: jnp.asarray(v, getattr(env, k).dtype) for k, v in kw.items()}
+    return env.replace(**conv)
+
+
+def initial_patches(env: EnvParams, key: jax.Array) -> jax.Array:
+    """bool[P, P]: estado inicial de los parches (True = el alga B es la tóxica). Mitad y mitad al
+    azar, salvo en el modo periódico, que empieza sincronizado (todos iguales)."""
+    p = C.TOX_PATCHES
+    rand = jax.random.bernoulli(key, 0.5, (p, p))
+    return jnp.where(env.tox_mode == C.TOX_MODES["periodico"], jnp.zeros((p, p), bool), rand)
+
+
+def step_patches(env: EnvParams, patches: jax.Array, step: jax.Array, key: jax.Array) -> jax.Array:
+    """Avanza un paso el estado de los parches según el programa temporal."""
+    p = C.TOX_PATCHES
+    rand_flip = jax.random.uniform(key, (p, p)) < 2.0 / env.tox_period
+    half = jnp.maximum(jnp.round(env.tox_period / 2.0), 1.0).astype(jnp.int32)
+    periodic_flip = (step + 1) % half == 0
+    flip = jnp.where(env.tox_mode == C.TOX_MODES["aleatorio"], rand_flip,
+                     jnp.where(env.tox_mode == C.TOX_MODES["periodico"], periodic_flip, False))
+    return patches ^ flip
 
 
 # ---------------------------------------------------------------------------------------------
@@ -112,11 +157,17 @@ def toxic_regions(env: EnvParams, step: jax.Array) -> jax.Array:
     return jnp.sin(phase) > 0
 
 
-def toxic_cells(env: EnvParams, step: jax.Array, toxic_type: jax.Array) -> jax.Array:
-    """bool[RES, RES]: celdas cuya alga es tóxica ahora. El tipo tóxico depende de la región y se
-    invierte entero si toxic_type = 1."""
+def toxic_cells(env: EnvParams, step: jax.Array, toxic_type: jax.Array,
+                patches: jax.Array | None = None) -> jax.Array:
+    """bool[RES, RES]: celdas cuya alga es tóxica ahora. Según `env.tox_mode`, el tipo tóxico lo
+    deciden las franjas móviles (1b) o los parches de la fase 1d; toxic_type = 1 lo invierte todo."""
     a = algae_type_a(env, step)
-    b_toxic = toxic_regions(env, step) ^ (toxic_type == 1)
+    zone = toxic_regions(env, step)
+    if patches is not None:
+        rep = C.RESOURCE_GRID // C.TOX_PATCHES
+        up = jnp.repeat(jnp.repeat(patches, rep, axis=0), rep, axis=1)
+        zone = jnp.where(env.tox_mode == C.TOX_MODES["franjas"], zone, up)
+    b_toxic = zone ^ (toxic_type == 1)
     return (env.seasonal > 0) & jnp.where(b_toxic, ~a, a)
 
 
@@ -237,7 +288,7 @@ def sense(state, cand: jax.Array) -> tuple[jax.Array, jax.Array]:
     lateral = jnp.stack([-heading[:, 1], heading[:, 0]], axis=-1)
     v_fwd = jnp.tanh(jnp.sum(state.vel * heading, axis=-1) / C.V_OBS_SCALE)
     v_lat = jnp.tanh(jnp.sum(state.vel * lateral, axis=-1) / C.V_OBS_SCALE)
-    clock = 2 * math.pi * (state.step % C.CLOCK_PERIOD).astype(jnp.float32) / C.CLOCK_PERIOD
+    clock = 2 * math.pi * jnp.mod(state.step.astype(jnp.float32), state.env.clock_period) / state.env.clock_period
     n = state.pos.shape[0]
     in_range = valid & (pp[..., 0] < rng[:, None] ** 2)
     n_near = jnp.sum(in_range, axis=1)

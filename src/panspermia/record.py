@@ -55,13 +55,13 @@ def _chem_frame(state: IslandState) -> jax.Array:
     return jnp.clip(jnp.tanh(c / C.CHEM_OBS_SCALE) * 255, 0, 255).astype(jnp.uint8)
 
 
-@functools.partial(jax.jit, static_argnames=("k",), donate_argnums=(0,))
-def record_epoch(state: IslandState, k: int = C.EPOCH_STEPS):
+@functools.partial(jax.jit, static_argnames=("k", "plastic"), donate_argnums=(0,))
+def record_epoch(state: IslandState, k: int = C.EPOCH_STEPS, plastic: bool = True):
     """Como `island.epoch`, pero devuelve también los fotogramas (cada RECORD_STRIDE pasos)."""
     state = state.replace(comm_hist=jnp.zeros_like(state.comm_hist))
 
     def body(s, _):
-        s, st = world_step(s, None)
+        s, st = world_step(s, None, plastic=plastic)
         return s, (st, snapshot(s), _resource_frame(s), _chem_frame(s))
 
     state, (per_step, frames, res, chem) = jax.lax.scan(body, state, None, length=k)

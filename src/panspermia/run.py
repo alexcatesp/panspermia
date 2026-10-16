@@ -81,14 +81,18 @@ def _clean(d: dict) -> dict:
 
 
 def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: int,
-        reinject: bool = True, verbose: bool = True) -> dict:
+        reinject: bool = True, verbose: bool = True, env_overrides: dict | None = None,
+        plastic: bool = True, experiment: dict | None = None) -> dict:
+    """Ejecuta una isla. `env_overrides` sustituye campos del entorno; `plastic=False` desactiva la
+    plasticidad durante toda la evolución (gemelo de control, fase 1d); `experiment` se guarda en
+    run.json para trazabilidad."""
     out.mkdir(parents=True, exist_ok=True)
     stats_dir = out / "stats"
     stats_dir.mkdir(exist_ok=True)
     thresholds = _thresholds(out)
     mngr = _checkpoint_manager(out / "checkpoints")
 
-    state = island.init_island(seed, node_id, n_max=n_max, n_init=n_init)
+    state = island.init_island(seed, node_id, n_max=n_max, n_init=n_init, env_overrides=env_overrides)
     start = 0
     archive = metrics.NoveltyArchive()
     activity = metrics.ActivityTracker()
@@ -115,6 +119,7 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
         "n_max": n_max, "n_init": n_init, "epoch_steps": C.EPOCH_STEPS, "reinject": reinject,
         "world_l": C.WORLD_L, "jax": jax.__version__, "device": str(jax.devices()[0]),
         "capability_thresholds": thresholds,
+        "plastic": plastic, "env_overrides": env_overrides or {}, "experiment": experiment or {},
     }
     (out / "run.json").write_text(json.dumps(meta, indent=2))
 
@@ -125,21 +130,24 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
     paused = None
     for e in range(start + 1, epochs + 1):
         t0 = time.perf_counter()
-        frozen_test = e % C.FROZEN_PLASTICITY_TEST_EVERY == 0
+        frozen_test = plastic and e % C.FROZEN_PLASTICITY_TEST_EVERY == 0
         if frozen_test:
             uid0, alive0 = jax.device_get((state.lineage.uid, state.alive))
             clone = jax.tree.map(jnp.copy, state)
         if e % C.VIDEO_EVERY == 0:
-            state, stats, frames, res = record.record_epoch(state, C.EPOCH_STEPS)
+            state, stats, frames, res = record.record_epoch(state, C.EPOCH_STEPS, plastic=plastic)
             record.save_recording(out / "recordings" / f"epoch_{e:06d}", frames, res,
                                   {"epoch": e, "seed": seed, "steps": C.EPOCH_STEPS,
                                    "stride": C.RECORD_STRIDE, "res_stride": C.RECORD_RES_STRIDE,
                                    "world_l": C.WORLD_L, "n_max": n_max})
         else:
-            state, stats = island.epoch(state, C.EPOCH_STEPS)
-        stats = {k: np.asarray(v).item() for k, v in jax.device_get(stats).items()}
+            state, stats = island.epoch(state, C.EPOCH_STEPS, plastic=plastic)
+        stats = jax.device_get(stats)
+        series = {k[7:]: np.asarray(stats.pop(k)) for k in list(stats) if k.startswith("series_")}
+        stats = {k: np.asarray(v).item() for k, v in stats.items()}
 
         row: dict = {"epoch": e, "reinjected": 0, **stats}
+        row.update(metrics.temporal_metrics(series, state.env, int(state.step) - C.EPOCH_STEPS))
         view = metrics.host_view(state)
         desc = metrics.descriptors(view)
         rng = np.random.default_rng([seed, e])
@@ -152,13 +160,17 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
             row.update({f"desc_{n}": float(v) for n, v in zip(metrics.DESCRIPTOR_NAMES, desc.mean(0))})
 
         if frozen_test:
-            clone, _ = island.epoch(clone, C.EPOCH_STEPS, plastic=False)
+            clone, st_f = island.epoch(clone, C.EPOCH_STEPS, plastic=False)
             uid_f, alive_f = jax.device_get((clone.lineage.uid, clone.alive))
+            st_f = {k: np.asarray(v).item() for k, v in jax.device_get(st_f).items()
+                    if not k.startswith("series_")}
             del clone
             s_plastic = metrics.learning_survival(uid0, alive0, view["uid"], view["alive"])
             s_frozen = metrics.learning_survival(uid0, alive0, uid_f, alive_f)
             row.update({"survival_plastic": s_plastic, "survival_frozen": s_frozen,
                         "learning_value": s_plastic - s_frozen})
+            # sonda emparejada a nivel de población (ADR-010, fase 1d): misma época, mismo azar
+            row.update(metrics.paired_learning_value(stats, st_f))
 
         if e % C.CAPABILITY_TEST_EVERY == 0:
             battery = capability.run_battery(state, stats["comm_mi_bits"])
@@ -181,7 +193,7 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
         rows.append(row)
         all_rows.append(row)
         if verbose:
-            extra = f" · aprendizaje {row['learning_value']:+.3f}" if frozen_test else ""
+            extra = f" · VA {row['va_population']:+.3f}" if frozen_test else ""
             print(f"época {e:5d} · {row['seconds']:5.2f}s · pob {stats['population']:5d} "
                   f"(mín {stats['population_min']:5d}) · nac {stats['births']:5d} · "
                   f"ataques† {stats['deaths_attack']:4d} · gen máx {stats['generation_max']:.0f} · "

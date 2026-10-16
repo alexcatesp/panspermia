@@ -52,6 +52,7 @@ class IslandState:
     resources: jax.Array    # f32[128, 128]
     chem: jax.Array         # f32[N_CHEM, 128, 128]: nutriente, toxina, feromona
     toxic_type: jax.Array   # int32: 0 = alga A tóxica, 1 = alga B tóxica
+    tox_patches: jax.Array  # bool[P, P]: programa de toxicidad por parches (fase 1d)
     alive: jax.Array        # bool[N]
     pos: jax.Array          # f32[N, 2]
     vel: jax.Array          # f32[N, 2]
@@ -86,6 +87,10 @@ class StepStats:
     toxin_damage: jax.Array
     emitted: jax.Array       # f32[N_CHEM]
     toxic_type: jax.Array
+    tox_state: jax.Array    # fracción de parches con el alga B tóxica
+    eaters: jax.Array       # agentes comiendo en el paso
+    death_age_sum: jax.Array  # suma de edades al morir (duración media de la vida)
+    deaths: jax.Array
 
 
 def setup_determinism() -> None:
@@ -144,6 +149,7 @@ def _scatter(tree, idx, new):
 
 @functools.partial(jax.jit, static_argnames=("n_max", "n_init"))
 def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandState:
+    k_patches = jax.random.fold_in(key, 0x70A)
     k = jax.random.split(key, 5)
     genomes = jax.vmap(G.random_minimal)(jax.random.split(k[0], n_max))
     pheno = develop_batch(genomes)
@@ -156,6 +162,7 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         resources=world.init_resources(env, k[1]),
         chem=jnp.zeros((C.N_CHEM, C.RESOURCE_GRID, C.RESOURCE_GRID), jnp.float32),
         toxic_type=jnp.int32(0),
+        tox_patches=world.initial_patches(env, k_patches),
         alive=alive,
         pos=jax.random.uniform(k[2], (n_max, 2), maxval=C.WORLD_L),
         vel=jnp.zeros((n_max, 2)),
@@ -176,11 +183,16 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
     )
 
 
-def init_island(seed: int, node_id: bytes, n_max: int = C.N_MAX, n_init: int = C.N_INIT) -> IslandState:
-    """Estado inicial: n_init genomas mínimos aleatorios en n_max slots."""
+def init_island(seed: int, node_id: bytes, n_max: int = C.N_MAX, n_init: int = C.N_INIT,
+                env_overrides: dict | None = None) -> IslandState:
+    """Estado inicial: n_init genomas mínimos aleatorios en n_max slots. `env_overrides` sustituye
+    campos del entorno (experimentos de la fase 1d), p. ej. {"tox_mode": "aleatorio", "tox_period": 560}."""
     if not 0 < n_init <= n_max:
         raise ValueError("se requiere 0 < n_init <= n_max")
-    return _init(jax.random.PRNGKey(seed), world.make_env(node_id), n_max, n_init)
+    env = world.make_env(node_id)
+    if env_overrides:
+        env = world.with_overrides(env, **env_overrides)
+    return _init(jax.random.PRNGKey(seed), env, n_max, n_init)
 
 
 def _births(state: IslandState, key: jax.Array):
@@ -255,7 +267,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         fixed = jnp.zeros_like(actions).at[:, 0].set(control[1]).at[:, 1].set(control[2]).at[:, 2].set(1.0)
         actions = jnp.where(control[0] > 0, fixed, actions)
     pos, vel, angle, thrust = world.physics(state, actions, cand)
-    toxic = world.toxic_cells(state.env, state.step, state.toxic_type)
+    toxic = world.toxic_cells(state.env, state.step, state.toxic_type, state.tox_patches)
     toxicity = jnp.clip(state.step.astype(jnp.float32) / C.TOXIC_RAMP_STEPS, 0.0, 1.0)
     gain, intake, toxic_in, nutrient, resources, chem = world.eat(
         state.resources, state.chem, pos, alive0, actions, toxic, toxicity)
@@ -295,6 +307,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     )
 
     died = alive0 & (energy <= 0)
+    age_at_death = state.age
     by_attack = died & (drained > 0)
     # veneno: sin la toxina ni la pérdida neta por alga tóxica de este paso habría sobrevivido
     # (la intoxicación lenta, repartida en muchos pasos, cuenta como hambre)
@@ -322,8 +335,11 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     resources = world.resources_step(state.resources, state.env, state.step)
     chem, resources = world.chem_step(state.chem, resources)
     flip = jax.random.uniform(k_flip) < C.TOXIC_FLIP_PROB
+    patches = world.step_patches(state.env, state.tox_patches, state.step,
+                                 jax.random.fold_in(k_flip, 0x70A))
     state = state.replace(w=w, resources=resources, chem=chem, step=state.step + 1,
-                          toxic_type=jnp.where(flip, 1 - state.toxic_type, state.toxic_type))
+                          toxic_type=jnp.where(flip, 1 - state.toxic_type, state.toxic_type),
+                          tox_patches=patches)
 
     stats = StepStats(
         population=jnp.sum(state.alive).astype(jnp.int32),
@@ -340,6 +356,10 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         toxin_damage=jnp.sum(tox_dmg),
         emitted=jnp.sum(emitted, axis=0),
         toxic_type=state.toxic_type,
+        tox_state=jnp.mean(state.tox_patches.astype(jnp.float32)),
+        eaters=jnp.sum(alive0 & (actions[:, 2] > 0)).astype(jnp.int32),
+        death_age_sum=jnp.sum(jnp.where(died, age_at_death, 0)).astype(jnp.float32),
+        deaths=jnp.sum(died).astype(jnp.int32),
     )
     return state, stats
 

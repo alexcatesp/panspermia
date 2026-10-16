@@ -1,0 +1,18 @@
+[
+  {"name": "E0-fijo-N4096", "block": "E0",
+   "description": "Control sin cambio (asignación fija por parches), mundo base 1b calibrado. Viabilidad y tau_vida.",
+   "node": "fase1d-w0", "seeds": [0, 1, 2, 3, 4], "epochs": 100, "n_max": 4096, "n_init": 512,
+   "env": {"tox_mode": "fijo"}},
+  {"name": "E0-aleatorio-T560-N4096", "block": "E0",
+   "description": "Cambio aleatorio por parches con T = 560 pasos (~4 vidas): la condición central de E1.",
+   "node": "fase1d-w0", "seeds": [0, 1, 2, 3, 4], "epochs": 100, "n_max": 4096, "n_init": 512,
+   "env": {"tox_mode": "aleatorio", "tox_period": 560}},
+  {"name": "E0-fijo-N2048", "block": "E0",
+   "description": "Como E0-fijo-N4096 con la mitad de huecos: ¿misma ecología cualitativa y más rápido?",
+   "node": "fase1d-w0", "seeds": [0, 1, 2, 3, 4], "epochs": 100, "n_max": 2048, "n_init": 256,
+   "env": {"tox_mode": "fijo"}},
+  {"name": "E0-aleatorio-T560-N2048", "block": "E0",
+   "description": "Como E0-aleatorio-T560-N4096 con la mitad de huecos.",
+   "node": "fase1d-w0", "seeds": [0, 1, 2, 3, 4], "epochs": 100, "n_max": 2048, "n_init": 256,
+   "env": {"tox_mode": "aleatorio", "tox_period": 560}}
+]

@@ -119,6 +119,9 @@ TOXIC_FLIP_PROB = 0.0                 # inversión global por paso; desactivada:
                                       # población entera come veneno a la vez y se extingue
 TOXIC_REGION_K = 2                    # franjas de toxicidad: 2 de cada régimen en el toro
 TOXIC_REGION_SPEED = 5.0              # unidades de mundo por unidad de tiempo de las fronteras
+# Programa temporal de toxicidad (fase 1d, docs/fase1d/diseno.md): qué alga es tóxica por parches.
+TOX_MODES = {"franjas": 0, "aleatorio": 1, "periodico": 2, "fijo": 3}
+TOX_PATCHES = 8                       # rejilla de 8 × 8 parches (128 × 128 unidades cada uno)
 TOXIC_FACTOR = 0.5                    # comer alga tóxica resta la mitad de lo que habría sumado
                                       # (con 1,0 las islas se extinguen; ADR-008, calibración)
 # Rampa (ADR-008, addendum): el alga tóxica pasa de alimentar como las demás (paso 0) a restar
