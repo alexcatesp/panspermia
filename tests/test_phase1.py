@@ -214,6 +214,16 @@ def test_viewer_serves_only_run_dir(tmp_path):
     assert (viewer.STATIC / "index.html").exists()
 
 
+def test_extinct_streak_ignores_stray_survivors():
+    """Un superviviente suelto de la reinyección no reinicia la cuenta de extinción."""
+    from panspermia import run as runner
+    s = 0
+    for pop in (0, 1, 0, 3, 0):
+        s = runner.next_extinct_streak(s, pop)
+    assert s == 5
+    assert runner.next_extinct_streak(s, config.N_MIN_REINJECT) == 0
+
+
 def test_runner_stops_when_extinct(tmp_path, monkeypatch):
     """Si la isla sigue extinguiéndose pese a reinyectar, el runner se detiene y lo indica."""
     from panspermia import run as runner

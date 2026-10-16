@@ -80,6 +80,12 @@ def _clean(d: dict) -> dict:
     return {k: (v.item() if isinstance(v, np.generic) else v) for k, v in d.items()}
 
 
+def next_extinct_streak(streak: int, population: int) -> int:
+    """Épocas seguidas que acaban por debajo de N_MIN_REINJECT. No basta con exigir población 0:
+    en E0 un superviviente suelto de la reinyección reiniciaba la cuenta y la parada no actuaba."""
+    return streak + 1 if population < C.N_MIN_REINJECT else 0
+
+
 def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: int,
         reinject: bool = True, verbose: bool = True, env_overrides: dict | None = None,
         plastic: bool = True, experiment: dict | None = None) -> dict:
@@ -125,7 +131,7 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
 
     rows: list[dict] = []
     extinct_at = None
-    extinct_streak = 0  # épocas seguidas en las que la población llegó a 0 (pese a reinyectar)
+    extinct_streak = 0  # épocas seguidas que acaban por debajo de N_MIN_REINJECT (la reinyección no prende)
     stopped_extinct = False
     paused = None
     for e in range(start + 1, epochs + 1):
@@ -182,7 +188,7 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
 
         if stats["population_min"] == 0 and extinct_at is None:
             extinct_at = e
-        extinct_streak = extinct_streak + 1 if stats["population_min"] == 0 else 0
+        extinct_streak = next_extinct_streak(extinct_streak, stats["population"])
         stopped_extinct = extinct_streak >= C.EXTINCT_STOP_EPOCHS
         if reinject and stats["population"] < C.N_MIN_REINJECT:
             before = stats["population"]
