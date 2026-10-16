@@ -192,3 +192,32 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - Criterios del `eval`: grupos estables **no** (solo s2 y s3 superan 200 épocas), aprendizaje **no** (cinco de cinco negativos, pero la métrica de cohortes está degenerada; ver 07:30), novedad **sí** (el archivo sigue creciendo en las cinco). Comunicación ≈ 0 bits; laberinto ≈ 0.
 - Ninguna isla pausa: la mejor ganancia en la mancha es 0,156 (s4), por debajo del umbral 0,2. La s0 terminó antes de la v2; su valor sale de `battery_on_checkpoint.py` sobre el checkpoint final.
 - Conclusión: **firme**. La ecología de la fase 1 es estable en 5 de 5 islas (3.100–3.800 bichos), con ataque fijado cerca de 1 y cerebros pequeños. Sin capacidad por encima de las referencias triviales. Con esto se cierra la fase 1 como línea base para la 1b y la 1d.
+
+### 15:30–16:35 · Fase 1b integrada en main; suite completa de la 1d en GPU
+- Qué: fusión de `fase1b` en main (`bfea05a`, sustrato 2.0.0). Dos conflictos, en el texto del ADR-008/009 y en la firma de `world_step`, con el argumento `control` de la batería v2. El código fusionado es idéntico al de `fase1d` en `c6fc3d3`.
+- Tests: `pytest --runslow` en la rama `fase1d` (1b + 1d + main): **57 de 57 en verde** en 1 h 05 min. Log: `runs/fase1d/tests_gpu.log`.
+- Tropiezo: el primer intento importaba el paquete de main (O = 70), porque el venv lo tiene instalado en modo editable. Desde un worktree hay que exportar `PYTHONPATH=src`.
+
+### 16:37 · E0 lanzado (viabilidad y escalas de tiempo)
+- Cola: `experiments/fase1d/e0.json`. Condiciones: fijo y aleatorio con T = 560, cada una con N = 4.096 y N = 2.048; 5 semillas y 100 épocas por condición. Código: `39cd831`. Datos: `runs/fase1d/E0-*`, log en `runs/fase1d/e0.log`.
+
+### 16:37–20:20 · E0: viabilidad, tamaño del mundo y escalas de tiempo
+- Datos: `runs/fase1d/E0-*`, `runs/fase1d/e0.log`, resumen en `runs/fase1d/e0_resumen.csv` (`scripts/analyze_1d.py`). Código: `39cd831`. 5 semillas × 100 épocas por condición; medidas tardías sobre las épocas 51–100 de los supervivientes.
+
+| Condición | Sobreviven | Población tardía | Mín. | τ_vida (pasos) | τ_gen (pasos) | Fracción tóxica | VA (población) | s/época |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| fijo, N = 4.096 | 5/5 | 1.910 | 149 | 206 | 336 | 0,15 | +0,35 | 7,3 |
+| aleatorio T = 560, N = 4.096 | 2/5 | 977 | 132 | 145 | 259 | 0,25 | +1,8 | 7,2 |
+| fijo, N = 2.048 | 5/5 | 1.510 | 61 | 428 | 609 | 0,13 | +0,21 | 6,4 |
+| aleatorio T = 560, N = 2.048 | 1/5 | 496 | 13 | 207 | 236 | 0,26 | (1 mundo) | 6,4 |
+
+- **Viabilidad**: el control sin cambio cumple el criterio prerregistrado (≥ 90 %), pero el cambio aleatorio extingue 3 de 5 (N = 4.096) y 4 de 5 (N = 2.048). Las extinciones llegan en las épocas 41–88, justo al terminar la rampa de veneno (40 épocas). Con cambio aleatorio la fracción tóxica no baja de ~0,25, frente a ~0,13 con comida fija, así que alargar la rampa solo retrasaría el colapso.
+- **Tamaño**: N = 2.048 llena el cupo (2 de 5 controles acaban en 2.048), y eso dobla τ_vida (428 frente a 206) porque, sin huecos libres, nadie puede nacer. Solo ahorra un 12 % de tiempo. **Se fija N = 4.096** (decisión delegada en E0 por el responsable).
+- **Escalas**: τ_vida = 206 pasos (control, N = 4.096), no ~140; τ_gen ≈ 336. Los periodos de E1 en múltiplos de τ_vida pasan a **50 · 200 · 800 · 3.200** pasos.
+- **Indicio**: el VA a nivel de población es mayor con cambio aleatorio (+1,8 frente a +0,35), como predice H1. Pero solo con 2 supervivientes, así que puede haber sesgo de supervivencia.
+- **Fallos encontrados**: (1) la parada por extinción no actuaba porque un superviviente suelto de la reinyección reiniciaba la cuenta. Arreglado en `807c13a`: ahora cuenta las épocas que acaban por debajo de `N_MIN_REINJECT`. (2) Un mundo casi extinto (E0-aleatorio-T560-N2048 s4, época 100) **saltó la pausa por el laberinto** (`maze_gain` 0,31 > 0,25) con **un solo agente** examinado: es ruido de una muestra de tamaño 1. Ver ADR-013.
+- Decisiones del responsable (20:30): **calibrar el veneno** (E0b) y **mínimo de 32 adultos** para pasar la batería.
+- Conclusión: N = 4.096 y τ_vida, **firmes**; viabilidad del cambio aleatorio, **calibrando**.
+
+### 20:45 · E0b lanzado (calibración del veneno)
+- Qué: `TOXIC_FACTOR` 0,5 → 0,3 en todas las condiciones. Fijo, y aleatorio con T = 200 y T = 800; 3 semillas × 100 épocas, N = 4.096. Cola: `experiments/fase1d/e0b.json` (`29f0d75`). Datos: `runs/fase1d/E0b-*`.
