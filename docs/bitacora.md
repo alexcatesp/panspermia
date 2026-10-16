@@ -237,7 +237,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 | E0b aleatorio T = 800, veneno 0,3 | −0,01 · 2,42 · 0,23 | +0,23 (×1,25) |
 
 - Decisiones del responsable (22:35): **lanzar E1 con veneno 0,3** (las extinciones se informan como resultado) y **VA_log con mediana** como medida primaria (diseño v0.4; la relativa se conserva). Implementado en `9b9fb9e`.
-- Indicios, pendientes de E1: (1) en **todas** las condiciones aprender ayuda (VA > 0 en 18 de 19 semillas vivas); (2) con cambio muy rápido (T = 200 ≈ 1,5 vidas) el beneficio casi desaparece (+0,02), aunque los cerebros son los mayores (15 neuronas ocultas); (3) el beneficio máximo aparece con cambio aleatorio a T = 560 y veneno fuerte (×2,15). Encaja con la campana de H1, pero con n = 2–3 por condición y veneno distinto entre bloques: **no es concluyente**.
+- Indicios, pendientes de E1: (1) en **todas** las condiciones aprender ayuda (VA > 0 en 15 de 16 semillas vivas); (2) con cambio muy rápido (T = 200 ≈ 1,5 vidas) el beneficio casi desaparece (+0,02), aunque los cerebros son los mayores (15 neuronas ocultas); (3) el beneficio máximo aparece con cambio aleatorio a T = 560 y veneno fuerte (×2,15). Encaja con la campana de H1, pero con n = 2–3 por condición y veneno distinto entre bloques: **no es concluyente**.
 
 ### 22:45 · E1 y E2 lanzados
 - Colas `experiments/fase1d/e1.json` y `e2.json`: 20 condiciones × 5 semillas × 300 épocas, N = 4.096, veneno 0,3. Código: `9b9fb9e`. Logs: `runs/fase1d/e1.log`, `e2.log`. Duración estimada: ~1,5–2 días.
