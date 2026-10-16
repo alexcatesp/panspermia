@@ -211,3 +211,17 @@ En cada condición se mide:
 Predicción de referencia: aprender compensa cuando el entorno cambia más deprisa que las generaciones, pero no tan deprisa que lo aprendido caduque dentro de la vida. Comprobar si se cumple aquí, y dónde está el óptimo, es el resultado de la fase y la receta para diseñar la granja.
 
 **Requisitos previos.** Batería v2 integrada (ADR-011) y métrica del aprendizaje reemplazada por la sonda emparejada en el runner. La granja «fuga» y el robot físico (salvaguarda 2) siguen como en el ADR-009, solo que más tarde.
+
+**Addendum (16-10-2026, 10:20): los ritmos temporales como eje de la 1d** (decisión del responsable). Hoy los mundos casi no tienen estructura temporal:
+- no hay día ni noche: el reloj interno de los agentes (periodo de 500 pasos) no se corresponde con nada del mundo;
+- no hay estaciones ni mareas;
+- las manchas de algas solo derivan muy despacio (una vuelta cada ~31.000 pasos, unas 220 vidas);
+- en la 1b, el veneno cambia por franjas móviles (una franja tarda ~1.000 pasos en pasar, unas 7 vidas), sin regularidad.
+
+Hipótesis de trabajo: el cambio **predecible** favorece la anticipación (un reloj interno bien conectado), el cambio **impredecible** dentro de una vida favorece el aprendizaje, y el cambio **más lento que las generaciones** lo resuelve la evolución sola. Factores que se añaden a la 1d, primero de uno en uno y después combinados:
+1. **Día y noche**: el rebrote de las algas oscila con un periodo menor que una vida (~100 pasos) y el reloj interno se sincroniza con él. Pregunta: ¿surge la anticipación?
+2. **Estaciones**: la capacidad de carga oscila con un periodo de varias vidas (~1.000–2.000 pasos). Pregunta: ¿surgen el almacenamiento (nutriente) o la migración?
+3. **Mareas**: zonas que periódicamente quedan inaccesibles y luego dejan comida al descubierto. Requiere terreno o paredes móviles, así que va al final.
+4. **Cambio impredecible**: las franjas de veneno de la 1b, como referencia para comparar lo predecible con lo impredecible.
+
+Cada ritmo es una regla del mundo, no una nota a los agentes, así que el principio 1 se mantiene. Medidas añadidas: uso del reloj interno (información mutua entre la fase del ciclo y las acciones) y anticipación (cambio de conducta *antes* del cambio ambiental).
