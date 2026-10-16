@@ -28,6 +28,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 ## Estado actual y siguiente trabajo
 
 - Fase 0 cerrada (ADR-005, ADR-006). Fase 1 implementada (ADR-007); la aceptación (5 semillas × 500 épocas, ~4 h) se lanza con `scripts/phase1_acceptance.py` y se evalúa con su subcomando `eval`.
+- Aceptación de la fase 1 hecha (ADR-010, tag `fase1-base`): aprendizaje negativo y 4 de 5 islas pausadas por `ring_gain`. Es un falso positivo: `scripts/capability_controls.py` muestra que avanzar recto sin cerebro da 1,0 en el anillo. **No reanudar `runs/phase1/s1–s4` ni crear `CAPABILITY_REVIEW.json` sin decisión del responsable**; la batería v2 (referencia = mejor política trivial, prueba que exija los sentidos) está propuesta en el ADR-010 y no aplicada. `scripts/compare_runs.py` compara lotes en una ventana de épocas.
 - Estructura del estado (`island.IslandState`): arrays con eje N delante; `Genome`, `Phenotype`, `Lineage`, `Behavior` son `flax.struct.dataclass`. Cada paso usa `fold_in(key, step)`. Nacimientos en lote fijo de `MAX_BIRTHS_PER_STEP` dentro de `lax.cond`. `world_step(..., plastic=, births=)` con flags estáticos.
 - Las métricas en `metrics.py` y la batería en `capability.py` solo observan: nunca deben influir en la reproducción.
 - Salvaguarda 5: los umbrales están en `config.CAPABILITY_PAUSE_THRESHOLDS`; solo una persona puede subirlos (vía `CAPABILITY_REVIEW.json` o un ADR). No cambiarlos para que una ejecución «pase».
