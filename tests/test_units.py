@@ -83,10 +83,14 @@ def test_eat_conserves_resources():
     res = jnp.full((config.RESOURCE_GRID,) * 2, 0.3)
     pos = jnp.array([[1.0, 1.0], [2.0, 2.0], [100.0, 100.0]])  # dos en la misma celda
     actions = jnp.zeros((3, config.ACT_DIM)).at[:, 2].set(1.0)
-    intake, res2 = world.eat(res, pos, jnp.array([True, True, True]), actions)
+    chem = jnp.zeros((config.N_CHEM,) + res.shape)
+    no_toxic = jnp.zeros(res.shape, bool)
+    gain, intake, toxic_in, _, res2, _ = world.eat(res, chem, pos, jnp.array([True, True, True]),
+                                                   actions, no_toxic)
     eaten = np.asarray(res, np.float64) - np.asarray(res2, np.float64)
     assert np.isclose(eaten.sum(), float(jnp.sum(intake)), atol=1e-5)
     assert float(intake[0] + intake[1]) <= 0.3 + 1e-6
+    assert np.allclose(np.asarray(gain), np.asarray(intake)) and float(jnp.sum(toxic_in)) == 0.0
 
 
 def test_env_from_node_id_is_stable_and_bounded():

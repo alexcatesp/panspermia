@@ -77,7 +77,7 @@ def test_mutual_information_bounds():
 def test_novelty_archive_grows_only_with_novel():
     a = metrics.NoveltyArchive()
     rng = np.random.default_rng(0)
-    first = a.update(rng.uniform(size=(64, 8)))
+    first = a.update(rng.uniform(size=(64, len(metrics.DESCRIPTOR_NAMES))))
     assert first["archive_size"] > 0
     size = first["archive_size"]
     same = a.update(np.repeat(a.archive[:1], 64, axis=0))

@@ -48,6 +48,13 @@ def _resource_frame(state: IslandState) -> jax.Array:
     return jnp.clip(r / (2 * C.K_MEAN) * 255, 0, 255).astype(jnp.uint8)
 
 
+def _chem_frame(state: IslandState) -> jax.Array:
+    g = C.RECORD_RES_GRID
+    f = C.RESOURCE_GRID // g
+    c = state.chem.reshape(C.N_CHEM, g, f, g, f).mean(axis=(2, 4))
+    return jnp.clip(jnp.tanh(c / C.CHEM_OBS_SCALE) * 255, 0, 255).astype(jnp.uint8)
+
+
 @functools.partial(jax.jit, static_argnames=("k",), donate_argnums=(0,))
 def record_epoch(state: IslandState, k: int = C.EPOCH_STEPS):
     """Como `island.epoch`, pero devuelve también los fotogramas (cada RECORD_STRIDE pasos)."""
@@ -55,10 +62,11 @@ def record_epoch(state: IslandState, k: int = C.EPOCH_STEPS):
 
     def body(s, _):
         s, st = world_step(s, None)
-        return s, (st, snapshot(s), _resource_frame(s))
+        return s, (st, snapshot(s), _resource_frame(s), _chem_frame(s))
 
-    state, (per_step, frames, res) = jax.lax.scan(body, state, None, length=k)
+    state, (per_step, frames, res, chem) = jax.lax.scan(body, state, None, length=k)
     frames = jax.tree.map(lambda x: x[C.RECORD_STRIDE - 1::C.RECORD_STRIDE], frames)
+    frames["chem"] = chem[C.RECORD_RES_STRIDE - 1::C.RECORD_RES_STRIDE]
     res = res[C.RECORD_RES_STRIDE - 1::C.RECORD_RES_STRIDE]
     return state, metrics.epoch_stats(state, per_step), frames, res
 

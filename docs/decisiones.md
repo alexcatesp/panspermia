@@ -113,6 +113,49 @@ Además: la ejecución no depende de cómo se trocee en épocas (2 × 100 pasos 
 
 **Otros**: el runner escribe `stats/summary.json` además del Parquet. Las partes Parquet pueden tener columnas distintas (pruebas cada 20/100 épocas): leer con `read_parquet('stats/*.parquet', union_by_name=true)`. El formato del genoma no cambia, así que `SUBSTRATE_VERSION` sigue en 1.0.0 aunque el mundo tenga reglas nuevas.
 
+## ADR-008 · 16-10-2026 · Fase 1b: química artificial y algas estacionales (sustrato 2.0.0)
+
+**Contexto.** En la fase 1 (semilla 0, primeras 150 épocas) la evolución converge a una sola estrategia sencilla: casi todos muerden lo que tienen delante y comen algas, los cerebros encogen de ~10 a ~5 neuronas, el valor del aprendizaje oscila en torno a 0 y los grupos conductuales se diluyen. Diagnóstico: el mundo no premia ni la diversidad ni aprender. Las acciones son pocas y cerradas (morder ya viene hecho) y el entorno apenas cambia dentro de una vida. El responsable delegó la elección del siguiente paso (16-10-2026, 00:03); esta es la elección.
+
+**Decisión.** Dos cambios dentro de la pecera, sin abrir ningún canal al exterior:
+
+1. **Química artificial (primitivas componibles).** Tres sustancias en campos de 128 × 128 con difusión y degradación: **nutriente**, **toxina** y **feromona**. Tres acciones nuevas emiten cada una en la celda propia (hasta 2 por unidad de tiempo).
+   - Nutriente y toxina **almacenan la energía** que cuesta emitirlas (1 por unidad); la feromona cuesta 0,1 y se disipa.
+   - Comer absorbe también nutriente: permite **almacenar comida o alimentar a otros** (por ejemplo, a la descendencia).
+   - La toxina drena 5 × concentración por unidad de tiempo a quien esté en su celda (también al emisor) y se consume en la misma cantidad. Lo drenado y la toxina consumida vuelven al campo como alga.
+   - Nutriente y toxina degradados vuelven como alga. **Energía conservada** en toda la química (hay tests); la única pérdida deliberada es el coste de la feromona.
+   - Sensores nuevos (9): concentración local y gradientes adelante y lateral de cada sustancia (quimiotaxis).
+   - Con esto, envenenar, defenderse con un rastro de toxina, cachear comida o marcar caminos pasan a ser **estrategias que se pueden descubrir**, no botones. Morder se mantiene para comparar con la fase 1.
+2. **Algas estacionales (entorno que cambia dentro de una vida).** Hay dos tipos de alga en manchas que derivan con el mundo. El canal de recurso de los rayos lleva signo (+ tipo A, − tipo B), así que el tipo es visible. Uno de los dos es tóxico: comerlo **resta** lo que habría sumado. Cuál es tóxico cambia al azar con probabilidad 1/400 por paso, un proceso sin memoria que el reloj no permite predecir. La vida media es de ~100–150 pasos y una generación evolutiva tarda mucho más que un cambio de estación, así que nacer sabiendo no sirve: hay que **probar y aprender** (la energía propia es un sensor y las neuronas moduladoras pueden ligarse a su caída). Es el escenario clásico en el que la teoría predice que el aprendizaje compensa.
+
+**Cambios de formato.** O = 79 (70 + 9), A = 8 (5 + 3), N_PRE = 143, N_POST = 72; el fenotipo crece un 11 %. El genoma no cambia de forma, pero el sustrato interpreta distinto los mismos genes, así que **major 2.0.0**: los migrantes 1.x se rechazan y el dominio del hash cambia. El descriptor conductual pasa a 12 dimensiones (+ emisión de cada sustancia y fracción de ingesta tóxica). Las pruebas de capacidad corren sin algas tóxicas (`EnvParams.seasonal = 0`).
+
+**Predicciones** (para evaluarlas con honestidad): (a) el valor del aprendizaje sube por encima de 0; (b) aparece más de una estrategia estable (por ejemplo, emisores de toxina frente a pastores); (c) los cerebros dejan de encoger. Si nada de esto ocurre, el siguiente candidato es el entorno 3D (fase 2) o una química más rica.
+
+**Seguridad.** Todo ocurre dentro de la simulación; la batería de capacidad y sus umbrales no cambian. La comunicación química (feromona) no entra todavía en la métrica de información mutua; queda como mejora pendiente de la batería.
+
+**Alternativas descartadas por ahora**: quitar el mordisco (perderíamos la comparación con la fase 1); química con reacciones entre sustancias (más difícil de analizar; siguiente paso si esta funciona); genoma sin techo (los cerebros usan ~5 de 64 neuronas: el techo no es lo que limita).
+
+**Calibración (16-10-2026, 02:00–04:40, antes de la aceptación).** El diseño inicial no superaba el test de no extinción de la fase 0: **0 de 5 semillas** sobrevivían 100 épocas.
+- Con el diseño original, en la primera época morían 505 de 512 agentes. Un cerebro aleatorio no distingue algas: con la mitad tóxica, comer de todo da un balance nulo.
+- Ablaciones (semilla 0, 5 épocas): sin algas estacionales la población se recupera aunque haya emisión (167 → 1.606). Con ellas se extingue aunque nadie emita.
+- Una **rampa de toxicidad** salva el arranque: en el paso 0 el alga tóxica alimenta como las demás y llega a veneno pleno en `TOXIC_RAMP_STEPS` (40 épocas). Durante la rampa la población **evoluciona discriminación**: la fracción de ingesta tóxica baja de 0,53 a ~0,04–0,15 y deja de emitir toxina.
+- Aun así, el **cambio global** de tipo tóxico (1/400 o 1/1000 por paso) provocaba colapsos sincronizados: cuando cambia, toda la población come veneno a la vez. Hubo extinción en 2 de 5 semillas incluso con veneno a la mitad, y en 1 de 4 con el doble de rebrote.
+- Se sustituye por **regiones de toxicidad móviles**: el tipo tóxico depende de franjas (2 de cada régimen en el toro) cuyas fronteras avanzan a 5 unidades por unidad de tiempo. Un individuo cruza cambios de régimen dentro de su vida, sea quedándose quieto o viajando, pero en cada momento media isla sigue igual. `TOXIC_FLIP_PROB = 0`; el mecanismo global queda en el código.
+- Pilotos con regiones (semillas 0 y 2): con veneno pleno (`TOXIC_FACTOR = 1`) se extinguen; con **`TOXIC_FACTOR = 0,5` y `RESOURCE_R = 1,5`** sobreviven (mínimos de 1.150 y 308).
+
+| Parámetro | Diseño inicial | Calibrado |
+| --- | --- | --- |
+| Cambio de tipo tóxico | global, 1/400 por paso | regiones móviles (k = 2, 5 u/t); global desactivado |
+| `TOXIC_FACTOR` | 1,0 | 0,5 |
+| Rampa de toxicidad | — | 40 épocas |
+| `RESOURCE_R` | 1,0 (como la fase 1) | 1,5 (el alga tóxica reduce la comida útil) |
+
+- La rampa dura 40 épocas, y no 100, para que haya ~60 épocas de veneno pleno antes de la primera batería de capacidad (época 100), que con la prueba del anillo actual probablemente pause las islas (ADR-010).
+- Etiqueta `deaths_poison` contrafactual: cuenta una muerte como envenenamiento si, sin la toxina o la pérdida por alga tóxica de ese paso, el agente habría sobrevivido. Antes, cualquier traza de toxina difundida bastaba.
+- Comparabilidad con la fase 1: hay más rebrote de algas, así que las poblaciones no son comparables en número. El valor del aprendizaje, los grupos y las neuronas sí lo son.
+- Test arreglado: `test_epoch_split_invariance` excluye `comm_hist`, un acumulador de observación que se reinicia cada época por diseño. La dinámica es idéntica bit a bit.
+
 ## ADR-009 · 16-10-2026 · Mundos libres, mundos granja y fabricabilidad
 
 **Contexto.** El responsable plantea tres caminos complementarios: (1) muchos mundos repartidos por el planeta para tener riqueza evolutiva, (2) fabricar en el mundo real organismos evolucionados en un mundo simulado y (3) dirigir la evolución para que surjan organismos que resuelvan un problema real. El camino 3 choca con el principio 1 («ninguna métrica externa decide la reproducción»). El responsable delegó las decisiones de este ADR (16-10-2026, 00:23).

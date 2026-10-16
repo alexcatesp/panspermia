@@ -110,6 +110,14 @@ def epoch_stats(state, per_step) -> dict[str, jax.Array]:
         "comm_mi_bits": mi,
         "comm_effective_symbols": symbols,
         "attack_gene_mean": _masked_mean(state.pheno.attack, alive),
+        "deaths_poison": jnp.sum(per_step.deaths_poison),
+        "toxic_intake": jnp.sum(per_step.toxic_intake),
+        "toxic_intake_frac": jnp.sum(per_step.toxic_intake) / jnp.maximum(jnp.sum(per_step.intake), 1e-9),
+        "nutrient_intake": jnp.sum(per_step.nutrient_intake),
+        "toxin_damage": jnp.sum(per_step.toxin_damage),
+        "toxic_flips": jnp.sum(jnp.abs(jnp.diff(per_step.toxic_type))),
+        **{f"emit_{n}": jnp.sum(per_step.emitted[:, i]) for i, n in enumerate(C.CHEM_NAMES)},
+        **{f"chem_{n}_total": jnp.sum(state.chem[i]) for i, n in enumerate(C.CHEM_NAMES)},
     }
     for name, x in (("hidden", hidden), ("synapses", synapses),
                     ("cppn_nodes", cppn_nodes), ("cppn_edges", cppn_edges)):
@@ -123,7 +131,8 @@ def epoch_stats(state, per_step) -> dict[str, jax.Array]:
 # ---------------------------------------------------------------------------------------------
 
 DESCRIPTOR_NAMES = ("speed", "turn", "intake", "attacks", "signal_entropy", "dispersion",
-                    "aggregation", "repro_age")
+                    "aggregation", "repro_age", "emit_nutrient", "emit_toxin", "emit_pheromone",
+                    "toxic_frac")
 
 
 def host_view(state) -> dict[str, np.ndarray]:
@@ -133,7 +142,7 @@ def host_view(state) -> dict[str, np.ndarray]:
         "alive": state.alive, "age": state.age, "clade": state.lineage.clade,
         "uid": state.lineage.uid, "speed": b.speed, "turn": b.turn, "intake": b.intake,
         "attack": b.attack, "neighbors": b.neighbors, "sig_hist": b.sig_hist, "disp": b.disp,
-        "first_repro_age": b.first_repro_age,
+        "first_repro_age": b.first_repro_age, "emitted": b.emitted, "toxic_intake": b.toxic_intake,
     })
 
 
@@ -157,6 +166,8 @@ def descriptors(v: dict[str, np.ndarray]) -> np.ndarray:
         np.linalg.norm(v["disp"][m], axis=1) / C.WORLD_L,
         v["neighbors"][m] / age / 10.0,
         repro,
+        *(v["emitted"][m][:, i] / age / (C.EMIT_RATE * C.DT) for i in range(C.N_CHEM)),
+        v["toxic_intake"][m] / np.maximum(v["intake"][m], 1e-9),
     ], axis=1)
     return np.clip(d, 0.0, 1.0)
 

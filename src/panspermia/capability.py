@@ -68,6 +68,8 @@ def _single(env, genome, pheno, w, pos, angle, valid, resources) -> IslandState:
     one = lambda x: x[None]
     return IslandState(
         step=jnp.int32(0), key=jax.random.PRNGKey(0), env=env, resources=resources,
+        chem=jnp.zeros((C.N_CHEM, C.RESOURCE_GRID, C.RESOURCE_GRID), jnp.float32),
+        toxic_type=jnp.int32(0),
         alive=one(valid), pos=one(pos), vel=jnp.zeros((1, 2)), angle=one(angle),
         energy=one(jnp.where(valid, jnp.float32(C.PROBE_ENERGY), 0.0)),
         age=jnp.zeros((1,), jnp.int32), signal=jnp.zeros((1,)),
@@ -102,7 +104,7 @@ def _run_probe(env, genomes, phenos, ws, valid, angles, resources, steps: int,
 
 def _probe_env(walls: np.ndarray):
     env = world.make_env(b"capability-probe")
-    return env.replace(regrow=jnp.float32(0.0), walls=jnp.asarray(walls))
+    return env.replace(regrow=jnp.float32(0.0), walls=jnp.asarray(walls), seasonal=jnp.float32(0.0))
 
 
 def _success(intake: jax.Array, valid: jax.Array) -> float:

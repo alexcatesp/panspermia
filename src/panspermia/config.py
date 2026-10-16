@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "1.0.0"  # major distinto => migrantes rechazados
+SUBSTRATE_VERSION = "2.0.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -8,9 +8,11 @@ DT = 0.1
 RESOURCE_GRID = 128
 N_RAYS = 16
 RAY_CONE_DEG = 180.0
-RAY_CHANNELS = 4  # distancia, recurso, agente, señal
-OBS_DIM = N_RAYS * RAY_CHANNELS + 6  # + energía, velocidad(2), reloj(2), señal recibida = 70
-ACT_DIM = 5  # empuje, giro, comer, atacar, señal
+RAY_CHANNELS = 4  # distancia, recurso (con signo según tipo de alga), agente, señal
+N_CHEM = 3        # sustancias: nutriente, toxina, feromona (ADR-008)
+CHEM_OBS = 3 * N_CHEM  # por sustancia: concentración local, gradiente adelante y lateral
+OBS_DIM = N_RAYS * RAY_CHANNELS + 6 + CHEM_OBS  # 64 + energía, vel(2), reloj(2), señal + 9 = 79
+ACT_DIM = 5 + N_CHEM  # empuje, giro, comer, atacar, señal, emitir nutriente/toxina/feromona = 8
 
 # --- Población ---
 N_MAX = 4096
@@ -34,8 +36,8 @@ GENOME_MAX_BYTES = 4096
 N_ACTIVATIONS = 6  # sin, gauss, tanh, sigmoide, abs, identidad
 
 # --- Cerebro ---
-N_PRE = OBS_DIM + N_HIDDEN_MAX   # 134
-N_POST = N_HIDDEN_MAX + ACT_DIM  # 69
+N_PRE = OBS_DIM + N_HIDDEN_MAX   # 143
+N_POST = N_HIDDEN_MAX + ACT_DIM  # 72
 W_MAX = 4.0
 PLASTICITY_EVERY = 4
 
@@ -102,11 +104,33 @@ ATTACK_REACH = 2.0           # distancia máxima entre superficies
 ATTACK_HALF_ANGLE_DEG = 45.0
 ATTACK_EFFICIENCY = 0.6      # fracción drenada que gana el atacante; el resto queda como carroña
 
+# Química artificial (ADR-008): campos sobre la rejilla de recursos; unidades de energía
+CHEM_NAMES = ("nutrient", "toxin", "pheromone")
+EMIT_RATE = 2.0                       # emisión máxima por sustancia y unidad de tiempo
+EMIT_COST = (1.0, 1.0, 0.1)           # energía por unidad emitida (nutriente y toxina la almacenan)
+CHEM_DIFFUSION = (0.2, 0.2, 1.0)      # celdas²/tiempo (estable si D·dt <= 0,25)
+CHEM_DECAY = (0.02, 0.05, 0.2)        # 1/tiempo; nutriente y toxina degradados vuelven como algas
+TOXIN_DAMAGE = 5.0                    # energía drenada por unidad de toxina en la celda y de tiempo
+CHEM_OBS_SCALE = 1.0
+CHEM_GRAD_DIST = 8.0                  # distancia de muestreo para los gradientes (una celda)
+
+# Algas estacionales (ADR-008): dos tipos en manchas; cuál es tóxico cambia al azar
+TOXIC_FLIP_PROB = 0.0                 # inversión global por paso; desactivada: con 1/400 o 1/1000 la
+                                      # población entera come veneno a la vez y se extingue
+TOXIC_REGION_K = 2                    # franjas de toxicidad: 2 de cada régimen en el toro
+TOXIC_REGION_SPEED = 5.0              # unidades de mundo por unidad de tiempo de las fronteras
+TOXIC_FACTOR = 0.5                    # comer alga tóxica resta la mitad de lo que habría sumado
+                                      # (con 1,0 las islas se extinguen; ADR-008, calibración)
+# Rampa (ADR-008, addendum): el alga tóxica pasa de alimentar como las demás (paso 0) a restar
+# TOXIC_FACTOR × lo ingerido (desde TOXIC_RAMP_STEPS). Sin rampa, una población aleatoria, que no
+# distingue algas, se extingue en 2–3 épocas y la evolución no tiene gradiente por el que empezar.
+TOXIC_RAMP_STEPS = 40_000                 # 40 épocas de 1.000 pasos
+
 # Paredes (solo en entornos de prueba de capacidad; vacías en las islas)
 WALL_SAMPLES = 8             # muestras por rayo para detectar paredes
 
 # Recursos: crecimiento logístico con Kmax en manchas derivantes (suma de ondas planas toroidales)
-RESOURCE_R = 1.0
+RESOURCE_R = 1.5                # fase 1: 1,0; ×1,5 en 2.x porque el alga tóxica reduce la comida útil (ADR-008)
 RESOURCE_SEED = 0.002        # aporte mínimo para que celdas agotadas rebroten
 K_MEAN = 4.0
 K_WAVES = 8
