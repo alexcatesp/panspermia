@@ -248,3 +248,26 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - Comprobaciones: las poblaciones de las épocas 1–3 de E1-aleatorio-T035 s0 coinciden con las del arranque abortado (331, 963, 1.580), así que la medida solo observa. En la época 10 hay 3.682 cambios de parcela (esperados ≈ 64 × 1.000 × 2/35 ≈ 3.657) y la fracción tóxica ronda 0,5 durante la rampa.
 - E1 y E2 relanzados a las 23:50. Se estima que E1 termine el 18-10 por la mañana y E2, el 19-10.
 - Artículo divulgativo vivo para el responsable: «Panspermia: el experimento explicado» (Claude Docs).
+
+## 17-10-2026
+
+### 08:30 · E1 a medias (datos provisionales, sin análisis formal)
+- 15 de 50 mundos terminados (~33 min por mundo). Medianas de las condiciones aleatorias: VA_log T35 +0,12 · **T140 +0,41** · T560 +0,08 · T2240 +0,10 (solo 1 semilla). El máximo cae en T ≈ τ_vida, como predice H1. **Indicio.**
+- Curva de recuperación: justo tras un cambio comen **más** veneno que por azar (T2240: 0,76; T560: 0,69) y en ~100 pasos baja a ~0,2. Con T35 se quedan en ~0,5. «Aprender a aprender»: sin cambio entre las épocas 41–100 y las últimas 100 (T560: 0,58 → 0,59).
+- Explicación alternativa sin descartar: la caída podría deberse a que se agota el alga que ahora es mala, no a que aprendan. Hará falta la curva en el gemelo congelado (hoy excluida: prefijo `recov_`).
+
+### 11:00–16:26 · Sonda de recompensa (diseño 1d v0.6)
+- Qué: a la pregunta del responsable («¿tienen centros de recompensa como los mamíferos?»). `scripts/reward_probe.py` (`5858732`) graba la modulación m (la señal que regula la plasticidad) durante 1.000 pasos desde los checkpoints de las épocas 100 y 300. Compara inicios de comida tóxicos y buenos dentro de cada tipo de alga, con ANCOVA sobre m(t) y permutación dentro de (agente, tipo). Criterio prerregistrado en `15d2d33`: |d| ≥ 0,2 y p < 0,01 en ≥ 3 semillas de una condición. Corrió en la CPU (no es bit a bit igual que la GPU). Datos: `runs/fase1d/reward_probe.jsonl`.
+- Error corregido antes de medir: la primera versión (m(t+L) − m(t) con todos los bocados) confundía la vuelta a la media con una respuesta. Se vio en una prueba de 60 pasos.
+- Todos los agentes tienen neuronas moduladoras (de 1 a 11 de media según el mundo).
+- Resultado (max |d| sobre L = 1–8; signo: negativo = m más baja tras el veneno):
+
+| Condición | Época 300 | Época 100 |
+| --- | --- | --- |
+| aleatorio T35 | 0,10 · 0,11 · 0,08* · 0,12* · 0,09*; signos mezclados | 0,11 · 0,14 · 0,09 · 0,06 · 0,12* |
+| aleatorio T140 | −0,15* · −0,12* · 0,07 · −0,20* | −0,11 · −0,15 · **−0,29*** · −0,16* |
+| aleatorio T560 | −0,11* · 0,10 · 0,09 · −0,10* · **−0,23*** | 0,07* · 0,05 · 0,05 · −0,08* · **−0,23*** |
+
+  (* = p < 0,01; en negrita, los mundos que cumplen el criterio)
+- **Conclusión según el criterio: la evolución no ha inventado una señal de recompensa clara** (en ninguna condición la cumplen 3 semillas; como mucho 1 de 5). **Indicio** exploratorio: en T140 y T560, la mayoría de los mundos muestran una respuesta pequeña pero sostenida y del mismo signo (m baja 0,1–0,2 desviaciones tras el veneno, más allá de lo que ven y de la vuelta a la media). Con T35, los signos son mezclados. La señal no crece entre las épocas 100 y 300.
+- Pendiente: T2240, el periódico y el fijo cuando acabe E1. Decisión pendiente del responsable: dar o no un sentido de malestar tras el veneno (opción 2).
