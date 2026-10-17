@@ -33,8 +33,8 @@ def _mutated_population(n_lineages: int, n_generations: int, seed: int = 0) -> G
 
 def test_obs_dims_match_spec():
     """Sustrato 2.x (ADR-008): 70 observaciones de la spec v1 + 9 químicas; 5 + 3 acciones."""
-    assert config.OBS_DIM == 79 and config.ACT_DIM == 8
-    assert config.N_PRE == 143 and config.N_POST == 72
+    assert config.OBS_DIM == 80 and config.ACT_DIM == 8
+    assert config.N_PRE == 144 and config.N_POST == 72
 
 
 def test_genome_roundtrip_10k_mutated():

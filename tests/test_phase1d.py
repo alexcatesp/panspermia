@@ -148,6 +148,7 @@ def test_runner_with_schedule_reports_1d_metrics(tmp_path, monkeypatch):
     assert meta["env_overrides"] == env and meta["plastic"] is True
     assert "lifespan_mean" in rows[-1] and "clock_rhythm" in rows[-1] and "anticipation" in rows[-1]
     assert "va_population" in rows[1] and "frozen_population" in rows[1]  # sonda en la época 2
+    assert "frozen_recov_intake_b0" in rows[1]  # curva de recuperación del gemelo congelado (E9)
     assert not any(k.startswith("series_") for k in rows[-1])
 
 
@@ -170,3 +171,37 @@ def test_experiment_queue_validation(tmp_path):
         experiment.load_queue(q)
     q.write_text(json.dumps([{"name": "a", "seeds": [0], "config": {"TOXIC_FACTOR": 0.25}}]))
     assert experiment.load_queue(q)[0]["config"]["TOXIC_FACTOR"] == 0.25
+
+
+MALAISE_IDX = config.N_RAYS * config.RAY_CHANNELS + 6  # tras energía, vel(2), reloj(2) y señal
+
+
+@pytest.mark.parametrize("sense", [0.0, 1.0])
+def test_malaise_sense_is_seen_only_when_enabled(sense):
+    state = island.init_island(0, b"fase1d-test", n_max=64, n_init=32,
+                               env_overrides={"malaise_sense": sense})
+    state = state.replace(malaise=state.malaise.at[0].set(1.0))
+    obs, _ = world.sense(state, world.neighbors(state.pos, state.alive))
+    expected = np.tanh(1.0 / config.MALAISE_OBS_SCALE) * sense
+    assert np.isclose(float(obs[0, MALAISE_IDX]), expected)
+    assert np.all(np.asarray(obs[1:, MALAISE_IDX]) == 0.0)
+
+
+def test_malaise_accumulates_poison_and_decays():
+    """m' = MALAISE_DECAY · m + toxicidad · alga tóxica ingerida; 0 en los recién nacidos y muertos."""
+    state = island.init_island(0, b"fase1d-test", n_max=256, n_init=200,
+                               env_overrides={"tox_mode": "aleatorio", "tox_period": 140,
+                                              "malaise_sense": 1.0})
+    state = state.replace(step=jnp.int32(config.TOXIC_RAMP_STEPS))  # veneno pleno
+    seen_poison = False
+    for _ in range(30):
+        uid0, m0, tox0 = state.lineage.uid, state.malaise, state.behavior.toxic_intake
+        alive0 = state.alive
+        state, _ = island.world_step(state)
+        same = np.asarray(alive0 & state.alive & (state.lineage.uid == uid0))
+        dtox = np.asarray(state.behavior.toxic_intake - tox0)
+        want = config.MALAISE_DECAY * np.asarray(m0) + dtox
+        assert np.allclose(np.asarray(state.malaise)[same], want[same], atol=1e-5)
+        assert np.all(np.asarray(state.malaise)[~np.asarray(state.alive)] == 0.0)
+        seen_poison |= bool((dtox[same] > 0).any())
+    assert seen_poison

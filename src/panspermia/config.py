@@ -1,6 +1,7 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.0.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008)
+SUBSTRATE_VERSION = "3.0.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales,
+                             # ADR-008; 3.x: sentido de malestar, diseño 1d v0.7)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -11,7 +12,7 @@ RAY_CONE_DEG = 180.0
 RAY_CHANNELS = 4  # distancia, recurso (con signo según tipo de alga), agente, señal
 N_CHEM = 3        # sustancias: nutriente, toxina, feromona (ADR-008)
 CHEM_OBS = 3 * N_CHEM  # por sustancia: concentración local, gradiente adelante y lateral
-OBS_DIM = N_RAYS * RAY_CHANNELS + 6 + CHEM_OBS  # 64 + energía, vel(2), reloj(2), señal + 9 = 79
+OBS_DIM = N_RAYS * RAY_CHANNELS + 7 + CHEM_OBS  # 64 + energía, vel(2), reloj(2), señal, malestar + 9 = 80
 ACT_DIM = 5 + N_CHEM  # empuje, giro, comer, atacar, señal, emitir nutriente/toxina/feromona = 8
 
 # --- Población ---
@@ -125,6 +126,12 @@ TOX_PATCHES = 8                       # rejilla de 8 × 8 parches (128 × 128 un
 # Curva de recuperación (diseño 1d v0.5): alga y alga tóxica ingeridas según los pasos transcurridos
 # desde el último cambio del parche donde se come. Bordes de los intervalos (el último, abierto).
 RECOVERY_EDGES = (8, 16, 32, 64, 128, 256, 512, 1024, 2048)
+
+# Malestar (diseño 1d v0.7, E9; tipo efecto Garcia): sentido interno que se enciende al ingerir alga
+# tóxica y se apaga poco a poco. m_{t+1} = MALAISE_DECAY · m_t + toxicidad · alga tóxica ingerida;
+# entrada = tanh(m / MALAISE_OBS_SCALE) si env.malaise_sense = 1, y 0 si no (por defecto, apagado).
+MALAISE_DECAY = 0.95                  # vida media ≈ 13,5 pasos (~1/10 de vida)
+MALAISE_OBS_SCALE = 5 * 5.0 * 0.1     # 5 bocados máximos (EAT_RATE · DT): un bocado ≈ 0,2
 TOXIC_FACTOR = 0.5                    # comer alga tóxica resta la mitad de lo que habría sumado
                                       # (con 1,0 las islas se extinguen; ADR-008, calibración)
 # Rampa (ADR-008, addendum): el alga tóxica pasa de alimentar como las demás (paso 0) a restar

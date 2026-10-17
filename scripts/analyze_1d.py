@@ -79,14 +79,15 @@ def seed_summary(d: Path) -> dict | None:
     }
 
 
-def recovery_curve(rows: list[dict]) -> list[float | None]:
-    """Fracción tóxica agregada por intervalo de tiempo desde el último cambio del parche."""
+def recovery_curve(rows: list[dict], prefix: str = "") -> list[float | None]:
+    """Fracción tóxica agregada por intervalo de tiempo desde el último cambio del parche.
+    `prefix="frozen_"`: la del gemelo congelado (sin plasticidad; E9 y siguientes)."""
     out = []
     b = 0
-    while f"recov_intake_b{b}" in rows[-1]:
-        food = sum(r.get(f"recov_intake_b{b}") or 0.0 for r in rows)
-        tox = sum((r.get(f"recov_toxic_frac_b{b}") or 0.0) * (r.get(f"recov_intake_b{b}") or 0.0)
-                  for r in rows)
+    while f"{prefix}recov_intake_b{b}" in rows[-1]:
+        food = sum(r.get(f"{prefix}recov_intake_b{b}") or 0.0 for r in rows)
+        tox = sum((r.get(f"{prefix}recov_toxic_frac_b{b}") or 0.0)
+                  * (r.get(f"{prefix}recov_intake_b{b}") or 0.0) for r in rows)
         out.append(tox / food if food > 0 else None)
         b += 1
     return out
@@ -107,7 +108,9 @@ def recovery_summary(d: Path) -> dict | None:
     fast = lambda c: _mean([x for x in c[:4] if x is not None])  # intervalos < 64 pasos
     curve_late = recovery_curve(late_rows)
     fast_early = fast(recovery_curve(early_rows)) if early_rows else None
-    return {"curve_late": curve_late, "fast_early": fast_early, "fast_late": fast(curve_late)}
+    frozen = recovery_curve(late_rows, "frozen_") if "frozen_recov_intake_b0" in rows[-1] else []
+    return {"curve_late": curve_late, "fast_early": fast_early, "fast_late": fast(curve_late),
+            "curve_frozen": frozen}
 
 
 KEYS = ["population_late", "population_min", "lifespan", "tau_gen", "va_log_population",
@@ -149,7 +152,8 @@ def main() -> None:
     print()
     print("Curva de recuperación: fracción tóxica según los pasos desde el cambio del parche "
           "(últimas 100 épocas; mediana entre semillas). «Aprender a aprender»: fracción tóxica en "
-          "los primeros 64 pasos, épocas 41–100 frente a las últimas 100.")
+          "los primeros 64 pasos, épocas 41–100 frente a las últimas 100. «(congelado)»: el gemelo sin "
+          "plasticidad, desde el mismo estado.")
     print(f"{'condición':32s} " + " ".join(f"{x:>9s}" for x in labels)
           + f" {'rápida 41-100':>14s} {'rápida final':>13s}")
     for cond in sorted(d for d in a.root.iterdir() if d.is_dir()):
@@ -162,6 +166,10 @@ def main() -> None:
         fe, fl = _median([r["fast_early"] for r in recs]), _median([r["fast_late"] for r in recs])
         print(f"{cond.name:32s} " + " ".join(f"{fmt(x):>9s}" for x in curve)
               + f" {fmt(fe):>14s} {fmt(fl):>13s}")
+        if any(r["curve_frozen"] for r in recs):  # gemelo congelado: si se recupera igual, no es aprender
+            frz = [_median([r["curve_frozen"][b] for r in recs if b < len(r["curve_frozen"])])
+                   for b in range(len(labels))]
+            print(f"{'  (congelado)':32s} " + " ".join(f"{fmt(x):>9s}" for x in frz))
     if a.csv:
         with a.csv.open("w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=list(table[0]))

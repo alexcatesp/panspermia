@@ -176,8 +176,11 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
         if frozen_test:
             clone, st_f = island.epoch(clone, C.EPOCH_STEPS, plastic=False)
             uid_f, alive_f = jax.device_get((clone.lineage.uid, clone.alive))
-            st_f = {k: np.asarray(v).item() for k, v in jax.device_get(st_f).items()
-                    if not k.startswith(("series_", "recov_"))}
+            st_f = jax.device_get(st_f)
+            # curva de recuperación del gemelo congelado (E9): separa aprender de agotar el alga mala
+            rec_f = metrics.recovery_columns(st_f.pop("recov_intake"), st_f.pop("recov_toxic"))
+            row.update({f"frozen_{k}": v for k, v in rec_f.items()})
+            st_f = {k: np.asarray(v).item() for k, v in st_f.items() if not k.startswith("series_")}
             del clone
             s_plastic = metrics.learning_survival(uid0, alive0, view["uid"], view["alive"])
             s_frozen = metrics.learning_survival(uid0, alive0, uid_f, alive_f)

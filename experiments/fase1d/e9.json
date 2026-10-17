@@ -1,0 +1,98 @@
+[
+ {
+  "name": "E9-aleatorio-T140-malestar",
+  "block": "E9",
+  "description": "Programa aleatorio, T = 140 pasos, sentido de malestar activo (sustrato 3.0.0).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 140,
+   "malaise_sense": 1.0
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E9-aleatorio-T140-sin",
+  "block": "E9",
+  "description": "Programa aleatorio, T = 140 pasos, sentido de malestar apagado (sustrato 3.0.0).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 140,
+   "malaise_sense": 0.0
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E9-aleatorio-T560-malestar",
+  "block": "E9",
+  "description": "Programa aleatorio, T = 560 pasos, sentido de malestar activo (sustrato 3.0.0).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 560,
+   "malaise_sense": 1.0
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E9-aleatorio-T560-sin",
+  "block": "E9",
+  "description": "Programa aleatorio, T = 560 pasos, sentido de malestar apagado (sustrato 3.0.0).",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 560,
+   "malaise_sense": 0.0
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ }
+]

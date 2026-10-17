@@ -51,6 +51,7 @@ class EnvParams:
     tox_mode: jax.Array    # i32
     tox_period: jax.Array  # f32
     clock_period: jax.Array  # f32: periodo del reloj interno de los agentes (pasos)
+    malaise_sense: jax.Array  # f32: 1 activa el sentido de malestar (E9); 0 lo deja a cero
 
 
 def make_env(node_id: bytes) -> EnvParams:
@@ -80,6 +81,7 @@ def make_env(node_id: bytes) -> EnvParams:
         tox_mode=jnp.int32(0),
         tox_period=jnp.float32(1e9),
         clock_period=jnp.float32(C.CLOCK_PERIOD),
+        malaise_sense=jnp.float32(0.0),
     )
 
 
@@ -242,7 +244,7 @@ def sense(state, cand: jax.Array) -> tuple[jax.Array, jax.Array]:
     Por rayo (16, en el cono del cuerpo): proximidad del obstáculo más cercano, agente o pared
     (1 − d/alcance), recurso medio a lo largo del rayo (relativo a K_MEAN), parentesco del agente
     detectado (1 − distancia de color/√3) y su señal. Después: energía, velocidad (adelante,
-    lateral), reloj (sen, cos) y señal recibida (media de los vecinos dentro del alcance).
+    lateral), reloj (sen, cos), señal recibida (media de los vecinos dentro del alcance) y malestar.
     """
     ph = state.pheno
     safe, valid, rel, _, r_j = _gather_neighbors(cand, state.pos, state.vel, ph.radius, state.alive)
@@ -297,6 +299,7 @@ def sense(state, cand: jax.Array) -> tuple[jax.Array, jax.Array]:
     own = jnp.stack([
         jnp.tanh(state.energy / C.E_OBS_SCALE), v_fwd, v_lat,
         jnp.full((n,), jnp.sin(clock)), jnp.full((n,), jnp.cos(clock)), recv,
+        jnp.tanh(state.malaise / C.MALAISE_OBS_SCALE) * state.env.malaise_sense,
     ], axis=-1)
     obs = jnp.concatenate([rays, own, sense_chem(state.chem, state.pos, heading, lateral)], axis=-1)
     return jnp.where(state.alive[:, None], obs, 0.0), jnp.where(state.alive, n_near, 0)
