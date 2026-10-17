@@ -264,10 +264,10 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 | Condición | Época 300 | Época 100 |
 | --- | --- | --- |
-| aleatorio T35 | 0,10 · 0,11 · 0,08* · 0,12* · 0,09*; signos mezclados | 0,11 · 0,14 · 0,09 · 0,06 · 0,12* |
-| aleatorio T140 | −0,15* · −0,12* · 0,07 · −0,20* | −0,11 · −0,15 · **−0,29*** · −0,16* |
-| aleatorio T560 | −0,11* · 0,10 · 0,09 · −0,10* · **−0,23*** | 0,07* · 0,05 · 0,05 · −0,08* · **−0,23*** |
+| aleatorio T35 | −0,10 · ±0,11 · +0,08* · +0,12* · −0,09* (signos mezclados) | −0,11 · +0,14 · −0,09 · +0,06 · −0,12* |
+| aleatorio T140 | −0,15* · −0,12* · +0,07* · −0,20* | −0,11 · −0,15* · **−0,29*** · −0,16* |
+| aleatorio T560 | −0,11* · +0,10 · −0,09* · −0,10* · **−0,23*** | −0,07* · +0,05 · +0,05 · −0,08* · **−0,23*** |
 
-  (* = p < 0,01; en negrita, los mundos que cumplen el criterio)
-- **Conclusión según el criterio: la evolución no ha inventado una señal de recompensa clara** (en ninguna condición la cumplen 3 semillas; como mucho 1 de 5). **Indicio** exploratorio: en T140 y T560, la mayoría de los mundos muestran una respuesta pequeña pero sostenida y del mismo signo (m baja 0,1–0,2 desviaciones tras el veneno, más allá de lo que ven y de la vuelta a la media). Con T35, los signos son mezclados. La señal no crece entre las épocas 100 y 300.
+  (* = p < 0,01 con 200 permutaciones, el mínimo es 1/201; en negrita, los mundos que cumplen el criterio)
+- **Conclusión según el criterio: la evolución no ha inventado una señal de recompensa clara** (en ninguna condición la cumplen 3 semillas; como mucho 1 de 5). **Indicio** exploratorio: en T140 y T560, 7 de 9 mundos muestran en la época 300 una respuesta pequeña pero sostenida y del mismo signo (m baja 0,1–0,2 desviaciones tras el veneno, más allá de lo que ven y de la vuelta a la media). Con T35, los signos son mezclados. La señal no crece entre las épocas 100 y 300.
 - Pendiente: T2240, el periódico y el fijo cuando acabe E1. Decisión pendiente del responsable: dar o no un sentido de malestar tras el veneno (opción 2).
