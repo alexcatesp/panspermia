@@ -271,3 +271,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   (* = p < 0,01 con 200 permutaciones, el mínimo es 1/201; en negrita, los mundos que cumplen el criterio)
 - **Conclusión según el criterio: la evolución no ha inventado una señal de recompensa clara** (en ninguna condición la cumplen 3 semillas; como mucho 1 de 5). **Indicio** exploratorio: en T140 y T560, 7 de 9 mundos muestran en la época 300 una respuesta pequeña pero sostenida y del mismo signo (m baja 0,1–0,2 desviaciones tras el veneno, más allá de lo que ven y de la vuelta a la media). Con T35, los signos son mezclados. La señal no crece entre las épocas 100 y 300.
 - Pendiente: T2240, el periódico y el fijo cuando acabe E1. Decisión pendiente del responsable: dar o no un sentido de malestar tras el veneno (opción 2).
+
+### 16:45 · Decisión: E9 (sentido de malestar) y brazo largo sin malestar
+- Decisión del responsable ante la sonda de recompensa: **«ambas cosas»**. (1) E9: mismo mundo con un sentido de malestar tras ingerir veneno (activo/apagado; T140 y T560; 5 semillas). (2) En la ejecución larga, un mundo sin malestar para ver si la señal surge sola con tiempo. Diseño v0.7.
+- Implementación en la rama `fase1d-e9` (worktree `panspermia-e9`), separada del código con el que corren E1 y E2. Sustrato 3.0.0 (`OBS_DIM` 79 → 80). El gemelo congelado guarda ahora su curva de recuperación (`frozen_recov_*`).

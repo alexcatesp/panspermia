@@ -84,6 +84,20 @@ Predicción (Dunlap y Stephens 2009, `dunlap2009components`): con r = 1 gana el 
 
 Implementación pendiente: necesita un canal sensorial nuevo (un cuarto campo químico o una marca en el canal de recurso de los rayos). Si cambia `OBS_DIM`, el sustrato sube de versión mayor. Se decide al programarlo, después de E1 y E2.
 
+### E9 · Sentido de malestar (añadido en la v0.7, a propuesta del responsable)
+
+La sonda de recompensa (v0.6) no encontró una señal clara de premio o castigo en la modulación m: solo un esbozo débil en T140 y T560 (m baja 0,1–0,2 desviaciones tras el veneno en 7 de 9 mundos; 1 de 5 cumple el criterio como mucho). La única pista de que algo sentó mal es el nivel de energía, mezclado con moverse, reproducirse y envejecer. Los animales tienen un sentido aparte, la náusea, que asocia un sabor con su consecuencia aunque llegue tarde (Garcia y Koelling 1966, `garcia1966relation`).
+
+E9 añade una **entrada de malestar**: m_mal ← 0,95 · m_mal + toxicidad · alga tóxica ingerida (vida media ≈ 13,5 pasos), vista como tanh(m_mal / 2,5). No es una recompensa impuesta: no dice qué hacer ni se usa en la reproducción. Solo informa de cómo está el cuerpo, como la energía. Condiciones: aleatorio T = 140 y T = 560, con el sentido **activo** o **apagado** (entrada a 0), veneno 0,3, 5 semillas, 300 épocas → **4 condiciones**. Las dos ramas usan el mismo sustrato 3.0.0 (`OBS_DIM` = 80), así que la única diferencia es si la entrada lleva información. La rama apagada además replica E1 en el sustrato nuevo.
+
+Además, E9 guarda la **curva de recuperación del gemelo congelado**, que separa aprender de agotar el alga mala.
+
+Predicciones: con malestar, (a) la sonda de recompensa cumple el criterio en ≥ 3 semillas por condición (m pasa a responder a la consecuencia); (b) VA_log mayor que sin malestar; (c) recuperación más rápida (menos veneno en los primeros 64 pasos tras un cambio). Si el malestar no mejora nada, el cuello de botella no es la falta de un sentido interno, sino cómo se conecta. Análisis: diferencia de medianas con malestar y sin él, con permutación por semillas y corrección de Holm por los 2 periodos.
+
+**Brazo largo** (decisión del responsable, 17-10-2026): en la ejecución larga que se proponga tras la 1d se incluye también un mundo **sin** malestar, para ver si con muchas más generaciones la evolución conecta sola la modulación a la energía.
+
+Implementación: rama `fase1d-e9` (worktree `panspermia-e9`), cola `experiments/fase1d/e9.json`. Se lanza cuando E1 y E2 dejen libre la GPU.
+
 ### Aplazado
 
 - **Mareas**: requieren terreno o paredes móviles. Irán en la fase 1e.
@@ -163,3 +177,4 @@ A ~5 s por época (N = 4.096) son **~65 h**, unos 2,7 días de GPU continua. Con
 - 0.4 (16-10-2026, tras E0b y antes de E1): **corrección**: τ_vida se resume con la mediana entre semillas (~130 pasos; la media de 206 de la v0.3 estaba inflada por una semilla), así que **se mantienen los periodos 35 · 140 · 560 · 2.240**. Veneno calibrado: `TOXIC_FACTOR` = 0,3 en E1 y E2 (8 de 9 mundos viables en E0b; el responsable decide seguir e informar las extinciones). **Medida primaria**: VA_log = log((población_plástica + 1) / (población_congelada + 1)), con **mediana** entre semillas y *bootstrap*. La relativa explotaba con gemelos casi extintos (+32 en E0b). La relativa se conserva como secundaria.
 - 0.5 (16-10-2026, 23:10, E1 parado a los 20 min y relanzado, sin datos analizados): a propuesta del responsable («¿descubren los bichos el patrón de la variabilidad?») se añade la **curva de recuperación** tras cada cambio de parche y su comparación temprana/tardía («aprender a aprender»). Se añade **E8, fiabilidad del aviso**, para después de E1/E2. Observación pura: la dinámica no cambia (`tox_since` y los contadores no entran en ninguna decisión). `tox_patch_flips` pasa a contar los cambios reales (antes restaba cambios opuestos simultáneos).
 - 0.6 (17-10-2026, E1 en curso): a propuesta del responsable («¿tienen centros de recompensa como los mamíferos?») se añade la **sonda de recompensa** (§7, §8). Es observación pura: corre fuera de la evolución, desde checkpoints, y en la CPU mientras E1 ocupa la GPU, así que no es bit a bit igual a la GPU; se anota el *backend*. El criterio se fija tras una única prueba técnica de 60 pasos en E1-aleatorio-T560 s0, que mostró que la primera versión (m(t+L) − m(t) con todos los bocados) confundía la vuelta a la media con una respuesta; por eso se pasó a inicios de comida y ANCOVA. Ningún otro dato de la sonda se ha visto.
+- 0.7 (17-10-2026, 16:45, E1 en curso): resultado de la sonda de recompensa (sin señal clara según el criterio; esbozo débil en T140/T560) y, por decisión del responsable («ambas cosas»), **E9, sentido de malestar** (§5) y un brazo sin malestar en la futura ejecución larga. Sustrato 3.0.0 solo en la rama `fase1d-e9`. E9 guarda también la curva de recuperación del gemelo congelado.
