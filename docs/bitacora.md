@@ -275,3 +275,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 ### 16:45 · Decisión: E9 (sentido de malestar) y brazo largo sin malestar
 - Decisión del responsable ante la sonda de recompensa: **«ambas cosas»**. (1) E9: mismo mundo con un sentido de malestar tras ingerir veneno (activo/apagado; T140 y T560; 5 semillas). (2) En la ejecución larga, un mundo sin malestar para ver si la señal surge sola con tiempo. Diseño v0.7.
 - Implementación en la rama `fase1d-e9` (worktree `panspermia-e9`), separada del código con el que corren E1 y E2. Sustrato 3.0.0 (`OBS_DIM` 79 → 80). El gemelo congelado guarda ahora su curva de recuperación (`frozen_recov_*`).
+
+### 18:59 · E9 implementado (rama `fase1d-e9`, commit `edcc274`)
+
+- **Qué:** sustrato 3.0.0. Nueva entrada de malestar: tanh(malestar/2,5) × `malaise_sense`. El malestar suma el veneno ingerido y decae ×0,95 por paso (vida media de 13,5 pasos). Se pone a 0 al nacer y al morir. Con `malaise_sense = 0` la entrada existe pero vale siempre 0, así que el control tiene el mismo cerebro. El gemelo congelado guarda ahora su propia curva de recuperación (`frozen_recov_*`), y `analyze_1d.py` la muestra.
+- **Pruebas:** 33 pasan y 1 se salta, en la CPU (2 h 06 min, porque la GPU está ocupada con E1). Incluyen dos tests nuevos: el malestar solo se ve cuando está activado, y se acumula y decae según la fórmula.
+- **Cola:** `experiments/fase1d/e9.json` (T140 y T560 aleatorio, con y sin malestar, 5 semillas, 300 épocas). Se lanza cuando termine E2.
