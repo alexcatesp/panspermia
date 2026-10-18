@@ -404,3 +404,18 @@ Respuesta según la bibliografía:
   - tasas fijas: `hidden_mean` menor;
   - CPPN neutral: `cppn_nodes_mean` menor;
   - N1024: descriptivo, con dispersión entre semillas de `hidden_mean` mayor y `genome_distance` menor.
+
+## ADR-017 · 18-10-2026 · P0: reproducción sexual y lugar de nacimiento; 100 % P0 (decisión del responsable)
+
+**Decisión.**
+- Se preparan experimentos para todos los factores de `docs/escalera/p0_factores.md` que se pueden medir en P0. B1 (sexo) y D1 (dónde nace el hijo) se implementan en la rama `escalera-p0y` (worktree `panspermia-p0y`, `3bedd02`, sustrato 2.4.0; por defecto, idéntico bit a bit):
+  - `REPRODUCTION = "sexual"`: pareja adulta al azar entre los vecinos y cruce uniforme por índice; sin pareja, clon. La pareja solo aporta genes;
+  - `BIRTH_PLACEMENT = "azar"`;
+  - métricas `kin_local` y `kin_global`, que solo observan.
+- **100 % P0** (responsable, 22:44):
+  - se cancelan la sonda de recompensa (80 de 88 hechas; se puede reanudar), la sonda del reloj y la cola que iba a reanudar E2;
+  - la GPU solo corre P0 (`scratchpad/p0_solo.sh`, en el orden A1 → A3 → A2 → B1 → D1 → C1).
+- **Criterios prerregistrados** (5 de 5 semillas emparejadas con P0-feliz, épocas 151–300):
+  - **sexual:** descriptivo. Se miden `genome_distance` (diversidad) y `hidden_mean`. Hipótesis: el cruce de cerebros de distinto tamaño no cambia la media por sí solo;
+  - **nacer al azar:** `kin_local − kin_global` **menor** que en el control con la medida (P0-feliz-control-kin, 1 semilla, que además debe coincidir bit a bit con P0-feliz s0 en población y neuronas). Para las semillas 1–4 del control, el parentesco se calcula a posteriori desde los checkpoints.
+- **B2 (herencia darwiniana):** se mantiene por bibliografía (ver `p0_factores.md`).

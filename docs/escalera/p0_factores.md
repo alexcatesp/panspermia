@@ -27,8 +27,8 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba | Estado |
 |---|---|---|---|---|---|---|
-| B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex | En P0, efectos neutrales (diversidad y ligamiento); su ventaja se ve con selección (P1). Requiere implementar el cruce por índices de la spec | 📋 decidir ahora; P0 y P1 |
-| B2 | **Herencia de lo aprendido** | darwiniana: el hijo nace con los pesos innatos, no con los aprendidos | En la Tierra no se heredan los aprendizajes. En algoritmos, heredarlos (lamarckiano) acelera pero se queda en óptimos locales; el efecto Baldwin encuentra el global | whitley1994lamarck, hinton1987learning | Ninguna: se mantiene por principio y por bibliografía | ✅ 📚 |
+| B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex | P0-feliz-sexual (5 mundos): efectos neutrales (diversidad, tamaño del cerebro tras el cruce). Su ventaja se verá con selección (P1) | 🔬 en cola |
+| B2 | **Herencia de lo aprendido** | darwiniana: el hijo nace con los pesos innatos, no con los aprendidos | Heredar lo aprendido (lamarckiano) acelera en mundos **estables** (Ackley y Littman 1994), pero cae más en óptimos locales (Whitley et al. 1994) y es **peor cuando el mundo cambia**: hereda lo que servía en un mundo que ya no existe (Sasaki y Tokoro 2000). Aprender sin heredarlo también acelera la evolución (efecto Baldwin; Hinton y Nowlan 1987), según la pendiente de la ganancia (Paenke et al. 2007). Además, con una codificación indirecta (CPPN) no se puede reescribir la receta a partir de los pesos aprendidos | whitley1994lamarck, ackley1994lamarck, sasaki2000lamarck, hinton1987learning, paenke2007plasticity | Ninguna en P0 (no hay nada que aprender). La transmisión de lo aprendido entre bichos (cultura) sería un peldaño social, no genético | ✅ 📚 |
 | B3 | ¿Quién paga la energía del hijo? | dotación regalada (P0, P1) o cedida por el padre (P3+) | — | — | Es de P3 | ⏭ |
 
 ## C. Demografía
@@ -44,7 +44,7 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
-| D1 | **Dónde nace el hijo** | pegado al padre (a 2 radios) | Crea vecindarios de parientes (aislamiento por distancia). Eso favorece la cooperación y la señal, pero la competencia local entre parientes puede anularlo. Cambiarlo más tarde cambiaría toda la evolución social | wright1943isolation, taylor1992viscous, werfel2015death | P0 con nacimiento en un lugar al azar: medir el parentesco entre vecinos con las dos reglas | 📋 simular |
+| D1 | **Dónde nace el hijo** | pegado al padre (a 2 radios) | Crea vecindarios de parientes (aislamiento por distancia). Eso favorece la cooperación y la señal, pero la competencia local entre parientes puede anularlo. Cambiarlo más tarde cambiaría toda la evolución social | wright1943isolation, taylor1992viscous, werfel2015death | P0-feliz-nacer-azar (5 mundos) y control con la medida de parentesco (1 mundo): `kin_local` frente a `kin_global` | 🔬 en cola |
 | D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0 | ⏭ P2 (densidad de comida) |
 
 ## E. Codificación del cerebro
@@ -55,8 +55,8 @@
 
 ## Plan para cerrar P0
 
-1. **Esta noche (🔬):** A1, A2, A3 y C1 (35 mundos, hasta las ~11:00 del 19-10).
+1. **Cola solo de P0 (🔬, `scratchpad/p0_solo.sh`, decisión del 18-10 a las 22:44):** A1 → A3 → A2 → B1 → D1 → C1. Son 36 mundos más, unas 19 h, hasta el 19-10 por la tarde. Sin E2 ni otras fases.
 2. **Análisis sin GPU (📋):** A4, A5, A7 y C4, con los datos de P0 que ya existen.
-3. **Simulaciones que faltan (📋):** D1 (dispersión al azar) y B1 (sexo). B1 necesita implementar el cruce, unas horas de trabajo.
+3. **B1 y D1** ya están implementados (rama `escalera-p0y`, ADR-017) y en la cola.
 4. **Decisiones por bibliografía (📚):** C2, A6, B2 y E1.
 5. **Criterio de cierre:** todas las filas en ✅ o ⏭. Las decisiones quedan en una ADR de cierre de P0, que fija la "física" de la herencia para toda la escalera.

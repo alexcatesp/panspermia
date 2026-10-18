@@ -410,7 +410,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Análisis preparado antes de ver las variantes:** `scripts/analyze_ladder.py` (solo biblioteca estándar).
 - **Ya se ve en P0-nest (s0 y s1):** también crece la CPPN (nodos ocultos de 0,35 a ~10,7; aristas de 49 a ~68). La rama de mutación no cambia la mutación de la CPPN.
 
-### 22:15–22:50 · La tasa de mutación también deriva; lista de cierre de P0 y cola de esta noche (ADR-016)
+### 22:15–22:33 · La tasa de mutación también deriva; lista de cierre de P0 y cola de esta noche (ADR-016)
 
 - **Medida en checkpoints de P0-feliz** (épocas 100, 200 y 300):
   - la tasa de mutación estructural (mediana) pasa de 1,00 a 1,74 (s0) y de 1,01 a 1,77 (s1);
@@ -427,3 +427,16 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - 21 referencias nuevas en `docs/bibliografia/escalera/refs.bib` (39 en total), con los DOI comprobados en Crossref;
   - rama `escalera-p0x` (`35e22f2`): 14 tests en verde y modo por defecto idéntico bit a bit;
   - cola `scratchpad/p0_noche.sh`: congela `p0_tres.sh` y encadena P0 → variantes → p0x → E2.
+
+### 22:34–22:55 · Sexo y lugar de nacimiento implementados; 100 % P0 (ADR-017)
+
+- **Corrección de horas:** se había escrito 22:50 en la bitácora, el mapa y el artículo cuando eran las 22:33; corregido. Memoria nueva: usar siempre la hora real.
+- **Rama `escalera-p0y` (`3bedd02`):** reproducción sexual (cruce por índice), nacer al azar y parentesco local; 5 tests en verde y modo por defecto idéntico bit a bit. Dos tests fallaron al principio por la caché de `jax.jit`, que reutilizaba la traza con el modo anterior; en los experimentos no ocurre, porque cada mundo es un proceso nuevo.
+- **Responsable: 100 % P0.**
+  - Cancelados la sonda de recompensa (80 de 88), la sonda del reloj y la cola con E2.
+  - Cola nueva `scratchpad/p0_solo.sh`: A1 neutral y terrestre → A3 tasas fijas → A2 CPPN neutral → B1 sexual → D1 nacer al azar y control → C1 N1024. Son 36 mundos, unas 19 h.
+  - Tras cada experimento con conclusiones, se presentará la tabla Grupo · Factor · Estado.
+- **Pregunta del responsable:** ¿la herencia darwiniana no hace más lenta la evolución? Respuesta con bibliografía en `p0_factores.md` (B2):
+  - más rápida en mundos estables, peor en mundos cambiantes;
+  - el efecto Baldwin acelera sin heredar;
+  - además, con la CPPN no se puede reescribir la receta desde los pesos aprendidos.
