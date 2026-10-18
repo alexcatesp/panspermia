@@ -202,7 +202,7 @@ def init_island(seed: int, node_id: bytes, n_max: int = C.N_MAX, n_init: int = C
 
 
 def _births(state: IslandState, key: jax.Array):
-    """Nacimientos asexuales en slots libres. Devuelve (estado, nº nacimientos, máscara de recién nacidos)."""
+    """Nacimientos (asexuales o sexuales, ADR-017) en slots libres. Devuelve (estado, nº nacimientos, máscara de recién nacidos)."""
     n = state.alive.shape[0]
     b = min(C.MAX_BIRTHS_PER_STEP, n)
     k = jax.random.split(key, 4)
@@ -217,6 +217,17 @@ def _births(state: IslandState, key: jax.Array):
 
     def do(state: IslandState):
         parent_g = jax.tree.map(lambda x: x[parents], state.genome)
+        if C.REPRODUCTION == "sexual":  # ADR-017: pareja adulta al azar entre los vecinos
+            cand = world.neighbors(state.pos, state.alive)[parents]
+            safe = jnp.maximum(cand, 0)
+            ok = (cand >= 0) & state.alive[safe] & (state.age[safe] >= C.MIN_REPRO_AGE)
+            k_mate = jax.random.split(jax.random.fold_in(key, 0x5E7), 2)
+            pick = jnp.argmax(jnp.where(ok, jax.random.uniform(k_mate[0], cand.shape), -1.0), axis=1)
+            mates = jnp.where(jnp.any(ok, axis=1), safe[jnp.arange(b), pick], parents)  # sin pareja: clon
+            mate_g = jax.tree.map(lambda x: x[mates], state.genome)
+            parent_g = jax.vmap(G.crossover)(parent_g, mate_g, jax.random.split(k_mate[1], b))
+        elif C.REPRODUCTION != "asexual":
+            raise ValueError(f"REPRODUCTION desconocida: {C.REPRODUCTION}")
         child_g = jax.vmap(G.mutate)(parent_g, jax.random.split(k[1], b))
         child_p = jax.vmap(develop)(child_g)
         e_split = state.pheno.offspring_frac[parents] * state.energy[parents]
@@ -233,8 +244,13 @@ def _births(state: IslandState, key: jax.Array):
                                     mode="drop")
         state = state.replace(energy=state.energy.at[p_idx].add(-e_paid, mode="drop"),
                               behavior=state.behavior.replace(first_repro_age=first))
-        state = _place(state, jnp.where(valid, slots, n), child_g, child_p,
-                       (state.pos[parents] + offset) % C.WORLD_L,
+        if C.BIRTH_PLACEMENT == "cerca":
+            child_pos = (state.pos[parents] + offset) % C.WORLD_L
+        elif C.BIRTH_PLACEMENT == "azar":  # ADR-017: sin vecindarios de parientes
+            child_pos = jax.random.uniform(jax.random.fold_in(key, 0xD15), (b, 2), maxval=C.WORLD_L)
+        else:
+            raise ValueError(f"BIRTH_PLACEMENT desconocido: {C.BIRTH_PLACEMENT}")
+        state = _place(state, jnp.where(valid, slots, n), child_g, child_p, child_pos,
                        jax.random.uniform(k[3], (b,), maxval=2 * math.pi), e_child, uid,
                        state.lineage.uid[parents], clade)
         return state.replace(next_uid=state.next_uid + n_births.astype(jnp.uint32))

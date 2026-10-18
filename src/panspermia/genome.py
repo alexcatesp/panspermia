@@ -95,6 +95,29 @@ def canonical(genome: Genome) -> Genome:
 # Creación y mutación (puras; compatibles con jit/vmap)
 # ---------------------------------------------------------------------------------------------
 
+def crossover(a: Genome, b: Genome, key: jax.Array) -> Genome:
+    """Cruce uniforme por índice (ADR-017): cada nodo de la CPPN con sus aristas de entrada, cada hueco
+    de neurona y cada gen de cuerpo y de vida vienen de `a` o de `b` al 50 %. Los índices actúan como
+    marcas históricas (spec §Reproducción sexual, como las innovaciones de NEAT)."""
+    k = jax.random.split(key, 4)
+    n = jax.random.bernoulli(k[0], 0.5, (C.CPPN_NODES,))
+    h = jax.random.bernoulli(k[1], 0.5, (C.N_HIDDEN_MAX,))
+    bo = jax.random.bernoulli(k[2], 0.5, (C.BODY_GENES,))
+    li = jax.random.bernoulli(k[3], 0.5, (C.LIFE_GENES,))
+
+    def pick(m, x, y):
+        return jnp.where(m, y, x)
+
+    child = Genome(
+        node_mask=pick(n, a.node_mask, b.node_mask), act_id=pick(n, a.act_id, b.act_id),
+        bias=pick(n, a.bias, b.bias), W=pick(n[None, :], a.W, b.W), W_mask=pick(n[None, :], a.W_mask, b.W_mask),
+        hid_mask=pick(h, a.hid_mask, b.hid_mask), hid_pos=pick(h[:, None], a.hid_pos, b.hid_pos),
+        hid_type=pick(h, a.hid_type, b.hid_type), body=pick(bo, a.body, b.body), life=pick(li, a.life, b.life),
+        generation=jnp.maximum(a.generation, b.generation),
+    )
+    return canonical(child)
+
+
 def random_minimal(key: jax.Array) -> Genome:
     """Genoma inicial: CPPN mínima (entradas→salidas) y N_HIDDEN_INIT neuronas."""
     k = jax.random.split(key, 8)

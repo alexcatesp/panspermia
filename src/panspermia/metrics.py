@@ -15,6 +15,7 @@ import jax.numpy as jnp
 import numpy as np
 
 from . import config as C
+from . import world
 
 # ---------------------------------------------------------------------------------------------
 # Bajo jit
@@ -77,6 +78,31 @@ def _genome_distance(state) -> tuple[jax.Array, jax.Array]:
     return (jnp.mean(jnp.linalg.norm(ca - cb, axis=1)), jnp.mean(jnp.sum(jnp.abs(sa - sb), axis=1)))
 
 
+def kin_local(state) -> jax.Array:
+    """Parentesco local (ADR-017, solo observa): fracción media de vecinos a menos de KIN_RADIUS que
+    son del mismo clado. Se compara con `kin_global` (índice de Simpson de los clados)."""
+    alive = state.alive
+    cand = world.neighbors(state.pos, alive)
+    safe = jnp.maximum(cand, 0)
+    d = world.wrap_delta(state.pos[safe] - state.pos[:, None, :])
+    near = (cand >= 0) & (jnp.sum(d * d, axis=-1) <= C.KIN_RADIUS ** 2)
+    same = near & (state.lineage.clade[safe] == state.lineage.clade[:, None])
+    n_near = jnp.sum(near, axis=1)
+    has = alive & (n_near > 0)
+    frac = jnp.sum(same, axis=1) / jnp.maximum(n_near, 1)
+    return jnp.sum(jnp.where(has, frac, 0.0)) / jnp.maximum(jnp.sum(has), 1)
+
+
+def simpson(clade: np.ndarray, alive: np.ndarray) -> float:
+    """Probabilidad de que dos vivos al azar sean del mismo clado (referencia de `kin_local`)."""
+    c = clade[alive]
+    if len(c) < 2:
+        return 0.0
+    _, counts = np.unique(c, return_counts=True)
+    p = counts / counts.sum()
+    return float(np.sum(p * p))
+
+
 def epoch_stats(state, per_step) -> dict[str, jax.Array]:
     alive = state.alive
     g = state.genome
@@ -124,6 +150,7 @@ def epoch_stats(state, per_step) -> dict[str, jax.Array]:
         # escalera (ADR-014): movimiento real y cuerpo (solo observan)
         "thrust_mean": jnp.sum(per_step.thrust) / jnp.maximum(jnp.sum(per_step.population), 1),
         "mass_mean": _masked_mean(state.pheno.mass, alive),
+        "kin_local": kin_local(state),
         "max_thrust_mean": _masked_mean(state.pheno.max_thrust, alive),
         # series por paso (fase 1d): el runner calcula con ellas anticipación y uso del reloj y no
         # las guarda en las estadísticas

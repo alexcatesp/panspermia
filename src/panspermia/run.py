@@ -170,6 +170,7 @@ def run(seed: int, epochs: int, out: Path, node_id: bytes, n_max: int, n_init: i
         row.update(archive.update(sample))
         row.update(metrics.behavior_groups(sample, seed * 1_000_003 + e))
         row.update(activity.update(view["clade"], view["alive"]))
+        row["kin_global"] = metrics.simpson(view["clade"], view["alive"])
         if len(desc):
             row.update({f"desc_{n}": float(v) for n, v in zip(metrics.DESCRIPTOR_NAMES, desc.mean(0))})
 
