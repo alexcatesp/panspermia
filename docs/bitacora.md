@@ -307,7 +307,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - *No concluyente:* H2, por falta de potencia y por las medidas.
   - *Pendiente:* E2 (en curso) dirá si poder evolucionar la plasticidad cambia la supervivencia. La sonda de recompensa en las condiciones que faltan corre en la CPU.
 
-### 10:30 · Decisión: E1b corrector, en el orden E2 → E9 → E1b
+### 09:25 · Decisión: E1b corrector, en el orden E2 → E9 → E1b
 
 - El responsable elige **E1b corrector** y el orden **E2 → E9 → E1b**. Protocolo prerregistrado en el diseño v0.9 (`24d9525`), antes de tener ningún dato de E1b.
 - Código en la rama `fase1d-e1b` (worktree `panspermia-e1b`):
@@ -315,3 +315,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - `scripts/clock_probe.py`, que compara una época con el reloj normal y otra con el reloj desincronizado (× φ);
   - cola `experiments/fase1d/e1b.json`: uniforme con las semillas 0–4, más las semillas 5–9 de aleatorio y periódico en T140 y T560.
 - Cadena en la GPU: `scratchpad/chain_e9_e1b.sh` espera a que termine E2, lanza E9 y, si existe `runs/fase1d/e1b_ok` (pruebas superadas), lanza E1b.
+
+### 09:35 · E1b implementado y probado (rama `fase1d-e1b`, commit `bd0747f`)
+
+- **Pruebas:** 14 tests de la 1d pasan en CPU, incluido el nuevo del modo uniforme (mismo tipo tóxico en todas las celdas, en los pasos 0 y 5.000). La cola e1b es válida (5 condiciones).
+- **Prueba técnica de la sonda del reloj** (la única vista antes del análisis, como en la v0.6), en E1-periodico-T140 s3, época 300, en CPU (17 min): población 1.402 con el reloj normal frente a 1.439 desincronizado (CU = −0,026), ingesta +0,002 y fracción tóxica −0,002. Solo comprueba que funciona; no cambia el criterio.
+- Marca `runs/fase1d/e1b_ok` creada: la cadena lanzará E1b tras E9. La sonda del reloj sobre E1 (semillas 0–4, 40 mundos, unas 11 h en CPU) espera a que termine la de recompensa (`scratchpad/clock_chain.sh`).
