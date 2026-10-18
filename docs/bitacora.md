@@ -359,3 +359,22 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Tras P5, rama del sí (aprender compensa): veneno que cambia en el tiempo.
   - Rama del no: química → ataque → señal, de una en una sobre P5.
 - **Dónde está:** ADR-014 (adenda), `docs/escalera/diseno.md` v0.2 y `docs/mapa.json`, con los nodos P6si, P6no, P7no y P8no.
+
+### 18:48 · Decisión: E2 se pausa para dar paso a la escalera
+
+- **Qué:** el responsable acepta pausar E2 en cuanto pasen los tests de la escalera. Nuevo orden en la GPU: **escalera → resto de E2 → E9 → E1b** (`scratchpad/chain_esc_e2_e9_e1b.sh`).
+- **Por qué:** P1 comprueba que la selección del motor funciona, y E2, E9 y E1b dependen de ello. Pausar apenas cuesta: el barrido salta los 21 mundos terminados y el que está en marcha se reanuda desde su último checkpoint (como mucho se pierden 10 épocas). E2 terminará unas 15 h más tarde.
+
+### 19:30–20:43 · E2 en pausa, tests en verde y escalera lanzada (rama `escalera`, `293f6a9`)
+
+- **E2 en pausa a las 19:30:**
+  - 21 de 50 mundos terminados;
+  - E2-periodico-T035 s1 tiene checkpoint en la época 240;
+  - se paró también la cadena antigua.
+- **Tests en el procesador:** se abandonaron tras 76 min. Habían pasado 42 sin fallos.
+- **Test 43, `test_runner_pause_and_review`:**
+  - parece colgado, pero es la compilación de JAX, que es muy lenta en ese test (varios minutos por variante);
+  - le pasa igual con el código de `fase1d-e1b`, sin la escalera;
+  - deuda: acortar ese test.
+- **Tests en la GPU** (decisión del responsable: esperar a los tests antes de lanzar). Los 13 restantes pasaron en 21 min. Total: test_escalera, fase 1d, 1b, 1 y unitarios, todos en verde.
+- **20:43:** se crea `runs/fase1d/escalera_ok` y arranca la cadena `escalera → resto de E2 → E9 → E1b`, empezando por P0-feliz s0.
