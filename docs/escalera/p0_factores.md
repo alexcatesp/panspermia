@@ -15,7 +15,7 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
-| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest, neutral y terrestre (15 mundos) | 🔬 esta noche |
+| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest (✅ 5/5), neutral y terrestre (🔬) | 🔬 |
 | A2 | Física de la mutación de la **CPPN** | añadir 5 %, quitar 2 %, dividir 3 %, quitar nodo 1 % | En P0 sus nodos pasan de 0,35 a ~11: es el mismo sesgo, en la receta del cerebro | stanley2002neat, langdon1998bloat, banzhaf2002bloat, kuo2009deletional | P0-cppn-neutral (5 mundos); si hace falta, también terrestre | 🔬 en cola |
 | A3 | **Tasas de mutación**: gen o constante | σ autoadaptativa y tasa estructural como gen (deriva +75 % en 300 épocas) | Sin selección, la tasa sube por el suelo en 0. En la Tierra, la selección la baja hasta la barrera de la deriva | lynch2016driftbarrier, sniegowski1997mutators, beyer2002es | P0-tasas-fijas (5 mundos). Si se mantiene como gen, el ruido pasa a escala logarítmica (sin artefacto del suelo) | 🔬 en cola |
 | A4 | **Cuánto** se muta: σ inicial 0,05, τ = 0,2, 11 % de cambios estructurales por hijo | sin contrastar | Demasiada mutación destruye la información más deprisa de lo que la selección la fija (umbral de error). Demasiado poca estanca | eigen1971selforganization, lynch2016driftbarrier | En P0: velocidad de divergencia neutral (`genome_distance`). El juicio necesita P1 | 📋 análisis de P0 + prueba en P1 |
@@ -60,3 +60,26 @@
 3. **B1 y D1** ya están implementados (rama `escalera-p0y`, ADR-017) y en la cola.
 4. **Decisiones por bibliografía (📚):** C2, A6, B2 y E1.
 5. **Criterio de cierre:** todas las filas en ✅ o ⏭. Las decisiones quedan en una ADR de cierre de P0, que fija la "física" de la herencia para toda la escalera.
+
+
+## Resultados
+
+### 18-10-2026, 23:18 · P0-feliz completo (mutación de siempre, 5 mundos) y análisis sin GPU
+
+Ventana de las épocas 151–300; los valores son por semilla, s0 a s4.
+
+- **A1 · neuronas:** 24,1 · 23,8 · 28,9 · 21,0 · 24,5. Siguen creciendo (+4,6 a +11,0 por 100 épocas). En la época 300 la media es 25–35 y el máximo 42–47.
+- **A2 · CPPN:**
+  - nodos ocultos de 0,33 a 10,3–12,7;
+  - aristas de 49 a 64–73;
+  - en la época 300, **entre el 8 y el 34 % de los bichos tienen la CPPN en su techo (18 nodos ocultos)**. El techo de la CPPN ya frena el sesgo.
+- **A3 · tasas (época 300):** la mediana de σ va de 0,013 a 0,055 y la de la tasa estructural de 1,05 a 2,58 según el mundo. Sin selección, **cada mundo acaba con un régimen de mutación distinto solo por azar**, y eso añade ruido a todas las comparaciones entre mundos.
+- **A4 · cuánto se muta:** la distancia genética media sube casi en línea recta, de 10,5 a 49,0 (continua) y de 34 a 135 (estructural) en s0. Es la deriva neutral y no satura. **P0 no puede decir si es "demasiado"**: hace falta selección (carga mutacional) → se prueba en la entrada de P1.
+- **A5 · techo:**
+  - **neuronas:** ningún bicho pasa de 56 de 64 (máximo 47); el techo de neuronas no limita en 300 épocas;
+  - **CPPN:** sí limita (ver A2).
+- **A7 · f16:** el redondeo a f16 **borra entre el 6 y el 10 % de las pequeñas perturbaciones de los pesos**. Es un suelo oculto de la mutación, mayor cuanto menor es σ y cuanto mayor es el peso.
+- **C4 · tope de nacimientos:**
+  - en P0 se alcanza en **todos** los pasos con nacimientos (32 justos), pero porque la población muere y renace en **cohortes sincronizadas de 32**: el arranque simultáneo, la vida fija y el tope fabrican una "cinta transportadora" de 128 cohortes;
+  - no se pierden nacimientos (32 mueren y 32 nacen);
+  - riesgo para P1+: tras una mortandad grande, la recuperación quedaría limitada a 32 por paso. Hay que vigilarlo en P1.

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 22:52",
+ "actualizado": "2026-10-18 23:20",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -98,30 +98,33 @@
    "padre": "p0cierre",
    "titulo": "A4 · Cuánto se muta (σ, τ, 11 %)",
    "corto": "A4 Cuánto se muta (σ, τ, 11 %)",
-   "estado": "pendiente",
+   "estado": "decision",
    "resultado": null,
    "anade": "Cuánto se muta (σ, τ, 11 %)",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "La divergencia neutral crece casi en línea recta (de 10,5 a 49). P0 no puede juzgar si se muta demasiado: prueba de carga mutacional en la entrada de P1."
   },
   {
    "id": "p0f-A5",
    "padre": "p0cierre",
    "titulo": "A5 · Techo del genoma (64 / 32)",
    "corto": "A5 Techo del genoma (64 / 32)",
-   "estado": "pendiente",
+   "estado": "decision",
    "resultado": null,
    "anade": "Techo del genoma (64 / 32)",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "Neuronas: el techo (64) no limita (máximo 47). CPPN: sí, entre el 8 y el 34 % en el techo de 18 nodos ocultos en la época 300."
   },
   {
    "id": "p0f-A7",
    "padre": "p0cierre",
    "titulo": "A7 · Precisión f16",
    "corto": "A7 Precisión f16",
-   "estado": "pendiente",
+   "estado": "decision",
    "resultado": null,
    "anade": "Precisión f16",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "El redondeo a f16 borra entre el 6 y el 10 % de las pequeñas perturbaciones de los pesos: un suelo oculto de la mutación."
   },
   {
    "id": "p0f-B1",
@@ -158,10 +161,11 @@
    "padre": "p0cierre",
    "titulo": "C4 · Tope de nacimientos",
    "corto": "C4 Tope de nacimientos",
-   "estado": "pendiente",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "indicio",
    "anade": "Tope de nacimientos",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "En P0 se alcanza siempre (32), por las cohortes sincronizadas; no se pierden nacimientos. Vigilar en P1 (recuperación tras una mortandad)."
   },
   {
    "id": "p0f-D1",

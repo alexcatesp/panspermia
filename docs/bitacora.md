@@ -450,3 +450,14 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Kehoe et al. 2015: robótica en la nube;
   - Levine et al. 2017: aprendizaje compartido entre robots.
 - No cambia nada de P0.
+
+### 23:15–23:20 · P0-feliz completo (5/5) y análisis sin GPU (A3, A4, A5, A7, C4)
+
+- **P0-feliz s3 y s4** terminan (0,52 h y 0,37 h). La cola `p0_solo.sh` cierra la antigua (código 9, previsto) y empieza P0-feliz-neutral.
+- **Resultados** (detalle en `docs/escalera/p0_factores.md` § Resultados; datos en `runs/fase1d/_analisis_P0-feliz.json` y `_host_P0-feliz.json`):
+  - neuronas: 21–29 de media tardía, aún crecen;
+  - CPPN: entre el 8 y el 34 % en su techo de 18 nodos;
+  - tasas de mutación distintas en cada mundo solo por azar;
+  - f16 borra entre el 6 y el 10 % de las pequeñas perturbaciones;
+  - el tope de nacimientos se alcanza siempre por las cohortes sincronizadas, sin pérdida de nacimientos.
+- **Conclusión:** indicio. Quedan tres decisiones de P0 (techo de la CPPN, f16 y tasas). A4 solo puede juzgarse con selección, en la entrada de P1.
