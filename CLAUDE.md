@@ -45,6 +45,8 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
   - Rama `escalera` (worktree `panspermia-escalera`, sustrato 2.1.0). Interruptores en `EnvParams` (`metabolism`, `max_age`, `repro_mode`, `attack_on`, `chem_on`, `signal_on`; la comida se apaga con `k_mean` 0 y se deja quieta con `drift` 0), con valores por defecto que dejan el mundo de siempre. Cola `experiments/fase1d/escalera.json`.
   - El responsable quiere un **árbol binario**: si un peldaño sale bien, el siguiente construye sobre esa variable; si sale mal, la descarta y prueba otra. Antes de dibujar las ramas, discutirlas con él.
   - Al proponer un experimento, decir de qué peldaño cuelga y qué única cosa añade.
+  - **Física de la mutación (ADR-015):** P0 mostró que los cerebros crecen solos (de 8 a ~29 neuronas sin selección), por el operador "expresar o silenciar" de la spec v1 ("nest"). Rama `escalera-mut` (worktree `panspermia-mut`, sustrato 2.2.0): `config.NEURON_MUTATION` = "nest" (por defecto, idéntico bit a bit) | "neutral" | "terrestre". Cola `experiments/fase1d/mutacion.json` (P0 y P1 con las dos físicas nuevas). Bibliografía en `docs/bibliografia/escalera/`. Medir siempre el tamaño del cerebro contra P0.
+  - Orden en la GPU desde el 18-10, 21:58: escalera → mutación → resto de E2 → E9 → E1b (`scratchpad/chain_mut_e2_e9_e1b.sh`; la cadena anterior está congelada con SIGSTOP y se mata al acabar la escalera). **No tocar los worktrees `panspermia-escalera` ni `panspermia-mut` mientras corren.**
   - El panel muestra cada peldaño (`escalera` en `docs/mapa.json`): planteamiento, vídeo de sus 5 mundos (`/api/video`) y resultados con el veredicto provisional.
 
 ## Convenciones

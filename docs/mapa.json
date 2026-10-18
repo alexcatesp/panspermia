@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 20:45",
+ "actualizado": "2026-10-18 21:58",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -52,6 +52,73 @@
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true
+  },
+  {
+   "id": "mut",
+   "padre": "P0",
+   "titulo": "Rama: física de la mutación (ADR-015)",
+   "corto": "¿Qué mutación?",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "otra forma de mutar el número de neuronas",
+   "texto": "P0 mostró que los cerebros crecen solos (de 8 a 29 neuronas) por cómo está programada la mutación. Se repiten P0 y P1 con mutación neutral y terrestre justo después de la escalera.",
+   "ref": "ADR-015 · docs/bibliografia/escalera/"
+  },
+  {
+   "id": "P0n",
+   "padre": "mut",
+   "titulo": "Mundo feliz · mutación neutral",
+   "corto": "P0 con mutación neutral",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "P0 con mutación neutral",
+   "texto": "¿Desaparece el crecimiento del cerebro sin selección? Las neuronas se quedan cerca de 8, por debajo de P0 (que deriva hacia ~43).",
+   "cola": "mutacion.json",
+   "condicion": "P0-feliz-neutral",
+   "ref": "ADR-015",
+   "recurso": "GPU"
+  },
+  {
+   "id": "P0t",
+   "padre": "mut",
+   "titulo": "Mundo feliz · mutación terrestre",
+   "corto": "P0 con mutación terrestre",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "P0 con mutación terrestre",
+   "texto": "¿Se encogen los cerebros solos? Menos neuronas que con la mutación neutral; tienden a 0.",
+   "cola": "mutacion.json",
+   "condicion": "P0-feliz-terrestre",
+   "ref": "ADR-015",
+   "recurso": "GPU"
+  },
+  {
+   "id": "P1n",
+   "padre": "mut",
+   "titulo": "Peaje · mutación neutral",
+   "corto": "P1 con mutación neutral",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "P1 con mutación neutral",
+   "texto": "¿Funciona la selección también con esta mutación? Menos empuje que P0-neutral, como en P1 frente a P0.",
+   "cola": "mutacion.json",
+   "condicion": "P1-peaje-neutral",
+   "ref": "ADR-015",
+   "recurso": "GPU"
+  },
+  {
+   "id": "P1t",
+   "padre": "mut",
+   "titulo": "Peaje · mutación terrestre",
+   "corto": "P1 con mutación terrestre",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "P1 con mutación terrestre",
+   "texto": "¿Funciona la selección también con esta mutación? Menos empuje que P0-terrestre.",
+   "cola": "mutacion.json",
+   "condicion": "P1-peaje-terrestre",
+   "ref": "ADR-015",
+   "recurso": "GPU"
   },
   {
    "id": "P2",
@@ -916,6 +983,129 @@
     "hidden_mean",
     "va_log_population",
     "va_log_intake"
+   ]
+  },
+  {
+   "id": "P0n",
+   "condicion": "P0-feliz-neutral",
+   "titulo": "Mundo feliz · mutación neutral",
+   "rama": "mutación",
+   "anade": "Igual que P0, con una mutación que no empuja al cerebro ni a crecer ni a encoger.",
+   "anade_corto": "P0 con mutación neutral",
+   "pregunta": "¿Desaparece el crecimiento del cerebro sin selección?",
+   "prediccion": "Las neuronas se quedan cerca de 8, por debajo de P0 (que deriva hacia ~43).",
+   "primaria": {
+    "medida": "hidden_mean",
+    "vs": "P0",
+    "signo": "<"
+   },
+   "secundarias": [
+    "thrust_mean",
+    "mass_mean"
+   ],
+   "interruptores": [
+    "como P0",
+    "+mutación neutral"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population"
+   ]
+  },
+  {
+   "id": "P0t",
+   "condicion": "P0-feliz-terrestre",
+   "titulo": "Mundo feliz · mutación terrestre",
+   "rama": "mutación",
+   "anade": "Igual que P0, con una mutación que pierde neuronas el doble de a menudo de lo que las gana, como en la Tierra.",
+   "anade_corto": "P0 con mutación terrestre",
+   "pregunta": "¿Se encogen los cerebros solos?",
+   "prediccion": "Menos neuronas que con la mutación neutral; tienden a 0.",
+   "primaria": {
+    "medida": "hidden_mean",
+    "vs": "P0n",
+    "signo": "<"
+   },
+   "secundarias": [
+    "thrust_mean"
+   ],
+   "interruptores": [
+    "como P0",
+    "+mutación terrestre"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population"
+   ]
+  },
+  {
+   "id": "P1n",
+   "condicion": "P1-peaje-neutral",
+   "titulo": "Peaje · mutación neutral",
+   "rama": "mutación",
+   "anade": "P1 (vivir cuesta) con la mutación neutral.",
+   "anade_corto": "P1 con mutación neutral",
+   "pregunta": "¿Funciona la selección también con esta mutación?",
+   "prediccion": "Menos empuje que P0-neutral, como en P1 frente a P0.",
+   "primaria": {
+    "medida": "thrust_mean",
+    "vs": "P0n",
+    "signo": "<"
+   },
+   "secundarias": [
+    "hidden_mean",
+    "mass_mean"
+   ],
+   "interruptores": [
+    "como P1",
+    "+mutación neutral"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population"
+   ]
+  },
+  {
+   "id": "P1t",
+   "condicion": "P1-peaje-terrestre",
+   "titulo": "Peaje · mutación terrestre",
+   "rama": "mutación",
+   "anade": "P1 (vivir cuesta) con la mutación terrestre.",
+   "anade_corto": "P1 con mutación terrestre",
+   "pregunta": "¿Funciona la selección también con esta mutación?",
+   "prediccion": "Menos empuje que P0-terrestre.",
+   "primaria": {
+    "medida": "thrust_mean",
+    "vs": "P0t",
+    "signo": "<"
+   },
+   "secundarias": [
+    "hidden_mean",
+    "mass_mean"
+   ],
+   "interruptores": [
+    "como P1",
+    "+mutación terrestre"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population"
    ]
   }
  ]

@@ -365,3 +365,26 @@ Ninguna depende de la conducta ni de una métrica, así que **el principio 1 se 
 - **La gran bifurcación es P5**, y es la única que se dibuja por adelantado:
   - si aprender compensa en P5 (VA > 0), se sigue con el veneno que cambia en el tiempo;
   - si no, lo visto en E1 vendría de otro ingrediente, y se añaden sobre P5 de uno en uno en el orden **química → ataque → señal**.
+
+## ADR-015 · 18-10-2026 · Física de la mutación de neuronas: rama de prueba (decisión del responsable)
+
+**Contexto.** P0 (mundo feliz, sin selección) mostró que **los cerebros crecen solos**: de 8 a 28,7 neuronas ocultas en 300 épocas en la semilla 0. La causa es el operador "expresar o silenciar" de la spec v1, que invierte un hueco elegido al azar entre 64. Empezando con 8, casi siempre enciende. Junto con "duplicar", que solo suma, el equilibrio sin selección está en unas 43 neuronas.
+
+La spec adoptó en su día la idea de NEAT (complejificar desde lo mínimo), pero **nadie analizó este efecto**. En la Tierra, la mutación pierde ADN más a menudo de lo que lo gana: al menos 10 a 1 en procariotas y cerca de 1 a 1 en eucariotas (Kuo y Ochman 2009). Los duplicados se pierden casi siempre (Lynch y Conery 2000), y el tejido nervioso que no se usa desaparece (Moran et al. 2015). El sesgo de la mutación orienta la evolución (Yampolsky y Stoltzfus 2001; Cano et al. 2022). Bibliografía en `docs/bibliografia/escalera/`.
+
+**Pregunta del responsable.** ¿Debe parecerse a la Tierra una vida que trabajará en la Tierra mediante robots?
+
+Respuesta según la bibliografía:
+- la genética no necesita copiar la terrestre: lo que decide si un controlador funciona en la Tierra es el mundo donde se selecciona y el salto de la realidad (Doncieux et al. 2015; Koos et al. 2013);
+- pero el sesgo sí importa para el producto, porque cada neurona es cómputo y batería.
+
+**Decisión** (responsable, 18-10-2026, 21:55):
+- No se cambia nada durante la escalera: la mutación es otra variable.
+- **Justo después de la escalera, y antes de reanudar E2**, se repiten P0 y P1 con **dos** físicas nuevas:
+  - **neutral:** primero se decide encender o apagar, mitad y mitad, y después a qué neurona; "perder neurona" compensa a "duplicar" con la misma tasa, 1 %;
+  - **terrestre:** 1/3 de los cambios encienden, y "perder" (2 %) es el doble que "duplicar".
+
+  Son 20 mundos, unas 3–4 h.
+- Implementado en la rama `escalera-mut` (worktree `panspermia-mut`, `1cd481d`, sustrato 2.2.0) como `config.NEURON_MUTATION`, sustituible por condición. El modo por defecto ("nest") es idéntico bit a bit al anterior (comprobado).
+- La física de la mutación de la CPPN (añadir 5 %, quitar 2 %…) no se toca en esta rama: queda pendiente.
+- Qué física se usa a partir de ahí se decide con el responsable a la vista de los resultados.

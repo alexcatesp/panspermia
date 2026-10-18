@@ -85,3 +85,21 @@ Se añade antes de tener datos y no cambia ningún criterio de P0–P5.
 - **P5 es la bifurcación.** Se mira la mediana de VA_log_population de las épocas 151–300 y su signo por semilla:
   - **sí** (VA > 0 en 5 de 5): **P6 · veneno que cambia en el tiempo**;
   - **no**: P5 + química → P5 + química + ataque → P5 + química + ataque + señal, parando en el primero que haga aparecer el aprendizaje (VA > 0 en 5 de 5).
+
+## v0.3 · 18-10-2026, 21:55 · Rama de la física de la mutación (ADR-015)
+
+Antes de tener datos de la rama. En P0 ya se había visto el crecimiento de la semilla 0, que es lo que motiva la rama.
+
+| Condición | Igual que | Cambia | Criterio (5 de 5 semillas emparejadas, épocas 151–300) |
+|---|---|---|---|
+| P0-feliz-neutral | P0 | mutación neutral | `hidden_mean` **menor** que en P0 (nest) |
+| P0-feliz-terrestre | P0 | mutación terrestre | `hidden_mean` **menor** que en P0-neutral |
+| P1-peaje-neutral | P1 | mutación neutral | `thrust_mean` **menor** que en P0-neutral (P1 replicado con otra física) |
+| P1-peaje-terrestre | P1 | mutación terrestre | `thrust_mean` **menor** que en P0-terrestre |
+
+**Secundaria:** ¿cambia la conclusión de P1 sobre el cerebro? Se compara `hidden_mean` de P1 con su P0 en las tres físicas.
+
+**Lectura:**
+- Si las tres físicas llevan a la misma conclusión en P1, la física de la mutación no cambia lo que aprendemos.
+- Si no coinciden, hay que elegir física antes de seguir construyendo.
+- En ambos casos, la elección se hace con el responsable.

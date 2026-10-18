@@ -144,6 +144,7 @@ ul.plain li { margin: 3px 0; }
 .step .t { font-size: 13.5px; font-weight: 600; }
 .step .a { font-size: 12px; color: var(--text-2); line-height: 1.35; }
 .arrow { flex: none; align-self: center; color: var(--muted); padding: 0 4px; font-size: 18px; }
+.arrow.branchsep { font-size: 12.5px; padding: 0 10px; white-space: nowrap; }
 .rung { display: grid; gap: 12px; }
 .rung h3 { font-size: 15px; margin: 0 0 8px; }
 .plan { display: grid; gap: 6px 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); font-size: 14px; }
@@ -492,7 +493,9 @@ function renderLadder(L) {
   if (!ladderData.some((r) => r.id === selRung)) selRung = (ladderData.find((r) => r.estado === "en curso") || ladderData[0]).id;
   $("steps").innerHTML = ladderData.map((r, i) => {
     const k = rungKind(r);
-    return `${i ? `<span class="arrow" aria-hidden="true">→</span>` : ""}<button class="step" role="tab" data-r="${esc(r.id)}" aria-selected="${r.id === selRung}">
+    const sep = r.rama && !(ladderData[i - 1] || {}).rama
+      ? `<span class="arrow branchsep" aria-hidden="true">┊ rama: ${esc(r.rama)}</span>` : (i ? `<span class="arrow" aria-hidden="true">→</span>` : "");
+    return `${sep}<button class="step" role="tab" data-r="${esc(r.id)}" aria-selected="${r.id === selRung}">
       <span class="top">${icon(k)}${esc(r.id)}</span><span class="t">${esc(r.titulo)}</span><span class="a">＋ ${esc(r.anade_corto || r.anade || "")}</span></button>`;
   }).join("");
   const r = ladderData.find((x) => x.id === selRung);
@@ -665,7 +668,8 @@ function bindCharts() {
   });
 }
 function renderResults(r) {
-  const i = ladderData.indexOf(r), prev = i > 0 ? ladderData[i - 1] : null, v = r.verdict;
+  const i = ladderData.indexOf(r), vsId = r.primaria && r.primaria.vs, v = r.verdict;
+  const prev = (vsId && ladderData.find((x) => x.id === vsId)) || (i > 0 ? ladderData[i - 1] : null);
   let banner;
   if (r.resultado && KIND[r.resultado]) banner = `${icon(r.resultado)}<div><b>${esc(KIND[r.resultado].label)}</b> (resultado analizado). ${esc(r.texto || "")}</div>`;
   else if (!v) banner = `${icon(r.estado === "hecho" ? "hecho" : rungKind(r))}<div>Peldaño de referencia: no tiene criterio de sí o no. Sirve para comparar el siguiente.</div>`;

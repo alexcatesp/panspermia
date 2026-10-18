@@ -378,3 +378,24 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - deuda: acortar ese test.
 - **Tests en la GPU** (decisión del responsable: esperar a los tests antes de lanzar). Los 13 restantes pasaron en 21 min. Total: test_escalera, fase 1d, 1b, 1 y unitarios, todos en verde.
 - **20:43:** se crea `runs/fase1d/escalera_ok` y arranca la cadena `escalera → resto de E2 → E9 → E1b`, empezando por P0-feliz s0.
+
+### 21:35–21:58 · Los cerebros crecen sin selección; bibliografía y rama de mutación (ADR-015)
+
+- **Resultado parcial de P0:**
+  - s0 (300 épocas): neuronas ocultas de 8,07 a 28,7 sin ningún premio;
+  - s1 (época 180): 20,3;
+  - energía constante en 30, población llena (4.096), VA = 0 exacto.
+- **Causa:** "expresar o silenciar" invierte un hueco al azar entre 64 (sesgo entrópico hacia la mitad) y "duplicar" solo suma. Equilibrio teórico de unas 43 neuronas, con una constante de tiempo de unas 1.070 generaciones. La curva de s0 frena como predice.
+- **Consecuencia:** "el cerebro creció" no prueba que pensar compense; hay que medir siempre contra P0. Hay que releer la 1b (de 8 a 21 neuronas): podría estar por debajo de la deriva neutral.
+- **Bibliografía** (`docs/bibliografia/escalera/`, 18 referencias, DOI comprobados en Crossref):
+  - sesgo de deleción en la Tierra;
+  - duplicados efímeros;
+  - complejidad no adaptativa;
+  - sesgo de la mutación como factor orientador;
+  - coste del tejido nervioso;
+  - coste de conexión y modularidad;
+  - bloat;
+  - salto de la realidad en robótica evolutiva.
+- **Decisión del responsable:** rama con mutación neutral y terrestre en P0 y P1, justo después de la escalera (ADR-015, diseño v0.3).
+  - Rama `escalera-mut`, `1cd481d`: el modo por defecto es idéntico bit a bit (hash de 20 rondas de mutación igual en las dos ramas); 11 tests en verde.
+  - Cadena nueva (`scratchpad/chain_mut_e2_e9_e1b.sh`): congela con SIGSTOP la cadena anterior para que no lance E2 al acabar la escalera, espera al barrido y lanza mutación → E2 → E9 → E1b. La escalera sigue corriendo sin interrupción.
