@@ -1,7 +1,8 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.1.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
-                             # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014)
+SUBSTRATE_VERSION = "2.2.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+                             # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
+                             # 2.2: física de la mutación de neuronas elegible, ADR-015)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -54,6 +55,16 @@ P_TOGGLE_NEURON = 0.03
 P_DUP_NEURON = 0.01
 P_MOVE_NEURON = 0.05
 NEURON_MOVE_SIGMA = 0.05
+# Física de la mutación del número de neuronas (ADR-015, docs/bibliografia/escalera/):
+# - "nest" (spec v1, por defecto): «expresar o silenciar» invierte un hueco elegido al azar entre los
+#   64 y «duplicar» solo suma. Sin selección deriva hacia ~43 neuronas (sesgo entrópico, visto en P0).
+# - "neutral": primero se decide encender o apagar (mitad y mitad) y luego a qué neurona; «perder
+#   neurona» compensa a «duplicar» con la misma tasa. Sin selección, el tamaño no tiene rumbo.
+# - "terrestre": se pierde el doble de lo que se gana, como el sesgo de deleción de la Tierra
+#   (Kuo y Ochman 2009): 1/3 de los cambios encienden y «perder» es el doble de «duplicar».
+NEURON_MUTATION = "nest"
+NEURON_MUTATION_P_ON = {"neutral": 0.5, "terrestre": 1 / 3}
+P_DEL_NEURON = {"neutral": 0.01, "terrestre": 0.02}
 
 # --- Detalles de implementación de la fase 0 (ADR-005; no fijados por la spec) ---
 # CPPN: índices 0..5 entradas, 6..23 ocultos, 24..31 salidas (orden topológico por índice).

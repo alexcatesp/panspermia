@@ -202,11 +202,23 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     new_act = jax.random.randint(ks[19], (), 0, C.N_ACTIVATIONS).astype(jnp.int8)
     act_id = act_id.at[k_node].set(jnp.where(do, new_act, act_id[k_node]))
 
-    # Expresar o silenciar neurona oculta
+    # Expresar o silenciar neurona oculta (física elegible, ADR-015; "nest" es la de la spec v1)
     kk = jax.random.split(ks[20], 8)
-    h = jax.random.randint(kk[0], (), 0, C.N_HIDDEN_MAX)
-    do = happens(kk[1], C.P_TOGGLE_NEURON)
-    hid_mask = hid_mask.at[h].set(jnp.where(do, ~hid_mask[h], hid_mask[h]))
+    mode = C.NEURON_MUTATION
+    if mode == "nest":  # invierte un hueco al azar: deriva hacia la mitad sin selección
+        h = jax.random.randint(kk[0], (), 0, C.N_HIDDEN_MAX)
+        do = happens(kk[1], C.P_TOGGLE_NEURON)
+        hid_mask = hid_mask.at[h].set(jnp.where(do, ~hid_mask[h], hid_mask[h]))
+    elif mode in C.NEURON_MUTATION_P_ON:  # primero encender o apagar; después a qué neurona
+        kn = jax.random.split(jax.random.fold_in(ks[20], 0x6E6575), 3)
+        on = jax.random.uniform(kn[0]) < C.NEURON_MUTATION_P_ON[mode]
+        h_off, ok_off = _choose(kn[1], ~hid_mask)
+        h_on, ok_on = _choose(kn[2], hid_mask)
+        h = jnp.where(on, h_off, h_on)
+        do = happens(kk[1], C.P_TOGGLE_NEURON) & jnp.where(on, ok_off, ok_on)
+        hid_mask = hid_mask.at[h].set(jnp.where(do, on, hid_mask[h]))
+    else:
+        raise ValueError(f"NEURON_MUTATION desconocida: {mode}")
 
     # Duplicar neurona: copia una activa en un hueco libre con posición desplazada
     src, ok_s = _choose(kk[2], hid_mask)
@@ -216,6 +228,12 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     hid_mask = hid_mask.at[dst].set(jnp.where(do, True, hid_mask[dst]))
     hid_pos = hid_pos.at[dst].set(jnp.where(do, new_pos, hid_pos[dst]))
     hid_type = hid_type.at[dst].set(jnp.where(do, hid_type[src], hid_type[dst]))
+
+    if mode != "nest":  # perder neurona: la otra cara de duplicar (Lynch y Conery 2000)
+        kd = jax.random.split(jax.random.fold_in(ks[20], 0x64656C), 2)
+        victim, ok_v = _choose(kd[0], hid_mask)
+        do = happens(kd[1], C.P_DEL_NEURON[mode]) & ok_v
+        hid_mask = hid_mask.at[victim].set(jnp.where(do, False, hid_mask[victim]))
 
     # Mover neurona
     m, ok = _choose(kk[6], hid_mask)

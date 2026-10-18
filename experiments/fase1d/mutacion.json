@@ -1,0 +1,116 @@
+[
+ {
+  "name": "P0-feliz-neutral",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "MUT",
+  "description": "Mundo feliz: vivir es gratis, no hay comida y todos mueren a la misma edad (600 pasos). Nacen por edad con energía regalada. Control neutro: lo que hacen las medidas sin selección. Rama ADR-015: mutación neutral (encender o apagar mitad y mitad; perder = duplicar).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 0,
+   "k_mean": 0.0,
+   "repro_mode": "edad",
+   "max_age": 600
+  },
+  "config": {
+   "NEURON_MUTATION": "neutral"
+  }
+ },
+ {
+  "name": "P0-feliz-terrestre",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "MUT",
+  "description": "Mundo feliz: vivir es gratis, no hay comida y todos mueren a la misma edad (600 pasos). Nacen por edad con energía regalada. Control neutro: lo que hacen las medidas sin selección. Rama ADR-015: mutación terrestre (se pierde el doble de lo que se gana).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 0,
+   "k_mean": 0.0,
+   "repro_mode": "edad",
+   "max_age": 600
+  },
+  "config": {
+   "NEURON_MUTATION": "terrestre"
+  }
+ },
+ {
+  "name": "P1-peaje-neutral",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "MUT",
+  "description": "Peaje a vivir: vivir, moverse, cada neurona y el tamaño cuestan energía; sigue sin haber comida y se nace por edad con energía regalada. ¿Funciona la selección? (menos empuje, menos neuronas) Rama ADR-015: mutación neutral (encender o apagar mitad y mitad; perder = duplicar).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 1,
+   "k_mean": 0.0,
+   "repro_mode": "edad"
+  },
+  "config": {
+   "NEURON_MUTATION": "neutral"
+  }
+ },
+ {
+  "name": "P1-peaje-terrestre",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "MUT",
+  "description": "Peaje a vivir: vivir, moverse, cada neurona y el tamaño cuestan energía; sigue sin haber comida y se nace por edad con energía regalada. ¿Funciona la selección? (menos empuje, menos neuronas) Rama ADR-015: mutación terrestre (se pierde el doble de lo que se gana).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 1,
+   "k_mean": 0.0,
+   "repro_mode": "edad"
+  },
+  "config": {
+   "NEURON_MUTATION": "terrestre"
+  }
+ }
+]
