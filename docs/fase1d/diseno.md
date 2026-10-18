@@ -98,6 +98,28 @@ Predicciones: con malestar, (a) la sonda de recompensa cumple el criterio en ≥
 
 Implementación: rama `fase1d-e9` (worktree `panspermia-e9`), cola `experiments/fase1d/e9.json`. Se lanza cuando E1 y E2 dejen libre la GPU.
 
+### E1b · Corrección de E1 (añadido en la v0.9, por decisión del responsable)
+
+Corrige los cuatro fallos declarados en la v0.8. Se fija **antes** de tener datos de E1b, de la sonda del reloj y de las semillas 5–9.
+
+- **Control uniforme** (`E1b-uniforme`, `tox_mode = "uniforme"`): el mismo tipo de alga es tóxico en todo el mundo y siempre. El tipo se ve, así que el instinto basta. Veneno 0,3, 5 semillas, 300 épocas.
+- **Semillas 5–9** en E1 aleatorio y periódico con T = 140 y 560 (20 mundos), con el mismo código y la misma cola, salvo las semillas. Así hay 10 semillas por condición y la permutación de signos puede bajar a p ≈ 0,002.
+- **Sonda del reloj** (`scripts/clock_probe.py`, CPU, desde el checkpoint de la época 300). Repite una época con el reloj normal y con el reloj **desincronizado** (`clock_period` × φ): misma estadística, sin información de fase. CU = log((pob_normal + 1)/(pob_desincronizada + 1)). Sustituye a `clock_rhythm` como medida del uso del reloj. En el aleatorio sirve de control.
+- **Anticipación**: deja de ser medida primaria; queda como descriptiva. La sustituye la **recuperación inmediata**: fracción tóxica en los primeros 8 pasos tras un cambio (primer intervalo de la curva de recuperación), comparada entre programas.
+- **Medida sin techo**: si los dos gemelos de la sonda emparejada superan el 95 % de N_max, se usa VA_log_intake en lugar de VA_log (afecta al control sin veneno).
+
+Predicciones y análisis:
+
+1. **H1, control** (1 prueba): VA_log(uniforme) < VA_log(fijo). Permutación de etiquetas entre las 5 + 5 semillas, unilateral, α = 0,05. Se describe también uniforme frente a todos los aleatorios.
+2. **H2** en T = 140 y 560 con las semillas 0–9 emparejadas por semilla (periódico − aleatorio). Permutación de signos exacta bilateral y Holm × 2 dentro de cada medida:
+   - VA_log: periódico < aleatorio;
+   - CU (sonda del reloj): periódico > aleatorio;
+   - recuperación inmediata: periódico < aleatorio (menos veneno justo tras el cambio, si se anticipan).
+3. T = 35 y 2.240 se quedan con 5 semillas y son **exploratorios**.
+4. Las semillas extinguidas se excluyen por pares y se informan.
+
+Implementación: rama `fase1d-e1b` (worktree `panspermia-e1b`, desde `fase1d`, sustrato 2.0.0 sin cambios de genoma), cola `experiments/fase1d/e1b.json`. Orden en la GPU: E2 → E9 → E1b. La sonda del reloj corre en la CPU cuando termine la de recompensa.
+
 ### Aplazado
 
 - **Mareas**: requieren terreno o paredes móviles. Irán en la fase 1e.
@@ -184,3 +206,4 @@ A ~5 s por época (N = 4.096) son **~65 h**, unos 2,7 días de GPU continua. Con
   3. **H2 no tenía potencia.** Con 5 semillas, la permutación de signos no baja de p = 0,0625, y Holm × 4 exige 0,0125.
   4. **El uso del reloj y la anticipación no miden lo que dicen.** En el programa periódico, la fase del reloj coincide con la del mundo. La anticipación es negativa por defecto en cualquier población que reacciona. Hace falta anular la entrada del reloj en una sonda, y una anticipación referida a un nulo.
   Las correcciones se deciden con el responsable antes de lanzar nada nuevo.
+- 0.9 (18-10-2026, 10:30, E2 en curso, sin datos de E1b): por decisión del responsable («E1b corrector», orden E2 → E9 → E1b) se añade **E1b** (§5): control uniforme, semillas 5–9 en T140/T560, sonda del reloj desincronizado, recuperación inmediata en lugar de la anticipación y medida sin techo. Predicciones y pruebas fijadas antes de los datos.
