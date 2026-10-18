@@ -29,7 +29,7 @@ from pathlib import Path
 CONFIG_OVERRIDABLE = {
     "TOXIC_FACTOR", "TOXIC_RAMP_STEPS", "C_NEURON", "MIN_REPRO_AGE", "RESOURCE_R", "EMIT_COST",
     "FROZEN_PLASTICITY_TEST_EVERY", "CHECKPOINT_EVERY", "VIDEO_EVERY", "CAPABILITY_TEST_EVERY",
-    "NEURON_MUTATION",
+    "NEURON_MUTATION", "MUTATION_RATES", "CPPN_MUTATION",
 }
 SPEC_KEYS = {"name", "description", "node", "seeds", "epochs", "n_max", "n_init", "plastic", "env",
              "config", "block"}

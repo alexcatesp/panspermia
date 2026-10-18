@@ -1,8 +1,9 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.2.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.3.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
-                             # 2.2: física de la mutación de neuronas elegible, ADR-015)
+                             # 2.2: física de la mutación de neuronas elegible, ADR-015;
+                             # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -65,6 +66,15 @@ NEURON_MOVE_SIGMA = 0.05
 NEURON_MUTATION = "nest"
 NEURON_MUTATION_P_ON = {"neutral": 0.5, "terrestre": 1 / 3}
 P_DEL_NEURON = {"neutral": 0.01, "terrestre": 0.02}
+# Tasas de mutación (ADR-016): "evolutivas" (spec v1: σ autoadaptativa y tasa estructural como gen,
+# que sin selección deriva hacia arriba por el suelo en 0) o "fijas" (σ = SIGMA_INIT y tasa = 1,
+# constantes del mundo; los genes no cambian).
+MUTATION_RATES = "evolutivas"
+# Física de la mutación de la CPPN (ADR-016): "nest" (spec v1: añadir arista 5 %, quitar 2 %, dividir
+# 3 %, quitar nodo 1 %: crece sin selección) o "neutral" (ganar y perder con la misma tasa; el total
+# de cambios estructurales por hijo, 11 %, no cambia).
+CPPN_MUTATION = "nest"
+CPPN_NEUTRAL_RATES = {"add_edge": 0.035, "del_edge": 0.035, "split": 0.02, "del_node": 0.02}
 
 # --- Detalles de implementación de la fase 0 (ADR-005; no fijados por la spec) ---
 # CPPN: índices 0..5 entradas, 6..23 ocultos, 24..31 salidas (orden topológico por índice).

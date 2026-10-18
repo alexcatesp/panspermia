@@ -47,3 +47,42 @@ def test_default_is_the_spec_v1_operator():
     a = G.mutate(g, jax.random.PRNGKey(4))
     b = G.mutate(g, jax.random.PRNGKey(4))
     assert np.array_equal(np.asarray(a.hid_mask), np.asarray(b.hid_mask))
+
+
+def _struct(rates: str, cppn: str, rounds: int = 200, n: int = 256):
+    config.MUTATION_RATES, config.CPPN_MUTATION = rates, cppn
+    try:
+        mutate = jax.jit(jax.vmap(lambda g, k: G.mutate(g, k)))
+        g = jax.vmap(G.random_minimal)(jax.random.split(jax.random.PRNGKey(0), n))
+        for r in range(rounds):
+            g = mutate(g, jax.random.split(jax.random.PRNGKey(r + 1), n))
+        life = np.asarray(g.life, np.float32)
+        nodes = float(np.mean(np.sum(np.asarray(g.node_mask), axis=-1)))
+        return life[:, 2], life[:, 3], nodes
+    finally:
+        config.MUTATION_RATES, config.CPPN_MUTATION = "evolutivas", "nest"
+
+
+def test_fixed_rates_do_not_drift():
+    sig, rate, _ = _struct("fijas", "nest")
+    assert np.allclose(sig, config.SIGMA_INIT, atol=1e-3) and np.allclose(rate, 1.0)
+    sig_e, rate_e, _ = _struct("evolutivas", "nest")
+    assert np.std(rate_e) > 0.1 and np.std(sig_e) > 0.01
+
+
+def test_neutral_cppn_grows_less_than_nest():
+    _, _, nest = _struct("evolutivas", "nest")
+    _, _, neutral = _struct("evolutivas", "neutral")
+    assert nest > neutral + 1
+
+
+def test_unknown_rates_or_cppn_mode_is_rejected():
+    g = G.random_minimal(jax.random.PRNGKey(0))
+    for name in ("MUTATION_RATES", "CPPN_MUTATION"):
+        old = getattr(config, name)
+        setattr(config, name, "inventada")
+        try:
+            with pytest.raises(ValueError):
+                G.mutate(g, jax.random.PRNGKey(1))
+        finally:
+            setattr(config, name, old)

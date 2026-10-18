@@ -138,6 +138,17 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     sigma = life[2] * jnp.exp(C.SIGMA_TAU * jax.random.normal(ks[0]))
     sigma = jnp.clip(sigma, *C.SIGMA_BOUNDS)
     rate = jnp.clip(life[3], *C.STRUCT_RATE_BOUNDS)
+    if C.MUTATION_RATES == "fijas":  # ADR-016: constantes del mundo, no genes
+        sigma, rate = jnp.float32(C.SIGMA_INIT), jnp.float32(1.0)
+    elif C.MUTATION_RATES != "evolutivas":
+        raise ValueError(f"MUTATION_RATES desconocida: {C.MUTATION_RATES}")
+    if C.CPPN_MUTATION == "nest":
+        p_add, p_del, p_split, p_del_node = C.P_ADD_EDGE, C.P_DEL_EDGE, C.P_SPLIT_EDGE, C.P_DEL_NODE
+    elif C.CPPN_MUTATION == "neutral":
+        r = C.CPPN_NEUTRAL_RATES
+        p_add, p_del, p_split, p_del_node = r["add_edge"], r["del_edge"], r["split"], r["del_node"]
+    else:
+        raise ValueError(f"CPPN_MUTATION desconocida: {C.CPPN_MUTATION}")
 
     # Perturbación de parámetros activos (prob. 1)
     noise = lambda k, shape: sigma * jax.random.normal(k, shape)
@@ -146,7 +157,8 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     bias = jnp.where(computes, g.bias.astype(jnp.float32) + noise(ks[2], (n,)), 0.0)
     body = g.body.astype(jnp.float32) + noise(ks[3], (C.BODY_GENES,))
     life_new = life.at[0:2].add(noise(ks[4], (2,)))
-    life_new = life_new.at[3].add(noise(ks[5], ()))
+    if C.MUTATION_RATES == "evolutivas":
+        life_new = life_new.at[3].add(noise(ks[5], ()))
     life_new = life_new.at[2].set(sigma)
 
     node_mask, W_mask, act_id = g.node_mask, g.W_mask, g.act_id
@@ -160,14 +172,14 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     # Añadir conexión CPPN
     free_edges = valid_edge & ~W_mask & node_mask[:, None] & node_mask[None, :]
     e, ok = _choose(ks[6], free_edges)
-    do = happens(ks[7], C.P_ADD_EDGE) & ok
+    do = happens(ks[7], p_add) & ok
     i, j = e // n, e % n
     W_mask = W_mask.at[i, j].set(jnp.where(do, True, W_mask[i, j]))
     W = W.at[i, j].set(jnp.where(do, jax.random.normal(ks[8]), W[i, j]))
 
     # Eliminar conexión CPPN
     e, ok = _choose(ks[9], W_mask)
-    do = happens(ks[10], C.P_DEL_EDGE) & ok
+    do = happens(ks[10], p_del) & ok
     i, j = e // n, e % n
     W_mask = W_mask.at[i, j].set(jnp.where(do, False, W_mask[i, j]))
     W = W.at[i, j].set(jnp.where(do, 0.0, W[i, j]))
@@ -178,7 +190,7 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     idx = jnp.arange(n)
     free_k = jnp.asarray(_IS_HIDDEN) & ~node_mask & (idx > i) & (idx < j)
     k_node, ok_k = _choose(ks[12], free_k)
-    do = happens(ks[13], C.P_SPLIT_EDGE) & ok & ok_k
+    do = happens(ks[13], p_split) & ok & ok_k
     w_ij = W[i, j]
     node_mask = node_mask.at[k_node].set(jnp.where(do, True, node_mask[k_node]))
     bias = bias.at[k_node].set(jnp.where(do, 0.0, bias[k_node]))
@@ -193,7 +205,7 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
 
     # Eliminar nodo CPPN oculto (la forma canónica limpia sus aristas)
     k_node, ok = _choose(ks[15], jnp.asarray(_IS_HIDDEN) & node_mask)
-    do = happens(ks[16], C.P_DEL_NODE) & ok
+    do = happens(ks[16], p_del_node) & ok
     node_mask = node_mask.at[k_node].set(jnp.where(do, False, node_mask[k_node]))
 
     # Cambiar activación de un nodo activo no de entrada
