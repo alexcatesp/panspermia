@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 22:15",
+ "actualizado": "2026-10-18 22:50",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -53,8 +53,129 @@
    "principal": true
   },
   {
-   "id": "mut",
+   "id": "p0cierre",
    "padre": "P0",
+   "titulo": "Cierre de P0: factores que decidir antes de P1 (ADR-016)",
+   "corto": "Cierre de P0",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "decidir la física de la herencia antes de subir",
+   "texto": "No se pasa a P1 hasta cerrar todos los factores (docs/escalera/p0_factores.md). Cerrados por bibliografía: herencia darwiniana (B2), codificación CPPN (E1); población inicial irrelevante (C3).",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-A1",
+   "padre": "p0cierre",
+   "titulo": "A1 · Mutación de neuronas",
+   "corto": "A1 Mutación de neuronas",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "Mutación de neuronas",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-A2",
+   "padre": "p0cierre",
+   "titulo": "A2 · Mutación de la CPPN",
+   "corto": "A2 Mutación de la CPPN",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Mutación de la CPPN",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-A3",
+   "padre": "p0cierre",
+   "titulo": "A3 · Tasas de mutación: gen o constante",
+   "corto": "A3 Tasas de mutación: gen o constante",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Tasas de mutación: gen o constante",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-A4",
+   "padre": "p0cierre",
+   "titulo": "A4 · Cuánto se muta (σ, τ, 11 %)",
+   "corto": "A4 Cuánto se muta (σ, τ, 11 %)",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Cuánto se muta (σ, τ, 11 %)",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-A5",
+   "padre": "p0cierre",
+   "titulo": "A5 · Techo del genoma (64 / 32)",
+   "corto": "A5 Techo del genoma (64 / 32)",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Techo del genoma (64 / 32)",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-A7",
+   "padre": "p0cierre",
+   "titulo": "A7 · Precisión f16",
+   "corto": "A7 Precisión f16",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Precisión f16",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-B1",
+   "padre": "p0cierre",
+   "titulo": "B1 · Sexo (recombinación)",
+   "corto": "B1 Sexo (recombinación)",
+   "estado": "decision",
+   "resultado": null,
+   "anade": "Sexo (recombinación)",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-C1",
+   "padre": "p0cierre",
+   "titulo": "C1 · Tamaño de la población",
+   "corto": "C1 Tamaño de la población",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Tamaño de la población",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-C2",
+   "padre": "p0cierre",
+   "titulo": "C2 · Muerte y vejez: ley o gen",
+   "corto": "C2 Muerte y vejez: ley o gen",
+   "estado": "decision",
+   "resultado": null,
+   "anade": "Muerte y vejez: ley o gen",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-C4",
+   "padre": "p0cierre",
+   "titulo": "C4 · Tope de nacimientos",
+   "corto": "C4 Tope de nacimientos",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Tope de nacimientos",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "p0f-D1",
+   "padre": "p0cierre",
+   "titulo": "D1 · Dónde nace el hijo",
+   "corto": "D1 Dónde nace el hijo",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "Dónde nace el hijo",
+   "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "mut",
+   "padre": "p0cierre",
    "titulo": "Rama: física de la mutación (ADR-015)",
    "corto": "¿Qué mutación?",
    "estado": "pendiente",

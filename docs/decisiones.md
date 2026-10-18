@@ -388,3 +388,19 @@ Respuesta según la bibliografía:
 - Implementado en la rama `escalera-mut` (worktree `panspermia-mut`, `1cd481d`, sustrato 2.2.0) como `config.NEURON_MUTATION`, sustituible por condición. El modo por defecto ("nest") es idéntico bit a bit al anterior (comprobado).
 - La física de la mutación de la CPPN (añadir 5 %, quitar 2 %…) no se toca en esta rama: queda pendiente.
 - Qué física se usa a partir de ahí se decide con el responsable a la vista de los resultados.
+
+## ADR-016 · 18-10-2026 · Cierre de P0: lista de factores y pruebas de esta noche (decisión del responsable)
+
+**Contexto.** El responsable quiere pasar a P1 solo cuando ninguna decisión de P0 vaya a tener que revisarse. Cada factor se apoya en bibliografía. En P0 se vio una segunda deriva oculta: la **tasa de mutación estructural** sube un 75 % en 300 épocas sin selección (mediana de 1,00 a 1,74 y 1,77 en s0 y s1). Es un gen con ruido aditivo y suelo en 0. σ oscila sin rumbo (mediana de 0,03 a 0,07). En la Tierra, la selección baja la tasa de mutación hasta la barrera de la deriva (Lynch et al. 2016), y los mutadores solo suben arrastrados por mejoras (Sniegowski et al. 1997).
+
+**Decisión.**
+- **Lista de cierre** en `docs/escalera/p0_factores.md`, con 17 factores (variación, reproducción, demografía, espacio y codificación), cada uno con bibliografía, prueba y estado.
+- **Pruebas de esta noche** (rama `escalera-p0x`, worktree `panspermia-p0x`, `35e22f2`, sustrato 2.3.0; por defecto, idéntico bit a bit):
+  - P0-feliz-N1024: tope de población 1.024;
+  - P0-feliz-tasas-fijas: `MUTATION_RATES = "fijas"`, con σ = 0,05 y tasa = 1;
+  - P0-feliz-cppn-neutral: `CPPN_MUTATION = "neutral"`, que gana y pierde con la misma tasa y mantiene el 11 % total.
+- **Orden en la GPU** (`scratchpad/p0_noche.sh`): P0 nest s3–s4 → P0 neutral y terrestre → p0x → resto de E2. **P1 no se lanza.**
+- **Criterios prerregistrados** (5 de 5 semillas emparejadas con P0-feliz, épocas 151–300):
+  - tasas fijas: `hidden_mean` menor;
+  - CPPN neutral: `cppn_nodes_mean` menor;
+  - N1024: descriptivo, con dispersión entre semillas de `hidden_mean` mayor y `genome_distance` menor.

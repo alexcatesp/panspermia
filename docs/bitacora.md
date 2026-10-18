@@ -409,3 +409,21 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - `scratchpad/p0_tres.sh` espera a ese mundo y luego lanza P0 s3–s4, P0-neutral y P0-terrestre (15 mundos, unas 3–4 h). Al acabar crea `runs/fase1d/p0_listo` y avanza E2 mientras se decide.
 - **Análisis preparado antes de ver las variantes:** `scripts/analyze_ladder.py` (solo biblioteca estándar).
 - **Ya se ve en P0-nest (s0 y s1):** también crece la CPPN (nodos ocultos de 0,35 a ~10,7; aristas de 49 a ~68). La rama de mutación no cambia la mutación de la CPPN.
+
+### 22:15–22:50 · La tasa de mutación también deriva; lista de cierre de P0 y cola de esta noche (ADR-016)
+
+- **Medida en checkpoints de P0-feliz** (épocas 100, 200 y 300):
+  - la tasa de mutación estructural (mediana) pasa de 1,00 a 1,74 (s0) y de 1,01 a 1,77 (s1);
+  - σ oscila entre 0,03 y 0,08;
+  - neuronas 28,7 y 28,6.
+  - Causa: gen con ruido aditivo y suelo en 0.
+- **Corrección:** cada mundo de P0 tarda unos 0,53 h (32 min), no lo que se dijo a las 22:10. P0 con las tres mutaciones termina hacia las 4:45, no a la 1:30.
+- **Responsable:**
+  - pregunta si el tamaño del mundo o la población inicial son variables de P0. Respuesta: no, sin ecología no cambian nada; sí lo es el tamaño de la población, que es biología de poblaciones;
+  - elige añadir esta noche N1024, tasas fijas y CPPN neutral;
+  - pide **la lista completa de factores de P0, con bibliografía, antes de pasar a P1**.
+- **Hecho:**
+  - `docs/escalera/p0_factores.md` (17 factores);
+  - 21 referencias nuevas en `docs/bibliografia/escalera/refs.bib` (39 en total), con los DOI comprobados en Crossref;
+  - rama `escalera-p0x` (`35e22f2`): 14 tests en verde y modo por defecto idéntico bit a bit;
+  - cola `scratchpad/p0_noche.sh`: congela `p0_tres.sh` y encadena P0 → variantes → p0x → E2.
