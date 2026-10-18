@@ -440,3 +440,13 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - más rápida en mundos estables, peor en mundos cambiantes;
   - el efecto Baldwin acelera sin heredar;
   - además, con la CPPN no se puede reescribir la receta desde los pesos aprendidos.
+
+### 22:52 · Idea del responsable: peldaño social y "mente colmena"
+
+- Le gusta que un peldaño futuro permita aprender de otros (cultura) y que, en robots, lo que aprende uno lo copien los demás.
+- Queda en el árbol como rama pendiente (`social`, tras P6si), con 4 referencias comprobadas en Crossref:
+  - Rogers 1988: copiar no mejora a la población si nadie aprende por su cuenta;
+  - Tomasello et al. 1993: aprendizaje cultural;
+  - Kehoe et al. 2015: robótica en la nube;
+  - Levine et al. 2017: aprendizaje compartido entre robots.
+- No cambia nada de P0.

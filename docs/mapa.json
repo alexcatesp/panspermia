@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 22:33",
+ "actualizado": "2026-10-18 22:52",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -823,6 +823,17 @@
    "anade": "comunicación y lenguaje",
    "corto": "Lenguaje",
    "principal": false
+  },
+  {
+   "id": "social",
+   "padre": "P6si",
+   "titulo": "Peldaño social: aprender de otros (cultura) y, en robots, compartir lo aprendido («mente colmena»)",
+   "corto": "Aprender de otros",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "transmisión de lo aprendido entre individuos, no por los genes",
+   "texto": "Idea del responsable (18-10-2026). La copia social sola no mejora a la población si nadie aprende por su cuenta (paradoja de Rogers 1988); hace falta mezclar aprendizaje individual y social. En robots ya se comparte la experiencia de una flota (robótica en la nube: Kehoe et al. 2015; agarre aprendido con 14 robots: Levine et al. 2017). Riesgo: si todos copian lo mismo, se pierde diversidad y se comparten también los errores.",
+   "ref": "docs/bibliografia/escalera/refs.bib"
   }
  ],
  "hipotesis": [
