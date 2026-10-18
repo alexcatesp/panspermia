@@ -77,7 +77,7 @@ Todas solo observan. Se calcula la media por semilla en la ventana tardía, **é
 - Orden en la GPU (decisión del responsable, 18-10): **E2 → escalera → E9 → E1b**. Son unos 30 mundos, unas 15 h.
 - El análisis compara peldaños consecutivos por semilla (script `scripts/analyze_ladder.py`, por escribir antes de ver datos).
 
-## v0.2 · 18-10-2026, 19:05 · Ramas tras P5 (decisión del responsable)
+## v0.2 · 18-10-2026, 18:45 · Ramas tras P5 (decisión del responsable)
 
 Se añade antes de tener datos y no cambia ningún criterio de P0–P5.
 

@@ -336,7 +336,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Propuesto por Claude:** separar en dos peldaños (P2 y P3) la comida y el pago de la reproducción, que en la propuesta iban juntos.
 - **Siguiente, según el responsable:** convertirlo en un **árbol binario**. Si el peldaño i sale bien, el i+1 construye sobre esa variable; si sale mal, la descarta y prueba otra. Las ramas se discuten con él antes de dibujarlas.
 
-### 18:10–18:55 · Escalera implementada (rama `escalera`) y panel por peldaños
+### 18:10–18:40 · Escalera implementada (rama `escalera`) y panel por peldaños
 
 - **Código** (worktree `panspermia-escalera`, desde `fase1d-e1b`, sustrato 2.1.0):
   - interruptores en `EnvParams`: `metabolism`, `max_age`, `repro_mode` ("energia" o "edad"), `attack_on`, `chem_on` y `signal_on`. Sus valores por defecto dejan el mundo de siempre;
@@ -352,7 +352,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Corrección: las descargas en paralelo se cortaban en Windows (ERR_CONNECTION_RESET); ahora se cargan de una en una, por trozos y con un reintento.
 - **Cadena de la GPU** sustituida por `scratchpad/chain_esc_e9_e1b.sh`: espera a E2 y lanza la escalera (si existe `runs/fase1d/escalera_ok`), luego E9 y después E1b.
 
-### 19:05 · Decisión: solo se dibuja la bifurcación de P5
+### 18:45 · Decisión: solo se dibuja la bifurcación de P5
 
 - **Qué se acordó:**
   - P0–P3 son cimientos: si fallan, se reparan, no se descartan.

@@ -359,7 +359,7 @@ Ninguna depende de la conducta ni de una métrica, así que **el principio 1 se 
 
 **Desdoblado propuesto por Claude.** La propuesta original pasaba de "peaje" a "comida" cambiando a la vez la comida y el pago de la reproducción. Se separa en P2 y P3 para respetar la regla de un cambio por peldaño.
 
-**Adenda (18-10-2026, 19:05; decisión del responsable): árbol de sí o no.** Si un peldaño sale bien, el siguiente construye sobre esa variable; si sale mal, se descarta y se prueba otra. Matiz acordado:
+**Adenda (18-10-2026, 18:45; decisión del responsable): árbol de sí o no.** Si un peldaño sale bien, el siguiente construye sobre esa variable; si sale mal, se descarta y se prueba otra. Matiz acordado:
 
 - **P0–P3 son cimientos** (hambre, coste de vivir, comida, hijos pagados): si fallan, se reparan (calibración o motor), no se descartan.
 - **La gran bifurcación es P5**, y es la única que se dibuja por adelantado:
