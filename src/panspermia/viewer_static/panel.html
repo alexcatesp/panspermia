@@ -134,6 +134,39 @@ ul.plain li { margin: 3px 0; }
 #tip { position: fixed; pointer-events: none; background: var(--text); color: var(--bg); font-size: 12.5px; line-height: 1.4;
   padding: 8px 10px; border-radius: 8px; z-index: 9; display: none; max-width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
 .err { color: var(--crit); font-size: 13px; }
+
+/* escalera de complejidad */
+.steps { display: flex; gap: 0; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: thin; }
+.step { flex: 1 0 150px; display: flex; flex-direction: column; gap: 4px; text-align: left; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; color: var(--text); font: inherit; min-width: 150px; }
+.step[aria-selected="true"] { border-color: var(--text-2); box-shadow: inset 0 0 0 1px var(--text-2); background: var(--surface-2); }
+.step .top { display: flex; gap: 8px; align-items: center; font-weight: 700; }
+.step .t { font-size: 13.5px; font-weight: 600; }
+.step .a { font-size: 12px; color: var(--text-2); line-height: 1.35; }
+.arrow { flex: none; align-self: center; color: var(--muted); padding: 0 4px; font-size: 18px; }
+.rung { display: grid; gap: 12px; }
+.rung h3 { font-size: 15px; margin: 0 0 8px; }
+.plan { display: grid; gap: 6px 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); font-size: 14px; }
+.plan dt { color: var(--text-2); font-size: 12.5px; font-weight: 600; }
+.plan dd { margin: 0 0 6px; }
+.switches { display: flex; flex-wrap: wrap; gap: 6px; }
+.sw { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); }
+.sw.on { border-color: var(--blue); color: var(--blue); }
+.vctl { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 10px; font-size: 13px; color: var(--text-2); }
+.vctl input[type=range] { flex: 1 1 200px; accent-color: var(--blue); }
+.vctl button.play { background: var(--surface); border: 1px solid var(--line); color: var(--text); border-radius: 6px; height: 30px; min-width: 76px; cursor: pointer; font: inherit; }
+.worlds { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.world { position: relative; }
+.world canvas { width: 100%; aspect-ratio: 1; display: block; border-radius: 8px; background: #0e1311; image-rendering: auto; }
+.world .cap { font-size: 12px; color: var(--text-2); margin-top: 4px; display: flex; justify-content: space-between; }
+.world .ph { position: absolute; inset: 0 0 20px 0; display: grid; place-items: center; color: #8f8e88; font-size: 12.5px; text-align: center; padding: 8px; }
+.verdict { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); margin-bottom: 10px; font-size: 14px; }
+.charts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); margin-top: 12px; }
+.chart .ct { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.chart svg { width: 100%; height: 120px; display: block; }
+.chart .ax { font-size: 10px; fill: var(--muted); }
+.clegend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--text-2); margin-top: 8px; }
+.clegend span { display: inline-flex; align-items: center; gap: 6px; }
 </style>
 </head>
 <body>
@@ -145,6 +178,11 @@ ul.plain li { margin: 3px 0; }
     </div>
     <div class="card gpu" id="gpu"><span class="empty">GPU: sin datos</span></div>
   </header>
+
+  <h2>Escalera de complejidad</h2>
+  <div class="sub">Cada peldaño es el anterior más una sola cosa, con una pregunta de sí o no decidida antes de ver los datos (ADR-014). Elige un peldaño para ver su planteamiento, sus cinco mundos en movimiento y sus resultados.</div>
+  <div class="steps" id="steps" role="tablist" aria-label="Peldaños"></div>
+  <div class="rung" id="rung"><div class="empty">Cargando…</div></div>
 
   <h2>Árbol de posibilidades</h2>
   <div class="sub">El tronco baja de lo más sencillo (arriba) a lo más complejo (abajo); de él salen las ramas que hemos probado o que quedan por probar. Pasa el ratón por un nodo para ver el detalle.</div>
@@ -437,6 +475,225 @@ function renderConds(cs) {
   });
 }
 
+// --- escalera de complejidad ---
+const MEAS = {
+  population: "Población", thrust_mean: "Empuje medio", desc_speed: "Velocidad", hidden_mean: "Neuronas ocultas",
+  mass_mean: "Masa", max_thrust_mean: "Empuje máximo (gen)", lifespan_mean: "Vida media (pasos)", intake: "Ingesta",
+  toxic_intake_frac: "Fracción tóxica", va_log_population: "VA_log (población)", va_log_intake: "VA_log (ingesta)",
+};
+const mlabel = (k) => MEAS[k] || k;
+let selRung = null, ladderData = [];
+try { selRung = localStorage.getItem("panel.rung"); } catch (e) { /* sin almacenamiento */ }
+const rungKind = (r) => r.resultado && KIND[r.resultado] ? r.resultado : (KIND[r.estado] ? r.estado : "pendiente");
+
+function renderLadder(L) {
+  ladderData = L || [];
+  if (!ladderData.length) { $("steps").innerHTML = ""; $("rung").innerHTML = `<div class="empty">Sin escalera en docs/mapa.json.</div>`; return; }
+  if (!ladderData.some((r) => r.id === selRung)) selRung = (ladderData.find((r) => r.estado === "en curso") || ladderData[0]).id;
+  $("steps").innerHTML = ladderData.map((r, i) => {
+    const k = rungKind(r);
+    return `${i ? `<span class="arrow" aria-hidden="true">→</span>` : ""}<button class="step" role="tab" data-r="${esc(r.id)}" aria-selected="${r.id === selRung}">
+      <span class="top">${icon(k)}${esc(r.id)}</span><span class="t">${esc(r.titulo)}</span><span class="a">＋ ${esc(r.anade_corto || r.anade || "")}</span></button>`;
+  }).join("");
+  const r = ladderData.find((x) => x.id === selRung);
+  if (!$("rplan") || $("rung").dataset.r !== r.id) {
+    $("rung").dataset.r = r.id;
+    $("rung").innerHTML = `<div class="card" id="rplan"></div><div class="card" id="rvideo"></div><div class="card" id="rres"></div>`;
+    video.key = null;
+  }
+  renderPlan(r); renderVideo(r); renderResults(r);
+}
+$("steps").addEventListener("click", (ev) => {
+  const b = ev.target.closest(".step"); if (!b) return;
+  selRung = b.dataset.r; try { localStorage.setItem("panel.rung", selRung); } catch (e) { /* nada */ }
+  renderLadder(ladderData);
+});
+
+function renderPlan(r) {
+  const prim = r.primaria;
+  const crit = prim ? `${mlabel(prim.medida)} ${prim.signo === "<" ? "menor" : "mayor"} ${prim.ventana_ref ? `en las épocas 151–300 que en las ${prim.ventana_ref[0]}–${prim.ventana_ref[1]}` : `que en ${esc(prim.vs)}`} en los 5 mundos`
+    : "Ninguno: es la referencia con la que se comparan los demás.";
+  const sw = (r.interruptores || []).map((s) => `<span class="sw${s.startsWith("+") ? " on" : ""}">${esc(s.replace(/^\+/, ""))}</span>`).join("");
+  $("rplan").innerHTML = `<h3>${icon(rungKind(r))} ${esc(r.id)} · ${esc(r.titulo)} <span class="tag">${esc(r.condicion)}</span></h3>
+    <dl class="plan">
+      <div><dt>Qué añade respecto al anterior</dt><dd>${esc(r.anade)}</dd>
+           <dt>Pregunta de sí o no</dt><dd>${esc(r.pregunta)}</dd></div>
+      <div><dt>Qué esperamos</dt><dd>${esc(r.prediccion)}</dd>
+           <dt>Criterio (prerregistrado)</dt><dd>${crit}</dd>
+           ${(r.secundarias || []).length ? `<dt>También miramos</dt><dd>${r.secundarias.map(mlabel).map(esc).join(" · ")}</dd>` : ""}</div>
+    </dl>${sw ? `<div class="switches" style="margin-top:6px">${sw}</div>` : ""}`;
+}
+
+// vídeo: un lienzo por mundo, sincronizados; datos de /api/video (compactos, ~0,7 MB por mundo)
+const video = {key: null, worlds: [], frame: 0, frames: 0, playing: false, last: 0, epoch: null};
+const VW = 256;
+async function loadWorld(cond, seed, epoch) {
+  const r = await fetch(`/api/video?cond=${encodeURIComponent(cond)}&seed=${seed}&epoch=${epoch}`, {cache: "no-store"});
+  if (!r.ok) throw new Error(r.status);
+  const buf = await r.arrayBuffer(), hl = new DataView(buf).getUint32(0, true);
+  const h = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 4, hl)));
+  let o = 4 + hl; const F = h.frames, N = h.n;
+  const take = (len) => { const a = new Uint8Array(buf, o, len); o += len; return a; };
+  return {h, pos: take(F * N * 2), flags: take(F * N), color: take(F * N), res: take(h.res_frames * h.res_grid * h.res_grid)};
+}
+function renderVideo(r) {
+  const eps = [...new Set(r.worlds.flatMap((w) => w.recordings))].sort((a, b) => a - b);
+  const key = `${r.condicion}`;
+  if (video.key === key && video.eps === eps.join(",")) return;  // no rehacer el vídeo en cada refresco
+  const keepEpoch = video.key === key ? video.epoch : null;
+  video.key = key; video.eps = eps.join(",");
+  if (!eps.length) {
+    stopVideo();
+    $("rvideo").innerHTML = `<h3>Evolución visual</h3><div class="empty">Todavía no hay grabaciones: cada mundo graba una época de cada 50 (50, 100 … 300).</div>`;
+    return;
+  }
+  const ep = keepEpoch && eps.includes(keepEpoch) ? keepEpoch : eps[eps.length - 1];
+  $("rvideo").innerHTML = `<h3>Evolución visual</h3>
+    <div class="vctl"><span>Época</span><span class="counts" id="veps">${eps.map((e) => `<button class="chip" data-e="${e}" aria-pressed="${e === ep}">${e}</button>`).join("")}</span>
+      <button class="play" id="vplay">▶ Reproducir</button><input type="range" id="vslider" min="0" max="99" value="0" aria-label="Paso de la época"><span class="num" id="vstep">—</span></div>
+    <div class="worlds">${r.worlds.map((w) => `<div class="world"><canvas width="${VW}" height="${VW}" data-seed="${w.seed}" aria-label="Mundo semilla ${w.seed}"></canvas>
+      <div class="ph" data-ph="${w.seed}">Cargando…</div><div class="cap"><span>semilla ${w.seed}</span><span class="num" data-cnt="${w.seed}"></span></div></div>`).join("")}</div>
+    <div class="clegend"><span>Fondo verde: comida (más clara = más)</span><span>Puntos: bichos, coloreados por linaje</span><span>Un fotograma cada 10 pasos de la época</span></div>`;
+  $("veps").addEventListener("click", (ev) => { const b = ev.target.closest(".chip"); if (b) openEpoch(r, +b.dataset.e); });
+  $("vplay").addEventListener("click", () => { video.playing ? stopVideo() : startVideo(); });
+  $("vslider").addEventListener("input", (ev) => { video.frame = +ev.target.value; drawFrame(); });
+  openEpoch(r, ep);
+}
+async function openEpoch(r, epoch) {
+  stopVideo(); video.epoch = epoch; video.frame = 0; video.worlds = [];
+  document.querySelectorAll("#veps .chip").forEach((b) => b.setAttribute("aria-pressed", +b.dataset.e === epoch));
+  const token = Symbol(); video.token = token;
+  for (const w of r.worlds) {  // de uno en uno (en paralelo, Windows cortaba conexiones) y con un reintento
+    const ph = document.querySelector(`[data-ph="${w.seed}"]`);
+    if (!w.recordings.includes(epoch)) { if (ph) ph.textContent = "Sin grabar en esta época"; continue; }
+    let d = null;
+    for (let tries = 0; tries < 2 && !d; tries++) {
+      try { d = await loadWorld(r.condicion, w.seed, epoch); } catch (e) { /* reintento */ }
+    }
+    if (video.token !== token) return;
+    if (!d) { if (ph) ph.textContent = "No se pudo cargar"; continue; }
+    d.seed = w.seed; video.worlds.push(d); if (ph) ph.remove();
+    video.frames = Math.max(0, ...video.worlds.map((x) => x.h.frames));
+    if ($("vslider")) $("vslider").max = Math.max(video.frames - 1, 0);
+    drawFrame();
+  }
+}
+const BG = [14, 19, 17], FOOD = [70, 150, 70];
+function drawFrame() {
+  for (const d of video.worlds) {
+    const cv = document.querySelector(`canvas[data-seed="${d.seed}"]`); if (!cv) continue;
+    const ctx = cv.getContext("2d"), img = ctx.createImageData(VW, VW), px = new Uint32Array(img.data.buffer);
+    const {h} = d, f = Math.min(video.frame, h.frames - 1), G = h.res_grid, cell = VW / G;
+    const ri = Math.max(0, Math.min(h.res_frames - 1, Math.floor((f + 1) * h.frame_steps / h.res_steps) - 1));
+    const rbase = ri * G * G;
+    for (let y = 0; y < VW; y++) for (let x = 0; x < VW; x++) {
+      const v = d.res[rbase + Math.floor(x / cell) * G + Math.floor(y / cell)] / 255;  // [i, j] = [x, y]
+      const r = BG[0] + (FOOD[0] - BG[0]) * v, g = BG[1] + (FOOD[1] - BG[1]) * v, b = BG[2] + (FOOD[2] - BG[2]) * v;
+      px[y * VW + x] = (255 << 24) | (b << 16) | (g << 8) | r;
+    }
+    let alive = 0; const N = h.n, base = f * N;
+    for (let i = 0; i < N; i++) {
+      if (!(d.flags[base + i] & 128)) continue;
+      alive++;
+      const x = d.pos[(base + i) * 2], y = d.pos[(base + i) * 2 + 1], c = d.color[base + i];
+      const r = 90 + ((c >> 5) & 7) * 23, g = 90 + ((c >> 2) & 7) * 23, b = 90 + (c & 3) * 55;
+      const col = (255 << 24) | (b << 16) | (g << 8) | r;
+      for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) px[((y + dy) % VW) * VW + ((x + dx) % VW)] = col;
+    }
+    ctx.putImageData(img, 0, 0);
+    const cnt = document.querySelector(`[data-cnt="${d.seed}"]`); if (cnt) cnt.textContent = `${alive.toLocaleString("es-ES")} vivos`;
+  }
+  if ($("vslider")) $("vslider").value = video.frame;
+  const fs = video.worlds[0]?.h.frame_steps || 10;
+  if ($("vstep")) $("vstep").textContent = video.worlds.length ? `paso ${(video.frame + 1) * fs} de ${video.frames * fs}` : "—";
+}
+function tick(t) {
+  if (!video.playing) return;
+  if (t - video.last > 70) { video.last = t; video.frame = (video.frame + 1) % Math.max(video.frames, 1); drawFrame(); }
+  requestAnimationFrame(tick);
+}
+function startVideo() { if (!video.frames) return; video.playing = true; if ($("vplay")) $("vplay").textContent = "❚❚ Pausa"; requestAnimationFrame(tick); }
+function stopVideo() { video.playing = false; if ($("vplay")) $("vplay").textContent = "▶ Reproducir"; }
+document.addEventListener("visibilitychange", () => { if (document.hidden) stopVideo(); });
+
+// resultados: veredicto provisional, tabla por mundo y series (cada mundo frente a la mediana del peldaño anterior)
+function medianSeries(worlds, key) {
+  const by = new Map();
+  worlds.forEach((w) => (w.series[key] || []).forEach(([e, v]) => { if (!by.has(e)) by.set(e, []); by.get(e).push(v); }));
+  return [...by.entries()].filter(([, vs]) => vs.length >= Math.ceil(worlds.length / 2)).sort((a, b) => a[0] - b[0])
+    .map(([e, vs]) => { vs.sort((a, b) => a - b); const n = vs.length; return [e, n % 2 ? vs[n >> 1] : (vs[n / 2 - 1] + vs[n / 2]) / 2]; });
+}
+function lineChart(key, r, prev) {
+  const W = 300, H = 120, PL = 34, PR = 6, PT = 6, PB = 16;
+  const seeds = r.worlds.map((w) => ({seed: w.seed, pts: w.series[key] || []})).filter((s) => s.pts.length);
+  const ref = prev ? medianSeries(prev.worlds, key) : [];
+  const all = [...seeds.flatMap((s) => s.pts), ...ref];
+  if (!all.length) return `<div class="chart card"><div class="ct">${esc(mlabel(key))}</div><div class="empty">Sin datos todavía</div></div>`;
+  const xs = all.map((p) => p[0]), ys = all.map((p) => p[1]);
+  const x0 = 0, x1 = Math.max(300, ...xs); let y0 = Math.min(0, ...ys), y1 = Math.max(...ys);
+  if (y1 === y0) y1 = y0 + 1;
+  const X = (v) => PL + (v - x0) / (x1 - x0) * (W - PL - PR), Y = (v) => PT + (1 - (v - y0) / (y1 - y0)) * (H - PT - PB);
+  const path = (pts) => pts.map((p, i) => `${i ? "L" : "M"}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join("");
+  const isVA = key.startsWith("va_");
+  const mark = (pts, cls) => isVA ? pts.map((p) => `<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="2.5" ${cls}/>`).join("") : "";
+  const data = esc(JSON.stringify({seeds, ref, x0, x1, PL, PR, W}));
+  const fmtY = (v) => Math.abs(y1 - y0) >= 100 ? Math.round(v).toLocaleString("es-ES") : fmt(v, Math.abs(y1 - y0) >= 10 ? 0 : 2);
+  return `<div class="chart card"><div class="ct">${esc(mlabel(key))}</div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" data-chart="${data}" data-key="${esc(key)}">
+      <line x1="${PL}" x2="${W - PR}" y1="${Y(y0)}" y2="${Y(y0)}" stroke="var(--line)"/>
+      ${y0 < 0 ? `<line x1="${PL}" x2="${W - PR}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--muted)" stroke-dasharray="2 3"/>` : ""}
+      <text class="ax" x="${PL - 4}" y="${PT + 8}" text-anchor="end">${fmtY(y1)}</text><text class="ax" x="${PL - 4}" y="${H - PB}" text-anchor="end">${fmtY(y0)}</text>
+      <text class="ax" x="${PL}" y="${H - 3}">0</text><text class="ax" x="${W - PR}" y="${H - 3}" text-anchor="end">época ${x1}</text>
+      ${ref.length ? `<path d="${path(ref)}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"/>${mark(ref, 'fill="var(--muted)"')}` : ""}
+      ${seeds.map((s) => isVA ? mark(s.pts, 'fill="var(--blue)" opacity=".6"') : `<path d="${path(s.pts)}" fill="none" stroke="var(--blue)" stroke-opacity=".55" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`).join("")}
+      <line class="cross" x1="0" x2="0" y1="${PT}" y2="${H - PB}" stroke="var(--text-2)" vector-effect="non-scaling-stroke" visibility="hidden"/>
+    </svg></div>`;
+}
+function bindCharts() {
+  document.querySelectorAll("svg[data-chart]").forEach((svg) => {
+    const c = JSON.parse(svg.dataset.chart), cross = svg.querySelector(".cross"), key = svg.dataset.key;
+    const near = (pts, e) => pts.reduce((b, p) => (b == null || Math.abs(p[0] - e) < Math.abs(b[0] - e)) ? p : b, null);
+    svg.addEventListener("mousemove", (ev) => {
+      const r = svg.getBoundingClientRect(), vx = (ev.clientX - r.left) / r.width * c.W;
+      const e = c.x0 + (vx - c.PL) / (c.W - c.PL - c.PR) * (c.x1 - c.x0);
+      cross.setAttribute("x1", vx); cross.setAttribute("x2", vx); cross.setAttribute("visibility", "visible");
+      const rows = c.seeds.map((s) => { const p = near(s.pts, e); return p ? `semilla ${s.seed}: <b>${fmt(p[1], key === "population" ? 0 : 2)}</b>` : ""; }).filter(Boolean);
+      const rp = c.ref.length ? near(c.ref, e) : null;
+      showTip(ev, `Época ≈ ${Math.round(e)}<br>${rows.join("<br>")}${rp ? `<br>peldaño anterior (mediana): ${fmt(rp[1], key === "population" ? 0 : 2)}` : ""}`);
+    });
+    svg.addEventListener("mouseleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+  });
+}
+function renderResults(r) {
+  const i = ladderData.indexOf(r), prev = i > 0 ? ladderData[i - 1] : null, v = r.verdict;
+  let banner;
+  if (r.resultado && KIND[r.resultado]) banner = `${icon(r.resultado)}<div><b>${esc(KIND[r.resultado].label)}</b> (resultado analizado). ${esc(r.texto || "")}</div>`;
+  else if (!v) banner = `${icon(r.estado === "hecho" ? "hecho" : rungKind(r))}<div>Peldaño de referencia: no tiene criterio de sí o no. Sirve para comparar el siguiente.</div>`;
+  else {
+    const prov = v.result ? `${icon(v.result)}<div><b>Provisional: ${v.result === "positivo" ? "se cumple" : "no se cumple"}</b> el criterio (${v.n_ok} de ${v.n} mundos). Falta el análisis formal.</div>`
+      : `${icon(rungKind(r))}<div>Criterio: ${esc(mlabel(v.medida))} ${v.signo === "<" ? "menor" : "mayor"} en los ${v.n} mundos. Por ahora cumplen <b>${v.n_ok}</b>; faltan mundos por terminar.</div>`;
+    banner = prov;
+  }
+  let table = "";
+  if (v) {
+    table = `<div class="tablewrap"><table><tr><th>Mundo</th><th>Estado</th><th>${esc(mlabel(v.medida))}</th><th>${v.per_seed.some((p) => p.ref != null) ? "Referencia" : "Referencia"}</th><th>Diferencia</th><th>¿Cumple?</th></tr>
+      ${v.per_seed.map((p) => { const w = r.worlds.find((x) => x.seed === p.seed);
+        return `<tr><td>semilla ${p.seed}</td><td>${esc(w ? w.state : "")}${w && w.state === "en curso" ? ` · época ${w.epoch}` : ""}</td>
+        <td class="n">${fmt(p.value, 3)}</td><td class="n">${fmt(p.ref, 3)}</td><td class="n">${signed(p.diff, 3)}</td>
+        <td>${p.ok == null ? "—" : p.ok ? icon("positivo") : icon("negativo")}</td></tr>`; }).join("")}</table></div>`;
+  } else {
+    const done = r.worlds.filter((w) => w.state === "hecho" || w.state === "extinto").length;
+    table = `<div class="sub">${done} de ${r.worlds.length} mundos terminados.</div>`;
+  }
+  const graphs = r.graficas || ["population", "thrust_mean", "hidden_mean"];
+  $("rres").innerHTML = `<h3>Resultados</h3><div class="verdict">${banner}</div>${table}
+    <div class="charts">${graphs.map((k) => lineChart(k, r, prev)).join("")}</div>
+    <div class="clegend"><span><svg width="26" height="10" aria-hidden="true"><line x1="2" x2="24" y1="5" y2="5" stroke="var(--blue)" stroke-width="2"/></svg>Cada mundo de ${esc(r.id)}</span>
+      ${prev ? `<span><svg width="26" height="10" aria-hidden="true"><line x1="2" x2="24" y1="5" y2="5" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4"/></svg>${esc(prev.id)} (mediana de sus mundos)</span>` : ""}
+      <span>VA: un punto por sonda del gemelo congelado</span></div>`;
+  bindCharts();
+}
+
 // --- bucle: relee cada minuto ---
 let last = null, lastAt = 0;
 async function load() {
@@ -447,6 +704,7 @@ async function load() {
     const g = last.gpu;
     $("gpu").innerHTML = g ? `<span>${esc(g.name)}</span><span>uso <b>${fmt(g.util, 0)} %</b></span>
       <span>memoria <b>${fmt(g.mem_used / 1024, 1)}</b> / ${fmt(g.mem_total / 1024, 0)} GB</span><span><b>${fmt(g.temp, 0)}</b> °C</span>` : `<span class="empty">GPU: sin datos</span>`;
+    renderLadder(last.ladder || []);
     renderTree(last.tree, last.main_path); renderNow(last.tree); renderHyps(last.hypotheses || []); renderConds(last.conditions || []);
     $("log").innerHTML = (last.bitacora || []).map((b) => `<li><span class="num">${esc(b.day)}</span> · ${esc(b.title)}</li>`).join("");
     $("debts").innerHTML = (last.debts || []).map((d) => `<li>${esc(d)}</li>`).join("");

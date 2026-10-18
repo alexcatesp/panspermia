@@ -51,6 +51,28 @@ def test_estado_from_fake_tree(tmp_path):
     assert cond["seeds"] == 3 and cond["survived"] == 2 and abs(cond["va_median"] - 0.2) < 1e-9
 
 
+def test_ladder_verdict_is_paired_by_seed(tmp_path):
+    """Escalera: el criterio compara cada semilla con la misma del peldaño anterior (5 de 5)."""
+    for seed in range(3):
+        for cond, thrust in (("P0-x", 1.0), ("P1-x", 0.5 if seed < 2 else 1.5)):
+            rows = [{"epoch": e, "population": 100, "thrust_mean": thrust, "toxic_intake_frac": 0.5 - e / 1000}
+                    for e in range(1, 301)]
+            _world(tmp_path, cond, seed, {"hours": 0.1}, rows)
+    rungs = [{"id": "P0", "condicion": "P0-x", "semillas": [0, 1, 2], "graficas": ["thrust_mean"]},
+             {"id": "P1", "condicion": "P1-x", "semillas": [0, 1, 2],
+              "primaria": {"medida": "thrust_mean", "vs": "P0", "signo": "<"}},
+             {"id": "P5", "condicion": "P1-x", "semillas": [0, 1, 2],
+              "primaria": {"medida": "toxic_intake_frac", "ventana_ref": [41, 50], "signo": "<"}}]
+    out = {r["id"]: r for r in panel.ladder(rungs, tmp_path, time.time())}
+    assert out["P0"]["verdict"] is None and out["P0"]["estado"] == "hecho"
+    assert len(out["P0"]["worlds"][0]["series"]["thrust_mean"]) <= panel.SERIES_POINTS + 1
+    v = out["P1"]["verdict"]
+    assert [p["ok"] for p in v["per_seed"]] == [True, True, False]
+    assert v["n_ok"] == 2 and v["result"] == "negativo"
+    assert out["P5"]["verdict"]["result"] == "positivo"
+    assert "rows" not in out["P1"]["worlds"][0]
+
+
 def test_stale_world_is_interrupted(tmp_path):
     d = _world(tmp_path, "E1-x", 0)
     old = time.time() - 3600

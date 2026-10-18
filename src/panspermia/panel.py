@@ -11,6 +11,8 @@ Cada consulta a /api/estado vuelve a leer, sin caché:
 - los mundos de `runs/fase1d` (`run.json`, `result.json`, `stats/summary.json`, los logs);
 - las sondas en CPU (`*.jsonl`);
 - las cabeceras de `docs/bitacora.md`;
+- la escalera de complejidad (`escalera` en mapa.json): planteamiento, medidas por semilla, veredicto
+  provisional y, en `/api/video`, un vídeo compacto de cada época grabada;
 - y la GPU, con `nvidia-smi` si está disponible.
 
 Solo escucha en 127.0.0.1 y solo sirve la página y ese JSON. Usa solo la biblioteca estándar,
@@ -28,7 +30,7 @@ import webbrowser
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 STATIC = Path(__file__).parent / "viewer_static" / "panel.html"
 REPO = Path(__file__).resolve().parents[2]
@@ -91,9 +93,11 @@ def world_status(d: Path, now: float) -> dict:
     return {"state": "en curso" if fresh else "interrumpido"}
 
 
-def queue_progress(queue: Path, runs: Path, now: float) -> dict:
+def queue_progress(queue: Path, runs: Path, now: float, only: str | None = None) -> dict:
+    """Avance de una cola; con `only`, solo de esa condición (un peldaño de la escalera)."""
     specs = _read_json(queue, [])
     specs = specs if isinstance(specs, list) else [specs]
+    specs = [s for s in specs if only is None or s.get("name") == only]
     worlds, current = [], None
     for s in specs:
         for seed in s.get("seeds", []):
@@ -141,7 +145,7 @@ def resolve_tasks(tasks: list[dict], runs: Path, now: float, repo: Path = REPO) 
         prog = None
         if t.get("cola"):
             q = find_queue(t["cola"], repo)
-            prog = queue_progress(q, runs, now) if q else None
+            prog = queue_progress(q, runs, now, t.get("condicion")) if q else None
             t["progress"] = prog
         elif t.get("jsonl"):
             prog = jsonl_progress(runs / t["jsonl"], t.get("total"), now)
@@ -194,6 +198,152 @@ def condition_summary(runs: Path) -> list[dict]:
     return table
 
 
+# --- Escalera de complejidad (ADR-014, docs/escalera/diseno.md) ---------------------------------
+
+LADDER_MEASURES = ("population", "thrust_mean", "desc_speed", "hidden_mean", "mass_mean",
+                   "max_thrust_mean", "lifespan_mean", "intake", "toxic_intake_frac",
+                   "va_log_population", "va_log_intake")
+LATE_FROM = 151          # ventana tardía prerregistrada: épocas 151–300
+SERIES_POINTS = 100      # puntos máximos por serie (las sondas VA se guardan todas)
+
+
+def _window_mean(rows: list[dict], key: str, lo: int, hi: int | None = None):
+    return _mean([r.get(key) for r in rows if r["epoch"] >= lo and (hi is None or r["epoch"] <= hi)])
+
+
+def _series(rows: list[dict], key: str) -> list[list]:
+    pts = [[r["epoch"], r[key]] for r in rows if isinstance(r.get(key), (int, float))]
+    if key.startswith("va_") or len(pts) <= SERIES_POINTS:
+        return pts
+    step = math.ceil(len(pts) / SERIES_POINTS)
+    return pts[::step] if pts[-1] in pts[::step] else [*pts[::step], pts[-1]]
+
+
+def rung_worlds(cond: str, seeds: list[int], runs: Path, now: float, graphs: list[str]) -> list[dict]:
+    out = []
+    for seed in seeds:
+        d = runs / cond / f"s{seed}"
+        rows = _read_json(d / "stats" / "summary.json", [])
+        rec = sorted(int(p.stem.split("_")[1].split(".")[0]) for p in (d / "recordings").glob("epoch_*.json")) \
+            if (d / "recordings").is_dir() else []
+        last = rows[-1]["epoch"] if rows else 0
+        out.append({
+            "seed": seed, **world_status(d, now), "epoch": last, "recordings": rec,
+            "late": {k: _window_mean(rows, k, LATE_FROM) for k in LADDER_MEASURES} if last >= LATE_FROM else {},
+            "rows": rows,  # se quita antes de enviar
+            "series": {k: _series(rows, k) for k in graphs},
+        })
+    return out
+
+
+def _verdict(prim: dict, worlds: list[dict], ref: list[dict] | None) -> dict | None:
+    """Criterio prerregistrado: el signo predicho en todas las semillas (5 de 5). Provisional: el
+    resultado oficial lo fija el análisis en `docs/mapa.json` (campo `resultado`)."""
+    if not prim:
+        return None
+    key, sign = prim["medida"], prim.get("signo", "<")
+    per = []
+    for w in worlds:
+        if "ventana_ref" in prim:  # dentro del mismo peldaño: tardía frente a una ventana anterior
+            lo, hi = prim["ventana_ref"]
+            a = w["late"].get(key)
+            b = _window_mean(w["rows"], key, lo, hi) if a is not None else None
+        else:
+            r = next((x for x in ref or [] if x["seed"] == w["seed"]), None)
+            a, b = w["late"].get(key), (r["late"].get(key) if r else None)
+        diff = None if a is None or b is None else a - b
+        ok = None if diff is None else (diff < 0 if sign == "<" else diff > 0)
+        per.append({"seed": w["seed"], "value": a, "ref": b, "diff": diff, "ok": ok,
+                    "final": w["state"] in ("hecho", "extinto")})
+    n_ok = sum(p["ok"] is True for p in per)
+    complete = all(w["state"] in ("hecho", "extinto") for w in worlds)  # un mundo extinto cuenta como fallo
+    ref_done = ref is None or all(x["state"] in ("hecho", "extinto") for x in ref)
+    result = None
+    if complete and ref_done:
+        result = "positivo" if n_ok == len(per) else "negativo"
+    return {"medida": key, "signo": sign, "per_seed": per, "n_ok": n_ok, "n": len(per), "result": result}
+
+
+def ladder(rungs: list[dict], runs: Path, now: float) -> list[dict]:
+    """Peldaños con su planteamiento (de mapa.json), mundos, series y veredicto provisional."""
+    done: dict[str, list[dict]] = {}
+    out = []
+    for r in rungs:
+        graphs = list(dict.fromkeys(r.get("graficas", ["population", "thrust_mean", "hidden_mean"])))
+        seeds = r.get("semillas", [0, 1, 2, 3, 4])
+        worlds = rung_worlds(r["condicion"], seeds, runs, now, graphs)
+        done[r["id"]] = worlds
+        prim = r.get("primaria")
+        ref = done.get(prim.get("vs")) if prim and prim.get("vs") else None
+        if prim and prim.get("vs") and ref is None:  # el peldaño de referencia va después en la lista
+            ref_r = next((x for x in rungs if x["id"] == prim["vs"]), None)
+            ref = rung_worlds(ref_r["condicion"], seeds, runs, now, []) if ref_r else None
+        verdict = _verdict(prim, worlds, ref)
+        states = [w["state"] for w in worlds]
+        estado = ("hecho" if all(s in ("hecho", "extinto") for s in states)
+                  else "en curso" if "en curso" in states else
+                  "parado" if any(s in ("hecho", "extinto", "interrumpido") for s in states) else "pendiente")
+        out.append({**r, "estado": estado, "verdict": verdict, "worlds": worlds})
+    for r in out:
+        for w in r["worlds"]:
+            w.pop("rows", None)
+    return out
+
+
+def video(runs: Path, cond: str, seed: int, epoch: int, every: int = 5) -> bytes | None:
+    """Vídeo compacto de una época grabada, para el panel (solo biblioteca estándar).
+
+    Formato: u32 (longitud de la cabecera JSON) + cabecera + pos (F×N×2, u8: byte alto de la
+    posición cuantizada) + flags (F×N, u8; bit 7 = vivo) + color (F×N, u8 en 3-3-2) + recursos
+    (R×64×64, u8). Toma 1 de cada `every` fotogramas (100 de 500: un fotograma cada 10 pasos)."""
+    import gzip
+    if cond not in {d.name for d in runs.iterdir() if d.is_dir()}:
+        return None
+    base = runs / cond / f"s{int(seed)}" / "recordings" / f"epoch_{int(epoch):06d}"
+    head = _read_json(base.with_suffix(".json"))
+    if head is None:
+        return None
+    key = (str(base), base.with_suffix(".bin.gz").stat().st_mtime, every)
+    if key in _VIDEO_CACHE:
+        return _VIDEO_CACHE[key]
+    raw = gzip.decompress(base.with_suffix(".bin.gz").read_bytes())
+    arr = head["arrays"]
+    frames, n = arr["pos"]["shape"][0], arr["pos"]["shape"][1]
+    idx = range(every - 1, frames, every)
+
+    def frame(name: str, i: int, size: int) -> bytes:
+        o = arr[name]["offset"] + i * n * size
+        return raw[o:o + n * size]
+
+    tr = {s: bytes(((v >> s[0]) << s[1]) for v in range(256)) for s in ((5, 5), (5, 2), (6, 0))}
+    pos, flags, color = [], [], []
+    for i in idx:
+        pos.append(frame("pos", i, 4)[1::2])          # byte alto (u16 little-endian) de x, y
+        flags.append(frame("flags", i, 1))
+        c = frame("color", i, 3)
+        rr, gg, bb = c[0::3].translate(tr[(5, 5)]), c[1::3].translate(tr[(5, 2)]), c[2::3].translate(tr[(6, 0)])
+        color.append((int.from_bytes(rr, "little") | int.from_bytes(gg, "little")
+                      | int.from_bytes(bb, "little")).to_bytes(n, "little"))
+    res = arr["resources"]
+    o = res["offset"]
+    res_bytes = raw[o:o + math.prod(res["shape"])]
+    meta = head["meta"]
+    header = json.dumps({"frames": len(pos), "n": n, "frame_steps": meta.get("stride", 2) * every,
+                         "res_frames": res["shape"][0], "res_grid": res["shape"][1],
+                         "res_steps": meta.get("res_stride", 20), "epoch": meta.get("epoch"),
+                         "seed": meta.get("seed")}).encode()
+    body = len(header).to_bytes(4, "little") + header + b"".join(pos) + b"".join(flags) \
+        + b"".join(color) + res_bytes
+    data = gzip.compress(body, compresslevel=5)
+    if len(_VIDEO_CACHE) >= 16:
+        _VIDEO_CACHE.pop(next(iter(_VIDEO_CACHE)))
+    _VIDEO_CACHE[key] = data
+    return data
+
+
+_VIDEO_CACHE: dict[tuple, bytes] = {}
+
+
 def bitacora(path: Path, n: int = 14) -> list[dict]:
     """Últimas `n` entradas (### hora · título) con su fecha (## dd-mm-aaaa)."""
     try:
@@ -231,6 +381,7 @@ def estado(runs: Path, repo: Path = REPO) -> dict:
         "hypotheses": mapa.get("hipotesis", []),
         "main_path": mapa.get("camino_principal", []),
         "debts": mapa.get("deudas", []),
+        "ladder": ladder(mapa.get("escalera", []), runs, now) if runs.is_dir() else [],
         "conditions": condition_summary(runs) if runs.is_dir() else [],
         "bitacora": bitacora(repo / "docs" / "bitacora.md"),
         "gpu": gpu_info(),
@@ -244,13 +395,16 @@ def make_handler(runs: Path):
         def log_message(self, fmt, *args):  # silencioso
             pass
 
-        def _send(self, data: bytes, ctype: str) -> None:
+        def _send(self, data: bytes, ctype: str, gzip: bool = False) -> None:
             self.send_response(HTTPStatus.OK)
             self.send_header("Content-Type", ctype)
+            if gzip:
+                self.send_header("Content-Encoding", "gzip")
             self.send_header("Content-Length", str(len(data)))
             self.send_header("Cache-Control", "no-store")
             self.end_headers()
-            self.wfile.write(data)
+            for i in range(0, len(data), 1 << 16):  # por trozos: un write grande se cortaba en Windows
+                self.wfile.write(data[i:i + (1 << 16)])
 
         def do_GET(self):
             path = urlparse(self.path).path
@@ -258,6 +412,15 @@ def make_handler(runs: Path):
                 return self._send(STATIC.read_bytes(), "text/html; charset=utf-8")
             if path == "/api/estado":
                 return self._send(json.dumps(estado(runs)).encode(), "application/json")
+            if path == "/api/video":
+                q = parse_qs(urlparse(self.path).query)
+                try:
+                    data = video(runs, q["cond"][0], int(q["seed"][0]), int(q["epoch"][0]))
+                except (KeyError, ValueError, OSError):
+                    data = None
+                if data is None:
+                    return self.send_error(HTTPStatus.NOT_FOUND)
+                return self._send(data, "application/octet-stream", gzip=True)
             self.send_error(HTTPStatus.NOT_FOUND)
 
     return Handler

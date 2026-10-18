@@ -10,6 +10,8 @@ Ecosistema de vida artificial distribuido: agentes que evolucionan por selecció
 
 **Fase 1d** (en curso, rama `fase1d`): barridos controlados de las condiciones en que aprender compensa (ADR-012, protocolo en `docs/fase1d/diseno.md`). El registro cronológico de todo lo probado está en `docs/bitacora.md`. La sonda de recompensa (`scripts/reward_probe.py`) no encuentra una señal de castigo consistente en las neuronas moduladoras. Por eso E9 (rama `fase1d-e9`, sustrato 3.0.0) añade un sentido de malestar tras comer veneno y lo compara con mundos sin él. **Resultado de E1** (50 mundos, 49 sobreviven): aprender en vida compensa casi siempre que hay veneno (VA_log > 0 en 40 de 44 mundos), pero no aparece la campana que predice la teoría (H1), y la comparación entre ciclos regulares y cambios al azar (H2) no es concluyente. El análisis destapó cuatro fallos del diseño (diseño v0.8). Los corrige **E1b** (rama `fase1d-e1b`): un control uniforme, 5 semillas más y una sonda del reloj desincronizado.
 
+**Escalera de complejidad** (ADR-014, rama `escalera`): rehace el camino **un interruptor cada vez**, desde un mundo feliz sin selección (P0), pasando por el peaje a vivir (P1), la comida (P2–P4) y los hijos pagados (P3), hasta la comida venenosa (P5). Cada peldaño responde a una pregunta de sí o no prerregistrada (`docs/escalera/diseno.md`). Se ejecuta tras E2 y antes de E9 y E1b.
+
 ## Documentos
 
 - [Especificación](docs/spec.md) — arquitectura, genoma, cerebro, red P2P, métricas, fases, salvaguardas.
@@ -39,7 +41,7 @@ python -m panspermia.viewer runs/s0                             # visor: http://
 python scripts/bench.py                                         # pasos-agente/s
 python scripts/phase1_acceptance.py run --out runs/phase1       # 5 semillas × 500 épocas
 python scripts/compare_runs.py runs/phase1 runs/phase1b --to 100 # compara dos lotes
-PYTHONPATH=src python -m panspermia.panel runs/fase1d          # panel en vivo: árbol de posibilidades y avance (127.0.0.1:8766)
+PYTHONPATH=src python -m panspermia.panel runs/fase1d          # panel en vivo: escalera (planteamiento, vídeo y resultados por peldaño), árbol y avance (127.0.0.1:8766)
 python scripts/capability_controls.py                           # controles triviales de la batería
 duckdb -c "SELECT epoch, population, births, hidden_mean FROM read_parquet('runs/s0/stats/*.parquet', union_by_name=true) ORDER BY epoch"
 ```

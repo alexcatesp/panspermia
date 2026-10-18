@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 16:25",
+ "actualizado": "2026-10-18 18:45",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -11,6 +11,120 @@
    "corto": "Panspermia"
   },
   {
+   "id": "escalera",
+   "padre": "raiz",
+   "titulo": "Escalera de complejidad (un interruptor cada vez)",
+   "corto": "Escalera",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "rehacer el camino de un interruptor en un interruptor",
+   "texto": "Decisión del responsable tras la retrospectiva del 18-10: cada fase había encendido muchas cosas a la vez y nunca se probó un control sin selección. Orden en la GPU: E2 → escalera → E9 → E1b.",
+   "ref": "ADR-014 · docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P0",
+   "padre": "escalera",
+   "titulo": "P0 · Mundo feliz",
+   "corto": "P0 · Mundo feliz",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "punto de partida, sin selección",
+   "texto": "¿Qué hacen las medidas cuando no hay selección? El mundo se llena (≥ 95 % de 4.096). Cerebro, cuerpo y movimiento derivan al azar, sin tendencia; aprender no aporta nada (VA ≈ 0).",
+   "cola": "escalera.json",
+   "condicion": "P0-feliz",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P1",
+   "padre": "P0",
+   "titulo": "P1 · Peaje a vivir",
+   "corto": "P1 · Peaje a vivir",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "vivir cuesta energía",
+   "texto": "¿Funciona la selección? ¿Ganan los que gastan menos? Se mueven menos, tienen menos neuronas y cuerpos más pequeños que en P0. Aprender sigue sin servir (no hay nada que aprender).",
+   "cola": "escalera.json",
+   "condicion": "P1-peaje",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P2",
+   "padre": "P1",
+   "titulo": "P2 · Comida quieta",
+   "corto": "P2 · Comida quieta",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "comida en manchas quietas",
+   "texto": "¿Sirve la comida? ¿Van a por ella? Viven más que en P1 y se mueven más (ir hacia la comida compensa).",
+   "cola": "escalera.json",
+   "condicion": "P2-comida-quieta",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P3",
+   "padre": "P2",
+   "titulo": "P3 · Hijos pagados",
+   "corto": "P3 · Hijos pagados",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "los hijos se pagan con energía",
+   "texto": "¿Limita la comida a la población? Menos población que en P2: ya no se llena el mundo.",
+   "cola": "escalera.json",
+   "condicion": "P3-hijos-pagados",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P4",
+   "padre": "P3",
+   "titulo": "P4 · Comida móvil",
+   "corto": "P4 · Comida móvil",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "la comida se desplaza",
+   "texto": "¿Obliga la comida móvil a moverse más? Más empuje que en P3. La deriva es lenta respecto a una vida, así que aprender probablemente aún no compensa.",
+   "cola": "escalera.json",
+   "condicion": "P4-comida-movil",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P5",
+   "padre": "P4",
+   "titulo": "P5 · Comida buena y mala",
+   "corto": "P5 · Comida buena y mala",
+   "estado": "auto",
+   "resultado": null,
+   "anade": "un alga es venenosa",
+   "texto": "¿Aprenden a evitar el veneno? ¿Empieza aquí a compensar aprender? La fracción tóxica baja respecto al final de la rampa (épocas 41–50). Esperamos VA > 0 por primera vez. Se compara con E1b-uniforme, que además tiene química, ataque y señal.",
+   "cola": "escalera.json",
+   "condicion": "P5-veneno",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P6",
+   "padre": "P5",
+   "titulo": "Siguientes peldaños (según lo que salga)",
+   "corto": "Siguiente peldaño",
+   "estado": "decision",
+   "resultado": null,
+   "anade": "una sola cosa más, elegida según el resultado de P5",
+   "texto": "Árbol binario: si un peldaño sale bien, el siguiente construye sobre esa variable; si sale mal, se descarta y se prueba otra. Candidatos: veneno que cambia en el tiempo (E1), química, ataque, señal.",
+   "principal": true
+  },
+  {
    "id": "f0",
    "padre": "raiz",
    "titulo": "Fase 0 · Motor determinista",
@@ -18,9 +132,10 @@
    "resultado": "positivo",
    "texto": "Mundo 2D reproducible bit a bit; ~6 s por época con 4.096 bichos.",
    "ref": "ADR-005, ADR-006",
-   "anade": "mundo 2D determinista y cuerpos simples",
-   "principal": true,
-   "corto": "Motor"
+   "anade": "mundo 2D determinista con comida, gasto, hambre, reproducción pagada y plasticidad, todo a la vez",
+   "principal": false,
+   "corto": "Motor",
+   "salto": true
   },
   {
    "id": "uv",
@@ -55,7 +170,7 @@
    "texto": "Ecología estable y sin extinciones en 5 de 5 mundos.",
    "ref": "ADR-010",
    "anade": "ecología: comida, reproducción, depredación",
-   "principal": true,
+   "principal": false,
    "salto": true,
    "corto": "Ecología"
   },
@@ -68,7 +183,7 @@
    "texto": "No: valor del aprendizaje negativo en 5 de 5; los cerebros encogen.",
    "ref": "ADR-010",
    "anade": "medir el valor de aprender",
-   "principal": true,
+   "principal": false,
    "corto": "¿Compensa aprender?"
   },
   {
@@ -128,7 +243,7 @@
    "texto": "Con veneno, aprender empieza a compensar y los cerebros crecen (8 → 21 neuronas). Sobreviven 2 de 5.",
    "ref": "ADR-008",
    "anade": "química + 2 tipos de alga, uno venenoso",
-   "principal": true,
+   "principal": false,
    "salto": true,
    "corto": "Veneno y química"
   },
@@ -188,7 +303,7 @@
    "texto": "Barridos de un factor cada vez con protocolo prerregistrado (diseño v0.9).",
    "ref": "ADR-012",
    "anade": "un factor cada vez (ritmo del cambio)",
-   "principal": true,
+   "principal": false,
    "corto": "Fase 1d"
   },
   {
@@ -201,7 +316,7 @@
    "texto": "4.096 bichos; vida típica ≈ 130 pasos.",
    "ref": "bitácora 16-10, 16:37",
    "anade": "tamaño del mundo y escalas de tiempo",
-   "principal": true,
+   "principal": false,
    "corto": "E0 · tamaño"
   },
   {
@@ -212,7 +327,7 @@
    "resultado": "negativo",
    "texto": "Se extinguen 3 de 5 mundos al acabar la rampa.",
    "anade": "cambio aleatorio del veneno",
-   "principal": true,
+   "principal": false,
    "corto": "Veneno 0,5"
   },
   {
@@ -225,7 +340,7 @@
    "texto": "8 de 9 mundos viables.",
    "ref": "bitácora 16-10, 20:45",
    "anade": "veneno más suave (0,3)",
-   "principal": true,
+   "principal": false,
    "corto": "E0b · veneno 0,3"
   },
   {
@@ -237,7 +352,7 @@
    "texto": "Sobreviven 49 de 50.",
    "ref": "bitácora 18-10, 06:00",
    "anade": "ritmo y previsibilidad del cambio",
-   "principal": true,
+   "principal": false,
    "corto": "E1 · ritmo del cambio"
   },
   {
@@ -299,7 +414,7 @@
    "texto": "No según el criterio (T35–T560); solo un esbozo débil en T140/T560.",
    "ref": "bitácora 17-10, 11:00",
    "anade": "mirar dentro del cerebro",
-   "principal": true,
+   "principal": false,
    "corto": "Señal de premio"
   },
   {
@@ -323,7 +438,7 @@
    "cola": "e9.json",
    "texto": "Con y sin, en T140 y T560. ¿Aprenden más y más rápido?",
    "anade": "un sentido nuevo: malestar",
-   "principal": true,
+   "principal": false,
    "corto": "E9 · malestar"
   },
   {
@@ -441,7 +556,7 @@
   },
   {
    "id": "larga",
-   "padre": "E9",
+   "padre": "P6",
    "titulo": "Ejecución larga (semanas) con la mejor receta",
    "estado": "decision",
    "texto": "Se propondrá al cerrar la 1d.",
@@ -526,6 +641,12 @@
    "texto": "Los cambios bruscos de régimen causan colapsos; una rampa los reduce",
    "resultado": "indicio",
    "detalle": "Indicio: las extinciones llegan justo al acabar la rampa del veneno (E0, E0b, E1). Prueba formal en E7."
+  },
+  {
+   "id": "ESC",
+   "texto": "Escalera: ¿en qué peldaño empieza a compensar aprender en vida (VA > 0)?",
+   "resultado": null,
+   "detalle": "Predicción: ni en P0 ni en P1; probablemente en P5."
   }
  ],
  "deudas": [
@@ -536,20 +657,230 @@
  ],
  "camino_principal": [
   "raiz",
-  "f0",
-  "f1",
-  "f1-aprender",
-  "f1b",
-  "f1d",
-  "E0",
-  "veneno05",
-  "E0b",
-  "E1",
-  "recompensa",
-  "E9",
+  "escalera",
+  "P0",
+  "P1",
+  "P2",
+  "P3",
+  "P4",
+  "P5",
+  "P6",
   "larga",
   "fuga",
   "red",
   "robot"
+ ],
+ "escalera": [
+  {
+   "id": "P0",
+   "condicion": "P0-feliz",
+   "titulo": "Mundo feliz",
+   "anade": "Punto de partida: vivir es gratis, no hay comida, todos mueren a los 600 pasos y se nace por edad con energía regalada.",
+   "anade_corto": "punto de partida, sin selección",
+   "pregunta": "¿Qué hacen las medidas cuando no hay selección?",
+   "prediccion": "El mundo se llena (≥ 95 % de 4.096). Cerebro, cuerpo y movimiento derivan al azar, sin tendencia; aprender no aporta nada (VA ≈ 0).",
+   "primaria": null,
+   "secundarias": [
+    "hidden_mean",
+    "thrust_mean",
+    "mass_mean",
+    "va_log_population"
+   ],
+   "interruptores": [
+    "vivir gratis",
+    "sin comida",
+    "vida fija 600 pasos",
+    "nacer por edad",
+    "sin ataque",
+    "sin química",
+    "sin señal"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population"
+   ]
+  },
+  {
+   "id": "P1",
+   "condicion": "P1-peaje",
+   "titulo": "Peaje a vivir",
+   "anade": "Vivir, moverse, cada neurona y el tamaño cuestan energía; ya no hay edad máxima.",
+   "anade_corto": "vivir cuesta energía",
+   "pregunta": "¿Funciona la selección? ¿Ganan los que gastan menos?",
+   "prediccion": "Se mueven menos, tienen menos neuronas y cuerpos más pequeños que en P0. Aprender sigue sin servir (no hay nada que aprender).",
+   "primaria": {
+    "medida": "thrust_mean",
+    "vs": "P0",
+    "signo": "<"
+   },
+   "secundarias": [
+    "hidden_mean",
+    "mass_mean",
+    "va_log_population"
+   ],
+   "interruptores": [
+    "+vivir cuesta",
+    "sin comida",
+    "nacer por edad",
+    "sin ataque",
+    "sin química",
+    "sin señal"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population"
+   ]
+  },
+  {
+   "id": "P2",
+   "condicion": "P2-comida-quieta",
+   "titulo": "Comida quieta",
+   "anade": "Comida que crece y se agota, en manchas que no se mueven. Se sigue naciendo por edad con energía regalada.",
+   "anade_corto": "comida en manchas quietas",
+   "pregunta": "¿Sirve la comida? ¿Van a por ella?",
+   "prediccion": "Viven más que en P1 y se mueven más (ir hacia la comida compensa).",
+   "primaria": {
+    "medida": "lifespan_mean",
+    "vs": "P1",
+    "signo": ">"
+   },
+   "secundarias": [
+    "thrust_mean",
+    "intake",
+    "va_log_population"
+   ],
+   "interruptores": [
+    "vivir cuesta",
+    "+comida quieta",
+    "nacer por edad",
+    "sin ataque",
+    "sin química",
+    "sin señal"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population",
+    "intake"
+   ]
+  },
+  {
+   "id": "P3",
+   "condicion": "P3-hijos-pagados",
+   "titulo": "Hijos pagados",
+   "anade": "Tener un hijo cuesta: hay que superar el umbral de energía y cederle una parte. La comida pasa a ser la única fuente de energía.",
+   "anade_corto": "los hijos se pagan con energía",
+   "pregunta": "¿Limita la comida a la población?",
+   "prediccion": "Menos población que en P2: ya no se llena el mundo.",
+   "primaria": {
+    "medida": "population",
+    "vs": "P2",
+    "signo": "<"
+   },
+   "secundarias": [
+    "hidden_mean",
+    "va_log_population"
+   ],
+   "interruptores": [
+    "vivir cuesta",
+    "comida quieta",
+    "+hijos pagados",
+    "sin ataque",
+    "sin química",
+    "sin señal"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population",
+    "intake"
+   ]
+  },
+  {
+   "id": "P4",
+   "condicion": "P4-comida-movil",
+   "titulo": "Comida móvil",
+   "anade": "Las manchas de comida se desplazan despacio, como en el mundo de siempre.",
+   "anade_corto": "la comida se desplaza",
+   "pregunta": "¿Obliga la comida móvil a moverse más?",
+   "prediccion": "Más empuje que en P3. La deriva es lenta respecto a una vida, así que aprender probablemente aún no compensa.",
+   "primaria": {
+    "medida": "thrust_mean",
+    "vs": "P3",
+    "signo": ">"
+   },
+   "secundarias": [
+    "va_log_population"
+   ],
+   "interruptores": [
+    "vivir cuesta",
+    "+comida móvil",
+    "hijos pagados",
+    "sin ataque",
+    "sin química",
+    "sin señal"
+   ],
+   "graficas": [
+    "population",
+    "thrust_mean",
+    "hidden_mean",
+    "mass_mean",
+    "lifespan_mean",
+    "va_log_population",
+    "intake"
+   ]
+  },
+  {
+   "id": "P5",
+   "condicion": "P5-veneno",
+   "titulo": "Comida buena y mala",
+   "anade": "Un tipo de alga es tóxico: el mismo en todo el mundo y siempre (factor 0,3, rampa de 40 épocas).",
+   "anade_corto": "un alga es venenosa",
+   "pregunta": "¿Aprenden a evitar el veneno? ¿Empieza aquí a compensar aprender?",
+   "prediccion": "La fracción tóxica baja respecto al final de la rampa (épocas 41–50). Esperamos VA > 0 por primera vez. Se compara con E1b-uniforme, que además tiene química, ataque y señal.",
+   "primaria": {
+    "medida": "toxic_intake_frac",
+    "ventana_ref": [
+     41,
+     50
+    ],
+    "signo": "<"
+   },
+   "secundarias": [
+    "va_log_population",
+    "va_log_intake"
+   ],
+   "interruptores": [
+    "vivir cuesta",
+    "comida móvil",
+    "hijos pagados",
+    "+veneno uniforme",
+    "sin ataque",
+    "sin química",
+    "sin señal"
+   ],
+   "graficas": [
+    "population",
+    "toxic_intake_frac",
+    "thrust_mean",
+    "hidden_mean",
+    "va_log_population",
+    "va_log_intake"
+   ]
+  }
  ]
 }

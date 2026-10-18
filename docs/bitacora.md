@@ -321,3 +321,33 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Pruebas:** 14 tests de la 1d pasan en CPU, incluido el nuevo del modo uniforme (mismo tipo tóxico en todas las celdas, en los pasos 0 y 5.000). La cola e1b es válida (5 condiciones).
 - **Prueba técnica de la sonda del reloj** (la única vista antes del análisis, como en la v0.6), en E1-periodico-T140 s3, época 300, en CPU (17 min): población 1.402 con el reloj normal frente a 1.439 desincronizado (CU = −0,026), ingesta +0,002 y fracción tóxica −0,002. Solo comprueba que funciona; no cambia el criterio.
 - Marca `runs/fase1d/e1b_ok` creada: la cadena lanzará E1b tras E9. La sonda del reloj sobre E1 (semillas 0–4, 40 mundos, unas 11 h en CPU) espera a que termine la de recompensa (`scratchpad/clock_chain.sh`).
+
+### 18:00–18:10 · Retrospectiva y decisión: escalera de complejidad (ADR-014)
+
+- **Qué:** el responsable señala que cada fase encendió muchas variables a la vez. Además, el punto de partida no era un "mundo feliz": la fase 0 ya tenía comida, gasto por paso, hambre, reproducción pagada y plasticidad. Nunca se probó un control sin selección.
+- **Decisión:** rehacer el camino un interruptor cada vez, con una pregunta de sí o no por peldaño, prerregistrada en `docs/escalera/diseno.md` v0.1. Los peldaños son:
+  - P0 mundo feliz;
+  - P1 peaje;
+  - P2 comida quieta;
+  - P3 hijos pagados;
+  - P4 comida móvil;
+  - P5 veneno uniforme.
+- **Respuestas del responsable:** orden **E2 → escalera → E9 → E1b**; en P0, vida de duración fija (600 pasos); en P1, dotación fija al nacer.
+- **Propuesto por Claude:** separar en dos peldaños (P2 y P3) la comida y el pago de la reproducción, que en la propuesta iban juntos.
+- **Siguiente, según el responsable:** convertirlo en un **árbol binario**. Si el peldaño i sale bien, el i+1 construye sobre esa variable; si sale mal, la descarta y prueba otra. Las ramas se discuten con él antes de dibujarlas.
+
+### 18:10–18:55 · Escalera implementada (rama `escalera`) y panel por peldaños
+
+- **Código** (worktree `panspermia-escalera`, desde `fase1d-e1b`, sustrato 2.1.0):
+  - interruptores en `EnvParams`: `metabolism`, `max_age`, `repro_mode` ("energia" o "edad"), `attack_on`, `chem_on` y `signal_on`. Sus valores por defecto dejan el mundo de siempre;
+  - métricas `thrust_mean`, `mass_mean` y `max_thrust_mean`;
+  - `tests/test_escalera.py`;
+  - cola `experiments/fase1d/escalera.json`: 6 peldaños × 5 semillas × 300 épocas.
+- **Panel** (main): sección "Escalera de complejidad" con:
+  - el planteamiento de cada peldaño;
+  - el vídeo sincronizado de sus cinco mundos (`/api/video`, unos 0,7 MB por mundo y época);
+  - los resultados: veredicto provisional por semilla frente al peldaño anterior y series de cada mundo junto a la mediana del anterior.
+  - Los peldaños están en `docs/mapa.json` (`escalera`). El árbol tiene un tronco nuevo, la escalera, y el camino antiguo queda como "primer intento", con ⚠ también en la fase 0.
+  - Probado con Playwright usando datos de E1 en lugar de los peldaños: vídeo, veredicto y gráficas correctos.
+  - Corrección: las descargas en paralelo se cortaban en Windows (ERR_CONNECTION_RESET); ahora se cargan de una en una, por trozos y con un reintento.
+- **Cadena de la GPU** sustituida por `scratchpad/chain_esc_e9_e1b.sh`: espera a E2 y lanza la escalera (si existe `runs/fase1d/escalera_ok`), luego E9 y después E1b.

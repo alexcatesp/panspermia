@@ -313,3 +313,48 @@ Cada ritmo es una regla del mundo, no una nota a los agentes, así que el princi
 **Alternativas descartadas**: dejarla igual (pausas falsas en cada mundo moribundo) y pasarla sin poder pausar (deja constancia, pero no protege).
 
 **Nota.** Ese mundo quedó con `CAPABILITY_PAUSE.json`, pero ya había terminado sus 100 épocas: no se reanuda y no se ha creado ningún `CAPABILITY_REVIEW.json`.
+
+## ADR-014 · 18-10-2026 · Escalera de complejidad: un interruptor cada vez (decisión del responsable)
+
+**Contexto.** En la retrospectiva del 18-10, el responsable hizo notar que cada fase había encendido muchas cosas a la vez:
+
+- fase 0: comida, gasto, hambre, reproducción pagada y plasticidad;
+- fase 1: ataque, carroña, señal, vejez y biogeografía;
+- fase 1b: química, feromona, dos algas y veneno.
+
+Además, nunca se probó un control sin selección. Con tantas variables en juego, los resultados de la 1d son difíciles de atribuir.
+
+**Decisión.** Rehacer el camino como una **escalera**: cada peldaño es el anterior más una sola cosa, con una pregunta de sí o no prerregistrada (`docs/escalera/diseno.md`). Los peldaños son:
+
+- P0 · mundo feliz;
+- P1 · peaje a vivir;
+- P2 · comida quieta;
+- P3 · hijos pagados;
+- P4 · comida móvil;
+- P5 · veneno uniforme.
+
+Después, la química, el ataque, la señal y los cambios temporales del veneno entran de uno en uno. Se ejecuta **después de E2 y antes de E9 y E1b**.
+
+**Implementación** (rama `escalera`, sustrato 2.1.0). Interruptores en `EnvParams`, con valores por defecto que dejan el mundo de siempre y validados en `with_overrides`:
+
+- `metabolism`: 0 hace que vivir sea gratis;
+- `max_age`: muerte segura a una edad fija;
+- `repro_mode`: con "edad", todo adulto puede tener un hijo si hay hueco, el hijo nace con E_INIT nueva y el padre no paga;
+- `attack_on`, `chem_on` y `signal_on`.
+
+La comida se apaga con `k_mean` 0 y se deja quieta con `drift` 0. El genoma no cambia. Métricas nuevas (solo observan): `thrust_mean`, `mass_mean` y `max_thrust_mean`.
+
+**Desviaciones de la spec, solo en los peldaños de control:**
+
+- en P0 y P1 la energía de los recién nacidos se crea de la nada (dotación fija);
+- en P0 se muere por edad fija.
+
+Ninguna depende de la conducta ni de una métrica, así que **el principio 1 se mantiene**: la reproducción la decide la edad (P0, P1) o la energía (P3 en adelante), nunca una medida externa.
+
+**Decisiones del responsable (18-10, 18:10):**
+
+- orden E2 → escalera → E9 → E1b;
+- en P0, vida de duración fija (600 pasos) en lugar de inmortalidad, que congelaría el mundo, o de reemplazo al azar;
+- en P1, dotación fija al nacer en lugar de energía cedida por el padre, que extinguiría el mundo sin comida.
+
+**Desdoblado propuesto por Claude.** La propuesta original pasaba de "peaje" a "comida" cambiando a la vez la comida y el pago de la reproducción. Se separa en P2 y P3 para respetar la regla de un cambio por peldaño.
