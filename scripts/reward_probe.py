@@ -110,7 +110,7 @@ def analyze(rec, seed: int = 0, onset: bool = True) -> dict:
     """`onset`: solo bocados que abren una comida (sin bocado del mismo agente en los PRE pasos
     anteriores), para que m(t) no arrastre la respuesta a bocados previos."""
     uid, m, food, tox, bite_a, same = rec
-    steps, n = m.shape
+    steps = m.shape[0]
     bite = (food > EPS) & same
     toxic = bite & (tox > 0.5 * food)
     good = bite & (tox <= 0)

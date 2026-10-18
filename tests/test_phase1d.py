@@ -54,6 +54,17 @@ def test_fixed_patches_never_change():
     assert (h == h[0]).all() and 0 < h[0].mean() < 1
 
 
+def test_uniform_mode_is_the_same_everywhere_and_always():
+    """E1b (diseño v0.9): el alga tóxica es el mismo tipo en todo el mundo y nunca cambia."""
+    env = _env(tox_mode="uniforme", tox_period=10)
+    h = _run_patches(env, 50)
+    assert not h.any()
+    for step in (0, 5000):
+        a = np.asarray(world.algae_type_a(env, jnp.int32(step)))
+        t = np.asarray(world.toxic_cells(env, jnp.int32(step), jnp.int32(0), jnp.asarray(h[-1])))
+        assert np.array_equal(t, a)  # tóxica = tipo A, en todas las celdas
+
+
 def test_franjas_mode_is_default_and_unchanged():
     env = world.make_env(b"x")
     assert int(env.tox_mode) == config.TOX_MODES["franjas"]

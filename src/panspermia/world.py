@@ -45,7 +45,8 @@ class EnvParams:
     seasonal: jax.Array    # f32: 1 en las islas; 0 desactiva las algas tóxicas (pruebas)
     region_k: jax.Array    # f32[2]: número de onda (entero, en un eje) de las regiones de toxicidad
     region_phase: jax.Array  # f32
-    # Fase 1d. tox_mode: 0 franjas móviles (1b), 1 parches aleatorios, 2 parches periódicos, 3 fijo.
+    # Fase 1d. tox_mode: 0 franjas móviles (1b), 1 parches aleatorios, 2 parches periódicos, 3 fijo,
+    # 4 uniforme (el mismo tipo tóxico en todo el mundo y siempre).
     # tox_period T (pasos): en 1 cada parche se invierte con prob. 2/T por paso (estancia media T/2);
     # en 2 todos se invierten a la vez cada T/2 pasos (ciclo completo T, predecible).
     tox_mode: jax.Array    # i32
@@ -102,10 +103,12 @@ def with_overrides(env: EnvParams, **kw) -> EnvParams:
 
 def initial_patches(env: EnvParams, key: jax.Array) -> jax.Array:
     """bool[P, P]: estado inicial de los parches (True = el alga B es la tóxica). Mitad y mitad al
-    azar, salvo en el modo periódico, que empieza sincronizado (todos iguales)."""
+    azar, salvo en el periódico, que empieza sincronizado, y en el uniforme, que nunca cambia (todos
+    iguales)."""
     p = C.TOX_PATCHES
     rand = jax.random.bernoulli(key, 0.5, (p, p))
-    return jnp.where(env.tox_mode == C.TOX_MODES["periodico"], jnp.zeros((p, p), bool), rand)
+    same = (env.tox_mode == C.TOX_MODES["periodico"]) | (env.tox_mode == C.TOX_MODES["uniforme"])
+    return jnp.where(same, jnp.zeros((p, p), bool), rand)
 
 
 def step_patches(env: EnvParams, patches: jax.Array, step: jax.Array, key: jax.Array) -> jax.Array:

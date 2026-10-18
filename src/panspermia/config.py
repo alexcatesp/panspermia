@@ -120,7 +120,9 @@ TOXIC_FLIP_PROB = 0.0                 # inversión global por paso; desactivada:
 TOXIC_REGION_K = 2                    # franjas de toxicidad: 2 de cada régimen en el toro
 TOXIC_REGION_SPEED = 5.0              # unidades de mundo por unidad de tiempo de las fronteras
 # Programa temporal de toxicidad (fase 1d, docs/fase1d/diseno.md): qué alga es tóxica por parches.
-TOX_MODES = {"franjas": 0, "aleatorio": 1, "periodico": 2, "fijo": 3}
+TOX_MODES = {"franjas": 0, "aleatorio": 1, "periodico": 2, "fijo": 3, "uniforme": 4}
+# uniforme (diseño 1d v0.9, E1b): el mismo tipo de alga es tóxico en todo el mundo y siempre; el
+# fijo, en cambio, varía de un parche a otro (estable en el tiempo, no en el espacio).
 TOX_PATCHES = 8                       # rejilla de 8 × 8 parches (128 × 128 unidades cada uno)
 # Curva de recuperación (diseño 1d v0.5): alga y alga tóxica ingeridas según los pasos transcurridos
 # desde el último cambio del parche donde se come. Bordes de los intervalos (el último, abierto).

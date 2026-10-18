@@ -1,0 +1,118 @@
+[
+ {
+  "name": "E1b-uniforme",
+  "block": "E1b",
+  "description": "Control de verdad sin cambio (diseño v0.9): el mismo tipo de alga es tóxico en todo el mundo y siempre. El fijo de E1 variaba de un parche a otro.",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "uniforme"
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E1-aleatorio-T140",
+  "block": "E1",
+  "description": "Programa aleatorio, periodo T = 140 pasos (~1 vidas). Semillas 5–9 añadidas en E1b (diseño v0.9) para dar potencia a H2.",
+  "node": "fase1d-w0",
+  "seeds": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 140
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E1-periodico-T140",
+  "block": "E1",
+  "description": "Programa periodico, periodo T = 140 pasos (~1 vidas). Semillas 5–9 añadidas en E1b (diseño v0.9) para dar potencia a H2.",
+  "node": "fase1d-w0",
+  "seeds": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 140,
+   "clock_period": 140
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E1-aleatorio-T560",
+  "block": "E1",
+  "description": "Programa aleatorio, periodo T = 560 pasos (~4 vidas). Semillas 5–9 añadidas en E1b (diseño v0.9) para dar potencia a H2.",
+  "node": "fase1d-w0",
+  "seeds": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "aleatorio",
+   "tox_period": 560
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ },
+ {
+  "name": "E1-periodico-T560",
+  "block": "E1",
+  "description": "Programa periodico, periodo T = 560 pasos (~4 vidas). Semillas 5–9 añadidas en E1b (diseño v0.9) para dar potencia a H2.",
+  "node": "fase1d-w0",
+  "seeds": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "env": {
+   "tox_mode": "periodico",
+   "tox_period": 560,
+   "clock_period": 560
+  },
+  "config": {
+   "TOXIC_FACTOR": 0.3
+  }
+ }
+]
