@@ -358,3 +358,10 @@ Ninguna depende de la conducta ni de una métrica, así que **el principio 1 se 
 - en P1, dotación fija al nacer en lugar de energía cedida por el padre, que extinguiría el mundo sin comida.
 
 **Desdoblado propuesto por Claude.** La propuesta original pasaba de "peaje" a "comida" cambiando a la vez la comida y el pago de la reproducción. Se separa en P2 y P3 para respetar la regla de un cambio por peldaño.
+
+**Adenda (18-10-2026, 19:05; decisión del responsable): árbol de sí o no.** Si un peldaño sale bien, el siguiente construye sobre esa variable; si sale mal, se descarta y se prueba otra. Matiz acordado:
+
+- **P0–P3 son cimientos** (hambre, coste de vivir, comida, hijos pagados): si fallan, se reparan (calibración o motor), no se descartan.
+- **La gran bifurcación es P5**, y es la única que se dibuja por adelantado:
+  - si aprender compensa en P5 (VA > 0), se sigue con el veneno que cambia en el tiempo;
+  - si no, lo visto en E1 vendría de otro ingrediente, y se añaden sobre P5 de uno en uno en el orden **química → ataque → señal**.

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 18:45",
+ "actualizado": "2026-10-18 19:10",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -114,15 +114,50 @@
    "principal": true
   },
   {
-   "id": "P6",
+   "id": "P6si",
    "padre": "P5",
-   "titulo": "Siguientes peldaños (según lo que salga)",
-   "corto": "Siguiente peldaño",
-   "estado": "decision",
+   "titulo": "Si en P5 aprender compensa: veneno que cambia en el tiempo",
+   "corto": "✓ → veneno que cambia",
+   "estado": "pendiente",
    "resultado": null,
-   "anade": "una sola cosa más, elegida según el resultado de P5",
-   "texto": "Árbol binario: si un peldaño sale bien, el siguiente construye sobre esa variable; si sale mal, se descarta y se prueba otra. Candidatos: veneno que cambia en el tiempo (E1), química, ataque, señal.",
+   "anade": "el alga venenosa cambia con el tiempo (las preguntas de E1, ahora en un mundo limpio)",
+   "texto": "Rama del sí (decisión del responsable, 18-10): se construye sobre el veneno. Después, la señal entre ellos y el resto de ingredientes, de uno en uno.",
+   "ref": "ADR-014",
    "principal": true
+  },
+  {
+   "id": "P6no",
+   "padre": "P5",
+   "titulo": "Si en P5 aprender no compensa: + química",
+   "corto": "✗ → + química",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "química (nutriente, toxina, feromona) sobre P5",
+   "texto": "Rama del no (decisión del responsable, 18-10): lo visto en E1 vendría de otro ingrediente. Se añaden de uno en uno sobre P5, en el orden química → ataque → señal; el primero que haga aparecer el aprendizaje es el culpable. E1b-uniforme (todo junto) sirve de referencia.",
+   "ref": "ADR-014",
+   "principal": false
+  },
+  {
+   "id": "P7no",
+   "padre": "P6no",
+   "titulo": "Si sigue sin compensar: + ataque",
+   "corto": "+ ataque",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "ataque y carroña",
+   "ref": "ADR-014",
+   "principal": false
+  },
+  {
+   "id": "P8no",
+   "padre": "P7no",
+   "titulo": "Si sigue sin compensar: + señal",
+   "corto": "+ señal",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "señal entre bichos",
+   "ref": "ADR-014",
+   "principal": false
   },
   {
    "id": "f0",
@@ -556,7 +591,7 @@
   },
   {
    "id": "larga",
-   "padre": "P6",
+   "padre": "P6si",
    "titulo": "Ejecución larga (semanas) con la mejor receta",
    "estado": "decision",
    "texto": "Se propondrá al cerrar la 1d.",
@@ -664,7 +699,7 @@
   "P3",
   "P4",
   "P5",
-  "P6",
+  "P6si",
   "larga",
   "fuga",
   "red",

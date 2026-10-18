@@ -76,3 +76,12 @@ Todas solo observan. Se calcula la media por semilla en la ventana tardía, **é
 - Cola `experiments/fase1d/escalera.json`, con los datos en `runs/fase1d/P*/s*`.
 - Orden en la GPU (decisión del responsable, 18-10): **E2 → escalera → E9 → E1b**. Son unos 30 mundos, unas 15 h.
 - El análisis compara peldaños consecutivos por semilla (script `scripts/analyze_ladder.py`, por escribir antes de ver datos).
+
+## v0.2 · 18-10-2026, 19:05 · Ramas tras P5 (decisión del responsable)
+
+Se añade antes de tener datos y no cambia ningún criterio de P0–P5.
+
+- **P0–P3 son cimientos.** Si uno falla, se repara (calibración o motor) antes de subir.
+- **P5 es la bifurcación.** Se mira la mediana de VA_log_population de las épocas 151–300 y su signo por semilla:
+  - **sí** (VA > 0 en 5 de 5): **P6 · veneno que cambia en el tiempo**;
+  - **no**: P5 + química → P5 + química + ataque → P5 + química + ataque + señal, parando en el primero que haga aparecer el aprendizaje (VA > 0 en 5 de 5).

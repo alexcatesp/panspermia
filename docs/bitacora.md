@@ -351,3 +351,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Probado con Playwright usando datos de E1 en lugar de los peldaños: vídeo, veredicto y gráficas correctos.
   - Corrección: las descargas en paralelo se cortaban en Windows (ERR_CONNECTION_RESET); ahora se cargan de una en una, por trozos y con un reintento.
 - **Cadena de la GPU** sustituida por `scratchpad/chain_esc_e9_e1b.sh`: espera a E2 y lanza la escalera (si existe `runs/fase1d/escalera_ok`), luego E9 y después E1b.
+
+### 19:05 · Decisión: solo se dibuja la bifurcación de P5
+
+- **Qué se acordó:**
+  - P0–P3 son cimientos: si fallan, se reparan, no se descartan.
+  - Tras P5, rama del sí (aprender compensa): veneno que cambia en el tiempo.
+  - Rama del no: química → ataque → señal, de una en una sobre P5.
+- **Dónde está:** ADR-014 (adenda), `docs/escalera/diseno.md` v0.2 y `docs/mapa.json`, con los nodos P6si, P6no, P7no y P8no.
