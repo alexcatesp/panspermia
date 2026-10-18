@@ -306,3 +306,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - *Descartado, con este diseño:* la campana de H1.
   - *No concluyente:* H2, por falta de potencia y por las medidas.
   - *Pendiente:* E2 (en curso) dirá si poder evolucionar la plasticidad cambia la supervivencia. La sonda de recompensa en las condiciones que faltan corre en la CPU.
+
+### 10:30 · Decisión: E1b corrector, en el orden E2 → E9 → E1b
+
+- El responsable elige **E1b corrector** y el orden **E2 → E9 → E1b**. Protocolo prerregistrado en el diseño v0.9 (`24d9525`), antes de tener ningún dato de E1b.
+- Código en la rama `fase1d-e1b` (worktree `panspermia-e1b`):
+  - modo `uniforme`, con el mismo tipo tóxico en todo el mundo;
+  - `scripts/clock_probe.py`, que compara una época con el reloj normal y otra con el reloj desincronizado (× φ);
+  - cola `experiments/fase1d/e1b.json`: uniforme con las semillas 0–4, más las semillas 5–9 de aleatorio y periódico en T140 y T560.
+- Cadena en la GPU: `scratchpad/chain_e9_e1b.sh` espera a que termine E2, lanza E9 y, si existe `runs/fase1d/e1b_ok` (pruebas superadas), lanza E1b.
