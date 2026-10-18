@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 21:58",
+ "actualizado": "2026-10-18 22:15",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -43,11 +43,10 @@
    "padre": "P0",
    "titulo": "P1 · Peaje a vivir",
    "corto": "P1 · Peaje a vivir",
-   "estado": "auto",
+   "estado": "decision",
    "resultado": null,
    "anade": "vivir cuesta energía",
-   "texto": "¿Funciona la selección? ¿Ganan los que gastan menos? Se mueven menos, tienen menos neuronas y cuerpos más pequeños que en P0. Aprender sigue sin servir (no hay nada que aprender).",
-   "cola": "escalera.json",
+   "texto": "Se lanza solo tras analizar P0 en las tres mutaciones y decidir con el responsable (diseño v0.4). ¿Funciona la selección? ¿Ganan los que gastan menos? Se mueven menos, tienen menos neuronas y cuerpos más pequeños que en P0. Aprender sigue sin servir (no hay nada que aprender).",
    "condicion": "P1-peaje",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
@@ -97,11 +96,10 @@
    "padre": "mut",
    "titulo": "Peaje · mutación neutral",
    "corto": "P1 con mutación neutral",
-   "estado": "auto",
+   "estado": "decision",
    "resultado": null,
    "anade": "P1 con mutación neutral",
    "texto": "¿Funciona la selección también con esta mutación? Menos empuje que P0-neutral, como en P1 frente a P0.",
-   "cola": "mutacion.json",
    "condicion": "P1-peaje-neutral",
    "ref": "ADR-015",
    "recurso": "GPU"
@@ -111,11 +109,10 @@
    "padre": "mut",
    "titulo": "Peaje · mutación terrestre",
    "corto": "P1 con mutación terrestre",
-   "estado": "auto",
+   "estado": "decision",
    "resultado": null,
    "anade": "P1 con mutación terrestre",
    "texto": "¿Funciona la selección también con esta mutación? Menos empuje que P0-terrestre.",
-   "cola": "mutacion.json",
    "condicion": "P1-peaje-terrestre",
    "ref": "ADR-015",
    "recurso": "GPU"
@@ -756,7 +753,8 @@
   "El visor no muestra el alga tóxica.",
   "Referencias marcadas con † sin verificar.",
   "Copia de seguridad de runs/.",
-  "test_runner_pause_and_review tarda ~20 min en GPU por las compilaciones: acortarlo."
+  "test_runner_pause_and_review tarda ~20 min en GPU por las compilaciones: acortarlo.",
+  "La mutación de la CPPN también sesga a crecer (añadir 5 % / quitar 2 %): en P0 sus nodos pasan de 0,35 a ~11."
  ],
  "camino_principal": [
   "raiz",

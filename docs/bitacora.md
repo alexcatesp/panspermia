@@ -399,3 +399,13 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Decisión del responsable:** rama con mutación neutral y terrestre en P0 y P1, justo después de la escalera (ADR-015, diseño v0.3).
   - Rama `escalera-mut`, `1cd481d`: el modo por defecto es idéntico bit a bit (hash de 20 rondas de mutación igual en las dos ramas); 11 tests en verde.
   - Cadena nueva (`scratchpad/chain_mut_e2_e9_e1b.sh`): congela con SIGSTOP la cadena anterior para que no lance E2 al acabar la escalera, espera al barrido y lanza mutación → E2 → E9 → E1b. La escalera sigue corriendo sin interrupción.
+
+### 22:07–22:15 · Decisión: parar tras P0 y analizar las tres mutaciones antes de P1
+
+- **Qué:** el responsable pide no encadenar los peldaños. P0 se completa con las tres físicas de la mutación y se analiza antes de decidir cómo seguir con P1 (diseño v0.4).
+- **Cómo se hizo, sin perder nada:**
+  - se paró la cadena `chain_mut_e2_e9_e1b.sh`;
+  - se terminó el barrido de la escalera, dejando vivo el mundo en curso (P0-feliz s2, época ~172);
+  - `scratchpad/p0_tres.sh` espera a ese mundo y luego lanza P0 s3–s4, P0-neutral y P0-terrestre (15 mundos, unas 3–4 h). Al acabar crea `runs/fase1d/p0_listo` y avanza E2 mientras se decide.
+- **Análisis preparado antes de ver las variantes:** `scripts/analyze_ladder.py` (solo biblioteca estándar).
+- **Ya se ve en P0-nest (s0 y s1):** también crece la CPPN (nodos ocultos de 0,35 a ~10,7; aristas de 49 a ~68). La rama de mutación no cambia la mutación de la CPPN.

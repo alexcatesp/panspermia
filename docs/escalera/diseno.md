@@ -103,3 +103,14 @@ Antes de tener datos de la rama. En P0 ya se había visto el crecimiento de la s
 - Si las tres físicas llevan a la misma conclusión en P1, la física de la mutación no cambia lo que aprendemos.
 - Si no coinciden, hay que elegir física antes de seguir construyendo.
 - En ambos casos, la elección se hace con el responsable.
+
+## v0.4 · 18-10-2026, 22:10 · Parada tras cada peldaño (decisión del responsable)
+
+- **Cambio de procedimiento:** los peldaños ya no se encadenan solos. Cada uno se completa, se analiza y se decide el siguiente con el responsable.
+- **P0 se completa con las tres físicas de la mutación:** "nest" (P0-feliz), "neutral" (P0-feliz-neutral) y "terrestre" (P0-feliz-terrestre), 5 semillas cada una. Después se para.
+- **Qué se decide antes de lanzar P1:**
+  - con qué física de mutación se sigue: una, varias en paralelo o la que el análisis aconseje;
+  - si P1 necesita algún ajuste a la vista de P0.
+- **Los criterios prerregistrados no cambian.**
+- **Análisis:** `scripts/analyze_ladder.py` (escrito antes de ver los datos de las variantes). Media por semilla en las épocas 151–300, pendiente en esa ventana y comparaciones emparejadas con prueba de signos.
+- **Mientras se decide,** la GPU avanza el resto de E2, que se pausa en cuanto haya decisión (se pierden como mucho 10 épocas de un mundo).
