@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panspermia · panel</title>
+<link rel="icon" href="data:,">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f5f2; --surface: #fcfcfb; --surface-2: #f0efec; --line: #dcdbd6;
+  --text: #0b0b0b; --text-2: #52514e; --muted: #8a8984;
+  --blue: #2a78d6; --good: #0ca30c; --good-ink: #006300; --warn: #fab219; --warn-ink: #8a5a00;
+  --serious: #ec835a; --crit: #d03b3b; --pos: #2a78d6; --neg: #d03b3b;
+  --trunk: #8a6a4a; --branch: #c2b19b;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --surface-2: #242422; --line: #383835;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88;
+    --blue: #3987e5; --good-ink: #5fd35f; --warn-ink: #fab219; --pos: #3987e5; --neg: #e66767;
+    --trunk: #a8865f; --branch: #6e5f4c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --surface-2: #242422; --line: #383835;
+  --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88;
+  --blue: #3987e5; --good-ink: #5fd35f; --warn-ink: #fab219; --pos: #3987e5; --neg: #e66767;
+  --trunk: #a8865f; --branch: #6e5f4c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1240px; margin: 0 auto; padding: 20px 16px 60px; }
+header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: flex-end; justify-content: space-between; margin-bottom: 8px; }
+h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 17px; margin: 28px 0 8px; }
+.sub { color: var(--text-2); font-size: 13px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.gpu { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; font-size: 13px; color: var(--text-2); }
+.gpu b { font-size: 18px; color: var(--text); font-variant-numeric: tabular-nums; }
+.bar { height: 8px; background: var(--surface-2); border-radius: 4px; overflow: hidden; margin: 6px 0 4px; }
+.bar > i { display: block; height: 100%; background: var(--blue); border-radius: 4px; }
+.num { font-variant-numeric: tabular-nums; }
+.row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--text-2); }
+.now-title { font-weight: 600; display: flex; gap: 8px; align-items: center; }
+.tag { font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--text-2); }
+svg.spark { width: 100%; height: 64px; display: block; margin-top: 8px; }
+.empty { color: var(--muted); font-size: 14px; }
+
+/* iconos de estado: siempre símbolo + color + etiqueta en la leyenda */
+.ic { flex: none; width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center;
+  font-size: 13px; font-weight: 700; line-height: 1; color: #fff; }
+.ic.positivo { background: var(--good); }
+.ic.indicio { background: var(--surface); color: var(--good-ink); box-shadow: inset 0 0 0 2px var(--good); }
+.ic.negativo, .ic.descartado { background: var(--crit); }
+.ic.noconc { background: var(--warn); color: #3a2a00; }
+.ic.aparcado { background: var(--muted); }
+.ic.encurso { background: var(--blue); animation: pulse 2s ease-in-out infinite; }
+.ic.pendiente { background: var(--surface); color: var(--muted); box-shadow: inset 0 0 0 2px var(--line); }
+.ic.decision { background: var(--surface); color: var(--warn-ink); box-shadow: inset 0 0 0 2px var(--warn); }
+.ic.hecho { background: var(--text-2); }
+.ic.parado { background: var(--serious); }
+@keyframes pulse { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .ic.encurso, .tn.encurso .dot { animation: none; } }
+
+/* leyenda, filtros y zoom */
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--text-2); margin: 8px 0 10px; }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.legend .ic { width: 18px; height: 18px; font-size: 11px; }
+.toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 8px; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px;
+  background: var(--surface); border: 1px solid var(--line); font-size: 13px; cursor: pointer; color: var(--text); }
+.chip[aria-pressed="true"] { border-color: var(--text-2); box-shadow: inset 0 0 0 1px var(--text-2); }
+.chip b { font-variant-numeric: tabular-nums; }
+.chip .ic { width: 18px; height: 18px; font-size: 11px; }
+.zoom { display: flex; gap: 4px; }
+.zoom button { background: var(--surface); border: 1px solid var(--line); color: var(--text); border-radius: 6px; min-width: 34px; height: 30px; cursor: pointer; font-size: 14px; }
+
+/* árbol invertido (SVG): la raíz arriba, el tronco es el camino principal */
+.treewrap { overflow: auto; max-height: 80vh; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; cursor: grab; }
+.treewrap.grab { cursor: grabbing; user-select: none; }
+#treesvg { display: block; }
+.edge { fill: none; stroke: var(--branch); stroke-width: 3; stroke-linecap: round; }
+.edge.trunk { stroke: var(--trunk); stroke-width: 9; }
+.edge.open { stroke-dasharray: 1 7; stroke-width: 3; }
+.edge.dim, .tn.dim { opacity: .15; }
+.tn { cursor: pointer; outline: none; }
+.tn .hit { fill: transparent; }
+.tn .dot { stroke: var(--surface); stroke-width: 2.5; }
+.tn .sym { text-anchor: middle; font-size: 13px; font-weight: 700; fill: #fff; pointer-events: none; }
+.tn .lab { text-anchor: middle; font-size: 11.5px; fill: var(--text-2); pointer-events: none; }
+.tn .lab.halo { stroke: var(--surface); stroke-width: 4; stroke-linejoin: round; }
+.tn.main .lab { fill: var(--text); font-weight: 600; }
+.tn .warn { font-size: 12px; fill: var(--warn-ink); pointer-events: none; }
+.tn:hover .dot, .tn:focus .dot { stroke: var(--text); }
+.tn.positivo .dot { fill: var(--good); }
+.tn.indicio .dot { fill: var(--surface); stroke: var(--good); stroke-width: 3; }
+.tn.indicio .sym { fill: var(--good-ink); }
+.tn.negativo .dot, .tn.descartado .dot { fill: var(--crit); }
+.tn.noconc .dot { fill: var(--warn); }
+.tn.noconc .sym { fill: #3a2a00; }
+.tn.aparcado .dot { fill: var(--muted); }
+.tn.encurso .dot { fill: var(--blue); animation: pulse 2s ease-in-out infinite; }
+.tn.pendiente .dot { fill: var(--surface); stroke: var(--muted); stroke-dasharray: 3 3; }
+.tn.pendiente .sym { fill: var(--muted); }
+.tn.decision .dot { fill: var(--surface); stroke: var(--warn); stroke-width: 3; }
+.tn.decision .sym { fill: var(--warn-ink); }
+.tn.hecho .dot { fill: var(--text-2); }
+.tn.parado .dot { fill: var(--serious); }
+.axis line { stroke: var(--muted); stroke-width: 1.5; }
+.axis text { font-size: 11px; fill: var(--muted); }
+
+/* hipótesis */
+.hyp { display: flex; gap: 10px; }
+.hyp .id { font-weight: 700; }
+.hyp .d { color: var(--text-2); font-size: 13px; margin-top: 4px; }
+
+/* tabla de condiciones */
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; background: var(--surface); border: 1px solid var(--line); }
+th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--text-2); font-weight: 600; font-size: 12.5px; background: var(--surface-2); }
+td.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.block td { background: var(--surface-2); font-weight: 600; color: var(--text-2); font-size: 12.5px; }
+.va { display: flex; align-items: center; gap: 8px; }
+.va svg { width: 120px; height: 14px; flex: none; }
+ul.plain { margin: 0; padding-left: 18px; color: var(--text-2); font-size: 13.5px; }
+ul.plain li { margin: 3px 0; }
+#tip { position: fixed; pointer-events: none; background: var(--text); color: var(--bg); font-size: 12.5px; line-height: 1.4;
+  padding: 8px 10px; border-radius: 8px; z-index: 9; display: none; max-width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+.err { color: var(--crit); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Panspermia · panel</h1>
+      <div class="sub">Mapa actualizado: <span id="updated">—</span> · datos en vivo, leídos <span id="ago">—</span> <span id="err" class="err"></span></div>
+    </div>
+    <div class="card gpu" id="gpu"><span class="empty">GPU: sin datos</span></div>
+  </header>
+
+  <h2>Árbol de posibilidades</h2>
+  <div class="sub">El tronco baja de lo más sencillo (arriba) a lo más complejo (abajo); de él salen las ramas que hemos probado o que quedan por probar. Pasa el ratón por un nodo para ver el detalle.</div>
+  <div class="legend" id="legend"></div>
+  <div class="toolbar">
+    <div class="counts" id="counts"></div>
+    <div class="zoom"><button data-zoom="0.8" aria-label="Alejar">−</button><button data-zoom="1.25" aria-label="Acercar">+</button><button data-zoom="fit">Ajustar</button></div>
+  </div>
+  <div class="treewrap" id="treewrap"><svg id="treesvg" role="img" aria-label="Árbol de posibilidades"></svg></div>
+
+  <h2>Ahora mismo</h2>
+  <div class="grid" id="now"><div class="empty">Cargando…</div></div>
+
+  <h2>Hipótesis de la fase 1d</h2>
+  <div class="grid" id="hyps"></div>
+
+  <h2>Resultados por condición</h2>
+  <div class="sub" style="margin-bottom:8px">VA_log = log(población que aprende / gemelo congelado): mediana de los mundos supervivientes en las últimas épocas; los puntos son los mundos. Pasa el ratón por la barra para ver los valores.</div>
+  <div class="tablewrap"><table id="conds"></table></div>
+
+  <div class="grid" style="margin-top:24px">
+    <div><h2 style="margin-top:0">Bitácora reciente</h2><ul class="plain" id="log"></ul></div>
+    <div><h2 style="margin-top:0">Deudas pendientes</h2><ul class="plain" id="debts"></ul></div>
+  </div>
+</main>
+<div id="tip"></div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const fmt = (x, d = 2) => x == null ? "—" : Number(x).toLocaleString("es-ES", {minimumFractionDigits: d, maximumFractionDigits: d});
+const signed = (x, d = 2) => x == null ? "—" : (x > 0 ? "+" : "") + fmt(x, d);
+
+const KIND = {
+  positivo: {cls: "positivo", sym: "✓", label: "Salió bien"},
+  indicio: {cls: "indicio", sym: "◐", label: "Indicio"},
+  negativo: {cls: "negativo", sym: "✗", label: "No salió"},
+  descartado: {cls: "descartado", sym: "✗", label: "Descartado (error de diseño)"},
+  "no concluyente": {cls: "noconc", sym: "~", label: "No concluyente"},
+  aparcado: {cls: "aparcado", sym: "⏸", label: "Aparcado"},
+  "en curso": {cls: "encurso", sym: "●", label: "En marcha"},
+  parado: {cls: "parado", sym: "!", label: "Parado"},
+  decision: {cls: "decision", sym: "?", label: "Falta decidir"},
+  pendiente: {cls: "pendiente", sym: "○", label: "Por explorar"},
+  hecho: {cls: "hecho", sym: "•", label: "Hecho"},
+};
+const kindOf = (n) => (n.resultado && KIND[n.resultado]) ? n.resultado : (KIND[n.estado] ? n.estado : "pendiente");
+const icon = (k) => `<span class="ic ${KIND[k].cls}" aria-label="${esc(KIND[k].label)}">${KIND[k].sym}</span>`;
+const FILTERS = {
+  todo: () => true,
+  bien: (k) => k === "positivo" || k === "indicio",
+  mal: (k) => k === "negativo" || k === "descartado",
+  abierto: (k) => ["en curso", "pendiente", "decision", "no concluyente", "parado"].includes(k),
+  aparcado: (k) => k === "aparcado",
+};
+let filter = "todo";
+
+const eta = (h) => {
+  if (h == null) return "—";
+  const t = new Date(Date.now() + h * 3600e3);
+  return `${h < 1 ? Math.round(h * 60) + " min" : fmt(h, 1) + " h"} · ${t.toLocaleDateString("es-ES", {weekday: "short"})} ${t.toLocaleTimeString("es-ES", {hour: "2-digit", minute: "2-digit"})}`;
+};
+
+// --- tooltip compartido ---
+const tip = $("tip");
+function showTip(ev, html) { tip.innerHTML = html; tip.style.display = "block"; moveTip(ev); }
+function moveTip(ev) {
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.min(ev.clientX + 14, innerWidth - w - 8) + "px";
+  tip.style.top = (ev.clientY + 16 + h > innerHeight ? ev.clientY - h - 12 : ev.clientY + 16) + "px";
+}
+const hideTip = () => { tip.style.display = "none"; };
+
+// --- árbol invertido: la raíz arriba; el tronco (camino principal) baja recto ---
+const SP = 88, LV = 100, R = 14, PADX = 110, PADY = 40;
+let scale = null, centered = false, treeNodes = new Map();
+function layout(tree, mainIds) {
+  const main = new Set(mainIds || []);
+  const kids = new Map();
+  tree.forEach((n) => { const k = n.padre ?? "__root"; if (!kids.has(k)) kids.set(k, []); kids.get(k).push(n); });
+  const ordered = (n) => {  // el hijo del tronco en medio de sus hermanos
+    const ch = kids.get(n.id) || [], m = ch.filter((c) => main.has(c.id)), rest = ch.filter((c) => !main.has(c.id));
+    const half = Math.ceil(rest.length / 2);
+    return [...rest.slice(0, half), ...m, ...rest.slice(half)];
+  };
+  const pos = new Map(); let leaf = 0, maxD = 0;
+  const place = (n, d) => {
+    const ch = ordered(n); maxD = Math.max(maxD, d);
+    let x;
+    if (!ch.length) x = leaf++ * SP;
+    else {
+      ch.forEach((c) => place(c, d + 1));
+      const m = ch.find((c) => main.has(c.id));  // el tronco baja recto: encima de su hijo del tronco
+      x = m && main.has(n.id) ? pos.get(m.id).x : (pos.get(ch[0].id).x + pos.get(ch[ch.length - 1].id).x) / 2;
+    }
+    pos.set(n.id, {x, y: d * LV});
+  };
+  (kids.get("__root") || []).forEach((r) => place(r, 0));
+  return {pos, main, width: Math.max(leaf - 1, 0) * SP, height: maxD * LV};
+}
+function wrapWords(t, max = 14) {
+  const out = []; let cur = "";
+  for (const w of String(t).split(" ")) {
+    if (cur && (cur + " " + w).length > max) { out.push(cur); cur = w; } else cur = cur ? cur + " " + w : w;
+  }
+  if (cur) out.push(cur);
+  return out.slice(0, 3);
+}
+function tipHtml(n) {
+  const k = kindOf(n), p = n.progress;
+  let h = `<b>${esc(n.titulo)}</b><br><span style="opacity:.8">${esc(KIND[k].label)}</span>`;
+  if (n.anade) h += `<br>＋ añade: ${esc(n.anade)}`;
+  if (n.salto) h += `<br>⚠ añadió varias cosas a la vez`;
+  if (n.texto) h += `<br><br>${esc(n.texto)}`;
+  if (p && p.total) h += `<br><br>${p.done} de ${p.total}${p.extinct ? ` (${p.extinct} extinto${p.extinct > 1 ? "s" : ""})` : ""}`
+    + (p.eta_hours != null && n.estado === "en curso" ? ` · termina en ${esc(eta(p.eta_hours))}` : "");
+  if (n.ref) h += `<br><span style="opacity:.7">${esc(n.ref)}</span>`;
+  return h;
+}
+function renderTree(tree, mainIds) {
+  const L = layout(tree, mainIds);
+  treeNodes = new Map(tree.map((n) => [n.id, n]));
+  const ok = FILTERS[filter], on = (k) => filter === "todo" || ok(k);
+  const W = L.width + 2 * PADX, H = L.height + 2 * PADY + 30;
+  const X = (x) => x + PADX, Y = (y) => y + PADY;
+  let edges = "", nodes = "";
+  for (const n of tree) {
+    if (!n.padre || !L.pos.has(n.padre)) continue;
+    const a = L.pos.get(n.padre), b = L.pos.get(n.id), k = kindOf(n);
+    const trunk = L.main.has(n.id) && L.main.has(n.padre);
+    const open = k === "pendiente" || k === "decision";
+    const my = (Y(a.y) + Y(b.y)) / 2;
+    edges += `<path class="edge${trunk ? " trunk" : ""}${open && !trunk ? " open" : ""}${on(k) ? "" : " dim"}" d="M${X(a.x)},${Y(a.y)} C${X(a.x)},${my} ${X(b.x)},${my} ${X(b.x)},${Y(b.y)}"/>`;
+  }
+  for (const n of tree) {
+    const q = L.pos.get(n.id); if (!q) continue;
+    const k = kindOf(n), x = X(q.x), y = Y(q.y);
+    const lines = wrapWords(n.corto || n.titulo);
+    const lab = () => lines.map((t, i) => `<tspan x="${x}" dy="${i ? 13 : 0}">${esc(t)}</tspan>`).join("");
+    nodes += `<g class="tn ${KIND[k].cls}${L.main.has(n.id) ? " main" : ""}${on(k) ? "" : " dim"}" data-id="${esc(n.id)}" tabindex="0" role="button" aria-label="${esc(n.titulo + ": " + KIND[k].label)}">
+      <circle class="hit" cx="${x}" cy="${y}" r="${R + 12}"/><circle class="dot" cx="${x}" cy="${y}" r="${R}"/>
+      <text class="sym" x="${x}" y="${y + 4.5}">${KIND[k].sym}</text>
+      ${n.salto ? `<text class="warn" x="${x + R + 1}" y="${y - R + 3}">⚠</text>` : ""}
+      <text class="lab halo" y="${y + R + 15}">${lab()}</text>
+      <text class="lab" y="${y + R + 15}">${lab()}</text></g>`;
+  }
+  const axis = `<g class="axis"><line x1="34" x2="34" y1="${PADY}" y2="${H - PADY}" marker-end="url(#arr)"/>
+    <text x="42" y="${PADY + 4}">más sencillo</text><text x="42" y="${H - PADY - 4}">más complejo</text></g>`;
+  const svg = $("treesvg");
+  if (scale == null) scale = Math.max(Math.min(1, ($("treewrap").clientWidth - 4) / W), 0.7);
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W * scale); svg.setAttribute("height", H * scale);
+  svg.dataset.w = W; svg.dataset.h = H;
+  svg.innerHTML = `<defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>${axis}${edges}${nodes}`;
+  // contadores
+  const counts = {};
+  tree.filter((n) => n.padre).forEach((n) => { const k = kindOf(n); counts[k] = (counts[k] || 0) + 1; });
+  const order = [["todo", "Todo", null, null], ["bien", "Salió bien", ["positivo", "indicio"], "positivo"],
+    ["mal", "No salió", ["negativo", "descartado"], "negativo"], ["abierto", "Abierto o en marcha", ["en curso", "pendiente", "decision", "no concluyente", "parado"], "pendiente"],
+    ["aparcado", "Aparcado", ["aparcado"], "aparcado"]];
+  $("counts").innerHTML = order.map(([id, label, ks, ic]) => {
+    const c = ks ? ks.reduce((a, k) => a + (counts[k] || 0), 0) : tree.length - 1;
+    return `<button class="chip" data-f="${id}" aria-pressed="${filter === id}">${ic ? icon(ic) : ""}${label} <b>${c}</b></button>`;
+  }).join("");
+  if (!centered) {
+    const root = tree.find((n) => !n.padre);
+    if (root && L.pos.has(root.id)) { $("treewrap").scrollLeft = X(L.pos.get(root.id).x) * scale - $("treewrap").clientWidth / 2; centered = true; }
+  }
+}
+function zoom(f) {
+  const svg = $("treesvg"), w = +svg.dataset.w, h = +svg.dataset.h, el = $("treewrap");
+  if (!w) return;
+  const cx = (el.scrollLeft + el.clientWidth / 2) / scale, cy = (el.scrollTop + el.clientHeight / 2) / scale;
+  scale = f === "fit" ? Math.min(1, (el.clientWidth - 4) / w) : Math.max(0.3, Math.min(2, scale * f));
+  svg.setAttribute("width", w * scale); svg.setAttribute("height", h * scale);
+  el.scrollLeft = cx * scale - el.clientWidth / 2; el.scrollTop = cy * scale - el.clientHeight / 2;
+}
+document.querySelectorAll("[data-zoom]").forEach((b) => b.addEventListener("click", () => zoom(b.dataset.zoom === "fit" ? "fit" : +b.dataset.zoom)));
+(() => {  // arrastrar el fondo para moverse por el árbol
+  const el = $("treewrap"); let drag = null;
+  el.addEventListener("pointerdown", (ev) => {
+    if (ev.pointerType !== "mouse" || ev.target.closest("g.tn")) return;
+    drag = {x: ev.clientX, y: ev.clientY, l: el.scrollLeft, t: el.scrollTop}; el.classList.add("grab");
+  });
+  addEventListener("pointermove", (ev) => { if (drag) { el.scrollLeft = drag.l - (ev.clientX - drag.x); el.scrollTop = drag.t - (ev.clientY - drag.y); } });
+  addEventListener("pointerup", () => { drag = null; el.classList.remove("grab"); });
+})();
+const svgEl = $("treesvg");
+svgEl.addEventListener("mouseover", (ev) => { const g = ev.target.closest("g.tn"); if (g) showTip(ev, tipHtml(treeNodes.get(g.dataset.id))); });
+svgEl.addEventListener("mousemove", (ev) => { if (ev.target.closest("g.tn")) moveTip(ev); });
+svgEl.addEventListener("mouseout", (ev) => { if (ev.target.closest("g.tn")) hideTip(); });
+svgEl.addEventListener("click", (ev) => { const g = ev.target.closest("g.tn"); if (g) showTip(ev, tipHtml(treeNodes.get(g.dataset.id))); else hideTip(); });
+svgEl.addEventListener("focusin", (ev) => {
+  const g = ev.target.closest("g.tn"); if (!g) return;
+  const r = g.getBoundingClientRect(); showTip({clientX: r.right, clientY: r.bottom}, tipHtml(treeNodes.get(g.dataset.id)));
+});
+svgEl.addEventListener("focusout", hideTip);
+$("legend").innerHTML = ["positivo", "indicio", "negativo", "descartado", "no concluyente", "aparcado", "en curso", "decision", "pendiente"]
+  .map((k) => `<span>${icon(k)}${KIND[k].label}</span>`).join("")
+  + `<span><svg width="26" height="10" aria-hidden="true"><line x1="2" x2="24" y1="5" y2="5" stroke="var(--trunk)" stroke-width="7" stroke-linecap="round"/></svg>Tronco: camino principal</span>`
+  + `<span><svg width="26" height="10" aria-hidden="true"><line x1="2" x2="24" y1="5" y2="5" stroke="var(--branch)" stroke-width="3" stroke-dasharray="1 6" stroke-linecap="round"/></svg>Rama sin explorar</span>`
+  + `<span>⚠ Añadió varias cosas a la vez</span>`;
+$("counts").addEventListener("click", (ev) => {
+  const b = ev.target.closest(".chip"); if (!b) return;
+  filter = b.dataset.f; if (last) renderTree(last.tree, last.main_path);
+});
+
+// --- ahora mismo ---
+function spark(series) {
+  const pts = series.filter((r) => r.population != null);
+  if (pts.length < 2) return "";
+  const W = 300, H = 64, P = 4;
+  const xs = pts.map((r) => r.epoch), x0 = Math.min(...xs), x1 = Math.max(...xs), y1 = Math.max(...pts.map((r) => r.population)) * 1.05;
+  const X = (v) => P + (v - x0) / Math.max(x1 - x0, 1) * (W - 2 * P), Y = (v) => H - P - v / y1 * (H - 2 * P);
+  const d = pts.map((r, i) => `${i ? "L" : "M"}${X(r.epoch).toFixed(1)},${Y(r.population).toFixed(1)}`).join("");
+  const data = esc(JSON.stringify(pts.map((r) => [r.epoch, r.population, r.toxic])));
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" data-pts="${data}" data-x0="${x0}" data-x1="${x1}">
+    <line x1="${P}" x2="${W - P}" y1="${H - P}" y2="${H - P}" stroke="var(--line)" stroke-width="1"/>
+    <path d="${d}" fill="none" stroke="var(--blue)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+    <line class="cross" x1="0" x2="0" y1="0" y2="${H}" stroke="var(--text-2)" stroke-width="1" vector-effect="non-scaling-stroke" visibility="hidden"/></svg>`;
+}
+function bindSparks() {
+  document.querySelectorAll("svg.spark").forEach((svg) => {
+    const pts = JSON.parse(svg.dataset.pts), x0 = +svg.dataset.x0, x1 = +svg.dataset.x1, cross = svg.querySelector(".cross");
+    svg.addEventListener("mousemove", (ev) => {
+      const r = svg.getBoundingClientRect(), ep = x0 + (ev.clientX - r.left) / r.width * (x1 - x0);
+      let best = pts[0];
+      for (const p of pts) if (Math.abs(p[0] - ep) < Math.abs(best[0] - ep)) best = p;
+      const vx = 4 + (best[0] - x0) / Math.max(x1 - x0, 1) * 292;
+      cross.setAttribute("x1", vx); cross.setAttribute("x2", vx); cross.setAttribute("visibility", "visible");
+      showTip(ev, `Época ${best[0]}<br>Población <b>${best[1].toLocaleString("es-ES")}</b>${best[2] != null ? `<br>Fracción tóxica ${fmt(best[2], 2)}` : ""}`);
+    });
+    svg.addEventListener("mouseleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+  });
+}
+function renderNow(tree) {
+  const live = tree.filter((n) => n.progress && (n.estado === "en curso" || n.estado === "parado"));
+  const next = tree.filter((n) => n.progress && n.estado === "pendiente");
+  let html = live.map((n) => {
+    const p = n.progress, pct = p.total ? p.done / p.total * 100 : 0, run = p.running;
+    let cur = "";
+    if (run) {
+      const ep = run.epochs ? run.epoch / run.epochs * 100 : 0;
+      cur = `<div class="row" style="margin-top:10px"><span>Ahora: <b>${esc(run.condition)}</b> · semilla ${run.seed}</span><span class="num">época ${run.epoch} / ${run.epochs}</span></div>
+        <div class="bar"><i style="width:${ep.toFixed(1)}%"></i></div>${spark(run.series || [])}
+        <div class="row"><span>Población por época del mundo en marcha</span></div>`;
+    }
+    const extra = p.extinct ? ` · ${p.extinct} extinto${p.extinct > 1 ? "s" : ""}` : "";
+    return `<div class="card"><div class="now-title">${icon(n.estado)}<span>${esc(n.titulo)}</span><span class="tag">${esc(n.recurso || "")}</span></div>
+      <div class="row" style="margin-top:8px"><span class="num"><b>${p.done}</b> de ${p.total}${n.cola ? " mundos" : " sondas"}${extra}</span><span class="num">${pct.toFixed(0)} %</span></div>
+      <div class="bar"><i style="width:${pct.toFixed(1)}%"></i></div>
+      <div class="row"><span>Termina en</span><span class="num">${eta(p.eta_hours)}</span></div>${cur}</div>`;
+  }).join("");
+  if (next.length) html += `<div class="card"><div class="now-title">${icon("pendiente")}<span>En cola</span></div>
+    <ul class="plain" style="margin-top:8px">${next.map((n) => `<li>${esc(n.titulo)} <span class="tag">${esc(n.recurso || "")}</span> <span class="num">${n.progress.total}</span></li>`).join("")}</ul></div>`;
+  $("now").innerHTML = html || `<div class="empty">Nada en marcha ahora mismo.</div>`;
+  bindSparks();
+}
+
+// --- hipótesis, condiciones, bitácora ---
+function renderHyps(hs) {
+  $("hyps").innerHTML = hs.map((h) => {
+    const k = h.resultado && KIND[h.resultado] ? h.resultado : "pendiente";
+    return `<div class="card hyp">${icon(k)}<div><div><span class="id">${esc(h.id)}</span> · ${esc(h.texto)}</div>
+      <div class="d"><b>${esc(KIND[k].label)}.</b> ${esc(h.detalle || "")}</div></div></div>`;
+  }).join("");
+}
+function vaBar(v, seeds, lim) {
+  if (v == null) return "—";
+  const W = 120, H = 14, mid = W / 2, s = (x) => Math.max(-1, Math.min(1, x / lim)) * (mid - 2), w = s(v);
+  const rect = `<rect x="${(w >= 0 ? mid : mid + w).toFixed(1)}" y="3" width="${Math.abs(w).toFixed(1)}" height="8" rx="2" fill="${v >= 0 ? "var(--pos)" : "var(--neg)"}"/>`;
+  const dots = (seeds || []).filter((x) => x != null).map((x) => `<circle cx="${(mid + s(x)).toFixed(1)}" cy="7" r="2" fill="var(--text-2)" opacity=".6"/>`).join("");
+  return `<span class="va"><svg viewBox="0 0 ${W} ${H}" data-tip="${esc((seeds || []).map((x) => signed(x)).join(" · "))}">
+    <line x1="${mid}" x2="${mid}" y1="0" y2="${H}" stroke="var(--muted)" stroke-width="1"/>${rect}${dots}</svg><span class="num">${signed(v)}</span></span>`;
+}
+function renderConds(cs) {
+  if (!cs.length) { $("conds").innerHTML = `<tr><td class="empty">Sin datos</td></tr>`; return; }
+  const lim = Math.max(1, ...cs.map((c) => Math.abs(c.va_median || 0)));
+  let html = `<tr><th>Condición</th><th>Terminados</th><th>Sobreviven</th><th>VA_log</th><th>Fracción tóxica</th><th>Población</th></tr>`, block = null;
+  for (const c of cs) {
+    if (c.block !== block) { block = c.block; html += `<tr class="block"><td colspan="6">${esc(block)}</td></tr>`; }
+    html += `<tr><td>${esc(c.condition)}</td><td class="n">${c.finished}/${c.seeds}</td><td class="n">${c.survived}/${c.seeds}</td>
+      <td>${vaBar(c.va_median, c.va_seeds, lim)}</td><td class="n">${fmt(c.toxic_median, 2)}</td>
+      <td class="n">${c.population_median == null ? "—" : Math.round(c.population_median).toLocaleString("es-ES")}</td></tr>`;
+  }
+  $("conds").innerHTML = html;
+  $("conds").querySelectorAll("svg[data-tip]").forEach((svg) => {
+    svg.addEventListener("mousemove", (ev) => showTip(ev, `VA_log por mundo:<br>${svg.dataset.tip || "—"}`));
+    svg.addEventListener("mouseleave", hideTip);
+  });
+}
+
+// --- bucle: relee cada minuto ---
+let last = null, lastAt = 0;
+async function load() {
+  try {
+    const r = await fetch("/api/estado", {cache: "no-store"});
+    last = await r.json(); lastAt = Date.now(); $("err").textContent = "";
+    $("updated").textContent = last.updated || "—";
+    const g = last.gpu;
+    $("gpu").innerHTML = g ? `<span>${esc(g.name)}</span><span>uso <b>${fmt(g.util, 0)} %</b></span>
+      <span>memoria <b>${fmt(g.mem_used / 1024, 1)}</b> / ${fmt(g.mem_total / 1024, 0)} GB</span><span><b>${fmt(g.temp, 0)}</b> °C</span>` : `<span class="empty">GPU: sin datos</span>`;
+    renderTree(last.tree, last.main_path); renderNow(last.tree); renderHyps(last.hypotheses || []); renderConds(last.conditions || []);
+    $("log").innerHTML = (last.bitacora || []).map((b) => `<li><span class="num">${esc(b.day)}</span> · ${esc(b.title)}</li>`).join("");
+    $("debts").innerHTML = (last.debts || []).map((d) => `<li>${esc(d)}</li>`).join("");
+  } catch (e) { $("err").textContent = "· sin conexión con el panel"; }
+}
+setInterval(() => { if (lastAt) $("ago").textContent = `hace ${Math.round((Date.now() - lastAt) / 1000)} s`; }, 1000);
+load(); setInterval(load, 60000);
+</script>
+</body>
+</html>

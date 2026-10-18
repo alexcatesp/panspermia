@@ -39,6 +39,7 @@ python -m panspermia.viewer runs/s0                             # visor: http://
 python scripts/bench.py                                         # pasos-agente/s
 python scripts/phase1_acceptance.py run --out runs/phase1       # 5 semillas × 500 épocas
 python scripts/compare_runs.py runs/phase1 runs/phase1b --to 100 # compara dos lotes
+PYTHONPATH=src python -m panspermia.panel runs/fase1d          # panel en vivo: árbol de posibilidades y avance (127.0.0.1:8766)
 python scripts/capability_controls.py                           # controles triviales de la batería
 duckdb -c "SELECT epoch, population, births, hidden_mean FROM read_parquet('runs/s0/stats/*.parquet', union_by_name=true) ORDER BY epoch"
 ```

@@ -1,0 +1,555 @@
+{
+ "actualizado": "2026-10-18 16:25",
+ "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
+ "arbol": [
+  {
+   "id": "raiz",
+   "padre": null,
+   "titulo": "Panspermia: vida artificial que aprende sin nota externa",
+   "estado": "en curso",
+   "principal": true,
+   "corto": "Panspermia"
+  },
+  {
+   "id": "f0",
+   "padre": "raiz",
+   "titulo": "Fase 0 · Motor determinista",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "texto": "Mundo 2D reproducible bit a bit; ~6 s por época con 4.096 bichos.",
+   "ref": "ADR-005, ADR-006",
+   "anade": "mundo 2D determinista y cuerpos simples",
+   "principal": true,
+   "corto": "Motor"
+  },
+  {
+   "id": "uv",
+   "padre": "f0",
+   "titulo": "Instalar con uv pip",
+   "estado": "hecho",
+   "resultado": "descartado",
+   "texto": "Rechaza al azar ruedas NVIDIA válidas. Se usa pip.",
+   "ref": "ADR-005",
+   "anade": "otra herramienta de instalación",
+   "corto": "uv pip",
+   "principal": false
+  },
+  {
+   "id": "vmap",
+   "padre": "f0",
+   "titulo": "Varios mundos a la vez en la GPU",
+   "estado": "hecho",
+   "resultado": "aparcado",
+   "texto": "No coincide bit a bit y no cabe en memoria. Reabrir con más VRAM o mundos más pequeños.",
+   "ref": "rama multi-mundo",
+   "anade": "varios mundos por GPU",
+   "corto": "Varios mundos/GPU",
+   "principal": false
+  },
+  {
+   "id": "f1",
+   "padre": "f0",
+   "titulo": "Fase 1 · Ecología y medidas",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "texto": "Ecología estable y sin extinciones en 5 de 5 mundos.",
+   "ref": "ADR-010",
+   "anade": "ecología: comida, reproducción, depredación",
+   "principal": true,
+   "salto": true,
+   "corto": "Ecología"
+  },
+  {
+   "id": "f1-aprender",
+   "padre": "f1",
+   "titulo": "¿Compensa aprender en un mundo sencillo?",
+   "estado": "hecho",
+   "resultado": "negativo",
+   "texto": "No: valor del aprendizaje negativo en 5 de 5; los cerebros encogen.",
+   "ref": "ADR-010",
+   "anade": "medir el valor de aprender",
+   "principal": true,
+   "corto": "¿Compensa aprender?"
+  },
+  {
+   "id": "va-cohorte",
+   "padre": "f1",
+   "titulo": "Medir el aprendizaje por supervivencia de la cohorte",
+   "estado": "hecho",
+   "resultado": "descartado",
+   "texto": "Comparaba casi ceros. Sustituida por la sonda emparejada (gemelo congelado).",
+   "ref": "ADR-010",
+   "anade": "otra forma de medir",
+   "corto": "Medir por cohorte",
+   "principal": false
+  },
+  {
+   "id": "anillo",
+   "padre": "f1",
+   "titulo": "Batería v1: prueba del anillo",
+   "estado": "hecho",
+   "resultado": "descartado",
+   "texto": "Falso positivo: avanzar recto sin cerebro saca 1,0.",
+   "ref": "ADR-010",
+   "anade": "batería de capacidad",
+   "corto": "Prueba del anillo",
+   "principal": false
+  },
+  {
+   "id": "bateria2",
+   "padre": "anillo",
+   "titulo": "Batería v2 (referencia trivial, mancha a 90 u)",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "texto": "Las 5 islas completan 500 épocas sin pausas falsas.",
+   "ref": "ADR-011",
+   "anade": "referencia trivial",
+   "corto": "Batería v2",
+   "principal": false
+  },
+  {
+   "id": "mancha150",
+   "padre": "anillo",
+   "titulo": "Mancha lejana a 150 u y 500 pasos",
+   "estado": "hecho",
+   "resultado": "descartado",
+   "texto": "Ni un buscador programado pasaba de 0,25: la alarma no sonaría nunca.",
+   "ref": "ADR-011",
+   "anade": "prueba más difícil",
+   "corto": "Mancha a 150 u",
+   "principal": false
+  },
+  {
+   "id": "f1b",
+   "padre": "f1-aprender",
+   "titulo": "Fase 1b · Química y algas venenosas",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "texto": "Con veneno, aprender empieza a compensar y los cerebros crecen (8 → 21 neuronas). Sobreviven 2 de 5.",
+   "ref": "ADR-008",
+   "anade": "química + 2 tipos de alga, uno venenoso",
+   "principal": true,
+   "salto": true,
+   "corto": "Veneno y química"
+  },
+  {
+   "id": "sin-rampa",
+   "padre": "f1b",
+   "titulo": "Veneno pleno desde el principio (sin rampa)",
+   "estado": "hecho",
+   "resultado": "aparcado",
+   "texto": "505 de 512 muertos en la primera época. Reabrir con migrantes que ya distingan algas.",
+   "ref": "ADR-008",
+   "anade": "veneno pleno desde el inicio",
+   "corto": "Sin rampa",
+   "principal": false
+  },
+  {
+   "id": "cambio-global",
+   "padre": "f1b",
+   "titulo": "Cambio global y simultáneo del alga tóxica",
+   "estado": "hecho",
+   "resultado": "aparcado",
+   "texto": "Colapsos sincronizados y extinciones. Reabrir cuando ya aprendan en vida.",
+   "ref": "ADR-008",
+   "anade": "cambio global del alga mala",
+   "corto": "Cambio global",
+   "principal": false
+  },
+  {
+   "id": "veneno1",
+   "padre": "f1b",
+   "titulo": "Veneno a 1 (pleno)",
+   "estado": "hecho",
+   "resultado": "aparcado",
+   "texto": "Extinción con franjas móviles. Queda como condición de la 1d.",
+   "ref": "ADR-008",
+   "anade": "veneno más fuerte",
+   "corto": "Veneno pleno",
+   "principal": false
+  },
+  {
+   "id": "recursos2",
+   "padre": "f1b",
+   "titulo": "Más comida (RESOURCE_R = 2)",
+   "estado": "hecho",
+   "resultado": "aparcado",
+   "texto": "Tocan el tope de población, agotan las algas y colapsan.",
+   "ref": "ADR-008",
+   "anade": "más comida",
+   "corto": "Más comida",
+   "principal": false
+  },
+  {
+   "id": "f1d",
+   "padre": "f1b",
+   "titulo": "Fase 1d · ¿Cuándo compensa aprender?",
+   "estado": "en curso",
+   "texto": "Barridos de un factor cada vez con protocolo prerregistrado (diseño v0.9).",
+   "ref": "ADR-012",
+   "anade": "un factor cada vez (ritmo del cambio)",
+   "principal": true,
+   "corto": "Fase 1d"
+  },
+  {
+   "id": "E0",
+   "padre": "f1d",
+   "titulo": "E0 · Viabilidad y tamaño del mundo",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "cola": "e0.json",
+   "texto": "4.096 bichos; vida típica ≈ 130 pasos.",
+   "ref": "bitácora 16-10, 16:37",
+   "anade": "tamaño del mundo y escalas de tiempo",
+   "principal": true,
+   "corto": "E0 · tamaño"
+  },
+  {
+   "id": "veneno05",
+   "padre": "E0",
+   "titulo": "Veneno a 0,5 con cambio aleatorio",
+   "estado": "hecho",
+   "resultado": "negativo",
+   "texto": "Se extinguen 3 de 5 mundos al acabar la rampa.",
+   "anade": "cambio aleatorio del veneno",
+   "principal": true,
+   "corto": "Veneno 0,5"
+  },
+  {
+   "id": "E0b",
+   "padre": "veneno05",
+   "titulo": "E0b · Veneno a 0,3",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "cola": "e0b.json",
+   "texto": "8 de 9 mundos viables.",
+   "ref": "bitácora 16-10, 20:45",
+   "anade": "veneno más suave (0,3)",
+   "principal": true,
+   "corto": "E0b · veneno 0,3"
+  },
+  {
+   "id": "E1",
+   "padre": "E0b",
+   "titulo": "E1 · Ritmo y previsibilidad del cambio (50 mundos)",
+   "estado": "hecho",
+   "cola": "e1.json",
+   "texto": "Sobreviven 49 de 50.",
+   "ref": "bitácora 18-10, 06:00",
+   "anade": "ritmo y previsibilidad del cambio",
+   "principal": true,
+   "corto": "E1 · ritmo del cambio"
+  },
+  {
+   "id": "e1-compensa",
+   "padre": "E1",
+   "titulo": "¿Compensa aprender cuando hay veneno?",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "texto": "Sí, en 40 de 44 mundos con veneno.",
+   "corto": "Aprender compensa",
+   "principal": false
+  },
+  {
+   "id": "e1-campana",
+   "padre": "E1",
+   "titulo": "H1 · ¿Más a ritmo intermedio (campana)?",
+   "estado": "hecho",
+   "resultado": "negativo",
+   "texto": "Sin campana; el «pico en T140» era casualidad entre semillas.",
+   "corto": "Campana (H1)",
+   "principal": false
+  },
+  {
+   "id": "e1-h2",
+   "padre": "E1",
+   "titulo": "H2 · ¿Los ciclos regulares favorecen el reloj?",
+   "estado": "hecho",
+   "resultado": "no concluyente",
+   "texto": "Con 5 semillas la prueba no podía dar positivo, y las medidas del reloj estaban contaminadas.",
+   "corto": "Reloj (H2)",
+   "principal": false
+  },
+  {
+   "id": "e1-recup",
+   "padre": "E1",
+   "titulo": "¿Captan el cambio del veneno?",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "texto": "Corrigen en 128–256 pasos tras un cambio (o se agota el alga mala: E9 lo separará).",
+   "corto": "Captan el cambio",
+   "principal": false
+  },
+  {
+   "id": "e1-a2a",
+   "padre": "E1",
+   "titulo": "¿Aprenden a aprender?",
+   "estado": "hecho",
+   "resultado": "negativo",
+   "texto": "No corrigen más deprisa al final de la evolución que al principio.",
+   "corto": "Aprender a aprender",
+   "principal": false
+  },
+  {
+   "id": "recompensa",
+   "padre": "E1",
+   "titulo": "¿Han inventado una señal de premio/castigo?",
+   "estado": "hecho",
+   "resultado": "negativo",
+   "texto": "No según el criterio (T35–T560); solo un esbozo débil en T140/T560.",
+   "ref": "bitácora 17-10, 11:00",
+   "anade": "mirar dentro del cerebro",
+   "principal": true,
+   "corto": "Señal de premio"
+  },
+  {
+   "id": "recompensa2",
+   "padre": "recompensa",
+   "titulo": "Sonda de recompensa en el resto de E1",
+   "estado": "auto",
+   "recurso": "CPU",
+   "jsonl": "reward_probe.jsonl",
+   "total": 88,
+   "texto": "T2240, periódicos y fijo.",
+   "corto": "Sonda (resto)",
+   "principal": false
+  },
+  {
+   "id": "E9",
+   "padre": "recompensa",
+   "titulo": "E9 · Darles un sentido de malestar (tipo náusea)",
+   "estado": "auto",
+   "recurso": "GPU",
+   "cola": "e9.json",
+   "texto": "Con y sin, en T140 y T560. ¿Aprenden más y más rápido?",
+   "anade": "un sentido nuevo: malestar",
+   "principal": true,
+   "corto": "E9 · malestar"
+  },
+  {
+   "id": "larga-sin",
+   "padre": "larga",
+   "titulo": "Mundo largo sin malestar: ¿lo inventa la evolución?",
+   "estado": "decision",
+   "texto": "Dentro de la ejecución larga.",
+   "anade": "mucho más tiempo, sin el sentido nuevo",
+   "corto": "Largo sin malestar",
+   "principal": false
+  },
+  {
+   "id": "fallos",
+   "padre": "E1",
+   "titulo": "Cuatro fallos de diseño destapados",
+   "estado": "hecho",
+   "resultado": "descartado",
+   "texto": "El fijo no era quieto; la medida tocaba techo sin veneno; faltaban semillas; reloj y anticipación mal medidos.",
+   "anade": "revisión del propio diseño",
+   "corto": "Fallos de diseño",
+   "principal": false
+  },
+  {
+   "id": "E1b",
+   "padre": "fallos",
+   "titulo": "E1b · Corrección: control uniforme y 5 semillas más",
+   "estado": "auto",
+   "recurso": "GPU",
+   "cola": "e1b.json",
+   "texto": "Revisa H1 y H2 con un mundo de verdad quieto y 10 semillas en T140/T560.",
+   "anade": "mundo quieto de verdad + más semillas",
+   "corto": "E1b · corrección",
+   "principal": false
+  },
+  {
+   "id": "reloj",
+   "padre": "fallos",
+   "titulo": "Sonda del reloj desincronizado",
+   "estado": "auto",
+   "recurso": "CPU",
+   "jsonl": "clock_probe.jsonl",
+   "total": 39,
+   "texto": "Si comen peor con el reloj cambiado, es que lo usaban.",
+   "anade": "tapar el reloj",
+   "corto": "Sonda del reloj",
+   "principal": false
+  },
+  {
+   "id": "E2",
+   "padre": "E1",
+   "titulo": "E2 · Gemelo sin plasticidad (control causal)",
+   "estado": "auto",
+   "recurso": "GPU",
+   "cola": "e2.json",
+   "texto": "Las 10 condiciones de E1 sin aprendizaje en toda la evolución.",
+   "anade": "quitar el aprendizaje (control)",
+   "corto": "E2 · sin aprender",
+   "principal": false
+  },
+  {
+   "id": "E8",
+   "padre": "f1d",
+   "titulo": "E8 · ¿Y si el veneno avisa (olor)?",
+   "estado": "pendiente",
+   "texto": "Fiabilidad del aviso de 0 a 100 %. Falta programar el sentido nuevo.",
+   "anade": "un sentido nuevo: olor de aviso",
+   "corto": "E8 · olor de aviso",
+   "principal": false
+  },
+  {
+   "id": "E3",
+   "padre": "f1d",
+   "titulo": "E3 · Día y noche",
+   "estado": "pendiente",
+   "anade": "ciclo de día y noche",
+   "corto": "E3 · día y noche",
+   "principal": false
+  },
+  {
+   "id": "E4",
+   "padre": "f1d",
+   "titulo": "E4 · Estaciones",
+   "estado": "pendiente",
+   "anade": "estaciones",
+   "corto": "E4 · estaciones",
+   "principal": false
+  },
+  {
+   "id": "E5",
+   "padre": "f1d",
+   "titulo": "E5 · Duración de la vida (H4)",
+   "estado": "pendiente",
+   "anade": "vidas más largas o más cortas",
+   "corto": "E5 · vida",
+   "principal": false
+  },
+  {
+   "id": "E6",
+   "padre": "f1d",
+   "titulo": "E6 · Coste de las neuronas (H5)",
+   "estado": "pendiente",
+   "anade": "neuronas más caras o más baratas",
+   "corto": "E6 · coste neuronal",
+   "principal": false
+  },
+  {
+   "id": "E7",
+   "padre": "f1d",
+   "titulo": "E7 · Historia evolutiva y rampas (H5, H6)",
+   "estado": "pendiente",
+   "anade": "venir de otro mundo",
+   "corto": "E7 · historia",
+   "principal": false
+  },
+  {
+   "id": "larga",
+   "padre": "E9",
+   "titulo": "Ejecución larga (semanas) con la mejor receta",
+   "estado": "decision",
+   "texto": "Se propondrá al cerrar la 1d.",
+   "anade": "mucho más tiempo",
+   "principal": true,
+   "corto": "Ejecución larga"
+  },
+  {
+   "id": "fuga",
+   "padre": "larga",
+   "titulo": "Granja «fuga»: localizar el origen de una fuga",
+   "estado": "pendiente",
+   "ref": "ADR-009",
+   "anade": "un problema real (nicho diseñado)",
+   "principal": true,
+   "corto": "Granja «fuga»"
+  },
+  {
+   "id": "red",
+   "padre": "fuga",
+   "titulo": "Red de mundos conectados (4a)",
+   "estado": "pendiente",
+   "ref": "ADR-012",
+   "anade": "muchos mundos conectados",
+   "principal": true,
+   "corto": "Red de mundos"
+  },
+  {
+   "id": "robot",
+   "padre": "fuga",
+   "titulo": "Robot físico",
+   "estado": "pendiente",
+   "texto": "Exige su propio ADR (salvaguarda 2).",
+   "anade": "un cuerpo físico",
+   "principal": true,
+   "corto": "Robot físico"
+  },
+  {
+   "id": "lenguaje",
+   "padre": "raiz",
+   "titulo": "Horizonte: lenguaje propio → otros idiomas → significado",
+   "estado": "pendiente",
+   "texto": "Solo hablado. Primero tiene que surgir comunicación con estructura.",
+   "anade": "comunicación y lenguaje",
+   "corto": "Lenguaje",
+   "principal": false
+  }
+ ],
+ "hipotesis": [
+  {
+   "id": "H1",
+   "texto": "Aprender compensa más con cambio impredecible de ritmo intermedio (campana)",
+   "resultado": "negativo",
+   "detalle": "E1: sin campana (c = +0,02, IC95 [−0,09, +0,15]). E1b la revisa con un control uniforme."
+  },
+  {
+   "id": "H2",
+   "texto": "El cambio predecible favorece el reloj y la anticipación, no el aprendizaje",
+   "resultado": "no concluyente",
+   "detalle": "E1: con 5 semillas no podía salir. E1b: 10 semillas y sonda del reloj."
+  },
+  {
+   "id": "H3",
+   "texto": "El cambio lento lo resuelve la evolución (instinto)",
+   "resultado": null,
+   "detalle": "Necesita E2."
+  },
+  {
+   "id": "H4",
+   "texto": "Con vidas cortas no da tiempo a aprender",
+   "resultado": null,
+   "detalle": "E5."
+  },
+  {
+   "id": "H5",
+   "texto": "El cerebro sigue al valor del aprendizaje si el coste lo permite; la historia importa",
+   "resultado": null,
+   "detalle": "E6 y E7."
+  },
+  {
+   "id": "H6",
+   "texto": "Los cambios bruscos de régimen causan colapsos; una rampa los reduce",
+   "resultado": "indicio",
+   "detalle": "Indicio: las extinciones llegan justo al acabar la rampa del veneno (E0, E0b, E1). Prueba formal en E7."
+  }
+ ],
+ "deudas": [
+  "La métrica de comunicación no incluye la feromona.",
+  "El visor no muestra el alga tóxica.",
+  "Referencias marcadas con † sin verificar.",
+  "Copia de seguridad de runs/."
+ ],
+ "camino_principal": [
+  "raiz",
+  "f0",
+  "f1",
+  "f1-aprender",
+  "f1b",
+  "f1d",
+  "E0",
+  "veneno05",
+  "E0b",
+  "E1",
+  "recompensa",
+  "E9",
+  "larga",
+  "fuga",
+  "red",
+  "robot"
+ ]
+}
