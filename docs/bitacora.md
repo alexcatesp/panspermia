@@ -281,3 +281,28 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Qué:** sustrato 3.0.0. Nueva entrada de malestar: tanh(malestar/2,5) × `malaise_sense`. El malestar suma el veneno ingerido y decae ×0,95 por paso (vida media de 13,5 pasos). Se pone a 0 al nacer y al morir. Con `malaise_sense = 0` la entrada existe pero vale siempre 0, así que el control tiene el mismo cerebro. El gemelo congelado guarda ahora su propia curva de recuperación (`frozen_recov_*`), y `analyze_1d.py` la muestra.
 - **Pruebas:** 33 pasan y 1 se salta, en la CPU (2 h 06 min, porque la GPU está ocupada con E1). Incluyen dos tests nuevos: el malestar solo se ve cuando está activado, y se acumula y decae según la fórmula.
 - **Cola:** `experiments/fase1d/e9.json` (T140 y T560 aleatorio, con y sin malestar, 5 semillas, 300 épocas). Se lanza cuando termine E2.
+
+## 18-10-2026
+
+### 06:00–09:30 · E1 terminado: análisis prerregistrado de H1 y H2
+
+- **Qué:** E1 completo, 10 condiciones × 5 semillas × 300 épocas, código de la rama `fase1d` (`5858732`). Datos en `runs/fase1d/E1-*`, resumen en `runs/fase1d/e1_resumen.csv` (`scripts/analyze_1d.py`) y contraste con `scripts/e1_hypotheses.py` (rama `fase1d-e9`). Medida por semilla: media de VA_log en las épocas > 150, con 8 sondas por mundo.
+- **Supervivencia:** 49 de 50. Solo se extingue E1-aleatorio-T140 s4, en la época 52, justo al terminar la rampa del veneno.
+- **VA_log por semilla** (aleatorio): T35 {+1,02, −0,05, +0,12, +0,18, −0,14}; T140 {+0,81, +0,24, +0,28, +0,54}; T560 {+0,01, +0,08, +0,01, +0,49, +0,86}; T2240 {+0,08, +2,37, +0,02, +0,04, +0,74}; fijo {+0,11, +0,35, +0,06, +0,82, +0,51}. La dispersión entre semillas es enorme comparada con las diferencias entre condiciones.
+- **H1 (campana): no se sostiene.** El ajuste cuadrático sobre log T da c = +0,020, IC95 [−0,094, +0,150] (*bootstrap* por semillas, 10.000 réplicas). El "máximo en T140" que se vio en las medianas provisionales era ruido entre semillas. Además, el control fijo da VA_log = +0,35, cuando H1 predice ≈ 0.
+- **Por qué el fijo no es un mundo quieto:** en el modo fijo los parches no cambian con el tiempo, pero sí con el lugar. En cada parche de 128 u es tóxica un alga distinta, y el agente no ve en qué parche está. Un bicho que se mueve se encuentra la regla cambiada al cruzar de parche, y las manchas de tipo A/B también derivan (`K_DRIFT`). Así que T = ∞ es estable en el tiempo pero variable en el espacio, y aprender sirve igual. El control de verdad sin cambio sería una regla uniforme en todo el mundo. **Fallo de diseño, declarado.**
+- **Sin veneno:** VA_log = 0 exacto. Los dos gemelos llenan el cupo (4.096) y la medida satura, así que este control no informa. Otro fallo, declarado: hace falta una medida sin techo, por ejemplo la ingesta (VA_log_intake = +0,006).
+- **H2 (periódico frente a aleatorio): no concluyente.** Con 5 semillas, la permutación de signos exacta tiene una p bilateral mínima de 0,0625 (0,125 con 4 pares), y Holm × 4 exige p < 0,0125: **la prueba prerregistrada no podía dar positivo con 5 semillas.** Fallo de diseño, declarado. Por periodo, la diferencia periódico − aleatorio es:
+  - VA: +0,08, −0,31, +0,01 y +0,19 (todas p ≥ 0,25);
+  - uso del reloj: −0,22, +0,47, +0,34 y +0,20 (p entre 0,06 y 0,31; Holm ≥ 0,25).
+  - Exploratorio, con los 4 periodos agrupados (19 pares): uso del reloj +0,30 (13 de 19, p = 0,044); VA +0,02 (p = 0,33).
+- **Dos problemas de medida:**
+  - *Uso del reloj* es la varianza de la tasa de comer explicada por la fase del reloj. En el periódico el propio mundo cambia con esa fase, así que sale alto aunque el agente no mire el reloj. Para saber si lo usan hay que anular la entrada del reloj en una sonda.
+  - *Anticipación* es la fracción tóxica en la ventana antes de la inversión menos la de después. Sale negativa en 18 de 20 mundos, pero eso es lo esperable sin anticipación: tras el cambio, el alga que comían pasa a ser tóxica. **Corrijo lo dicho el 18-10 a las 00:25** ("justo antes del cambio comen más veneno"): es al revés, comen más veneno después, como cualquier población que reacciona. Un anticipador perfecto daría ≈ 0, no un valor positivo, así que la medida no distingue bien.
+  - Comparando la curva de recuperación con la del aleatorio del mismo T (fracción tóxica en los primeros 8 pasos): periódico 0,54 / 0,70 / 0,81 frente a aleatorio 0,60 / 0,69 / 0,74 en T140 / T560 / T2240. No hay ventaja del periódico, así que **no se ve anticipación**.
+- **Recuperación:** con T ≥ 560 la fracción tóxica cae de ~0,7–0,8 justo tras el cambio a ~0,2 en 128–256 pasos, en los dos programas. Captan el cambio, o se agota el alga mala (E9 lo separará con el gemelo congelado). **"Aprender a aprender": no.** En los primeros 64 pasos, la fracción tóxica es la misma en las épocas 41–100 y en las últimas 100 en todas las condiciones (p. ej., T2240 aleatorio 0,63 → 0,62).
+- **Conclusión:**
+  - *Firme:* el aprendizaje en vida tiene un valor positivo en casi todos los mundos con veneno (VA_log > 0 en 40 de 44 semillas supervivientes con veneno, fijo incluido).
+  - *Descartado, con este diseño:* la campana de H1.
+  - *No concluyente:* H2, por falta de potencia y por las medidas.
+  - *Pendiente:* E2 (en curso) dirá si poder evolucionar la plasticidad cambia la supervivencia. La sonda de recompensa en las condiciones que faltan corre en la CPU.
