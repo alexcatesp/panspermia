@@ -52,6 +52,14 @@ class EnvParams:
     tox_mode: jax.Array    # i32
     tox_period: jax.Array  # f32
     clock_period: jax.Array  # f32: periodo del reloj interno de los agentes (pasos)
+    # Escalera de complejidad (ADR-014). Por defecto, el mundo de siempre. La comida se apaga con
+    # k_mean = 0 y se deja quieta con drift = 0; el veneno, con seasonal = 0.
+    metabolism: jax.Array  # f32: 1 = vivir y moverse cuestan energía; 0 = gratis (peldaño 0)
+    max_age: jax.Array     # i32: muerte segura a esta edad (pasos); NO_MAX_AGE = sin límite
+    repro_mode: jax.Array  # i32: C.REPRO_MODES
+    attack_on: jax.Array   # f32: 0 = nadie puede atacar (ni paga por intentarlo)
+    chem_on: jax.Array     # f32: 0 = no se emiten sustancias
+    signal_on: jax.Array   # f32: 0 = la señal no se emite (todos ven y oyen 0)
 
 
 def make_env(node_id: bytes) -> EnvParams:
@@ -81,6 +89,12 @@ def make_env(node_id: bytes) -> EnvParams:
         tox_mode=jnp.int32(0),
         tox_period=jnp.float32(1e9),
         clock_period=jnp.float32(C.CLOCK_PERIOD),
+        metabolism=jnp.float32(1.0),
+        max_age=jnp.int32(C.NO_MAX_AGE),
+        repro_mode=jnp.int32(C.REPRO_MODES["energia"]),
+        attack_on=jnp.float32(1.0),
+        chem_on=jnp.float32(1.0),
+        signal_on=jnp.float32(1.0),
     )
 
 
@@ -97,6 +111,18 @@ def with_overrides(env: EnvParams, **kw) -> EnvParams:
             raise ValueError(f"tox_mode inválido: {mode}")
     if "tox_period" in kw and not float(kw["tox_period"]) >= 2.0:
         raise ValueError("tox_period debe ser >= 2 pasos")
+    if "repro_mode" in kw:
+        mode = kw["repro_mode"]
+        kw["repro_mode"] = C.REPRO_MODES.get(mode, -1) if isinstance(mode, str) else int(mode)
+        if kw["repro_mode"] not in C.REPRO_MODES.values():
+            raise ValueError(f"repro_mode inválido: {mode}")
+    if "max_age" in kw and not 1 <= int(kw["max_age"]) <= C.NO_MAX_AGE:
+        raise ValueError("max_age debe estar en [1, NO_MAX_AGE]")
+    for k in ("metabolism", "attack_on", "chem_on", "signal_on"):
+        if k in kw and float(kw[k]) not in (0.0, 1.0):
+            raise ValueError(f"{k} debe ser 0 o 1")
+    if "k_mean" in kw and not float(kw["k_mean"]) >= 0.0:
+        raise ValueError("k_mean debe ser >= 0")
     conv = {k: jnp.asarray(v, getattr(env, k).dtype) for k, v in kw.items()}
     return env.replace(**conv)
 
@@ -385,10 +411,12 @@ def eat(resources: jax.Array, chem: jax.Array, pos: jax.Array, alive: jax.Array,
     return gain, algae, toxic_in, nutrient, resources, chem.at[0].set(nut_field)
 
 
-def emit(chem: jax.Array, pos: jax.Array, alive: jax.Array, actions: jax.Array):
-    """Emisión en la celda propia. Devuelve (coste energético, emitido [N, N_CHEM], química)."""
+def emit(chem: jax.Array, pos: jax.Array, alive: jax.Array, actions: jax.Array,
+         on: jax.Array | float = 1.0):
+    """Emisión en la celda propia. Devuelve (coste energético, emitido [N, N_CHEM], química).
+    Con `on` = 0 (escalera) nadie emite ni paga."""
     rate = jax.nn.relu(actions[:, 5:5 + C.N_CHEM]) * C.EMIT_RATE * C.DT
-    amount = jnp.where(alive[:, None], rate, 0.0)
+    amount = jnp.where(alive[:, None] & (on > 0), rate, 0.0)
     cell = _res_index(pos)
     added = jax.vmap(lambda a: jax.ops.segment_sum(a, cell, num_segments=RES * RES))(amount.T)
     cost = amount @ jnp.asarray(C.EMIT_COST, jnp.float32)
@@ -436,7 +464,7 @@ def attack(state, actions: jax.Array, cand: jax.Array, resources: jax.Array):
     """
     n = state.alive.shape[0]
     ph = state.pheno
-    attempt = state.alive & (actions[:, 3] > 0)
+    attempt = state.alive & (actions[:, 3] > 0) & (state.env.attack_on > 0)
     safe, valid, rel, _, r_j = _gather_neighbors(cand, state.pos, state.vel, ph.radius, state.alive)
     dist = jnp.sqrt(jnp.sum(rel * rel, axis=-1))
     surface = dist - ph.radius[:, None] - r_j
@@ -461,9 +489,10 @@ def attack(state, actions: jax.Array, cand: jax.Array, resources: jax.Array):
 
 def energy_update(state, thrust: jax.Array, intake: jax.Array, attack_delta: jax.Array,
                   attempt: jax.Array) -> jax.Array:
-    """E += ingesta ± ataque − (c0·senescencia + cb·n_neuronas + cs·masa + cm·|empuje|² + ca·ataque)·dt."""
+    """E += ingesta ± ataque − (c0·senescencia + cb·n_neuronas + cs·masa + cm·|empuje|² + ca·ataque)·dt.
+    Con env.metabolism = 0 (peldaño 0 de la escalera) vivir no cuesta nada."""
     ph = state.pheno
     senescence = 1.0 + C.SENESCENCE_RATE * jnp.maximum(0, state.age - C.SENESCENCE_START)
     cost = (state.env.c_basal * senescence + C.C_NEURON * ph.n_hidden + C.C_MASS * ph.mass
-            + C.C_MOVE * thrust ** 2 + C.C_ATTACK * ph.attack * attempt)
+            + C.C_MOVE * thrust ** 2 + C.C_ATTACK * ph.attack * attempt) * state.env.metabolism
     return jnp.where(state.alive, state.energy + intake + attack_delta - cost * C.DT, 0.0)

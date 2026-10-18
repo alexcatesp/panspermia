@@ -95,6 +95,7 @@ class StepStats:
     patch_flips: jax.Array    # parches que cambian en el paso
     recov_intake: jax.Array   # f32[len(RECOVERY_EDGES) + 1]: alga ingerida por tiempo desde el cambio
     recov_toxic: jax.Array    # f32[len(RECOVERY_EDGES) + 1]: alga tóxica ingerida, ídem
+    thrust: jax.Array         # Σ |empuje| de los vivos (escalera: ¿dejan de moverse?)
 
 
 def setup_determinism() -> None:
@@ -205,7 +206,8 @@ def _births(state: IslandState, key: jax.Array):
     n = state.alive.shape[0]
     b = min(C.MAX_BIRTHS_PER_STEP, n)
     k = jax.random.split(key, 4)
-    eligible = (state.alive & (state.energy >= state.pheno.repro_threshold)
+    by_age = state.env.repro_mode == C.REPRO_MODES["edad"]  # escalera, peldaños 0 y 1
+    eligible = (state.alive & (by_age | (state.energy >= state.pheno.repro_threshold))
                 & (state.age >= C.MIN_REPRO_AGE))
     scores = jnp.where(eligible, jax.random.uniform(k[0], (n,)), -1.0)
     top, parents = jax.lax.top_k(scores, b)                        # orden aleatorio determinista
@@ -217,7 +219,9 @@ def _births(state: IslandState, key: jax.Array):
         parent_g = jax.tree.map(lambda x: x[parents], state.genome)
         child_g = jax.vmap(G.mutate)(parent_g, jax.random.split(k[1], b))
         child_p = jax.vmap(develop)(child_g)
-        e_child = jnp.where(valid, state.pheno.offspring_frac[parents] * state.energy[parents], 0.0)
+        e_split = state.pheno.offspring_frac[parents] * state.energy[parents]
+        e_child = jnp.where(valid, jnp.where(by_age, jnp.float32(C.E_INIT), e_split), 0.0)
+        e_paid = jnp.where(by_age, 0.0, e_child)  # en modo «edad» el padre no paga
         p_idx = jnp.where(valid, parents, n)
         theta = jax.random.uniform(k[2], (b,), maxval=2 * math.pi)
         offset = 2 * state.pheno.radius[parents][:, None] * jnp.stack([jnp.cos(theta), jnp.sin(theta)], -1)
@@ -227,7 +231,7 @@ def _births(state: IslandState, key: jax.Array):
         first = state.behavior.first_repro_age
         first = first.at[p_idx].set(jnp.where(first[parents] < 0, state.age[parents], first[parents]),
                                     mode="drop")
-        state = state.replace(energy=state.energy.at[p_idx].add(-e_child, mode="drop"),
+        state = state.replace(energy=state.energy.at[p_idx].add(-e_paid, mode="drop"),
                               behavior=state.behavior.replace(first_repro_age=first))
         state = _place(state, jnp.where(valid, slots, n), child_g, child_p,
                        (state.pos[parents] + offset) % C.WORLD_L,
@@ -276,7 +280,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     toxicity = jnp.clip(state.step.astype(jnp.float32) / C.TOXIC_RAMP_STEPS, 0.0, 1.0)
     gain, intake, toxic_in, nutrient, resources, chem = world.eat(
         state.resources, state.chem, pos, alive0, actions, toxic, toxicity)
-    signal = jnp.where(alive0, actions[:, 4], 0.0)
+    signal = jnp.where(alive0 & (state.env.signal_on > 0), actions[:, 4], 0.0)
     rbin = _recovery_bin(pos, state.tox_since, state.step)
     nb = len(C.RECOVERY_EDGES) + 1
     recov_intake = jax.ops.segment_sum(intake, rbin, num_segments=nb)
@@ -284,7 +288,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
                           signal=signal)
     atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
-    emit_cost, emitted, chem = world.emit(chem, pos, alive0, actions)
+    emit_cost, emitted, chem = world.emit(chem, pos, alive0, actions, state.env.chem_on)
     tox_dmg, chem, resources = world.toxin(chem, resources, pos, alive0, state.energy)
     energy = world.energy_update(state, thrust, gain - emit_cost - tox_dmg, atk_delta, attempt)
 
@@ -315,14 +319,15 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         ),
     )
 
-    died = alive0 & (energy <= 0)
+    old = alive0 & (state.age >= state.env.max_age)  # vida fija (escalera, peldaño 0)
+    died = alive0 & ((energy <= 0) | old)
     age_at_death = state.age
-    by_attack = died & (drained > 0)
+    by_attack = died & ~old & (drained > 0)
     # veneno: sin la toxina ni la pérdida neta por alga tóxica de este paso habría sobrevivido
     # (la intoxicación lenta, repartida en muchos pasos, cuenta como hambre)
     toxic_loss = jnp.maximum(toxic_in * (toxicity * (1.0 + C.TOXIC_FACTOR) - 1.0), 0.0)
-    by_poison = died & ~by_attack & (energy + tox_dmg + toxic_loss > 0)
-    by_age = died & ~by_attack & ~by_poison & (state.age >= C.SENESCENCE_START)
+    by_poison = died & ~old & ~by_attack & (energy + tox_dmg + toxic_loss > 0)
+    by_age = died & ~by_attack & ~by_poison & (old | (state.age >= C.SENESCENCE_START))
     alive = alive0 & ~died
     state = state.replace(energy=jnp.where(alive, energy, 0.0), alive=alive,
                           age=jnp.where(alive, state.age + 1, 0))
@@ -374,6 +379,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         patch_flips=jnp.sum(changed).astype(jnp.int32),
         recov_intake=recov_intake,
         recov_toxic=recov_toxic,
+        thrust=jnp.sum(jnp.abs(thrust)),
     )
     return state, stats
 

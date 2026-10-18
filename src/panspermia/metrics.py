@@ -121,6 +121,10 @@ def epoch_stats(state, per_step) -> dict[str, jax.Array]:
         # curva de recuperación (v0.5): el runner la desglosa en columnas por intervalo
         "recov_intake": jnp.sum(per_step.recov_intake, axis=0),
         "recov_toxic": jnp.sum(per_step.recov_toxic, axis=0),
+        # escalera (ADR-014): movimiento real y cuerpo (solo observan)
+        "thrust_mean": jnp.sum(per_step.thrust) / jnp.maximum(jnp.sum(per_step.population), 1),
+        "mass_mean": _masked_mean(state.pheno.mass, alive),
+        "max_thrust_mean": _masked_mean(state.pheno.max_thrust, alive),
         # series por paso (fase 1d): el runner calcula con ellas anticipación y uso del reloj y no
         # las guarda en las estadísticas
         "series_intake": per_step.intake,

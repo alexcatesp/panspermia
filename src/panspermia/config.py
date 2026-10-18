@@ -1,6 +1,7 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.0.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008)
+SUBSTRATE_VERSION = "2.1.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+                             # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -124,6 +125,15 @@ TOX_MODES = {"franjas": 0, "aleatorio": 1, "periodico": 2, "fijo": 3, "uniforme"
 # uniforme (diseño 1d v0.9, E1b): el mismo tipo de alga es tóxico en todo el mundo y siempre; el
 # fijo, en cambio, varía de un parche a otro (estable en el tiempo, no en el espacio).
 TOX_PATCHES = 8                       # rejilla de 8 × 8 parches (128 × 128 unidades cada uno)
+# Escalera de complejidad (ADR-014, docs/escalera/diseno.md): interruptores del mundo por condición.
+# Sus valores por defecto dejan el mundo de siempre; cada peldaño enciende una sola cosa más.
+REPRO_MODES = {"energia": 0, "edad": 1}
+# energia: se reproduce quien supera su umbral de energía y le cede una fracción al hijo (spec).
+# edad (peldaños 0 y 1, sin comida): todo adulto (edad >= MIN_REPRO_AGE) puede tener un hijo si hay
+# hueco; el hijo nace con E_INIT nueva y el padre no paga nada.
+NO_MAX_AGE = 2**30                    # sin vida máxima fija
+LADDER_LIFESPAN = 600                 # peldaño 0: vida fija = la de un bicho quieto que solo paga el
+                                      # gasto basal en el peldaño 1 (E_INIT / C_BASAL / DT)
 # Curva de recuperación (diseño 1d v0.5): alga y alga tóxica ingeridas según los pasos transcurridos
 # desde el último cambio del parche donde se come. Bordes de los intervalos (el último, abierto).
 RECOVERY_EDGES = (8, 16, 32, 64, 128, 256, 512, 1024, 2048)

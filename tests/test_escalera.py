@@ -1,0 +1,74 @@
+"""Escalera de complejidad (ADR-014): cada interruptor del mundo hace lo que dice y nada más."""
+import jax
+import jax.numpy as jnp
+import numpy as np
+import pytest
+
+from panspermia import config, island, world
+
+# Peldaño 0 con una vida corta para que el test quepa en 300 pasos (en el experimento, 600)
+P0 = {"metabolism": 0, "k_mean": 0.0, "seasonal": 0, "repro_mode": "edad", "max_age": 230,
+      "attack_on": 0, "chem_on": 0, "signal_on": 0}
+
+
+def _env(**kw):
+    return world.with_overrides(world.make_env(b"escalera-test"), **kw)
+
+
+def test_defaults_are_the_usual_world_and_overrides_validate():
+    env = world.make_env(b"escalera-test")
+    assert float(env.metabolism) == 1 and int(env.max_age) == config.NO_MAX_AGE
+    assert int(env.repro_mode) == config.REPRO_MODES["energia"]
+    assert float(env.attack_on) == float(env.chem_on) == float(env.signal_on) == 1
+    assert int(_env(repro_mode="edad").repro_mode) == config.REPRO_MODES["edad"]
+    for bad in ({"repro_mode": "inventado"}, {"metabolism": 0.5}, {"max_age": 0}, {"k_mean": -1.0},
+                {"signal_on": 2}):
+        with pytest.raises(ValueError):
+            _env(**bad)
+
+
+def test_happy_world_free_life_fixed_lifespan_and_births_by_age():
+    """Peldaño 0: sin gasto, sin comida, sin ataque, química ni señal; muerte a edad fija."""
+    s = island.init_island(0, b"escalera-test", n_max=128, n_init=32, env_overrides=P0)
+    assert float(jnp.sum(s.resources)) == 0.0
+    s, st = island.epoch(s, 100)
+    assert int(st["population"]) == 32 and int(st["births"]) == 0
+    assert np.all(np.asarray(s.energy)[np.asarray(s.alive)] == config.E_INIT)  # vivir es gratis
+    s, st = island.epoch(s, 200)
+    alive = np.asarray(s.alive)
+    assert int(st["births"]) == 128 - 32                  # a partir de la edad 200 llenan el mundo
+    assert int(st["deaths_age"]) == 32                    # los fundadores mueren a la edad 230
+    assert int(st["deaths_starvation"]) == int(st["deaths_poison"]) == 0
+    assert int(st["population"]) == 96
+    assert np.all(np.asarray(s.energy)[alive] == config.E_INIT)  # el hijo nace con E_INIT nueva
+    assert float(st["energy_drained"]) == 0.0 and float(st["intake"]) == 0.0
+    assert float(jnp.sum(s.chem)) == 0.0 and float(jnp.sum(jnp.abs(s.signal))) == 0.0
+
+
+def test_births_by_age_do_not_need_or_take_parent_energy():
+    """Peldaño 1: un adulto con poca energía tiene hijo; el padre no paga y el hijo nace con E_INIT."""
+    def state(mode):
+        s = island.init_island(0, b"escalera-test", n_max=16, n_init=4,
+                               env_overrides={"repro_mode": mode})
+        return s.replace(age=jnp.where(s.alive, config.MIN_REPRO_AGE, 0),
+                         energy=jnp.where(s.alive, 5.0, 0.0))  # por debajo de cualquier umbral
+    s, n, newborn = island._births(state("edad"), jax.random.PRNGKey(1))
+    assert int(n) == 4
+    e = np.asarray(s.energy)
+    assert np.all(e[:4] == 5.0) and np.all(e[np.asarray(newborn)] == config.E_INIT)
+    _, n, _ = island._births(state("energia"), jax.random.PRNGKey(1))
+    assert int(n) == 0
+
+
+def test_toll_without_food_costs_energy_and_movement_costs_more():
+    """Peldaño 1: sin comida la energía solo baja, y moverse cuesta más que quedarse quieto."""
+    env = {**P0, "metabolism": 1, "max_age": config.NO_MAX_AGE}
+    s = island.init_island(0, b"escalera-test", n_max=8, n_init=2, env_overrides=env)
+    s = s.replace(pheno=s.pheno.replace(n_hidden=jnp.zeros_like(s.pheno.n_hidden)))
+    e = world.energy_update(s, jnp.array([0.0, 10.0] + [0.0] * 6), jnp.zeros(8), jnp.zeros(8),
+                            jnp.zeros(8, bool))
+    assert float(e[0]) < config.E_INIT and float(e[1]) < float(e[0])
+    s0 = s.replace(env=s.env.replace(metabolism=jnp.float32(0.0)))
+    e0 = world.energy_update(s0, jnp.array([0.0, 10.0] + [0.0] * 6), jnp.zeros(8), jnp.zeros(8),
+                             jnp.zeros(8, bool))
+    assert np.all(np.asarray(e0)[:2] == config.E_INIT)
