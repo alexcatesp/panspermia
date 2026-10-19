@@ -41,6 +41,39 @@ def _births(mode_rep="asexual", place="cerca"):
         config.REPRODUCTION, config.BIRTH_PLACEMENT = "asexual", "cerca"
 
 
+def _evolved(seed, rounds=300):
+    """Genoma con una CPPN propia: muchas mutaciones con la tasa estructural alta."""
+    g = G.random_minimal(jax.random.PRNGKey(seed))
+    g = g.replace(life=g.life.at[3].set(5.0))
+    mut = jax.jit(G.mutate)
+    for i in range(rounds):
+        g = mut(g, jax.random.PRNGKey(1000 * seed + i))
+    return g
+
+
+def _dead_nodes(g):
+    hidden = np.zeros(config.CPPN_NODES, bool)
+    hidden[config.CPPN_IN:config.CPPN_NODES - config.CPPN_OUT] = True
+    nm, wm = np.asarray(g.node_mask), np.asarray(g.W_mask)
+    return int(np.sum(nm & hidden & ~wm.any(axis=1))), int(np.sum(nm & hidden & ~wm.any(axis=0)))
+
+
+def test_crossover_keeps_the_cppn_whole():
+    """ADR-018: la CPPN del hijo es entera la de un progenitor, y no deja nodos sin salida nuevos."""
+    a, b = _evolved(1), _evolved(2)
+    assert int(np.sum(np.asarray(a.node_mask) != np.asarray(b.node_mask))) > 0  # CPPN distintas
+    fields = ("node_mask", "act_id", "bias", "W", "W_mask")
+    seen = set()
+    for i in range(16):
+        c = G.crossover(a, b, jax.random.PRNGKey(100 + i))
+        from_a = all(np.array_equal(np.asarray(getattr(c, f)), np.asarray(getattr(G.canonical(a), f))) for f in fields)
+        from_b = all(np.array_equal(np.asarray(getattr(c, f)), np.asarray(getattr(G.canonical(b), f))) for f in fields)
+        assert from_a or from_b
+        seen.add("a" if from_a else "b")
+        assert _dead_nodes(c) in (_dead_nodes(a), _dead_nodes(b))
+    assert seen == {"a", "b"}
+
+
 def test_sexual_children_mix_two_parents():
     s, s2, n, newborn, alive0 = _births("sexual")
     assert n == 16

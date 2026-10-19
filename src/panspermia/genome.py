@@ -96,11 +96,16 @@ def canonical(genome: Genome) -> Genome:
 # ---------------------------------------------------------------------------------------------
 
 def crossover(a: Genome, b: Genome, key: jax.Array) -> Genome:
-    """Cruce uniforme por índice (ADR-017): cada nodo de la CPPN con sus aristas de entrada, cada hueco
-    de neurona y cada gen de cuerpo y de vida vienen de `a` o de `b` al 50 %. Los índices actúan como
-    marcas históricas (spec §Reproducción sexual, como las innovaciones de NEAT)."""
+    """Cruce (ADR-017, corregido en ADR-018): la CPPN entera viene de `a` o de `b` al 50 % (un bloque
+    ligado, como un cromosoma); cada hueco de neurona y cada gen de cuerpo y de vida, de uno u otro.
+
+    La versión 2.4 cruzaba la CPPN nodo a nodo por índice, como si los índices fueran marcas históricas.
+    No lo son: el mismo índice nace de divisiones distintas en cada linaje, y un nodo heredaba sus
+    aristas de entrada de un progenitor y las de salida del otro (83–88 % de nodos sin salida en P0;
+    "convenciones en competencia", Stanley y Miikkulainen 2002). Los huecos de neurona no tienen ese
+    problema: no guardan aristas, sus pesos salen de la CPPN según su posición."""
     k = jax.random.split(key, 4)
-    n = jax.random.bernoulli(k[0], 0.5, (C.CPPN_NODES,))
+    n = jax.random.bernoulli(k[0], 0.5)
     h = jax.random.bernoulli(k[1], 0.5, (C.N_HIDDEN_MAX,))
     bo = jax.random.bernoulli(k[2], 0.5, (C.BODY_GENES,))
     li = jax.random.bernoulli(k[3], 0.5, (C.LIFE_GENES,))
@@ -110,7 +115,7 @@ def crossover(a: Genome, b: Genome, key: jax.Array) -> Genome:
 
     child = Genome(
         node_mask=pick(n, a.node_mask, b.node_mask), act_id=pick(n, a.act_id, b.act_id),
-        bias=pick(n, a.bias, b.bias), W=pick(n[None, :], a.W, b.W), W_mask=pick(n[None, :], a.W_mask, b.W_mask),
+        bias=pick(n, a.bias, b.bias), W=pick(n, a.W, b.W), W_mask=pick(n, a.W_mask, b.W_mask),
         hid_mask=pick(h, a.hid_mask, b.hid_mask), hid_pos=pick(h[:, None], a.hid_pos, b.hid_pos),
         hid_type=pick(h, a.hid_type, b.hid_type), body=pick(bo, a.body, b.body), life=pick(li, a.life, b.life),
         generation=jnp.maximum(a.generation, b.generation),

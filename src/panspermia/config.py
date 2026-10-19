@@ -1,10 +1,11 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.4.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.5.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
-                             # 2.4: reproducción sexual y lugar de nacimiento elegibles, ADR-017)
+                             # 2.4: reproducción sexual y lugar de nacimiento elegibles, ADR-017;
+                             # 2.5: el cruce hereda la CPPN entera de un progenitor, ADR-018)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -76,9 +77,10 @@ MUTATION_RATES = "evolutivas"
 # de cambios estructurales por hijo, 11 %, no cambia).
 CPPN_MUTATION = "nest"
 CPPN_NEUTRAL_RATES = {"add_edge": 0.035, "del_edge": 0.035, "split": 0.02, "del_node": 0.02}
-# Reproducción (ADR-017): "asexual" (spec v1) o "sexual": el hijo mezcla por índice (marcas
-# históricas, como NEAT) los genes del padre y de una pareja adulta elegida al azar entre sus vecinos
-# (rejilla 3 × 3); sin pareja cerca, se clona. La pareja solo aporta genes, no energía.
+# Reproducción (ADR-017, corregida en ADR-018): "asexual" (spec v1) o "sexual": el hijo mezcla los
+# genes del padre y de una pareja adulta elegida al azar entre sus vecinos (rejilla 3 × 3); sin pareja
+# cerca, se clona. La pareja solo aporta genes, no energía. La CPPN se hereda entera de uno de los dos
+# (bloque ligado); los huecos de neurona y los genes de cuerpo y de vida se mezclan uno a uno.
 REPRODUCTION = "asexual"
 # Dónde nace el hijo (ADR-017): "cerca" (spec v1: a 2 radios del padre) o "azar" (cualquier punto).
 BIRTH_PLACEMENT = "cerca"
