@@ -479,3 +479,25 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - neutral lo conserva y solo lo dispersa;
   - terrestre lo vacía.
 - **Pendiente:** el responsable elige la física (A1, y con ella A6). Detalle en `docs/escalera/p0_factores.md` § Resultados.
+
+### 07:03 · Decisión del responsable: A1 se decide después de ver P1
+
+- Se le propuso fijar la física neutral (recomendada), la terrestre o la de siempre. Prefiere **esperar a P1**: ver cómo se comporta cada física cuando cada neurona cuesta energía, antes de fijarla.
+- Cola nueva `scratchpad/p1_mut.sh`: espera a que acabe `p0_solo.sh` y corre P1-peaje-neutral y P1-peaje-terrestre (5 + 5 mundos, rama `escalera-mut`). Al terminar crea la marca `runs/fase1d/p1_mut_hecho`. Log en `runs/fase1d/p1_mut.log`.
+- Es una prueba para cerrar un factor de P0, no el arranque de la escalera en P1: P1 sigue sin lanzarse hasta cerrar todos los factores (ADR-016).
+
+### 04:48–07:13 · A3 (tasas fijas) y A2 (CPPN neutral): 10 mundos, 5/5 en los dos contrastes
+
+- **Qué:** P0-feliz-tasas-fijas y P0-feliz-cppn-neutral, 5 semillas × 300 épocas cada uno (rama `escalera-p0x`, `35e22f2`, sustrato 2.3.0). Población llena y sin extinciones.
+- **Datos:** `runs/fase1d/_analisis_A2A3.json`, `_host_P0-feliz-{tasas-fijas,cppn-neutral}.json` y `_dist_cppn.json`. Al analizador se añaden los dos contrastes de ADR-016.
+- **A3, tasas fijas:**
+  - menos neuronas que P0-feliz, 5/5 (p = 0,031), pero con un efecto pequeño (de −0,05 a −5,5);
+  - el redondeo f16 pasa a borrar solo el 0,7 % de las perturbaciones (antes, entre el 6 y el 10 %);
+  - la CPPN toca su techo menos a menudo (entre el 3 y el 14 %).
+- **A2, CPPN neutral:**
+  - nodos ocultos de 1,6 a 3,0 frente a 10,3–12,7, 5/5 (p = 0,031); nadie toca el techo;
+  - pero las aristas bajan de 48 a 26–35 en la época 300: hasta un 10 % de los bichos con 10 aristas o menos. La causa es el punto de partida (todas las aristas entre entradas y salidas ya puestas) y que quitar un nodo arrastra sus aristas.
+- **Conclusión:**
+  - firme: la deriva de las tasas aporta poco al crecimiento del cerebro, pero causa el problema de f16 y el ruido entre mundos;
+  - firme: la CPPN neutral frena el inflado, pero no es neutral en aristas. Si se elige, necesita un ajuste.
+- **Pendiente:** el responsable decide A2, A3 y A7.

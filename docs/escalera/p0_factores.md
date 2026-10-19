@@ -16,9 +16,9 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
-| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest, neutral y terrestre (✅ 15 mundos; 5/5 en las dos comparaciones) | ⚖ |
-| A2 | Física de la mutación de la **CPPN** | añadir 5 %, quitar 2 %, dividir 3 %, quitar nodo 1 % | En P0 sus nodos pasan de 0,35 a ~11: es el mismo sesgo, en la receta del cerebro | stanley2002neat, langdon1998bloat, banzhaf2002bloat, kuo2009deletional | P0-cppn-neutral (5 mundos); si hace falta, también terrestre | 🔬 en cola |
-| A3 | **Tasas de mutación**: gen o constante | σ autoadaptativa y tasa estructural como gen (deriva +75 % en 300 épocas) | Sin selección, la tasa sube por el suelo en 0. En la Tierra, la selección la baja hasta la barrera de la deriva | lynch2016driftbarrier, sniegowski1997mutators, beyer2002es | P0-tasas-fijas (5 mundos). Si se mantiene como gen, el ruido pasa a escala logarítmica (sin artefacto del suelo) | 🔬 en cola |
+| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest, neutral y terrestre (✅ 15 mundos; 5/5 en las dos comparaciones). **Responsable (19-10, 07:03): decidir tras P1 con neutral y terrestre** (10 mundos, al final de la cola de P0) | 🔬 P1 en cola |
+| A2 | Física de la mutación de la **CPPN** | añadir 5 %, quitar 2 %, dividir 3 %, quitar nodo 1 % | En P0 sus nodos pasan de 0,35 a ~11: es el mismo sesgo, en la receta del cerebro | stanley2002neat, langdon1998bloat, banzhaf2002bloat, kuo2009deletional | P0-cppn-neutral (✅ 5/5): ya no se infla, pero pierde aristas | ⚖ |
+| A3 | **Tasas de mutación**: gen o constante | σ autoadaptativa y tasa estructural como gen (deriva +75 % en 300 épocas) | Sin selección, la tasa sube por el suelo en 0. En la Tierra, la selección la baja hasta la barrera de la deriva | lynch2016driftbarrier, sniegowski1997mutators, beyer2002es | P0-tasas-fijas (✅ 5/5, efecto pequeño). Si se mantiene como gen, el ruido pasa a escala logarítmica (sin artefacto del suelo) | ⚖ |
 | A4 | **Cuánto** se muta: σ inicial 0,05, τ = 0,2, 11 % de cambios estructurales por hijo | sin contrastar | Demasiada mutación destruye la información más deprisa de lo que la selección la fija (umbral de error). Demasiado poca estanca | eigen1971selforganization, lynch2016driftbarrier | En P0: velocidad de divergencia neutral (`genome_distance`). El juicio necesita P1 | 📋 análisis de P0 + prueba en P1 |
 | A5 | **Techo** del genoma: 64 neuronas y 32 nodos de CPPN | fijo | Con nest, el equilibrio neutral (~43) queda cerca del techo. La evolución abierta necesita poder crecer sin un límite artificial | taylor2016oee, stanley2002neat | Analizar en P0 qué fracción de bichos toca el techo con cada física. Hecho: el de neuronas no limita con ninguna física; el de la CPPN sí (8–34 %) | ⚖ tras A2 |
 | A6 | **Genoma inicial**: 8 neuronas y CPPN mínima | "empezar mínimo" (NEAT) | Con la física terrestre, el punto de partida pesa: deriva hacia 0 | stanley2002neat, lynch2003origins | Se decide junto con A1: con la física neutral, el tamaño inicial es el punto alrededor del cual deriva | ⚖ con A1 |
@@ -115,3 +115,30 @@ La cola terminó a las 02:56. Ventana de las épocas 151–300; los valores son 
 - con la terrestre, las dos presiones se sumarían.
 
 A6 (genoma inicial) se decide con A1: con la física neutral, las 8 neuronas iniciales son el centro de la deriva.
+
+### 19-10-2026, 07:13 · A3 (tasas fijas) y A2 (CPPN neutral), 10 mundos
+
+Los bloques terminaron a las 04:48 y a las 06:36. Ventana de las épocas 151–300; los valores son por semilla, s0 a s4. Datos en `runs/fase1d/_analisis_A2A3.json`, `_host_P0-feliz-tasas-fijas.json`, `_host_P0-feliz-cppn-neutral.json` y `_dist_cppn.json`.
+
+**A3 · tasas fijas** (σ = 0,05 y tasa estructural = 1 en todos los bichos; neuronas y CPPN con la mutación de siempre):
+- neuronas ocultas, media tardía: 23,7 · 21,4 · 23,4 · 20,9 · 22,3, frente a 24,1 · 23,8 · 28,9 · 21,0 · 24,5 en P0-feliz;
+  - contraste prerregistrado (ADR-016), menos neuronas que P0-feliz: **5/5** (p = 0,031). Pero el efecto es pequeño: de −0,05 a −5,5;
+  - la deriva de las tasas solo explica una parte pequeña del crecimiento; la mayor parte viene de la física de las neuronas (A1);
+- CPPN en su techo en la época 300: entre el 3 y el 14 % (entre el 8 y el 34 % con las tasas como gen);
+- **f16 (A7): con σ fija en 0,05, el redondeo solo borra el 0,7 % de las perturbaciones** (entre el 6 y el 10 % cuando σ deriva hacia abajo). El problema de f16 es sobre todo una consecuencia de que σ derive. Con tasas fijas, f16 basta;
+- todos los mundos mutan igual: desaparece el ruido entre mundos que añadían las tasas al azar.
+
+**A2 · CPPN neutral** (añadir y quitar aristas al 3,5 %, dividir y quitar nodo al 2 %; neuronas y tasas como siempre):
+- nodos ocultos de la CPPN, media tardía: 1,6 · 1,6 · 2,9 · 2,0 · 3,0, frente a 10,3–12,7 con la de siempre;
+  - contraste prerregistrado: **5/5** (p = 0,031);
+  - **nadie toca el techo** (como mucho, un 0,1 % en la época 300). Con esta física, el techo de la CPPN (A5) deja de ser un problema;
+- **pero pierde aristas**: la media baja de 48 a 33–38 en la ventana y a 26–35 en la época 300. Entre el 0 y el 10 % de los bichos tienen 10 aristas o menos, y el mínimo es de 2.
+  - Causa: la CPPN mínima empieza con las 48 aristas posibles entre entradas y salidas (añadir a menudo no encuentra hueco), y quitar un nodo se lleva sus aristas (dos o más) mientras que dividir solo suma una neta.
+  - Igual que con las neuronas, el punto de partida y las reglas empujan solos. Una CPPN casi sin aristas da pesos casi constantes: un cerebro sin forma;
+- la física de la CPPN no cambia las neuronas: `hidden_mean` sale idéntico al de P0-feliz en cada semilla (control limpio).
+
+**Para decidir:**
+- **A3:** fijar las tasas en P0 elimina una deriva sin selección y el ruido entre mundos, y resuelve f16. Dejarlas como gen solo tiene sentido con selección (en la Tierra, la selección baja la tasa hasta la barrera de la deriva, lynch2016driftbarrier).
+- **A2:** la CPPN neutral resuelve el inflado y el techo, pero necesita un ajuste para no vaciarse de aristas (por ejemplo, que quitar un nodo deje reconectadas sus aristas, o equilibrar añadir y quitar contando las aristas que arrastra cada operación).
+- **A7** se decide con A3: con tasas fijas, f16.
+

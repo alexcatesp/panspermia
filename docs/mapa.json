@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-19 03:08",
+ "actualizado": "2026-10-19 07:13",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -72,27 +72,29 @@
    "resultado": "positivo",
    "anade": "Mutación de neuronas",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "Neuronas tardías: nest 21–29 y crecen; neutral ≈ 8 (se queda en el punto de partida, solo se ensancha); terrestre 0,8–1,9 (en la época 300, entre el 51 y el 67 % sin neuronas ocultas). 5/5 en las dos comparaciones. Falta que el responsable elija la física."
+   "texto": "Neuronas tardías: nest 21–29 y crecen; neutral ≈ 8; terrestre 0,8–1,9. 5/5 en las dos comparaciones. El responsable (19-10, 07:03) decide tras ver P1 con neutral y terrestre (en cola)."
   },
   {
    "id": "p0f-A2",
    "padre": "p0cierre",
    "titulo": "A2 · Mutación de la CPPN",
    "corto": "A2 Mutación de la CPPN",
-   "estado": "pendiente",
-   "resultado": null,
+   "estado": "decision",
+   "resultado": "positivo",
    "anade": "Mutación de la CPPN",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "CPPN neutral: 1,6–3,0 nodos ocultos frente a 10–13 (5/5) y nadie en el techo. Pero pierde aristas (de 48 a 26–35; hasta un 10 % con 10 o menos): necesita un ajuste si se elige."
   },
   {
    "id": "p0f-A3",
    "padre": "p0cierre",
    "titulo": "A3 · Tasas de mutación: gen o constante",
    "corto": "A3 Tasas de mutación: gen o constante",
-   "estado": "pendiente",
-   "resultado": null,
+   "estado": "decision",
+   "resultado": "positivo",
    "anade": "Tasas de mutación: gen o constante",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "Tasas fijas: algo menos de neuronas (5/5, pero de −0,05 a −5,5). Todos los mundos mutan igual y f16 deja de ser un problema (0,7 % borrado)."
   },
   {
    "id": "p0f-A4",
@@ -114,7 +116,7 @@
    "resultado": null,
    "anade": "Techo del genoma (64 / 32)",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "Neuronas: el techo (64) no limita (máximo 47). CPPN: sí, entre el 8 y el 34 % en el techo de 18 nodos ocultos en la época 300."
+   "texto": "Neuronas: el techo (64) no limita con ninguna física. CPPN: entre el 8 y el 34 % en el techo con la mutación de siempre; entre el 3 y el 14 % con tasas fijas; nadie con la CPPN neutral."
   },
   {
    "id": "p0f-A7",
@@ -125,7 +127,7 @@
    "resultado": null,
    "anade": "Precisión f16",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "El redondeo a f16 borra entre el 6 y el 10 % de las pequeñas perturbaciones de los pesos: un suelo oculto de la mutación."
+   "texto": "f16 borra entre el 6 y el 10 % de las pequeñas perturbaciones cuando σ deriva hacia abajo, y solo el 0,7 % con σ fija en 0,05. Se decide con A3."
   },
   {
    "id": "p0f-B1",

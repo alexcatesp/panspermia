@@ -24,6 +24,8 @@ LATE = (151, 300)
 PREREG = [
     ("P0-feliz-neutral", "P0-feliz", "hidden_mean", "<"),
     ("P0-feliz-terrestre", "P0-feliz-neutral", "hidden_mean", "<"),
+    ("P0-feliz-tasas-fijas", "P0-feliz", "hidden_mean", "<"),      # ADR-016
+    ("P0-feliz-cppn-neutral", "P0-feliz", "cppn_nodes_mean", "<"),  # ADR-016
     ("P1-peaje", "P0-feliz", "thrust_mean", "<"),
     ("P1-peaje-neutral", "P0-feliz-neutral", "thrust_mean", "<"),
     ("P1-peaje-terrestre", "P0-feliz-terrestre", "thrust_mean", "<"),
