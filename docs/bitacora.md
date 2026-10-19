@@ -533,3 +533,13 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - test `test_crossover_keeps_the_cppn_whole`: falla con el código de la 2.4 y pasa con la 2.5. 14 tests en verde en CPU, mientras la GPU corre D1;
   - cola `experiments/fase1d/p0z.json` (P0-feliz-sexual-bloques, 5 mundos).
 - **Colas:** se paran `p1_mut.sh` y `p1_x.sh`, que solo estaban esperando sin haber corrido nada. Las sustituye `scratchpad/tras_p0.sh`: tras `p0_solo.sh`, B1 repetido → P1 neutral y terrestre → P1 de referencia → P1 tasas fijas → P1 CPPN neutral. Log en `runs/fase1d/tras_p0.log`; marcas `p0z_hecho`, `p1_mut_hecho` y `p1_x_hecho`.
+
+### 09:35–09:50 · ¿Heredar la receta entera es biológicamente correcto? (B1)
+
+- **Pregunta del responsable:** ¿heredar el cerebro de un solo progenitor no es lo correcto biológicamente?
+- **Respuesta** (bibliografía en `docs/bibliografia/escalera/README.md` § 7; 4 referencias nuevas comprobadas en Crossref):
+  - lo habitual en la Tierra es recombinar dentro de cada cromosoma, gracias a la homología;
+  - pero el ligamiento completo existe: mitocondrias, la parte no recombinante del cromosoma Y y los supergenes;
+  - su precio: interferencia de Hill-Robertson y trinquete de Muller dentro del bloque.
+  - La receta como supergén es, por tanto, un caso real, pero sin las ventajas del sexo en la parte más importante del genoma.
+- **Decisión del responsable:** decidir tras ver B1 corregido. Si el sexo funciona bien con la receta como supergén, B1 se cierra; si no, se implementan las marcas históricas (formato nuevo del genoma) antes de cerrar P0.
