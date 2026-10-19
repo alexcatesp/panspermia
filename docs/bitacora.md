@@ -616,13 +616,13 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Pregunta del responsable:** ¿neutral en este punto o para siempre? Respuesta: para toda la escalera, porque es la hipótesis nula y cambiarla a mitad invalidaría los peldaños anteriores; no para siempre, porque la terrestre es una variante realista (no universal) y sirve de prueba de robustez al final.
 - **Decisión del responsable (23:28):** neutral para toda la escalera (A1) y 8 neuronas iniciales (A6); al final, los peldaños clave se repiten con la terrestre. Nest, descartada; terrestre, aparcada (`docs/caminos.md`).
 
-### 23:35–23:45 · ¿Estamos tomando buenas decisiones? (revisión pedida por el responsable)
+### 23:35–23:39 · ¿Estamos tomando buenas decisiones? (revisión pedida por el responsable)
 
 - **A favor:** un interruptor cada vez, prerregistro, semillas emparejadas, controles (D1 idéntico bit a bit) y bibliografía. Con este método se encontraron el error del cruce, las falsas alarmas de capacidad y el empujón de nest.
 - **Riesgos señalados:**
   1. en P1 (sin comida) la selección solo quita: A2, A3 y B1 solo pueden juzgarse a medias ahí, porque su ventaja principal es construir;
   2. con 5 mundos solo se detectan efectos grandes (p mínima 0,031), y hay muchas comparaciones;
   3. deuda técnica para el cierre de P0: unir cinco ramas en un sustrato con tests y determinismo; medidas engañosas (batería de capacidad con línea de base al azar del 75 %, clados con sexo); tendencias que aún no se han estabilizado en 300 épocas.
-- **Decisión del responsable (23:45):** ver P1 y decidir A2, A3 y B1 caso a caso; lo no concluyente se prueba en P2 antes de fijarlo.
+- **Decisión del responsable (23:39):** ver P1 y decidir A2, A3 y B1 caso a caso; lo no concluyente se prueba en P2 antes de fijarlo.
 - **Propuestas pendientes:** ADR de cierre de P0 con rama de integración y tests antes de P2; revisar la batería de capacidad (ADR del responsable) antes de los peldaños con aprendizaje.
 
