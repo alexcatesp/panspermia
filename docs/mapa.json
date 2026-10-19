@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-18 23:20",
+ "actualizado": "2026-10-19 03:08",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -68,10 +68,11 @@
    "padre": "p0cierre",
    "titulo": "A1 · Mutación de neuronas",
    "corto": "A1 Mutación de neuronas",
-   "estado": "en curso",
-   "resultado": null,
+   "estado": "decision",
+   "resultado": "positivo",
    "anade": "Mutación de neuronas",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "Neuronas tardías: nest 21–29 y crecen; neutral ≈ 8 (se queda en el punto de partida, solo se ensancha); terrestre 0,8–1,9 (en la época 300, entre el 51 y el 67 % sin neuronas ocultas). 5/5 en las dos comparaciones. Falta que el responsable elija la física."
   },
   {
    "id": "p0f-A2",
@@ -182,10 +183,10 @@
    "padre": "p0cierre",
    "titulo": "Rama: física de la mutación (ADR-015)",
    "corto": "¿Qué mutación?",
-   "estado": "pendiente",
-   "resultado": null,
+   "estado": "decision",
+   "resultado": "positivo",
    "anade": "otra forma de mutar el número de neuronas",
-   "texto": "P0 mostró que los cerebros crecen solos (de 8 a 29 neuronas) por cómo está programada la mutación. Se repiten P0 y P1 con mutación neutral y terrestre justo después de la escalera.",
+   "texto": "P0 con las tres físicas (19-10, 02:56): nest infla el cerebro (21–29 neuronas), neutral lo deja en 8 y terrestre lo vacía (≈ 1). 5/5 en ambos contrastes. P1n y P1t, canceladas con la decisión de 100 % P0, esperan a que se elija la física.",
    "ref": "ADR-015 · docs/bibliografia/escalera/"
   },
   {

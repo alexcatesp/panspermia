@@ -461,3 +461,21 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - f16 borra entre el 6 y el 10 % de las pequeñas perturbaciones;
   - el tope de nacimientos se alcanza siempre por las cohortes sincronizadas, sin pérdida de nacimientos.
 - **Conclusión:** indicio. Quedan tres decisiones de P0 (techo de la CPPN, f16 y tasas). A4 solo puede juzgarse con selección, en la entrada de P1.
+
+## 19-10-2026
+
+### 02:56–03:08 · A1: P0 con mutación neutral y terrestre (10 mundos, 5/5)
+
+- **Qué:** P0-feliz-neutral y P0-feliz-terrestre, 5 semillas × 300 épocas cada uno (rama `escalera-mut`, `1cd481d`, sustrato 2.2.0), con la cola `scratchpad/p0_solo.sh`. Entre 0,36 y 0,5 h por mundo. Población llena y sin extinciones.
+- **Datos:** `runs/fase1d/P0-feliz-{neutral,terrestre}/s0–s4`; análisis en `runs/fase1d/_analisis_A1.json`, `_host_P0-feliz-{neutral,terrestre}.json` y `_dist_neuronas.json`.
+- **Resultado (neuronas ocultas, media de las épocas 151–300):**
+  - nest: 21–29, y siguen creciendo;
+  - neutral: 7,9–8,8;
+  - terrestre: 0,8–1,9. En la época 300, entre el 51 y el 67 % de los bichos no tienen ninguna neurona oculta.
+  - Contrastes prerregistrados: neutral < nest y terrestre < neutral, los dos **5/5** (p = 0,031).
+- **Control:** la CPPN, el cuerpo, las tasas, el redondeo f16 y los nacimientos salen idénticos en las tres físicas. Solo cambian las neuronas.
+- **Conclusión:** firme. La física de la mutación decide sola el tamaño del cerebro cuando no hay selección:
+  - nest lo infla;
+  - neutral lo conserva y solo lo dispersa;
+  - terrestre lo vacía.
+- **Pendiente:** el responsable elige la física (A1, y con ella A6). Detalle en `docs/escalera/p0_factores.md` § Resultados.

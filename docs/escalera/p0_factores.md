@@ -9,18 +9,19 @@
 - 🔬 en simulación;
 - 📋 pendiente de simular;
 - 📚 se decide por bibliografía, sin simular;
+- ⚖ simulado; falta la decisión del responsable;
 - ⏭ no es de P0 (se decide en su peldaño).
 
 ## A. Variación: cómo muta el genoma
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
-| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest (✅ 5/5), neutral y terrestre (🔬) | 🔬 |
+| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest, neutral y terrestre (✅ 15 mundos; 5/5 en las dos comparaciones) | ⚖ |
 | A2 | Física de la mutación de la **CPPN** | añadir 5 %, quitar 2 %, dividir 3 %, quitar nodo 1 % | En P0 sus nodos pasan de 0,35 a ~11: es el mismo sesgo, en la receta del cerebro | stanley2002neat, langdon1998bloat, banzhaf2002bloat, kuo2009deletional | P0-cppn-neutral (5 mundos); si hace falta, también terrestre | 🔬 en cola |
 | A3 | **Tasas de mutación**: gen o constante | σ autoadaptativa y tasa estructural como gen (deriva +75 % en 300 épocas) | Sin selección, la tasa sube por el suelo en 0. En la Tierra, la selección la baja hasta la barrera de la deriva | lynch2016driftbarrier, sniegowski1997mutators, beyer2002es | P0-tasas-fijas (5 mundos). Si se mantiene como gen, el ruido pasa a escala logarítmica (sin artefacto del suelo) | 🔬 en cola |
 | A4 | **Cuánto** se muta: σ inicial 0,05, τ = 0,2, 11 % de cambios estructurales por hijo | sin contrastar | Demasiada mutación destruye la información más deprisa de lo que la selección la fija (umbral de error). Demasiado poca estanca | eigen1971selforganization, lynch2016driftbarrier | En P0: velocidad de divergencia neutral (`genome_distance`). El juicio necesita P1 | 📋 análisis de P0 + prueba en P1 |
 | A5 | **Techo** del genoma: 64 neuronas y 32 nodos de CPPN | fijo | Con nest, el equilibrio neutral (~43) queda cerca del techo. La evolución abierta necesita poder crecer sin un límite artificial | taylor2016oee, stanley2002neat | Analizar en P0 qué fracción de bichos toca el techo con cada física | 📋 análisis (sin GPU) |
-| A6 | **Genoma inicial**: 8 neuronas y CPPN mínima | "empezar mínimo" (NEAT) | Con la física terrestre, el punto de partida pesa: deriva hacia 0 | stanley2002neat | Se decide junto con A1 | 📚 |
+| A6 | **Genoma inicial**: 8 neuronas y CPPN mínima | "empezar mínimo" (NEAT) | Con la física terrestre, el punto de partida pesa: deriva hacia 0 | stanley2002neat, lynch2003origins | Se decide junto con A1: con la física neutral, el tamaño inicial es el punto alrededor del cual deriva | ⚖ con A1 |
 | A7 | **Precisión** del genoma: los pesos se guardan en f16 | f16 | Un cambio menor que la resolución de f16 desaparece al guardarse: es otra "física" oculta, un suelo para σ | — (es técnico) | Medir en P0 cuántas mutaciones se pierden por redondeo | 📋 análisis (sin GPU) |
 
 ## B. Reproducción y herencia
@@ -83,3 +84,34 @@ Ventana de las épocas 151–300; los valores son por semilla, s0 a s4.
   - en P0 se alcanza en **todos** los pasos con nacimientos (32 justos), pero porque la población muere y renace en **cohortes sincronizadas de 32**: el arranque simultáneo, la vida fija y el tope fabrican una "cinta transportadora" de 128 cohortes;
   - no se pierden nacimientos (32 mueren y 32 nacen);
   - riesgo para P1+: tras una mortandad grande, la recuperación quedaría limitada a 32 por paso. Hay que vigilarlo en P1.
+
+### 19-10-2026, 03:08 · A1: P0 con mutación neutral y terrestre (10 mundos)
+
+La cola terminó a las 02:56. Ventana de las épocas 151–300; los valores son por semilla, s0 a s4. Datos en `runs/fase1d/_analisis_A1.json`, `_host_P0-feliz-neutral.json`, `_host_P0-feliz-terrestre.json` y `_dist_neuronas.json`.
+
+**Neuronas ocultas, media tardía:**
+
+| Física | s0 | s1 | s2 | s3 | s4 | En la época 300 |
+|---|---|---|---|---|---|---|
+| nest (la de siempre) | 24,1 | 23,8 | 28,9 | 21,0 | 24,5 | 25–35 de media; siguen creciendo |
+| neutral | 8,0 | 7,9 | 8,0 | 8,0 | 8,8 | 6,1–11,2 de media, desviación típica de 4,5 a 7,7; entre el 3 y el 8 % sin neuronas ocultas |
+| terrestre | 1,6 | 1,7 | 0,8 | 1,3 | 1,9 | 0,7–1,3 de media; **entre el 51 y el 67 % sin neuronas ocultas**; máximo de 8 a 12 |
+
+**Contrastes prerregistrados (ADR-015):**
+- neutral < nest: **5/5** (p = 0,031), con diferencias de −13,0 a −20,9 neuronas;
+- terrestre < neutral: **5/5** (p = 0,031), con diferencias de −6,2 a −7,2.
+
+**Lectura:**
+- **nest** infla el cerebro sin que sirva para nada. Es un sesgo de la mutación, no de la selección.
+- **neutral** conserva la media en el punto de partida (8) y solo ensancha la distribución por deriva: el tamaño del cerebro queda libre para que lo decida la selección.
+  - Matiz: el suelo en 0 rebota, así que a muy largo plazo la media sube despacio (s4: +3,4 por 100 épocas). Hay que vigilarlo en peldaños largos.
+- **terrestre** vacía el cerebro en 300 épocas. Con selección, solo sobrevivirían las neuronas cuya ventaja supere la barrera de la deriva (lynch2016driftbarrier). Es el modo "procariota", de genoma compacto (mira2001deletional, kuo2009deletional).
+
+**Control:** la CPPN, el cuerpo, las tasas de mutación, f16 y los nacimientos son **idénticos** en las tres físicas (mismo valor en cada semilla). La física de neuronas solo cambia las neuronas: la comparación es limpia.
+
+**Para la decisión:**
+- desde P1, cada neurona cuesta energía (`C_NEURON` = 0,02 por paso; "tejido caro", aiello1995expensive);
+- con la física neutral, la presión hacia cerebros pequeños vendría del mundo y no de la mutación;
+- con la terrestre, las dos presiones se sumarían.
+
+A6 (genoma inicial) se decide con A1: con la física neutral, las 8 neuronas iniciales son el centro de la deriva.
