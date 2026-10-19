@@ -28,7 +28,7 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba | Estado |
 |---|---|---|---|---|---|---|
-| B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex | P0-feliz-sexual (5 mundos): efectos neutrales (diversidad, tamaño del cerebro tras el cruce). Su ventaja se verá con selección (P1) | 🔬 en cola |
+| B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex | P0-feliz-sexual (✅ 5 mundos): **el cruce por índice rompe la receta del cerebro** (entre el 83 y el 88 % de los nodos de la CPPN quedan sin salida). Hay que rediseñar el cruce antes de juzgar el sexo | ⚖ |
 | B2 | **Herencia de lo aprendido** | darwiniana: el hijo nace con los pesos innatos, no con los aprendidos | Heredar lo aprendido (lamarckiano) acelera en mundos **estables** (Ackley y Littman 1994), pero cae más en óptimos locales (Whitley et al. 1994) y es **peor cuando el mundo cambia**: hereda lo que servía en un mundo que ya no existe (Sasaki y Tokoro 2000). Aprender sin heredarlo también acelera la evolución (efecto Baldwin; Hinton y Nowlan 1987), según la pendiente de la ganancia (Paenke et al. 2007). Además, con una codificación indirecta (CPPN) no se puede reescribir la receta a partir de los pesos aprendidos | whitley1994lamarck, ackley1994lamarck, sasaki2000lamarck, hinton1987learning, paenke2007plasticity | Ninguna en P0 (no hay nada que aprender). La transmisión de lo aprendido entre bichos (cultura) sería un peldaño social, no genético | ✅ 📚 |
 | B3 | ¿Quién paga la energía del hijo? | dotación regalada (P0, P1) o cedida por el padre (P3+) | — | — | Es de P3 | ⏭ |
 
@@ -141,4 +141,31 @@ Los bloques terminaron a las 04:48 y a las 06:36. Ventana de las épocas 151–3
 - **A3:** fijar las tasas en P0 elimina una deriva sin selección y el ruido entre mundos, y resuelve f16. Dejarlas como gen solo tiene sentido con selección (en la Tierra, la selección baja la tasa hasta la barrera de la deriva, lynch2016driftbarrier).
 - **A2:** la CPPN neutral resuelve el inflado y el techo, pero necesita un ajuste para no vaciarse de aristas (por ejemplo, que quitar un nodo deje reconectadas sus aristas, o equilibrar añadir y quitar contando las aristas que arrastra cada operación).
 - **A7** se decide con A3: con tasas fijas, f16.
+
+### 19-10-2026, 08:50 · B1: P0 con reproducción sexual (5 mundos)
+
+El bloque terminó a las 08:35 (entre 0,38 y 0,44 h por mundo; población llena). Ventana de las épocas 151–300, con el valor de la época 300 entre paréntesis. Datos en `runs/fase1d/_analisis_B1.json` y `_b1_cppn.json`.
+
+| Medida | Asexual (P0-feliz) | Sexual |
+|---|---|---|
+| Neuronas ocultas | 21,0–28,9 (25,3–35,4) | 26,4–28,4 (29,4–34,1): algo más en 4 de 5; el cruce no cambia mucho el tamaño, como se esperaba |
+| Nodos ocultos de la CPPN | 10,3–12,7 (11,9–16,5) | 12,5–15,0 (16,3–16,9, cerca del techo de 18) |
+| Aristas de la CPPN | 64–73, y suben | 44–46, y bajan (≈ 41) |
+| **Nodos de la CPPN sin ninguna salida** (época 300) | 3–5 % | **83–88 %** |
+| Aristas directas entre entradas y salidas | 22–28 | 14–17 |
+| Distancia genética estructural | 122–152, y sube (135–168) | 112–117, estancada (111–115) |
+| Distancia genética continua | 23–41 | 34–41 |
+| Clados vivos | 540–740 | 98–119 |
+| Parentesco local frente a global | — (se mide en D1) | 0,24–0,34 frente a 0,010–0,011 |
+
+**Lectura:**
+- **El cruce, tal como está programado, destroza la receta del cerebro.** Cada nodo de la CPPN viene de un progenitor junto con sus aristas de *entrada*. Pero sus aristas de *salida* están en las columnas de otros nodos, que la mitad de las veces vienen del otro progenitor. Así, casi todos los nodos ocultos se quedan sin salida: son peso muerto. Se acumulan sin que nadie lo note (cerca del techo), y la receta se reduce a las aristas directas.
+- La causa de fondo: **un mismo índice no significa lo mismo en dos linajes.** Tras cientos de generaciones, el nodo 10 de un bicho y el nodo 10 de otro nacieron de divisiones distintas. Es el problema de las "convenciones en competencia", que NEAT resolvió con marcas históricas (números de innovación) que identifican cada gen por su origen (stanley2002neat). Aquí los índices se usaron como si fueran esas marcas, y no lo son.
+- **La recombinación mantiene unida a la población:** la distancia estructural deja de crecer y aparecen muchos menos clados nuevos. Es lo esperado: el sexo mezcla los linajes (felsenstein1974recombination).
+- **Parentesco espacial fuerte:** un vecino es del mismo clado 25–35 veces más a menudo que un bicho al azar. Es la línea de base para D1.
+
+**Para decidir B1:** el resultado no juzga el sexo, sino el operador de cruce. Opciones:
+1. **cruce por bloques:** la receta del cerebro (CPPN) entera de un progenitor, y las neuronas, el cuerpo y los genes de vida mezclados. Es sencillo y no rompe nada; se parece a genes ligados en un cromosoma;
+2. **marcas históricas al estilo NEAT:** cada arista y cada nodo llevan un número de origen y se alinean por él. Es lo correcto según la bibliografía, pero cambia el formato del genoma (versión mayor del sustrato);
+3. seguir **asexual** y dejar el sexo para más adelante, con el riesgo de invalidar lo anterior.
 

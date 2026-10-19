@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-19 07:25",
+ "actualizado": "2026-10-19 08:50",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -135,9 +135,10 @@
    "titulo": "B1 · Sexo (recombinación)",
    "corto": "B1 Sexo (recombinación)",
    "estado": "decision",
-   "resultado": null,
+   "resultado": "negativo",
    "anade": "Sexo (recombinación)",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "El cruce uniforme por índice rompe la receta del cerebro: entre el 83 y el 88 % de los nodos de la CPPN quedan sin salida (sin sexo, entre el 3 y el 5 %). Juzga el operador, no el sexo. Opciones: cruce por bloques, marcas históricas (NEAT) o seguir asexual."
   },
   {
    "id": "p0f-C1",

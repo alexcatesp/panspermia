@@ -510,3 +510,17 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - **P1-peaje-tasas-fijas** (cola `experiments/fase1d/p1x.json`, rama `escalera-p0x`, `4fdfaa9` y siguiente);
   - **P1-peaje-cppn-neutral** (misma cola).
 - Orden en la GPU: resto de P0 (B1 → D1 → C1) → P1 neutral y terrestre → P1 de referencia → P1 tasas fijas → P1 CPPN neutral. En total quedan unos 41 mundos; a 0,35–0,5 h por mundo, terminarían el 19-10 por la noche (estimación).
+
+### 08:35–08:50 · B1: P0 con reproducción sexual (5 mundos): el cruce rompe la receta del cerebro
+
+- **Qué:** P0-feliz-sexual, 5 semillas × 300 épocas (rama `escalera-p0y`, `3bedd02`, sustrato 2.4.0). Población llena; entre 0,38 y 0,44 h por mundo.
+- **Datos:** `runs/fase1d/_analisis_B1.json` (`scratchpad/b1.py`) y `_b1_cppn.json` (`scratchpad/b1_cppn.py`, desde los checkpoints de la época 300).
+- **Resultado:**
+  - con sexo, entre el 83 y el 88 % de los nodos ocultos de la CPPN no tienen ninguna arista de salida (sin sexo, entre el 3 y el 5 %);
+  - las aristas bajan a ~41 y los nodos muertos se acumulan cerca del techo;
+  - neuronas: algo más que sin sexo en 4 de 5 mundos (efecto pequeño);
+  - la distancia estructural se estanca en ~113 y hay muchos menos clados (98–119 frente a 540–740);
+  - parentesco local entre 0,24 y 0,34, frente a 0,01 global.
+- **Causa:** el cruce uniforme por índice trata los índices como marcas históricas, y no lo son. Un nodo hereda sus aristas de entrada de un progenitor, pero sus aristas de salida pueden venir del otro. Es el problema de las convenciones en competencia (Stanley y Miikkulainen 2002).
+- **Conclusión:** firme sobre el operador, no sobre el sexo. Fallo de diseño propio: el test de `crossover` comprobaba que cada gen viniera de un progenitor, pero no que la receta siguiera conectada.
+- **Pendiente:** el responsable elige entre el cruce por bloques, las marcas históricas al estilo NEAT o seguir asexual.
