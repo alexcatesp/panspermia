@@ -524,3 +524,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Causa:** el cruce uniforme por índice trata los índices como marcas históricas, y no lo son. Un nodo hereda sus aristas de entrada de un progenitor, pero sus aristas de salida pueden venir del otro. Es el problema de las convenciones en competencia (Stanley y Miikkulainen 2002).
 - **Conclusión:** firme sobre el operador, no sobre el sexo. Fallo de diseño propio: el test de `crossover` comprobaba que cada gen viniera de un progenitor, pero no que la receta siguiera conectada.
 - **Pendiente:** el responsable elige entre el cruce por bloques, las marcas históricas al estilo NEAT o seguir asexual.
+
+### 08:55–09:15 · B1: error corregido y repetición en cola (ADR-018)
+
+- **Responsable:** "habrá que corregir el error y repetir".
+- **Hecho:**
+  - rama `escalera-p0z` (`8e4810b`, sustrato 2.5.0): la CPPN se hereda entera de un progenitor; huecos de neurona, cuerpo y vida se siguen mezclando;
+  - test `test_crossover_keeps_the_cppn_whole`: falla con el código de la 2.4 y pasa con la 2.5. 14 tests en verde en CPU, mientras la GPU corre D1;
+  - cola `experiments/fase1d/p0z.json` (P0-feliz-sexual-bloques, 5 mundos).
+- **Colas:** se paran `p1_mut.sh` y `p1_x.sh`, que solo estaban esperando sin haber corrido nada. Las sustituye `scratchpad/tras_p0.sh`: tras `p0_solo.sh`, B1 repetido → P1 neutral y terrestre → P1 de referencia → P1 tasas fijas → P1 CPPN neutral. Log en `runs/fase1d/tras_p0.log`; marcas `p0z_hecho`, `p1_mut_hecho` y `p1_x_hecho`.

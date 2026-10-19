@@ -419,3 +419,18 @@ Respuesta según la bibliografía:
   - **sexual:** descriptivo. Se miden `genome_distance` (diversidad) y `hidden_mean`. Hipótesis: el cruce de cerebros de distinto tamaño no cambia la media por sí solo;
   - **nacer al azar:** `kin_local − kin_global` **menor** que en el control con la medida (P0-feliz-control-kin, 1 semilla, que además debe coincidir bit a bit con P0-feliz s0 en población y neuronas). Para las semillas 1–4 del control, el parentesco se calcula a posteriori desde los checkpoints.
 - **B2 (herencia darwiniana):** se mantiene por bibliografía (ver `p0_factores.md`).
+
+## ADR-018 · 19-10-2026 · Cruce corregido: la CPPN se hereda entera (error de ADR-017)
+
+**Contexto.** P0-feliz-sexual (ADR-017) dejó entre el 83 y el 88 % de los nodos ocultos de la CPPN sin ninguna arista de salida (sin sexo, entre el 3 y el 5 %). Es un **error de implementación**: el cruce uniforme por índice daba a cada nodo sus aristas de entrada de un progenitor, mientras que sus aristas de salida, guardadas en las columnas de otros nodos, venían la mitad de las veces del otro. Los índices se trataron como marcas históricas, y no lo son: el mismo índice nace de divisiones distintas en cada linaje. Es el problema de las "convenciones en competencia" que NEAT resuelve con números de innovación (stanley2002neat). El test de `crossover` comprobaba que cada gen viniera de un progenitor, pero no que la receta siguiera conectada.
+
+**Decisión** (responsable, 19-10-2026, ~09:00: "habrá que corregir el error y repetir"):
+- **Corrección mínima** en la rama `escalera-p0z` (worktree `panspermia-p0z`, `8e4810b`, sustrato 2.5.0):
+  - la CPPN entera (nodos, activaciones, sesgos y aristas) viene de uno de los dos progenitores al 50 %, como un bloque ligado;
+  - los huecos de neurona y los genes de cuerpo y de vida se siguen mezclando uno a uno. Los huecos de neurona no tienen el problema, porque no guardan aristas: sus pesos salen de la CPPN según su posición.
+  - El modo asexual no cambia.
+- **Test nuevo** `test_crossover_keeps_the_cppn_whole`: con dos CPPN evolucionadas distintas, el hijo lleva entera la de uno de los dos, sin nodos sin salida nuevos. Falla con el cruce de la 2.4 y pasa con el de la 2.5 (14 tests en verde, en CPU).
+- **Se repite B1:** P0-feliz-sexual-bloques, 5 mundos (cola `experiments/fase1d/p0z.json`). Mismo criterio descriptivo que ADR-017, más la fracción de nodos de la CPPN sin salida, que debe quedar como sin sexo.
+- Los datos de P0-feliz-sexual se conservan como prueba del error.
+- Si más adelante hace falta recombinar dentro de la CPPN, el camino correcto son las marcas históricas (NEAT), con cambio de formato del genoma.
+- **Orden en la GPU** (`scratchpad/tras_p0.sh`, que sustituye a `p1_mut.sh` y `p1_x.sh`): resto de P0 (D1 y C1) → B1 repetido → P1 neutral y terrestre → P1 de referencia → P1 con tasas fijas → P1 con CPPN neutral.
