@@ -509,4 +509,4 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - **P1-peaje** con la mutación de siempre (rama `escalera`): es la referencia necesaria para comparar tasas fijas y CPPN neutral con selección, y sirve también para A1;
   - **P1-peaje-tasas-fijas** (cola `experiments/fase1d/p1x.json`, rama `escalera-p0x`, `4fdfaa9` y siguiente);
   - **P1-peaje-cppn-neutral** (misma cola).
-- Orden en la GPU: resto de P0 (B1 → D1 → C1) → P1 neutral y terrestre → P1 de referencia → P1 tasas fijas → P1 CPPN neutral. En total, unos 46 mundos, hasta el 20-10 por la mañana.
+- Orden en la GPU: resto de P0 (B1 → D1 → C1) → P1 neutral y terrestre → P1 de referencia → P1 tasas fijas → P1 CPPN neutral. En total quedan unos 41 mundos; a 0,35–0,5 h por mundo, terminarían el 19-10 por la noche (estimación).
