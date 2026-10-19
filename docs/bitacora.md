@@ -501,3 +501,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - firme: la deriva de las tasas aporta poco al crecimiento del cerebro, pero causa el problema de f16 y el ruido entre mundos;
   - firme: la CPPN neutral frena el inflado, pero no es neutral en aristas. Si se elige, necesita un ajuste.
 - **Pendiente:** el responsable decide A2, A3 y A7.
+
+### 07:20–07:25 · Decisión del responsable: A2 y A3 también se deciden tras P1
+
+- Para A3 y A2 también prefiere **esperar a P1**, y acepta añadir P1 con la CPPN neutral sin corregir: se verá si, con el coste de energía, la selección conserva las aristas útiles.
+- **Cola nueva `scratchpad/p1_x.sh`**: espera a `p0_solo.sh` y a `p1_mut.sh` y luego corre 15 mundos; marca `runs/fase1d/p1_x_hecho`, log `p1_x.log`:
+  - **P1-peaje** con la mutación de siempre (rama `escalera`): es la referencia necesaria para comparar tasas fijas y CPPN neutral con selección, y sirve también para A1;
+  - **P1-peaje-tasas-fijas** (cola `experiments/fase1d/p1x.json`, rama `escalera-p0x`, `4fdfaa9` y siguiente);
+  - **P1-peaje-cppn-neutral** (misma cola).
+- Orden en la GPU: resto de P0 (B1 → D1 → C1) → P1 neutral y terrestre → P1 de referencia → P1 tasas fijas → P1 CPPN neutral. En total, unos 46 mundos, hasta el 20-10 por la mañana.
