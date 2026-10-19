@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-19 12:04",
+ "actualizado": "2026-10-19 15:20",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -138,7 +138,7 @@
    "resultado": null,
    "anade": "Sexo (recombinación)",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "Primer intento con un error: el cruce por índice rompía la receta del cerebro (entre el 83 y el 88 % de los nodos de la CPPN sin salida). Corregido (ADR-018: la CPPN se hereda entera) y repetido en cola: P0-feliz-sexual-bloques."
+   "texto": "Primer intento con un error: el cruce por índice rompía la receta del cerebro (entre el 83 y el 88 % de los nodos de la CPPN sin salida). Corregido (ADR-018: la CPPN se hereda entera) y repetido: la receta queda sana (3–8 % sin salida) y la variedad no se pierde. Sin selección, el sexo no cambia casi nada. Responsable (19-10, 15:20): decidir tras P1-peaje-sexual-bloques."
   },
   {
    "id": "p0f-C1",

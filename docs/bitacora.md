@@ -581,3 +581,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - La forma terrestre de ganar variedad es repartir la población en varios mundos con migración (islas, fase 4a).
   - Reabrir N = 8.192 o más si P1 muestra que la selección se queda corta, o tras B1 si el sexo funciona.
 
+### 12:03–15:20 · B1 repetido: sexo con la receta entera (5 mundos)
+
+- **Qué:** P0-feliz-sexual-bloques (rama `escalera-p0z`, sustrato 2.5.0, ADR-018), de 12:03 a 14:01.
+- **Datos:** `runs/fase1d/_analisis_B1b.json`, `_b1b_cppn.json`.
+- **Resultado:**
+  - nodos de la CPPN sin salida, 3–8 % (asexual 3–5 %, cruce con error 83–88 %);
+  - aristas 72–78 en la época 300;
+  - distancia estructural 148–156, y sube (con el error, estancada en 112–117).
+- **Conclusión (firme):** el error está corregido. Sin selección, el sexo no cambia casi nada, como se esperaba. La cuenta de clados de una época no es comparable en los mundos sexuales: la generación del hijo es la mayor de sus padres y los clados se renuevan a la vez.
+- **Incidencia:** los análisis de D1 y C1 se guardaron moviendo `_analisis_B1.json` (fuera de git). Se regeneró con los mismos datos (`scratchpad/b1.py P0-feliz P0-feliz-sexual`).
+- **Decisión del responsable (15:20):** probarlo en P1. Cola `p1z.json` (rama `escalera-p0z`, commit `42a36b7`), lanzada con `scratchpad/tras_p1.sh` tras `tras_p0.sh`. Después se decide entre supergén y marcas históricas.
+
