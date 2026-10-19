@@ -605,3 +605,14 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Lectura (indicio, falta la referencia con nest):** con peaje, la selección funciona y se impone a la física de la mutación. Con las dos físicas el cerebro desaparece casi del todo y los bichos dejan de moverse: en P1 no hay comida, así que pensar y moverse solo cuestan. La física de la mutación apenas importa cuando hay selección.
 - **Pendiente:** P1-peaje (referencia con nest), en marcha desde las 20:12. Con ella se decide A1.
 
+### 20:12–23:28 · A1 con selección: referencia P1-peaje (nest) y decisión
+
+- **Qué:** P1-peaje (rama `escalera`, 5 mundos), de 20:12 a 23:22, 0,63 h por mundo. Llenos, sin extinciones ni pausas.
+- **Datos:** `runs/fase1d/_analisis_A1_P1.json`, `_ladder_P1.json` (`scripts/analyze_ladder.py`).
+- **Resultado:**
+  - neuronas en la ventana 151–300: nest 0,11–0,42, neutral 0,05–0,12, terrestre 0,05–0,10; en la época 300, las tres entre 0,04 y 0,11;
+  - pregunta prerregistrada de P1 (menos empuje que en P0): 5/5 con las tres físicas (p = 0,031).
+- **Conclusión (firme):** con peaje, la selección se impone a la física de la mutación; nest deja algo más de cerebro (5/5 frente a neutral, < 0,4 neuronas).
+- **Pregunta del responsable:** ¿neutral en este punto o para siempre? Respuesta: para toda la escalera, porque es la hipótesis nula y cambiarla a mitad invalidaría los peldaños anteriores; no para siempre, porque la terrestre es una variante realista (no universal) y sirve de prueba de robustez al final.
+- **Decisión del responsable (23:28):** neutral para toda la escalera (A1) y 8 neuronas iniciales (A6); al final, los peldaños clave se repiten con la terrestre. Nest, descartada; terrestre, aparcada (`docs/caminos.md`).
+

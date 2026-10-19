@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-19 15:14",
+ "actualizado": "2026-10-19 23:28",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -68,11 +68,11 @@
    "padre": "p0cierre",
    "titulo": "A1 · Mutación de neuronas",
    "corto": "A1 Mutación de neuronas",
-   "estado": "decision",
+   "estado": "hecho",
    "resultado": "positivo",
    "anade": "Mutación de neuronas",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "Neuronas tardías: nest 21–29 y crecen; neutral ≈ 8; terrestre 0,8–1,9. 5/5 en las dos comparaciones. El responsable (19-10, 07:03) decide tras ver P1 con neutral y terrestre (en cola)."
+   "texto": "P0: nest 21–29 y crecen; neutral ≈ 8; terrestre 0,8–1,9. P1: la selección vacía el cerebro con las tres (< 0,5 neuronas). Responsable (19-10, 23:28): neutral para toda la escalera; la terrestre, como prueba de robustez al final."
   },
   {
    "id": "p0f-A2",
@@ -188,10 +188,10 @@
    "padre": "p0cierre",
    "titulo": "Rama: física de la mutación (ADR-015)",
    "corto": "¿Qué mutación?",
-   "estado": "decision",
+   "estado": "hecho",
    "resultado": "positivo",
    "anade": "otra forma de mutar el número de neuronas",
-   "texto": "P0 con las tres físicas (19-10, 02:56): nest infla el cerebro (21–29 neuronas), neutral lo deja en 8 y terrestre lo vacía (≈ 1). 5/5 en ambos contrastes. P1n y P1t, canceladas con la decisión de 100 % P0, esperan a que se elija la física.",
+   "texto": "P0 con las tres físicas (19-10, 02:56): nest infla el cerebro (21–29 neuronas), neutral lo deja en 8 y terrestre lo vacía (≈ 1). 5/5 en ambos contrastes. P1 con las tres (19-10, 23:22): la selección vacía el cerebro con todas. Elegida neutral (responsable, 23:28); terrestre, para la robustez final.",
    "ref": "ADR-015 · docs/bibliografia/escalera/"
   },
   {

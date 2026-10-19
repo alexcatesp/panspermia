@@ -16,12 +16,12 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
-| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest, neutral y terrestre (✅ 15 mundos; 5/5 en las dos comparaciones). **Responsable (19-10, 07:03): decidir tras P1 con neutral y terrestre** (10 mundos, al final de la cola de P0) | 🔬 P1 en cola |
+| A1 | Física de la mutación de **neuronas** | "nest": invierte un hueco al azar; sin selección deriva hacia unas 43 | Infla los cerebros sin que sirvan; en la Tierra se pierde más de lo que se gana | kuo2009deletional, mira2001deletional, lynch2000duplicate, stanley2002neat, yampolsky2001bias, cano2022mutation | P0 con nest, neutral y terrestre (✅ 15 mundos; 5/5 en las dos comparaciones). P1 con las tres (✅ 15 mundos): la selección vacía el cerebro con todas (nest 0,11–0,42; neutral 0,05–0,12; terrestre 0,05–0,10). **Responsable (19-10, 23:28): neutral para toda la escalera; al final, los peldaños clave se repiten con la terrestre (robustez)** | ✅ |
 | A2 | Física de la mutación de la **CPPN** | añadir 5 %, quitar 2 %, dividir 3 %, quitar nodo 1 % | En P0 sus nodos pasan de 0,35 a ~11: es el mismo sesgo, en la receta del cerebro | stanley2002neat, langdon1998bloat, banzhaf2002bloat, kuo2009deletional | P0-cppn-neutral (✅ 5/5): ya no se infla, pero pierde aristas. **Responsable (19-10, 07:22): decidir tras P1-peaje-cppn-neutral** | 🔬 P1 en cola |
 | A3 | **Tasas de mutación**: gen o constante | σ autoadaptativa y tasa estructural como gen (deriva +75 % en 300 épocas) | Sin selección, la tasa sube por el suelo en 0. En la Tierra, la selección la baja hasta la barrera de la deriva | lynch2016driftbarrier, sniegowski1997mutators, beyer2002es | P0-tasas-fijas (✅ 5/5, efecto pequeño). Si se mantiene como gen, el ruido pasa a escala logarítmica (sin artefacto del suelo). **Responsable (19-10, 07:20): decidir tras P1-peaje-tasas-fijas frente a P1-peaje** | 🔬 P1 en cola |
 | A4 | **Cuánto** se muta: σ inicial 0,05, τ = 0,2, 11 % de cambios estructurales por hijo | sin contrastar | Demasiada mutación destruye la información más deprisa de lo que la selección la fija (umbral de error). Demasiado poca estanca | eigen1971selforganization, lynch2016driftbarrier | En P0: velocidad de divergencia neutral (`genome_distance`). El juicio necesita P1 | 📋 análisis de P0 + prueba en P1 |
 | A5 | **Techo** del genoma: 64 neuronas y 32 nodos de CPPN | fijo | Con nest, el equilibrio neutral (~43) queda cerca del techo. La evolución abierta necesita poder crecer sin un límite artificial | taylor2016oee, stanley2002neat | Analizar en P0 qué fracción de bichos toca el techo con cada física. Hecho: el de neuronas no limita con ninguna física; el de la CPPN sí (8–34 %) | ⚖ tras A2 |
-| A6 | **Genoma inicial**: 8 neuronas y CPPN mínima | "empezar mínimo" (NEAT) | Con la física terrestre, el punto de partida pesa: deriva hacia 0 | stanley2002neat, lynch2003origins | Se decide junto con A1: con la física neutral, el tamaño inicial es el punto alrededor del cual deriva | ⚖ con A1 |
+| A6 | **Genoma inicial**: 8 neuronas y CPPN mínima | "empezar mínimo" (NEAT) | Con la física terrestre, el punto de partida pesa: deriva hacia 0 | stanley2002neat, lynch2003origins | Se decide junto con A1: con la física neutral, el tamaño inicial es el punto alrededor del cual deriva | ✅ con A1: 8 neuronas, centro de la deriva neutral |
 | A7 | **Precisión** del genoma: los pesos se guardan en f16 | f16 | Un cambio menor que la resolución de f16 desaparece al guardarse: es otra "física" oculta, un suelo para σ | — (es técnico) | Medir en P0 cuántas mutaciones se pierden por redondeo. Hecho: entre el 6 y el 10 % | ⚖ tras A3 |
 
 ## B. Reproducción y herencia
@@ -222,4 +222,21 @@ El bloque terminó a las 14:01 (0,39–0,41 h por mundo; población llena). Rama
 - **Sin selección, el sexo no cambia casi nada**, como predice la teoría neutral (la recombinación no altera la diversidad media si nadie selecciona). Su ventaja (que las mejoras se sumen en vez de competir; hill1966linkage, felsenstein1974recombination) solo puede verse con selección.
 - **Ojo con los clados en los mundos sexuales:** el hijo hereda la generación mayor de sus dos padres, así que la población cruza a la vez los múltiplos de 50 generaciones y los clados se renuevan casi al mismo tiempo. La cuenta de clados en una época concreta (≈ 100–120) no es comparable con la de los asexuales; la media de la ventana sí lo es (324–362 frente a 343–356).
 - **Decisión del responsable (15:14):** probarlo en P1 (P1-peaje-sexual-bloques, 5 mundos, cola `p1z.json` de la rama `escalera-p0z`, `scratchpad/tras_p1.sh` tras `tras_p0.sh`). Después se decide si basta el supergén o hacen falta marcas históricas.
+
+### 19-10-2026, 23:28 · A1 con selección: P1 con las tres físicas (15 mundos)
+
+P1-peaje (nest, referencia) terminó a las 23:22; neutral y terrestre, a las 20:12. Todos llenos (4.096), sin extinciones ni pausas. Datos en `runs/fase1d/_analisis_A1_P1.json` y `_ladder_P1.json`. Ventana 151–300 (época 300 entre paréntesis).
+
+| Medida | nest | neutral | terrestre |
+|---|---|---|---|
+| Neuronas ocultas | 0,11–0,42 (0,05–0,10) | 0,05–0,12 (0,04–0,11) | 0,05–0,10 (0,04–0,10) |
+| Empuje | 0,004–0,10 | 0,02–0,08 | 0,02–0,11 |
+| Sinapsis | 1–398 | 16–632 | 23–187 |
+| Distancia estructural | 13–27 | 16–65 | 55–89 |
+| En P0 (sin selección), neuronas | 21–29, y crecen | 7,9–8,8 | 0,8–1,9 |
+
+- **Pregunta prerregistrada de P1 (¿funciona la selección? menos empuje):** se cumple 5/5 con las tres físicas (p = 0,031 en cada una).
+- **La selección se impone a la física de la mutación:** con peaje y sin comida, pensar y moverse solo cuestan, y las tres acaban casi sin cerebro y quietas. Nest deja algo más (5/5 por encima de neutral en la ventana, < 0,4 neuronas): su empuje hacia arriba se nota incluso con selección.
+- **Decisión del responsable (23:28):** física **neutral** para toda la escalera (A1) y genoma inicial de 8 neuronas (A6, centro de la deriva neutral). Es la hipótesis nula: el cerebro solo crece si la selección lo pide. Al terminar la escalera, los peldaños clave se repetirán con la **terrestre** como prueba de robustez. No es "la Tierra" en general: en bacterias domina la pérdida de ADN (kuo2009deletional, mira2001deletional), pero la duplicación es la gran fuente de genes nuevos (lynch2000duplicate) y en poblaciones pequeñas el genoma crece (lynch2003origins).
+- **Nota:** las pruebas de P1 que siguen en cola (tasas fijas, CPPN neutral, sexo) usan nest y se comparan con P1-peaje (nest), emparejadas por semilla. La comparación es válida; la física elegida se aplicará desde el cierre de P0.
 
