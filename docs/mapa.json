@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-19 11:10",
+ "actualizado": "2026-10-19 12:04",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -145,10 +145,11 @@
    "padre": "p0cierre",
    "titulo": "C1 · Tamaño de la población",
    "corto": "C1 Tamaño de la población",
-   "estado": "pendiente",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "positivo",
    "anade": "Tamaño de la población",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": "Con 1.024 el cerebro crece igual (29 frente a 30 neuronas), pero hay mucha menos variedad (32–100 clados frente a 540–740). Responsable (19-10, 12:04): se queda en 4.096."
   },
   {
    "id": "p0f-C2",

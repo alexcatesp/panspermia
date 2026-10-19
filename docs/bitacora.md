@@ -558,3 +558,16 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - Se mantiene «junto al padre» (`BIRTH_PLACEMENT="cerca"`, spec v1). Cuando haya señal o ataque, se probarán las dos opciones. Para P0, D1 queda cerrado.
 
+### 10:50–12:04 · C1: P0 con 1.024 bichos (5 mundos); fin de la cola de P0
+
+- **Qué:** P0-feliz-N1024 (rama `escalera-p0x`, cola `p0x.json`). Bloque de 10:50 a 12:02, entre 0,22 y 0,32 h por mundo. Con él termina `p0_solo.sh` (marca `p0_cola_hecha`); `tras_p0.sh` empezó a las 12:03 con B1 repetido.
+- **Datos:** `runs/fase1d/_analisis_C1.json`.
+- **Resultado (época 300, media ± desviación):**
+  - neuronas 29,3 ± 4,5 frente a 30,1 ± 3,9;
+  - nodos de la CPPN 12,8 ± 2,6 frente a 14,5 ± 1,8;
+  - distancia estructural 122 ± 20 frente a 152 ± 14;
+  - clados 32–100 frente a 540–740.
+- **Pausa de capacidad** en s0 en la época 300 (`patch_gain` y `maze_gain` = 0,25). Es un falso positivo: no hay selección en P0, y la línea de base aleatoria es del 75 %. El mundo había terminado; no se crea `CAPABILITY_REVIEW.json`.
+- **Conclusión (firme):** sin selección, N no cambia la tendencia media (la fija el sesgo de la mutación), solo la variedad.
+- **Decisión del responsable (12:04):** el tope se queda en 4.096.
+

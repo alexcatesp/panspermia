@@ -36,7 +36,7 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
-| C1 | **Tamaño de la población** (tope) | 4.096 | El azar compite con la selección: una ventaja menor que ~1/N no se impone. Las poblaciones pequeñas y las grandes llegan a la complejidad por caminos distintos. El sexo ayuda más en las grandes | ohta1973nearlyneutral, charlesworth2009ne, labar2016populations, colegrave2002sex | P0-N1024 (5 mundos); quizá también N = 8.192 si cabe en la GPU | 🔬 en cola |
+| C1 | **Tamaño de la población** (tope) | 4.096 | El azar compite con la selección: una ventaja menor que ~1/N no se impone. Las poblaciones pequeñas y las grandes llegan a la complejidad por caminos distintos. El sexo ayuda más en las grandes | ohta1973nearlyneutral, charlesworth2009ne, labar2016populations, colegrave2002sex | P0-N1024 (✅ 5 mundos): el cerebro crece igual (29 frente a 30 neuronas), pero con mucha menos variedad (32–100 clados frente a 540–740). **Responsable (19-10, 12:04): se queda en 4.096** | ✅ |
 | C2 | **Muerte y vejez** | P0: vida fija de 600 pasos. Desde P1: la vejez se impone (gasto creciente desde 5.000 pasos) | En la Tierra, el envejecimiento **evoluciona**: acumulación de mutaciones (Medawar), pleiotropía antagonista (Williams), soma desechable (Kirkwood). En mundos espaciales, la muerte programada puede verse favorecida. Imponerla o dejarla evolucionar cambia la duración de las generaciones y cuánto compensa aprender | williams1957pleiotropy, kirkwood1977ageing, werfel2015death | En P0 solo reescala el tiempo. La decisión ("ley del mundo" o "gen") se toma ahora y se prueba en P1 o P2 | 📚 decidir ahora |
 | C3 | **Población inicial** (512) | 512 | Solo afecta a la primera época: el mundo se llena enseguida | — | Ninguna: irrelevante en P0 | ✅ |
 | C4 | **Tope de nacimientos** por paso (32) | 32 | Si se alcanza, frena la reproducción por una razón técnica | — | Comprobar en los datos que nunca se alcanza. Hecho: se alcanza por las cohortes sincronizadas, sin perder nacimientos | ✅ (vigilar en P1) |
@@ -56,7 +56,7 @@
 
 ## Plan para cerrar P0
 
-1. **Cola solo de P0 (🔬, `scratchpad/p0_solo.sh`, decisión del 18-10 a las 22:44):** A1 → A3 → A2 → B1 → D1 → C1. Son 36 mundos más, unas 19 h, hasta el 19-10 por la tarde. Sin E2 ni otras fases.
+1. **Cola solo de P0 (✅ terminada el 19-10 a las 12:02, `scratchpad/p0_solo.sh`, decisión del 18-10 a las 22:44):** A1 → A3 → A2 → B1 → D1 → C1. Son 36 mundos más, unas 19 h, hasta el 19-10 por la tarde. Sin E2 ni otras fases.
 2. **Análisis sin GPU (📋):** A4, A5, A7 y C4, con los datos de P0 que ya existen.
 3. **B1 y D1** ya están implementados (rama `escalera-p0y`, ADR-017) y en la cola.
 4. **Decisiones por bibliografía (📚):** C2, A6, B2 y E1.
@@ -186,4 +186,21 @@ El bloque terminó a las 10:50 (0,39 h por mundo; población llena). Datos en `r
 - **Por qué importa más adelante:** en los peldaños sociales (señal, ataque), el parentesco local puede favorecer la ayuda entre vecinos, pero la competencia entre parientes puede anularlo (taylor1992viscous, west2002kincompetition).
 - **Propuesta:** mantener «junto al padre» (lo terrestre, sin coste en P0) y conservar «al azar» como interruptor de control para los peldaños sociales.
 - **Decisión del responsable (11:15):** se mantiene «junto al padre» y la elección se prueba con las dos opciones cuando haya señal o ataque. Para P0, D1 queda cerrado.
+
+### 19-10-2026, 12:04 · C1: P0 con 1.024 bichos (5 mundos)
+
+La cola de P0 terminó a las 12:02 (0,22 h por mundo frente a 0,39 h con 4.096). Datos en `runs/fase1d/_analisis_C1.json`. Valores de la época 300 (media ± desviación entre semillas).
+
+| Medida | N = 4.096 (P0-feliz) | N = 1.024 |
+|---|---|---|
+| Neuronas ocultas | 30,1 ± 3,9 | 29,3 ± 4,5 |
+| Nodos ocultos de la CPPN | 14,5 ± 1,8 | 12,8 ± 2,6 |
+| Distancia genética continua | 39,9 ± 10,7 | 32,9 ± 6,7 |
+| Distancia genética estructural | 152 ± 14 | 122 ± 20 |
+| Clados vivos | 540–740 | 32–100 |
+| Diversidad de clados (Shannon) | 5,4–6,0 | 3,2–3,6 |
+
+- **Lectura:** sin selección, el tamaño medio del cerebro lo fija el sesgo de la mutación, no el tamaño de la población (lo esperado por la teoría neutral). N cambia sobre todo la **variedad**: con 1.024 hay muchos menos linajes, menos distancia entre bichos y algo más de diferencia entre mundos. El efecto importante de N (que el azar tape ventajas menores que ~1/N; ohta1973nearlyneutral) solo se ve con selección.
+- **Pausa de capacidad** en P0-feliz-N1024 s0, en la última época (300): `patch_gain` y `maze_gain` = 0,25 (umbrales 0,20 y 0,25), con un 100 % de éxito de 64 sondas frente a una línea de base aleatoria del 75 %. Sin selección no puede haber capacidad evolucionada: es otro falso positivo de una prueba con poco margen sobre el azar, como los de E0 y E2. El mundo había terminado; no se crea `CAPABILITY_REVIEW.json`.
+- **Decisión del responsable (12:04):** el tope de población se queda en 4.096: más variedad y selección más fina, por 1,8 veces más tiempo por mundo.
 
