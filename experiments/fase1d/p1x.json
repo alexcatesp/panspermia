@@ -1,0 +1,30 @@
+[
+ {
+  "name": "P1-peaje-tasas-fijas",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P1X",
+  "description": "Peaje a vivir: vivir, moverse, cada neurona y el tamaño cuestan energía; sigue sin haber comida y se nace por edad con energía regalada. ¿Funciona la selección? (menos empuje, menos neuronas) Tasas de mutación fijas (σ = 0,05, tasa = 1), para decidir A3 con selección (responsable, 19-10, 07:20).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 1,
+   "k_mean": 0.0,
+   "repro_mode": "edad"
+  },
+  "config": {
+   "MUTATION_RATES": "fijas"
+  }
+ }
+]
