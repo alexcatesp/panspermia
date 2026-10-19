@@ -1,0 +1,30 @@
+[
+ {
+  "name": "P1-peaje-sexual-bloques",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P1Z",
+  "description": "Peaje a vivir: vivir, moverse, cada neurona y el tamaño cuestan energía; sigue sin haber comida y se nace por edad con energía regalada. ¿Funciona la selección? (menos empuje, menos neuronas) Reproducción sexual con la receta del cerebro entera de un progenitor (ADR-018), para decidir B1 con selección (responsable, 19-10, 15:20).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 1,
+   "k_mean": 0.0,
+   "repro_mode": "edad"
+  },
+  "config": {
+   "REPRODUCTION": "sexual"
+  }
+ }
+]
