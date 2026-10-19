@@ -543,3 +543,18 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - su precio: interferencia de Hill-Robertson y trinquete de Muller dentro del bloque.
   - La receta como supergén es, por tanto, un caso real, pero sin las ventajas del sexo en la parte más importante del genoma.
 - **Decisión del responsable:** decidir tras ver B1 corregido. Si el sexo funciona bien con la receta como supergén, B1 se cierra; si no, se implementan las marcas históricas (formato nuevo del genoma) antes de cerrar P0.
+
+### 08:35–11:10 · D1: el hijo nace al azar (5 mundos) y control (1 mundo)
+
+- **Qué:** P0-feliz-nacer-azar (`BIRTH_PLACEMENT="azar"`) y P0-feliz-control-kin s0 (rama `escalera-p0y`, sustrato 2.4.0, ADR-017). Bloque de 08:35 a 10:50, 0,39 h por mundo. Parentesco de P0-feliz s0–s4 calculado a posteriori desde los checkpoints (épocas 100, 200 y 300; `scratchpad/p0_kin.py`, CPU).
+- **Datos:** `runs/fase1d/_analisis_D1.json`, `_analisis_D1_kin.json`.
+- **Resultado:**
+  - control idéntico a P0-feliz s0 en todas las medidas salvo el tiempo de reloj (la medida de parentesco solo observa);
+  - al azar, **toda la genética es idéntica bit a bit** a P0-feliz en los 5 mundos (neuronas, CPPN, distancias, clados); solo cambian la conducta y los descriptores de movimiento;
+  - parentesco local / global en la época 300: 22–62 junto al padre, 1,00–1,03 al azar (5/5).
+- **Conclusión (firme):** en P0 el lugar de nacimiento no influye en la evolución, porque nadie interactúa y la reproducción no depende de la posición. Solo decide si hay vecindarios de parientes, que importarán en los peldaños sociales. Propuesta: mantener «junto al padre» y usar «al azar» como control. Bibliografía nueva: west2002kincompetition (Crossref). Pendiente de la decisión del responsable.
+
+### 11:15 · Decisión del responsable: D1 se prueba en el peldaño social
+
+- Se mantiene «junto al padre» (`BIRTH_PLACEMENT="cerca"`, spec v1). Cuando haya señal o ataque, se probarán las dos opciones. Para P0, D1 queda cerrado.
+

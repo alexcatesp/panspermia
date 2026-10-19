@@ -45,7 +45,7 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
-| D1 | **Dónde nace el hijo** | pegado al padre (a 2 radios) | Crea vecindarios de parientes (aislamiento por distancia). Eso favorece la cooperación y la señal, pero la competencia local entre parientes puede anularlo. Cambiarlo más tarde cambiaría toda la evolución social | wright1943isolation, taylor1992viscous, werfel2015death | P0-feliz-nacer-azar (5 mundos) y control con la medida de parentesco (1 mundo): `kin_local` frente a `kin_global` | 🔬 en cola |
+| D1 | **Dónde nace el hijo** | pegado al padre (a 2 radios) | Crea vecindarios de parientes (aislamiento por distancia). Eso favorece la cooperación y la señal, pero la competencia local entre parientes puede anularlo. Cambiarlo más tarde cambiaría toda la evolución social | wright1943isolation, taylor1992viscous, west2002kincompetition, werfel2015death | P0-feliz-nacer-azar (✅ 5 mundos) y control (✅ 1 mundo, idéntico bit a bit). **En P0 no cambia nada genético** (5/5 idénticos); solo el parentesco del vecindario: junto al padre, 22–62 veces el global; al azar, ≈ 1. **Responsable (19-10, 11:15): junto al padre por ahora; las dos opciones se prueban en el peldaño social** | ✅ ⏭ social |
 | D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0 | ⏭ P2 (densidad de comida) |
 
 ## E. Codificación del cerebro
@@ -168,4 +168,22 @@ El bloque terminó a las 08:35 (entre 0,38 y 0,44 h por mundo; población llena)
 1. **cruce por bloques:** la receta del cerebro (CPPN) entera de un progenitor, y las neuronas, el cuerpo y los genes de vida mezclados. Es sencillo y no rompe nada; se parece a genes ligados en un cromosoma;
 2. **marcas históricas al estilo NEAT:** cada arista y cada nodo llevan un número de origen y se alinean por él. Es lo correcto según la bibliografía, pero cambia el formato del genoma (versión mayor del sustrato);
 3. seguir **asexual** y dejar el sexo para más adelante, con el riesgo de invalidar lo anterior.
+
+### 19-10-2026, 11:10 · D1: el hijo nace al azar (5 mundos) y control (1 mundo)
+
+El bloque terminó a las 10:50 (0,39 h por mundo; población llena). Datos en `runs/fase1d/_analisis_D1.json` (medidas por época) y `_analisis_D1_kin.json` (parentesco calculado a posteriori desde los checkpoints de P0-feliz, que no lo medía).
+
+| Medida (época 300) | Junto al padre (P0-feliz) | Al azar |
+|---|---|---|
+| Neuronas, receta, distancias genéticas, clados | — | **idénticas bit a bit** en los 5 mundos |
+| Movimiento y conducta (empuje, novedad, agregación) | — | distintos (cada bicho ve otro entorno) |
+| Parentesco local (vecino del mismo clado) | 0,17–0,34 (épocas 100–200: 0,30–0,47) | 0,004–0,010 |
+| Parentesco global (dos bichos al azar) | 0,004–0,010 | 0,004–0,010 |
+| Cociente local / global | **22–62** (5/5) | **1,00–1,03** (5/5) |
+
+- **Control** (P0-feliz-control-kin s0): idéntico a P0-feliz s0 en todas las medidas salvo el tiempo de reloj. La medida de parentesco solo observa.
+- **Lectura:** en P0 nadie interactúa ni hay selección, y quién se reproduce no depende de dónde esté. Por eso el lugar de nacimiento no puede cambiar la genética: solo reparte a los parientes por el mapa. Nacer junto al padre crea vecindarios de parientes (aislamiento por distancia, wright1943isolation); nacer al azar los borra del todo.
+- **Por qué importa más adelante:** en los peldaños sociales (señal, ataque), el parentesco local puede favorecer la ayuda entre vecinos, pero la competencia entre parientes puede anularlo (taylor1992viscous, west2002kincompetition).
+- **Propuesta:** mantener «junto al padre» (lo terrestre, sin coste en P0) y conservar «al azar» como interruptor de control para los peldaños sociales.
+- **Decisión del responsable (11:15):** se mantiene «junto al padre» y la elección se prueba con las dos opciones cuando haya señal o ataque. Para P0, D1 queda cerrado.
 

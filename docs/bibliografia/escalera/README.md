@@ -81,3 +81,11 @@ Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de
   - la corrección de ADR-018 es un caso biológico real (la receta como supergén), no un error;
   - pero deja la parte más importante del genoma sin las ventajas del sexo;
   - recombinar dentro de la receta exige **homología**, es decir, marcas históricas. Eso cambia el formato del genoma, y conviene decidirlo en P0 si se quiere.
+
+## 8. Dónde nace el hijo (D1)
+
+- **Aislamiento por distancia** (wright1943isolation): si las crías nacen cerca de sus padres, los vecinos son parientes y la población se divide en vecindarios genéticos.
+- **Poblaciones viscosas** (taylor1992viscous; west2002kincompetition): ese parentesco local favorece ayudar al vecino (selección de parentesco), pero los parientes también compiten por lo mismo, y en el caso más sencillo los dos efectos se anulan. Lo que decide es si la competencia es local o global.
+- **En P0** no hay interacción entre bichos ni selección: dónde nace el hijo no puede cambiar la genética, solo quién vive al lado de quién. El resultado (genética idéntica bit a bit; parentesco local 22–62 veces el global junto al padre y ≈ 1 vez al azar) lo confirma.
+- **Implicación de diseño:** nacer junto al padre es lo terrestre y no cuesta nada en P0; el modo «al azar» queda como interruptor de control para los peldaños sociales (señal, ataque), donde permite saber si una conducta depende del parentesco.
+
