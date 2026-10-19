@@ -89,3 +89,10 @@ Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de
 - **En P0** no hay interacción entre bichos ni selección: dónde nace el hijo no puede cambiar la genética, solo quién vive al lado de quién. El resultado (genética idéntica bit a bit; parentesco local 22–62 veces el global junto al padre y ≈ 1 vez al azar) lo confirma.
 - **Implicación de diseño:** nacer junto al padre es lo terrestre y no cuesta nada en P0; el modo «al azar» queda como interruptor de control para los peldaños sociales (señal, ataque), donde permite saber si una conducta depende del parentesco.
 
+## 9. ¿Mundos mucho más grandes para tener más variedad? (C1, pregunta del responsable)
+
+- **La variedad neutral crece con N** (ohta1973nearlyneutral; charlesworth2009ne): es lo que mide C1 (32–100 clados con 1.024, 540–740 con 4.096). Pero en P0 es variedad sin uso: nadie la selecciona.
+- **Lo que importa es la variedad útil y la eficacia de la selección.** Con N grande, la selección distingue ventajas menores (s > ~1/N). Pero en una población asexual, a partir de cierto tamaño, las mejoras compiten entre sí en vez de sumarse (interferencia clonal, gerrish1998clonal), y crecer más rinde cada vez menos. El sexo (B1) es lo que deja aprovechar las poblaciones grandes (colegrave2002sex).
+- **Más grande no es siempre más complejo.** En organismos digitales asexuales, las poblaciones pequeñas y las grandes, pero no las intermedias, hicieron crecer el genoma: las pequeñas por deriva (fijando inserciones algo dañinas) y las grandes por selección (labar2016populations). En la Tierra, la complejidad de los genomas eucariotas pudo crecer precisamente gracias a poblaciones pequeñas (lynch2003origins).
+- **Alternativa de la Tierra: muchos mundos con algo de migración** (wright1943isolation). Varias poblaciones medianas, poco conectadas, conservan más variedad total que una sola grande del mismo tamaño, porque cada una deriva hacia soluciones distintas. Es el diseño original de Panspermia (islas P2P, fase 4a) y lo apoya D1 (vecindarios de parientes).
+

@@ -571,3 +571,13 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Conclusión (firme):** sin selección, N no cambia la tendencia media (la fija el sesgo de la mutación), solo la variedad.
 - **Decisión del responsable (12:04):** el tope se queda en 4.096.
 
+### 12:05–12:15 · ¿Mundos con muchos más bichos para tener más variedad? (C1)
+
+- **Pregunta del responsable**, a la vista de C1.
+- **Respuesta** (bibliografía en `docs/bibliografia/escalera/README.md` § 9; gerrish1998clonal nueva, comprobada en Crossref): no por ahora.
+  - La variedad que mide P0 es neutral.
+  - Sin sexo, crecer rinde cada vez menos por la interferencia clonal.
+  - Poblaciones pequeñas y grandes llegan a la complejidad por caminos distintos (labar2016populations).
+  - La forma terrestre de ganar variedad es repartir la población en varios mundos con migración (islas, fase 4a).
+  - Reabrir N = 8.192 o más si P1 muestra que la selección se queda corta, o tras B1 si el sexo funciona.
+
