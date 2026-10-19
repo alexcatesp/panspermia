@@ -60,7 +60,9 @@
 2. **Análisis sin GPU (📋):** A4, A5, A7 y C4, con los datos de P0 que ya existen.
 3. **B1 y D1** ya están implementados (rama `escalera-p0y`, ADR-017) y en la cola.
 4. **Decisiones por bibliografía (📚):** C2, A6, B2 y E1.
-5. **Criterio de cierre:** todas las filas en ✅ o ⏭. Las decisiones quedan en una ADR de cierre de P0, que fija la "física" de la herencia para toda la escalera.
+5. **A2, A3 y B1 en P1 (responsable, 19-10, 23:45):** decidir caso a caso; lo que P1 no pueda juzgar (en P1 la selección solo quita) se prueba en P2 antes de fijarlo.
+6. **Integración:** al cerrar P0, unir las ramas `escalera`, `escalera-mut`, `escalera-p0x`, `escalera-p0y` y `escalera-p0z` en un sustrato único, con tests y determinismo, antes de P2.
+7. **Criterio de cierre:** todas las filas en ✅ o ⏭. Las decisiones quedan en una ADR de cierre de P0, que fija la "física" de la herencia para toda la escalera.
 
 
 ## Resultados
