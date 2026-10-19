@@ -63,3 +63,21 @@ Búsqueda del 18-10-2026. El primer mundo de la escalera (P0, sin selección) mo
 
 - Leer completos Kuo y Ochman (2009), Cano et al. (2022) y Clune et al. (2013).
 - Buscar estudios sobre la reducción del cerebro en animales domésticos y en especies de islas.
+
+## 7. Recombinar dentro de la receta del cerebro (B1, ADR-018)
+
+Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de un solo progenitor es "incorrecto" biológicamente?
+
+- **En la Tierra lo normal es recombinar dentro de cada cromosoma.** En la meiosis, los cromosomas de los dos progenitores se emparejan por **homología** (la misma secuencia en el mismo sitio) y se entrecruzan. El hijo recibe trozos de los dos dentro de un mismo cromosoma. El emparejamiento funciona porque el ADN es lineal y cada gen ocupa su locus. Nuestros índices de la CPPN no tienen esa homología (ADR-018); las marcas históricas de NEAT son su equivalente artificial (stanley2002neat).
+- **Pero heredar un bloque entero también existe en la Tierra.** Es el **ligamiento completo**:
+  - el ADN de mitocondrias y cloroplastos se hereda casi siempre de un solo progenitor (birky1995uniparental);
+  - la parte del cromosoma Y que no recombina (charlesworth2000ydegeneration);
+  - los **supergenes**: bloques de genes que no se separan porque una inversión impide el entrecruzamiento, como los patrones de alas de *Heliconius numata* o el cromosoma social de la hormiga de fuego (thompson2014supergenes).
+- **Precio del ligamiento completo:** dentro del bloque se pierden las ventajas del sexo.
+  - Las mejoras de la receta no se pueden combinar: compiten (interferencia de Hill-Robertson, hill1966linkage).
+  - Las mutaciones dañinas se acumulan como en un asexual (trinquete de Muller, muller1964ratchet). El cromosoma Y degenera precisamente por eso (charlesworth2000ydegeneration).
+- **Ventaja:** conserva intacta una combinación que funciona junta. Por eso, en la Tierra, la selección favorece suprimir la recombinación entre genes que cooperan (thompson2014supergenes).
+- **Para Panspermia:**
+  - la corrección de ADR-018 es un caso biológico real (la receta como supergén), no un error;
+  - pero deja la parte más importante del genoma sin las ventajas del sexo;
+  - recombinar dentro de la receta exige **homología**, es decir, marcas históricas. Eso cambia el formato del genoma, y conviene decidirlo en P0 si se quiere.
