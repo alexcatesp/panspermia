@@ -593,3 +593,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Incidencia:** los análisis de D1 y C1 se guardaron moviendo `_analisis_B1.json` (fuera de git). Se regeneró con los mismos datos (`scratchpad/b1.py P0-feliz P0-feliz-sexual`).
 - **Decisión del responsable (15:14):** probarlo en P1. Cola `p1z.json` (rama `escalera-p0z`, commit `42a36b7`), lanzada con `scratchpad/tras_p1.sh` tras `tras_p0.sh`. Después se decide entre supergén y marcas históricas.
 
+### 14:01–20:15 · A1 en P1: mutación neutral y terrestre con peaje (10 mundos; provisional)
+
+- **Qué:** P1-peaje-neutral y P1-peaje-terrestre (rama `escalera-mut`, sustrato 2.2.0), de 14:01 a 20:12, 0,62 h por mundo. Los 10 mundos llenos (4.096) y sin extinciones ni pausas.
+- **Datos:** `runs/fase1d/_analisis_A1_P1.json`.
+- **Resultado (épocas 151–300; época 300 entre paréntesis):**
+  - neuronas ocultas: neutral 0,05–0,12 (0,04–0,11); terrestre 0,05–0,10 (0,04–0,10). En P0 eran 7,9–8,8 y 0,8–1,9;
+  - empuje: 0,02–0,08 en neutral y 0,02–0,11 en terrestre (P0: 5–7);
+  - sinapsis 16–632 (neutral) y 23–187 (terrestre), frente a 645–1.200 y 366–640 en P0;
+  - distancia estructural: neutral 16–65; terrestre 55–89 (P0: 102–138).
+- **Lectura (indicio, falta la referencia con nest):** con peaje, la selección funciona y se impone a la física de la mutación. Con las dos físicas el cerebro desaparece casi del todo y los bichos dejan de moverse: en P1 no hay comida, así que pensar y moverse solo cuestan. La física de la mutación apenas importa cuando hay selección.
+- **Pendiente:** P1-peaje (referencia con nest), en marcha desde las 20:12. Con ella se decide A1.
+
