@@ -679,3 +679,16 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - A4: se mantienen σ = 0,05 y tasa estructural = 1. P1 con tasas fijas no muestra exceso ni defecto; se revisa con el gemelo de P2;
   - C2: la vejez es una ley del mundo en toda la escalera; como gen, peldaño propio tras P5.
 - **Estado:** todas las filas de `docs/escalera/p0_factores.md` en ✅ o ⏭. Siguiente: ADR de cierre de P0 y rama de integración (5 ramas → un sustrato con tests, determinismo y la CPPN neutral corregida comprobada en P0).
+
+### 09:30–10:17 · Cierre de P0: ADR-019 y rama de integración
+
+- **Qué:** ADR-019 (física de la herencia de toda la escalera). Rama `escalera-int` (worktree `panspermia-int`, `da0a367`, sustrato 2.6.0): sale de `escalera-p0z` (que ya contenía `escalera`, `escalera-mut` y la base de `escalera-p0y`) más las colas de `escalera-p0x`. Valores por defecto: neuronas neutrales, tasas fijas (σ = 0,05, tasa 1), CPPN neutral corregida, asexual, nacer junto al padre, 8 neuronas iniciales.
+- **CPPN neutral corregida (A2):** cuatro intentos, medidos con `scripts/cppn_drift.py` (512 linajes, solo mutación, sin selección; aristas / nodos ocultos):
+  1. contraer uniendo cada entrada con cada salida: 45 / 2,9 a las 1.000 generaciones, pero 36 a las 3.000. Descartada;
+  2. fusionar solo nodos con una entrada y una salida: 60 / 12,6 a las 3.000 (los nodos se acumulan). Descartada;
+  3. contraer con el mínimo de aristas (a + b − 1), sin evitar choques: 37 / 7,9 a las 3.000, porque añadir arista rellena a menudo la i→j que dividir había quitado. Descartada;
+  4. **elegida:** como la 3, pero solo se contraen nodos sin choques; quitar arista no aísla nodos ocultos y dividir solo elige aristas divisibles. 54,5 / 6,7 a las 1.000 y 58,6 / 11,4 a las 3.000: **aristas − nodos se queda en 48** (47,2). Los nodos se extienden desde 0 como un paseo con suelo (√t).
+  - Referencias en 1.000 generaciones: nest 73 / 14; neutral 32 / 2,7.
+- **Tests:** 78 en verde y 1 lento saltado (28 min en GPU), con 3 tests nuevos: valores por defecto de la escalera, aristas − nodos constante y contracción.
+- **En marcha desde las 10:17:** cola `p0int.json`. Primero, el control con la física de la spec v1 elegida a mano, que debe coincidir bit a bit con P0-feliz s0. Después, P0-escalera, 5 mundos.
+- **Criterio:** neuronas cerca de 8; CPPN sin inflarse ni vaciarse (aristas − nodos cerca de 48); σ en 0,05; control idéntico.

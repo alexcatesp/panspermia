@@ -434,3 +434,37 @@ Respuesta según la bibliografía:
 - Los datos de P0-feliz-sexual se conservan como prueba del error.
 - Si más adelante hace falta recombinar dentro de la CPPN, el camino correcto son las marcas históricas (NEAT), con cambio de formato del genoma.
 - **Orden en la GPU** (`scratchpad/tras_p0.sh`, que sustituye a `p1_mut.sh` y `p1_x.sh`): resto de P0 (D1 y C1) → B1 repetido → P1 neutral y terrestre → P1 de referencia → P1 con tasas fijas → P1 con CPPN neutral.
+
+## ADR-019 · 20-10-2026 · Cierre de P0: la física de la herencia de toda la escalera (decisión del responsable)
+
+**Contexto.** ADR-016 abrió la lista de factores de P0 (`docs/escalera/p0_factores.md`) y prohibió subir de peldaño hasta cerrarlos. Entre el 18 y el 20 de octubre se simularon 76 mundos de P0 y P1 (46 y 30), se consultó la bibliografía (`docs/bibliografia/escalera/`) y el responsable decidió fila a fila. El 20-10 a las 09:28 todas las filas quedaron en ✅ o ⏭.
+
+**Decisión.** La escalera, desde P2, usa esta física de la herencia (rama `escalera-int`, sustrato 2.6.0, valores por defecto de `config.py`):
+
+| Factor | Elección | Cuándo | Por qué, en una línea |
+|---|---|---|---|
+| A1 Mutación de neuronas | `neutral` | 19-10, 23:28 | Hipótesis nula: el cerebro solo crece si la selección lo pide. Nest se descarta (infla de 8 a 21–29 sin selección); terrestre, prueba de robustez al final |
+| A2 Mutación de la CPPN | `neutral_corregida` | 20-10, 07:10 | Operadores equilibrados (langdon2000sizefair), cada uno con su inverso (abajo). La de siempre se infla incluso con selección |
+| A3 Tasas de mutación | `fijas` | 20-10, 07:01 | Como gen derivan hacia arriba sin selección (P0) y se hunden 10 veces con solo selección negativa (P1) |
+| A4 Cuánto se muta | σ = 0,05, tasa estructural 1 | 20-10, 09:28 | Sin señal de exceso ni de defecto en P0 ni en P1 |
+| A5 Techo del genoma | 64 neuronas, 32 nodos de CPPN | 20-10, 07:10 | Con A1 y A2 neutrales nadie lo toca; se vigila en P2 |
+| A6 Genoma inicial | 8 neuronas, CPPN mínima | 19-10, 23:28 | Centro de la deriva neutral |
+| A7 Precisión | f16 | 20-10, 07:01 | Con σ fija solo se pierde el 0,7 % de las perturbaciones |
+| B1 Reproducción | asexual | 20-10, 09:17 | En P1 el sexo no ayuda (purga peor porque la tasa como gen no baja); su ventaja se prueba en P2 |
+| B2 Herencia de lo aprendido | darwiniana | bibliografía | — |
+| C1 Población | 4.096 | 19-10, 12:04 | 1.024 pierde variedad (32–100 clados frente a 540–740) |
+| C2 Vejez | ley del mundo | 20-10, 09:28 | Hipótesis nula; como gen, peldaño propio tras P5 |
+| C3, C4 | 512 iniciales, tope 32 nacimientos por paso | bibliografía y datos | Sin efecto o sin tocar el tope |
+| D1 Lugar de nacimiento | junto al padre | 19-10, 11:15 | Se prueba al azar en el peldaño social |
+| E1 Codificación | indirecta (CPPN) | bibliografía | — |
+| B3, D2 | — | — | Pertenecen a P3 y P2 |
+
+- **Gemelos de P2** (lo que P1 no puede juzgar, decisión del 19-10, 23:39): tasas como gen y reproducción sexual con tasas fijas, cada uno contra P2 base, emparejados por semilla.
+- **Integración:** `escalera-int` sale de `escalera-p0z` (que contiene `escalera`, `escalera-mut` y la base de `escalera-p0y`) más las colas de `escalera-p0x`. Las físicas antiguas siguen elegibles en `config` para repetir experimentos.
+- **Comprobación antes de P2** (cola `experiments/fase1d/p0int.json`): P0-escalera, 5 mundos, con la física nueva: las neuronas se quedan cerca de 8, la CPPN no se infla ni se vacía (aristas cerca de 48) y σ no cambia. Además, un control con la física de la spec v1 elegida a mano, que debe coincidir bit a bit con P0-feliz s0.
+- **CPPN neutral corregida** (las tasas de la neutral: añadir y quitar arista 3,5 %, dividir y quitar nodo 2 %). Cada operador tiene su inverso a la misma tasa:
+  - añadir y quitar arista: +1 y −1. Quitar nunca deja un nodo oculto sin entrada o sin salida;
+  - dividir y contraer: dividir i→j crea i→k→j (+1 nodo, +1 arista) y solo elige aristas con hueco entre i y j. Contraer cambia el nodo (a entradas, b salidas) por el mínimo de aristas que mantiene unidos a sus vecinos (a + b − 1, peso w_ak·w_kb): −1 nodo y −1 arista. Solo se contraen nodos cuya contracción no choca con aristas existentes.
+  - Resultado sin selección (`scripts/cppn_drift.py`, 512 linajes, solo mutación): **aristas − nodos ocultos se queda en 48** (47,2 a las 3.000 generaciones). Los nodos se extienden desde 0 como un paseo al azar con suelo: 6,7 a las 1.000 generaciones y 11,4 a las 3.000 (crecen como √t). Es lo que hace cualquier física neutral que empieza en el mínimo; en P2 se mide con selección.
+  - Comparación en 1.000 generaciones (aristas / nodos ocultos): nest 73 / 14; neutral 32 / 2,7; neutral corregida 54 / 6,7.
+  - Se descartaron tres versiones intermedias: contraer uniendo cada entrada con cada salida (seguía perdiendo aristas: 36 a las 3.000), fusionar solo nodos con una entrada y una salida (los nodos se acumulaban: 12,6) y contraer con el mínimo de aristas sin evitar choques (37 aristas a las 3.000, porque añadir arista rellena a menudo la i→j que dividir había quitado).
