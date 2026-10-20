@@ -717,3 +717,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Decisión del responsable (tras P1-escalera):** P2 con la física integrada y sus dos gemelos en una sola cola, la base primero.
 - **Qué:** P2-escalera, P2-escalera-tasas-gen y P2-escalera-sexual, 5 mundos cada uno (rama `escalera-int`, `2cd8b33`, cola `p2int.json`, `scratchpad/p2int.sh`, marca `runs/fase1d/p2int_hecho`). Criterios en `diseno.md` v0.6 (16:48), escritos antes de los datos.
+
+### 21:16 · P2: la salvaguarda de capacidad pausa 5 de 10 mundos
+
+- **Qué:** la batería v2 (ADR-011) pausó P2-escalera s0, s2 y s3 en la época 200, s4 en la 100, y P2-escalera-tasas-gen s3 en la 200 (`CAPABILITY_PAUSE.json`). P2-escalera s1 y los otros cuatro gemelos de tasas llegaron a 300. El gemelo sexual corre ahora.
+- **Por qué:** `patch_gain` 0,20–0,30 (umbral 0,2) y, en s2 y s4, `maze_gain` 0,25–0,30 (umbral 0,25). Éxito en la mancha lejana: 92–98 %, frente al 69–77 % de genomas al azar con los mismos cuerpos y al 13–17 % de las políticas fijas. Es la capacidad que pregunta P2 (ir a por la comida), y queda por debajo del buscador programado (~0,34).
+- **Consecuencia:** la ventana prerregistrada (151–300) no está completa en 4 de 5 mundos de la base. **No se crea `CAPABILITY_REVIEW.json` ni se tocan umbrales sin decisión del responsable** (salvaguarda 5). Pendiente de su decisión.
