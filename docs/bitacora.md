@@ -659,3 +659,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Pregunta del responsable:** «¿A qué apunta la bibliografía?». Respuesta (`docs/bibliografia/escalera/README.md`, §11, 5 referencias nuevas comprobadas en Crossref): el inflado sin ganancia es un sesgo de los operadores; el remedio que respeta los principios son los operadores de tamaño neutro (langdon2000sizefair). La igualación de operadores (dignum2008equalisation) filtra hijos por tamaño, así que sería una métrica externa decidiendo; el coste por tamaño (soule1998parsimony) añadiría una ley física nueva.
 - **Decisión del responsable (07:10):** CPPN **neutral corregida** (añadir y quitar aristas equilibrados, contando las que arrastra quitar un nodo). Se implementa en la rama de integración y se comprueba en P0 antes de P2. El techo (A5) se mantiene: con A1 y A2 neutrales nadie lo toca; se vigila en P2.
+
+### 05:32–09:01 · B1 con selección: P1 con sexo frente a P1-peaje
+
+- **Qué:** P1-peaje-sexual-bloques (rama `escalera-p0z`, cola `p1z.json`, cruce corregido de ADR-018, 5 mundos), de 05:32 a 08:54, 0,67 h por mundo. Llenos, sin extinciones ni pausas. Fin de `tras_p1.sh` (marca `p1_z_hecho`): la GPU queda libre.
+- **Datos:** `runs/fase1d/_analisis_B1_P1.json`, `_host_P1-peaje-sexual-bloques.json`, `_b1_cppn_P1.json`.
+- **Resultado (sexual frente a asexual, ventana 151–300):** neuronas 0,45–0,79 frente a 0,11–0,42; empuje 0,16–0,24 frente a 0,004–0,10; distancia estructural 97–116 frente a 13–27; vida 514–520 frente a 521–528 (todo 5/5). Mediana de σ en la época 300: 0,015–0,033 frente a 0,005–0,007; tasa estructural 0,67–0,97 frente a 0,05–0,13. CPPN sin salida: 3–7 %.
+- **Conclusión (firme para P1, con una mezcla):** con sexo, la selección purga peor, sobre todo porque la tasa de mutación como gen apenas baja (el cruce desliga la tasa de sus efectos; johnson1999mutation). Frente al asexual con tasas fijas, el efecto propio del sexo es pequeño. El cruce corregido funciona. La ventaja principal del sexo (juntar mejoras) no se puede ver en P1.
+- **Pendiente:** decisión del responsable sobre B1.

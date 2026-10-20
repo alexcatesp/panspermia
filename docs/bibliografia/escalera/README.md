@@ -111,3 +111,9 @@ Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de
   3. controlar directamente la distribución de tamaños (igualación de operadores, dignum2008equalisation). Este no sirve aquí, porque sería una métrica externa decidiendo (principio 1).
 - **Para Panspermia apunta al remedio 2:** operadores equilibrados, de modo que el tamaño de la receta solo cambie por deriva o porque la selección lo pida. Es la misma hipótesis nula que se eligió para las neuronas (A1). El remedio 1 sería añadir una ley física nueva (pagar por la receta) y cambiaría lo que mide P1; queda como opción si en P2 la receta se hinchara sin motivo.
 - **En la Tierra no hay una dirección única** (kuo2009deletional frente a lynch2003origins). Por eso conviene el punto neutro, y la variante terrestre queda para la prueba de robustez final.
+
+## 12. Sexo con selección: por qué en P1 purga peor (B1)
+
+- **Con sexo, la tasa de mutación casi no baja.** En un asexual, el gen que sube la tasa viaja siempre con las mutaciones malas que causa, y la selección lo elimina con ellas. Con cruce, se separa de ellas en pocas generaciones, y la selección apenas lo ve (johnson1999mutation; lynch2010mutationrate: los organismos sexuales toleran tasas mayores). En P1, σ baja 10 veces sin sexo y solo de 1,5 a 3 con sexo.
+- **La ventaja de limpiar mutaciones malas** (kondrashov1988deleterious) necesita que los daños se potencien entre sí (epistasia sinérgica) y muchas mutaciones por hijo. En P1 no se ve: cada neurona cuesta lo mismo, se sume a otras o no.
+- **La ventaja principal del sexo es juntar mejoras** que aparecen en bichos distintos (hill1966linkage, felsenstein1974recombination, colegrave2002sex). Sin nada que ganar (P1) no puede aparecer; hay que probarla en P2.
