@@ -638,3 +638,19 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - f16 (A7): borra entre el 9 y el 22 % de las perturbaciones con σ como gen, y el 0,7 % con σ fija.
 - **Conclusión (firme para P1):** con selección y sin nada que ganar, la tasa de mutación como gen baja un orden de magnitud (dirección de la barrera de la deriva, lynch2016driftbarrier). Con tasas fijas, la población arrastra una carga de mutaciones algo mayor. Lo que P1 no puede decir es si mutar tan poco frena la adaptación cuando sí hay algo que ganar (P2).
 - **Pendiente:** decisión del responsable sobre A3 (y con ella A7).
+
+### 07:01 · A3 y A7 decididos
+
+- **Decisión del responsable (07:01):** tasas de mutación **fijas** (σ = 0,05, tasa estructural = 1) en el sustrato integrado; con ellas, los pesos en **f16** bastan (A7). En P2 se añade un gemelo con las tasas como gen: lo que P1 no puede juzgar (si mutar menos frena la adaptación cuando hay ganancias) se prueba allí.
+- **Por qué:** sin selección (P0), las tasas como gen derivan hacia arriba al azar y cada mundo acaba con un régimen distinto; con solo selección negativa (P1), se hunden. En los dos casos añaden una deriva que no es la pregunta del peldaño. Fijarlas es la opción limpia y comparable; la versión natural se prueba cuando pueda demostrar su valor.
+
+### 02:26–07:06 · A2 con selección: P1 con CPPN neutral frente a P1-peaje
+
+- **Qué:** P1-peaje-cppn-neutral (rama `escalera-p0x`, cola `p1x.json`, 5 mundos), de 02:26 a 05:32, 0,62 h por mundo. Llenos, sin extinciones ni pausas. Fin de `tras_p0.sh` a las 05:32 (marca `p1_x_hecho`). Después arrancó `tras_p1.sh` (P1 con sexo, B1).
+- **Datos:** `runs/fase1d/_analisis_A2_P1.json` (series, ventana 151–300) y `_dist_cppn_P1.json` (nodos y aristas de la CPPN en la época 300, en CPU).
+- **Resultado:**
+  - nodos ocultos de la CPPN: 0,4–2,7 frente a 0,8–11,2 (4/5 menos);
+  - aristas: 35–45 frente a 51–61 (5/5 menos); mínimo 29–36, nadie con 10 o menos (en P0 neutral, hasta un 10 % y mínimo 2);
+  - empuje, vida media, nacimientos y población: iguales.
+- **Conclusión (firme para P1):** la CPPN no paga peaje, así que con la mutación de siempre sigue inflándose aunque haya selección. Con la neutral no se infla, y la selección frena la pérdida de aristas que se veía en P0. Falta saber si una receta pequeña limita construir cuando compensa (P2).
+- **Pendiente:** decisión del responsable sobre A2 (y con ella A5, el techo).
