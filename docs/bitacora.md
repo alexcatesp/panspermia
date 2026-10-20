@@ -704,3 +704,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Decisión del responsable** (tras la comprobación): antes de P2 se repite P1 con todas las reglas nuevas juntas, para que el padre de P2 tenga la misma física. Hasta ahora P1 solo se había simulado con las reglas viejas, cambiando un factor cada vez.
 - **Qué:** P1-peaje con la física de la escalera, 5 mundos (rama `escalera-int`, `48d3099`, cola `p1int.json`, `scratchpad/p1int.sh`, marca `runs/fase1d/p1int_hecho`). Empezó a las 13:38.
 - **Mientras corre:** se prepara el plan de P2 (base y dos gemelos) para revisarlo con el responsable antes de lanzarlo.
+
+### 16:44 · P1-escalera: pasa (5 de 5)
+
+- **Terminó a las 16:44** (13:38–16:44, unos 37 min por mundo).
+- **Primaria:** empuje 0,05–0,13 frente a 6,4–8,1 en P0-escalera, **5/5**. **Secundarias:** neuronas 0,19 (5/5) y masa 0,27 (5/5) menores; VA = 0; población llena.
+- **CPPN con selección:** 3,7–5,1 nodos y aristas − nodos 43–48: no se hincha (con la física vieja y tasas fijas, 52–58) ni se vacía.
+- **Frente a las reglas viejas:** el cerebro se vacía más (0,19 frente a 0,48–0,54); la vida (523–524) queda entre P1-peaje (521–528) y P1-tasas-fijas viejo (516–518).
+- **Conclusión: firme.** P1 se cumple con la física integrada; P1-escalera es el padre de P2. Detalle en `p0_factores.md`; datos en `runs/fase1d/_analisis_P1int.json`.

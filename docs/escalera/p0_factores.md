@@ -319,3 +319,22 @@ P1-peaje-sexual-bloques (rama `escalera-p0z`, cruce corregido de ADR-018) termin
   - **σ = 0,05 y tasa = 1** en todos los bichos (0,04999 por el redondeo a f16). El redondeo borra un 0,7 % de las perturbaciones de pesos;
   - la distancia genética de pesos baja a 15 (22–41 en P0-feliz) y la estructural queda en 76–105, como con la CPPN neutral. El empuje (5–8) es como en P0-feliz: sin selección, nada lo mueve.
 - **Veredicto: la comprobación pasa en los cuatro criterios del ADR-019.** El sustrato 2.6.0 es la base de P2. Datos: `runs/fase1d/_analisis_P0int.json`, `_host_P0-escalera.json`.
+
+### 20-10-2026, 16:44 · P1-escalera: P1 con la física integrada (5 mundos)
+
+Criterio prerregistrado en `diseno.md` v0.5. Medias de las épocas 151–300:
+
+| Medida | P0-escalera | P1-escalera | P1-peaje-tasas-fijas (reglas viejas) |
+|---|---|---|---|
+| Empuje (**primaria**: menor) | 6,4–8,1 | **0,05–0,13 (5/5)** | 0,02–0,20 |
+| Neuronas ocultas | 7,4–9,1 | **0,19 (5/5)** | 0,48–0,54 |
+| Masa | 1,3–2,2 | 0,27 (5/5) | 0,26–0,29 |
+| Vida media | 600 (fija) | 523–524 | 516–518 |
+| Nodos de la CPPN | 3,7–4,8 | 3,7–5,1 | 6,5–14,4 |
+| Aristas − nodos de la CPPN | 46–47 | 43–48 | 52–58 |
+| Distancia estructural | 78–100 | 57–67 | 63–79 |
+
+- **P1 funciona con la física de la escalera:** primaria y secundarias en 5/5 (prueba de signos, p = 0,031). VA = 0 en las 8 sondas de cada mundo (no hay nada que aprender) y la población siempre llena (4.096).
+- **Lo que cambia frente a las reglas viejas:** el cerebro se vacía más (0,19 frente a 0,5 neuronas con tasas fijas), porque la mutación neutral ya no añade neuronas inútiles; la CPPN no se hincha con selección (aristas − nodos como sin selección), y los mundos son muy parecidos entre sí.
+- **Carga de las tasas fijas:** la vida (523–524) queda entre la de P1-peaje con tasas como gen (521–528) y la de las tasas fijas con la física vieja (516–518). El gemelo de P2 la medirá con comida.
+- Datos: `runs/fase1d/P1-escalera`, `_analisis_P1int.json`. **P1-escalera es el padre de P2.**

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-20 13:38",
+ "actualizado": "2026-10-20 16:44",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -68,10 +68,10 @@
    "padre": "P1",
    "titulo": "P1-escalera: el peaje con la física de la escalera",
    "corto": "P1-escalera",
-   "estado": "en curso",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "positivo",
    "anade": "la física integrada (ADR-019) en P1",
-   "texto": "Decisión del responsable (20-10, tras la comprobación de P0): repetir P1 con todas las reglas nuevas juntas antes de P2, para que el padre de P2 use la misma física. Rama escalera-int, cola p1int.json, 5 mundos; en marcha desde las 13:38. Pregunta de P1: con peaje, ¿la selección baja el empuje y el cerebro respecto a P0-escalera?",
+   "texto": "Decisión del responsable (20-10, tras la comprobación de P0): repetir P1 con todas las reglas nuevas juntas antes de P2, para que el padre de P2 use la misma física. Rama escalera-int, cola p1int.json, 5 mundos; en marcha desde las 13:38. Pregunta de P1: con peaje, ¿la selección baja el empuje y el cerebro respecto a P0-escalera? 16:44: pasa en 5/5. Empuje 0,05–0,13 (P0-escalera 6,4–8,1), neuronas 0,19, masa 0,27; CPPN estable (aristas − nodos 43–48); VA = 0. Padre de P2.",
    "cola": "p1int.json",
    "condicion": "P1-escalera",
    "ref": "docs/escalera/diseno.md",
