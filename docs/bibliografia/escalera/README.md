@@ -117,3 +117,13 @@ Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de
 - **Con sexo, la tasa de mutación casi no baja.** En un asexual, el gen que sube la tasa viaja siempre con las mutaciones malas que causa, y la selección lo elimina con ellas. Con cruce, se separa de ellas en pocas generaciones, y la selección apenas lo ve (johnson1999mutation; lynch2010mutationrate: los organismos sexuales toleran tasas mayores). En P1, σ baja 10 veces sin sexo y solo de 1,5 a 3 con sexo.
 - **La ventaja de limpiar mutaciones malas** (kondrashov1988deleterious) necesita que los daños se potencien entre sí (epistasia sinérgica) y muchas mutaciones por hijo. En P1 no se ve: cada neurona cuesta lo mismo, se sume a otras o no.
 - **La ventaja principal del sexo es juntar mejoras** que aparecen en bichos distintos (hill1966linkage, felsenstein1974recombination, colegrave2002sex). Sin nada que ganar (P1) no puede aparecer; hay que probarla en P2.
+
+## 13. ¿Cómo rebrota la comida? (P2, pregunta del responsable)
+
+- **Lo que hace el código** (spec §mundo, ADR de la fase 0): en cada casilla, crecimiento logístico `r·R·(1 − R/K)`, con r = 1,5 y K, la capacidad de la casilla, repartida en manchas (suma de 8 ondas en el toro; media 4, picos de 12–13 y un 10 % del mundo sin comida). Se añade un goteo mínimo (0,002) para que una casilla rapada vuelva a brotar. En P2 las manchas no se mueven.
+- **De dónde viene:**
+  - es la ecuación logística de Verhulst (1838; historia en bacaer2011verhulst), popularizada por pearl1920growth;
+  - es el modelo estándar del recurso que se regenera en los modelos de consumidor y recurso (rosenzweig1963predator: presa logística y consumidor);
+  - en vida artificial, Sugarscape (epstein1996sugarscape) usa una regla parecida: el azúcar vuelve a crecer hasta la capacidad de cada casilla, en un paisaje de dos montañas.
+- **Lo que no viene de la bibliografía:** los números (r, K, el contraste de las manchas y el goteo) se calibraron en la fase 1 para que las poblaciones sobrevivan (ADR-008). El goteo es necesario porque la logística pura deja una casilla a cero para siempre.
+- **Qué implica para P2:** una casilla a medio comer rebrota deprisa (lo máximo, a media carga), y una rapada tarda unos 50 pasos en recuperar la mitad. Comer en la mancha sin rapar compensa más que vaciarla.

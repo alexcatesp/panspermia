@@ -723,3 +723,8 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Qué:** la batería v2 (ADR-011) pausó P2-escalera s0, s2 y s3 en la época 200, s4 en la 100, y P2-escalera-tasas-gen s3 en la 200 (`CAPABILITY_PAUSE.json`). P2-escalera s1 y los otros cuatro gemelos de tasas llegaron a 300. El gemelo sexual corre ahora.
 - **Por qué:** `patch_gain` 0,20–0,30 (umbral 0,2) y, en s2 y s4, `maze_gain` 0,25–0,30 (umbral 0,25). Éxito en la mancha lejana: 92–98 %, frente al 69–77 % de genomas al azar con los mismos cuerpos y al 13–17 % de las políticas fijas. Es la capacidad que pregunta P2 (ir a por la comida), y queda por debajo del buscador programado (~0,34).
 - **Consecuencia:** la ventana prerregistrada (151–300) no está completa en 4 de 5 mundos de la base. **No se crea `CAPABILITY_REVIEW.json` ni se tocan umbrales sin decisión del responsable** (salvaguarda 5). Pendiente de su decisión.
+
+### 21:37 · ADR-020: reanudar P2 con mancha y laberinto a 0,4
+
+- **Decisión del responsable:** solo en P2, umbrales de mancha y laberinto a 0,4; revisiones firmadas en los 5 mundos pausados; reanudación automática tras la cola (`scratchpad/p2resume.sh`). Antes de P3, ADR de revisión de la batería: la prueba de la mancha se satura, porque el azar ya llega en un 69–77 %.
+- **Bibliografía del rebrote** (pregunta del responsable): el rebrote logístico venía de la spec, sin referencia. Se añaden bacaer2011verhulst, pearl1920growth, rosenzweig1963predator y epstein1996sugarscape (DOI comprobados en Crossref), en el §13 de `docs/bibliografia/escalera/README.md`.

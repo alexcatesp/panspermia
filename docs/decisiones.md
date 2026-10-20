@@ -468,3 +468,20 @@ Respuesta según la bibliografía:
   - Resultado sin selección (`scripts/cppn_drift.py`, 512 linajes, solo mutación): **aristas − nodos ocultos se queda en 48** (47,2 a las 3.000 generaciones). Los nodos se extienden desde 0 como un paseo al azar con suelo: 6,7 a las 1.000 generaciones y 11,4 a las 3.000 (crecen como √t). Es lo que hace cualquier física neutral que empieza en el mínimo; en P2 se mide con selección.
   - Comparación en 1.000 generaciones (aristas / nodos ocultos): nest 73 / 14; neutral 32 / 2,7; neutral corregida 54 / 6,7.
   - Se descartaron tres versiones intermedias: contraer uniendo cada entrada con cada salida (seguía perdiendo aristas: 36 a las 3.000), fusionar solo nodos con una entrada y una salida (los nodos se acumulaban: 12,6) y contraer con el mínimo de aristas sin evitar choques (37 aristas a las 3.000, porque añadir arista rellena a menudo la i→j que dividir había quitado).
+
+## ADR-020 · 20-10-2026 · Pausa de capacidad en P2: umbrales de mancha y laberinto a 0,4 solo en P2 (decisión del responsable)
+
+**Contexto.** La batería v2 (ADR-011) pausó 5 de 10 mundos de P2 (P2-escalera s0, s2 y s3 en la época 200, s4 en la 100; P2-escalera-tasas-gen s3 en la 200). Exceden `patch_gain` (0,20–0,30; umbral 0,2) y, en dos, `maze_gain` (0,25–0,30; umbral 0,25). Éxito en la mancha lejana: 92–98 %; genomas al azar con los mismos cuerpos: 69–77 %; políticas fijas: 13–17 %.
+
+**Valoración.**
+- **La prueba es objetiva y la pausa no es un falso positivo:** los bichos de P2 encuentran comida lejana mejor que el azar, que es justo lo que pregunta el peldaño.
+- **Pero está saturada:** con la referencia al azar en 0,69–0,77, la ganancia máxima posible es 0,23–0,31. Cualquier umbral mayor que unos 0,31 la deja ciega en P2, y uno menor vuelve a pausar (s4 ya está en 0,30).
+- Con 64 sondas, el error de la ganancia es de unos ±0,06–0,08: entre épocas varía de −0,05 a 0,30.
+
+**Decisión (responsable, 20-10-2026, 21:37).**
+- Solo en P2, `patch_gain` y `maze_gain` suben a 0,4; `comm_mi_bits` no cambia. Se firma `CAPABILITY_REVIEW.json` en los mundos pausados.
+- Los mundos del gemelo sexual que se pausen solo por mancha o laberinto se firman igual (`scratchpad/p2resume.py`); una pausa por otra prueba queda para el responsable.
+- Los mundos se reanudan hasta la época 300 cuando termine la cola de P2 (`scratchpad/p2resume.sh`, marca `runs/fase1d/p2resume_hecho`).
+- Riesgo asumido: P2 es un mundo cerrado, sin señal, ataque ni química, y sin conexión con nada.
+
+**Pendiente antes de P3:** ADR de revisión de la batería, con pruebas que no se saturen (por ejemplo, la mancha más lejos o comparar con los bichos del peldaño anterior en vez de con el azar) y umbrales por peldaño.
