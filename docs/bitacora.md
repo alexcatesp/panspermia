@@ -654,3 +654,8 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - empuje, vida media, nacimientos y población: iguales.
 - **Conclusión (firme para P1):** la CPPN no paga peaje, así que con la mutación de siempre sigue inflándose aunque haya selección. Con la neutral no se infla, y la selección frena la pérdida de aristas que se veía en P0. Falta saber si una receta pequeña limita construir cuando compensa (P2).
 - **Pendiente:** decisión del responsable sobre A2 (y con ella A5, el techo).
+
+### 07:06–07:10 · A2 y A5 decididos
+
+- **Pregunta del responsable:** «¿A qué apunta la bibliografía?». Respuesta (`docs/bibliografia/escalera/README.md`, §11, 5 referencias nuevas comprobadas en Crossref): el inflado sin ganancia es un sesgo de los operadores; el remedio que respeta los principios son los operadores de tamaño neutro (langdon2000sizefair). La igualación de operadores (dignum2008equalisation) filtra hijos por tamaño, así que sería una métrica externa decidiendo; el coste por tamaño (soule1998parsimony) añadiría una ley física nueva.
+- **Decisión del responsable (07:10):** CPPN **neutral corregida** (añadir y quitar aristas equilibrados, contando las que arrastra quitar un nodo). Se implementa en la rama de integración y se comprueba en P0 antes de P2. El techo (A5) se mantiene: con A1 y A2 neutrales nadie lo toca; se vigila en P2.

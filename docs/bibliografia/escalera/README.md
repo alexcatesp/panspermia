@@ -101,3 +101,13 @@ Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de
 - **En un mundo que no cambia, la selección baja la tasa de mutación.** Casi toda mutación es dañina, así que los linajes que mutan menos dejan hijos más sanos. La tasa baja hasta que la ventaja de bajarla más es menor que el ruido de la deriva (barrera de la deriva, lynch2016driftbarrier). Es lo que se ve en P1: σ cae 10 veces y la tasa estructural de 8 a 20 veces en 300 épocas.
 - **En un mundo con algo por descubrir, mutar más puede ganar.** Los mutadores viajan junto a las mejoras que producen (autostop genético) y llegan a dominar poblaciones que se adaptan (taddei1997mutator; en *E. coli*, sniegowski1997mutators). Por eso la tasa como gen solo se puede juzgar en un peldaño con ganancias (P2 o después).
 - **En evolución artificial**, la autoadaptación de σ (beyer2002es) ajusta el tamaño del paso al progreso posible: cerca de un óptimo, σ se reduce y la búsqueda se vuelve local.
+
+## 11. ¿Qué física para la receta del cerebro (CPPN)? (A2, pregunta del responsable)
+
+- **Que un genoma crezca sin ganar nada es un fallo conocido** en la evolución artificial (inflado o *bloat*: langdon1998bloat, banzhaf2002bloat). Una de sus causas son los propios operadores: si añadir y quitar no se compensan, el tamaño deriva solo (sesgo de eliminación, soule1998removal). Es lo que pasa con la CPPN de siempre (como en NEAT, stanley2002neat, que solo crece y lo compensa empezando por lo mínimo).
+- **Hay tres remedios clásicos:**
+  1. un coste por tamaño (presión de parsimonia, soule1998parsimony). En la vida real, cada gen cuesta energía, pero tan poca que solo importa en poblaciones enormes (lynch2015bioenergetic);
+  2. operadores que no cambian el tamaño esperado (cruces de tamaño justo, langdon2000sizefair);
+  3. controlar directamente la distribución de tamaños (igualación de operadores, dignum2008equalisation). Este no sirve aquí, porque sería una métrica externa decidiendo (principio 1).
+- **Para Panspermia apunta al remedio 2:** operadores equilibrados, de modo que el tamaño de la receta solo cambie por deriva o porque la selección lo pida. Es la misma hipótesis nula que se eligió para las neuronas (A1). El remedio 1 sería añadir una ley física nueva (pagar por la receta) y cambiaría lo que mide P1; queda como opción si en P2 la receta se hinchara sin motivo.
+- **En la Tierra no hay una dirección única** (kuo2009deletional frente a lynch2003origins). Por eso conviene el punto neutro, y la variante terrestre queda para la prueba de robustez final.

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-20 07:06",
+ "actualizado": "2026-10-20 07:10",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -79,11 +79,11 @@
    "padre": "p0cierre",
    "titulo": "A2 · Mutación de la CPPN",
    "corto": "A2 Mutación de la CPPN",
-   "estado": "decision",
+   "estado": "hecho",
    "resultado": "positivo",
    "anade": "Mutación de la CPPN",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "P0: CPPN neutral, 1,6–3,0 nodos frente a 10–13 (5/5) y nadie en el techo, pero pierde aristas (26–35; mínimo 2). P1 (20-10, 07:06): la de siempre se infla incluso con selección (la receta no paga peaje); la neutral no, y la selección frena la pérdida de aristas (34–45; mínimo 29). Empuje y vida iguales. Decide el responsable."
+   "texto": "P0: CPPN neutral, 1,6–3,0 nodos frente a 10–13 (5/5) y nadie en el techo, pero pierde aristas (26–35; mínimo 2). P1 (20-10, 07:06): la de siempre se infla incluso con selección (la receta no paga peaje); la neutral no, y la selección frena la pérdida de aristas (34–45; mínimo 29). Empuje y vida iguales. Decisión (20-10, 07:10): neutral corregida (añadir y quitar equilibrados), comprobada en P0 en la integración."
   },
   {
    "id": "p0f-A3",
@@ -112,11 +112,11 @@
    "padre": "p0cierre",
    "titulo": "A5 · Techo del genoma (64 / 32)",
    "corto": "A5 Techo del genoma (64 / 32)",
-   "estado": "decision",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "positivo",
    "anade": "Techo del genoma (64 / 32)",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "Neuronas: el techo (64) no limita con ninguna física. CPPN: entre el 8 y el 34 % en el techo con la mutación de siempre; entre el 3 y el 14 % con tasas fijas; nadie con la CPPN neutral."
+   "texto": "Neuronas: el techo (64) no limita con ninguna física. CPPN: entre el 8 y el 34 % en el techo con la mutación de siempre; entre el 3 y el 14 % con tasas fijas; nadie con la CPPN neutral. Decisión (20-10, 07:10): se mantiene; con A1 y A2 neutrales nadie lo toca. Vigilarlo en P2."
   },
   {
    "id": "p0f-A7",
