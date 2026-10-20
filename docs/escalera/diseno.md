@@ -114,3 +114,13 @@ Antes de tener datos de la rama. En P0 ya se había visto el crecimiento de la s
 - **Los criterios prerregistrados no cambian.**
 - **Análisis:** `scripts/analyze_ladder.py` (escrito antes de ver los datos de las variantes). Media por semilla en las épocas 151–300, pendiente en esa ventana y comparaciones emparejadas con prueba de signos.
 - **Mientras se decide,** la GPU avanza el resto de E2, que se pausa en cuanto haya decisión (se pierden como mucho 10 épocas de un mundo).
+
+## v0.5 · 20-10-2026, 13:38 · P1-escalera, con la física integrada (ADR-019)
+
+Escrito antes de tener datos de P1-escalera. Lo que se sabe de P1 viene de las reglas viejas, cambiando un factor cada vez (`p0_factores.md`).
+
+- **Decisión del responsable (20-10, tras cerrar P0):** antes de P2 se repite P1 con todas las reglas nuevas juntas, para que cada peldaño se apoye en el anterior con la misma física. Rama `escalera-int` (sustrato 2.6.0), cola `p1int.json`, 5 semillas (0–4).
+- **Primaria (la de P1, sin cambios):** `thrust_mean` **menor** que en P0-escalera, en 5 de 5 semillas emparejadas (épocas 151–300).
+- **Secundarias:** `hidden_mean` y `mass_mean` menores que en P0-escalera; VA ≤ 0.
+- **Descriptivas:** frente a P1-peaje-tasas-fijas (la condición vieja más parecida), aristas − nodos de la CPPN (sin selección se quedaba en 44–49) y vida media.
+- **Si falla la primaria:** no se sube a P2 sin entender por qué; la integración o la calibración tendrían un problema.
