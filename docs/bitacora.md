@@ -667,3 +667,8 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Resultado (sexual frente a asexual, ventana 151–300):** neuronas 0,45–0,79 frente a 0,11–0,42; empuje 0,16–0,24 frente a 0,004–0,10; distancia estructural 97–116 frente a 13–27; vida 514–520 frente a 521–528 (todo 5/5). Mediana de σ en la época 300: 0,015–0,033 frente a 0,005–0,007; tasa estructural 0,67–0,97 frente a 0,05–0,13. CPPN sin salida: 3–7 %.
 - **Conclusión (firme para P1, con una mezcla):** con sexo, la selección purga peor, sobre todo porque la tasa de mutación como gen apenas baja (el cruce desliga la tasa de sus efectos; johnson1999mutation). Frente al asexual con tasas fijas, el efecto propio del sexo es pequeño. El cruce corregido funciona. La ventaja principal del sexo (juntar mejoras) no se puede ver en P1.
 - **Pendiente:** decisión del responsable sobre B1.
+
+### 09:17 · B1 decidido
+
+- **Decisión del responsable (09:17):** sustrato **asexual**; en P2, gemelo con sexo (cruce corregido) y tasas fijas, donde la ventaja de juntar mejoras puede aparecer. El cruce queda en el código como opción.
+- **Con esto, en P0 solo quedan A4 (cuánto se muta, ahora con tasas fijas: elegir σ y la tasa estructural) y C2 (muerte y vejez).** La GPU está libre desde las 08:54.

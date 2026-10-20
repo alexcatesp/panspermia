@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-20 09:01",
+ "actualizado": "2026-10-20 09:17",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -134,11 +134,11 @@
    "padre": "p0cierre",
    "titulo": "B1 · Sexo (recombinación)",
    "corto": "B1 Sexo (recombinación)",
-   "estado": "en curso",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "no concluyente",
    "anade": "Sexo (recombinación)",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "P0: casi neutral con el cruce corregido. P1 (20-10, 09:01): con sexo la selección purga peor (más cerebro, empuje y variedad, 5/5), sobre todo porque la tasa de mutación como gen apenas baja con sexo (σ 0,015–0,033 frente a 0,005). La ventaja de juntar mejoras solo se ve con algo que ganar (P2). Decide el responsable."
+   "texto": "P0: casi neutral con el cruce corregido. P1 (20-10, 09:01): con sexo la selección purga peor (más cerebro, empuje y variedad, 5/5), sobre todo porque la tasa de mutación como gen apenas baja con sexo (σ 0,015–0,033 frente a 0,005). La ventaja de juntar mejoras solo se ve con algo que ganar (P2). Decisión (20-10, 09:17): asexual; en P2, gemelo con sexo y tasas fijas."
   },
   {
    "id": "p0f-C1",
