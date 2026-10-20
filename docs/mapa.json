@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-20 16:44",
+ "actualizado": "2026-10-20 16:48",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -268,15 +268,43 @@
    "padre": "P1",
    "titulo": "P2 · Comida quieta",
    "corto": "P2 · Comida quieta",
-   "estado": "auto",
+   "estado": "en curso",
    "resultado": null,
    "anade": "comida en manchas quietas",
-   "texto": "¿Sirve la comida? ¿Van a por ella? Viven más que en P1 y se mueven más (ir hacia la comida compensa).",
-   "cola": "escalera.json",
-   "condicion": "P2-comida-quieta",
+   "texto": "¿Sirve la comida? ¿Van a por ella? Viven más que en P1 y se mueven más (ir hacia la comida compensa). 20-10, 16:48: en marcha con la física integrada (P2-escalera; padre P1-escalera) y dos gemelos: tasas como gen y sexo con tasas fijas (diseno v0.6).",
+   "cola": "p2int.json",
+   "condicion": "P2-escalera",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true
+  },
+  {
+   "id": "P2tg",
+   "padre": "P2",
+   "titulo": "P2 gemelo: tasas de mutación como gen",
+   "corto": "P2 · tasas gen",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "σ y tasa estructural evolucionan (A3)",
+   "texto": "¿Se alejan σ y la tasa de 0,05 y 1 cuando hay algo que ganar? Revisa A4.",
+   "cola": "p2int.json",
+   "condicion": "P2-escalera-tasas-gen",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU"
+  },
+  {
+   "id": "P2sx",
+   "padre": "P2",
+   "titulo": "P2 gemelo: reproducción sexual con tasas fijas",
+   "corto": "P2 · sexo",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "cruce corregido (B1, ADR-018)",
+   "texto": "¿Compensa el sexo al juntar mejoras? Vida o ingesta mayor que la base en 5/5.",
+   "cola": "p2int.json",
+   "condicion": "P2-escalera-sexual",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU"
   },
   {
    "id": "P3",

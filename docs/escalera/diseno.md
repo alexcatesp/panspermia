@@ -124,3 +124,19 @@ Escrito antes de tener datos de P1-escalera. Lo que se sabe de P1 viene de las r
 - **Secundarias:** `hidden_mean` y `mass_mean` menores que en P0-escalera; VA ≤ 0.
 - **Descriptivas:** frente a P1-peaje-tasas-fijas (la condición vieja más parecida), aristas − nodos de la CPPN (sin selección se quedaba en 44–49) y vida media.
 - **Si falla la primaria:** no se sube a P2 sin entender por qué; la integración o la calibración tendrían un problema.
+
+## v0.6 · 20-10-2026, 16:48 · P2 con la física integrada y dos gemelos (decisión del responsable)
+
+Escrito antes de tener datos de P2. Rama `escalera-int` (sustrato 2.6.0), cola `p2int.json`, semillas 0–4. Padre: P1-escalera (pasa en 5/5).
+
+| Mundo | Cambia respecto a P2-escalera | Pregunta (5 de 5 semillas emparejadas, épocas 151–300) |
+|---|---|---|
+| **P2-escalera** | — (P1-escalera + comida en manchas quietas) | **Primaria:** `lifespan_mean` **mayor** que en P1-escalera. Secundaria: `thrust_mean` mayor (ir a por comida compensa); VA |
+| P2-escalera-tasas-gen | σ y tasa estructural como gen (`MUTATION_RATES` "evolutivas") | Descriptiva: ¿se alejan σ y la tasa de 0,05 y 1 (A4)? `lifespan_mean` e `intake` frente a la base |
+| P2-escalera-sexual | reproducción sexual con el cruce corregido (ADR-018) y tasas fijas | `lifespan_mean` o `intake` **mayor** que en la base en 5/5: el sexo compensa al juntar mejoras (B1) |
+
+- **Lectura de los gemelos:**
+  - si las tasas como gen bajan mucho σ o la tasa y viven más, se revisa A4;
+  - si el sexo gana en 5/5, se adopta desde P2 y se anota que P0 y P1 fueron asexuales;
+  - si no, se sigue con la base.
+- **Orden:** la base primero; después, los gemelos.

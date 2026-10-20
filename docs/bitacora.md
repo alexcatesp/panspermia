@@ -712,3 +712,8 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **CPPN con selección:** 3,7–5,1 nodos y aristas − nodos 43–48: no se hincha (con la física vieja y tasas fijas, 52–58) ni se vacía.
 - **Frente a las reglas viejas:** el cerebro se vacía más (0,19 frente a 0,48–0,54); la vida (523–524) queda entre P1-peaje (521–528) y P1-tasas-fijas viejo (516–518).
 - **Conclusión: firme.** P1 se cumple con la física integrada; P1-escalera es el padre de P2. Detalle en `p0_factores.md`; datos en `runs/fase1d/_analisis_P1int.json`.
+
+### 16:48 · P2 en marcha: base y dos gemelos
+
+- **Decisión del responsable (tras P1-escalera):** P2 con la física integrada y sus dos gemelos en una sola cola, la base primero.
+- **Qué:** P2-escalera, P2-escalera-tasas-gen y P2-escalera-sexual, 5 mundos cada uno (rama `escalera-int`, `2cd8b33`, cola `p2int.json`, `scratchpad/p2int.sh`, marca `runs/fase1d/p2int_hecho`). Criterios en `diseno.md` v0.6 (16:48), escritos antes de los datos.
