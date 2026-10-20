@@ -692,3 +692,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Tests:** 78 en verde y 1 lento saltado (28 min en GPU), con 3 tests nuevos: valores por defecto de la escalera, aristas − nodos constante y contracción.
 - **En marcha desde las 10:17:** cola `p0int.json`. Primero, el control con la física de la spec v1 elegida a mano, que debe coincidir bit a bit con P0-feliz s0. Después, P0-escalera, 5 mundos.
 - **Criterio:** neuronas cerca de 8; CPPN sin inflarse ni vaciarse (aristas − nodos cerca de 48); σ en 0,05; control idéntico.
+
+### 10:39–12:31 · Comprobación de la integración: pasa
+
+- **Control (terminó a las 10:39):** P0-feliz-control-int s0 coincide **bit a bit** con P0-feliz s0 (0 diferencias en 300 épocas, salvo el tiempo de cálculo). **Firme.**
+- **P0-escalera, 5 mundos (10:39–12:28), época 300:** neuronas 6,5–8,8 (máx. 22); CPPN 48–54 aristas y 4,0–5,7 nodos, aristas − nodos 44–49 (media 46,5; la deriva pura daba 47–48); σ = 0,05 y tasa = 1 en todos; el f16 borra el 0,7 % de las perturbaciones. Análisis: `scratchpad/p0int_an.py` → `runs/fase1d/_analisis_P0int.json`; `p0_host.py P0-escalera` → `_host_P0-escalera.json`.
+- **Conclusión: firme.** Los cuatro criterios del ADR-019 se cumplen y P0 queda cerrado del todo. Siguiente: plantear P2 con el responsable (base y dos gemelos: tasas como gen; sexo con tasas fijas).

@@ -309,3 +309,13 @@ P1-peaje-sexual-bloques (rama `escalera-p0z`, cruce corregido de ADR-018) termin
 - **A4 · cuánto se muta:** se mantienen σ = 0,05 y tasa estructural = 1 (un 11 % de cambios estructurales por hijo). En P0 la variedad crece sin estancarse; en P1, con esas tasas fijas, la selección sigue limpiando en 5/5 y la carga es pequeña (vida un 1 % más corta). No hay señal de exceso (umbral de error, eigen1971selforganization) ni de defecto. Se revisa si el gemelo de P2 con tasas como gen las lleva lejos de estos valores.
 - **C2 · muerte y vejez:** ley del mundo en toda la escalera (P0: vida fija de 600 pasos; desde P1, coste creciente desde 5.000 pasos). Es la hipótesis nula y un interruptor menos. La vejez como gen (williams1957pleiotropy, kirkwood1977ageing, werfel2015death) será un peldaño propio cuando aprender compense (tras P5), con su pregunta prerregistrada.
 - **Todas las filas están en ✅ o ⏭.** Faltan la ADR de cierre de P0 y la rama de integración (plan, puntos 6 y 7).
+
+### 20-10-2026, 12:31 · Comprobación de la integración (ADR-019): P0-escalera (5 mundos) y control
+
+- **Control (10:17–10:39):** la rama `escalera-int`, con la física de la spec v1 elegida a mano, coincide **bit a bit** con P0-feliz s0: 0 diferencias en 300 épocas (todas las medidas salvo el tiempo de cálculo). Unir las ramas no cambió nada de lo que ya había.
+- **P0-escalera (10:39–12:28), 5 mundos con la física nueva** (época 300; entre paréntesis, media de 151–300):
+  - **neuronas ocultas:** 6,5–8,8 (7,4–9,1), cerca de las 8 iniciales; P0-feliz llegaba a 25–35. Ningún bicho cerca del techo de 64 (máximo 22);
+  - **CPPN:** 48–54 aristas y 4,0–5,7 nodos ocultos; **aristas − nodos = 44–49 (media 46,5)**, como en la deriva pura medida sin selección (47–48). No se hincha como la de siempre (64–81 aristas, 12–16 nodos) ni se vacía como la neutral (26–35 aristas). Nodos en el techo: 0–0,2 %;
+  - **σ = 0,05 y tasa = 1** en todos los bichos (0,04999 por el redondeo a f16). El redondeo borra un 0,7 % de las perturbaciones de pesos;
+  - la distancia genética de pesos baja a 15 (22–41 en P0-feliz) y la estructural queda en 76–105, como con la CPPN neutral. El empuje (5–8) es como en P0-feliz: sin selección, nada lo mueve.
+- **Veredicto: la comprobación pasa en los cuatro criterios del ADR-019.** El sustrato 2.6.0 es la base de P2. Datos: `runs/fase1d/_analisis_P0int.json`, `_host_P0-escalera.json`.
