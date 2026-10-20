@@ -1,0 +1,80 @@
+[
+ {
+  "name": "P2-escalera",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P2INT",
+  "description": "Comida que crece y se agota en manchas quietas. La reproducción sigue siendo por edad con energía regalada: la comida solo alarga la vida. Física de la escalera (ADR-019): neuronas neutrales, tasas fijas, CPPN neutral corregida, asexual. Padre: P1-escalera.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "edad",
+   "drift": 0.0
+  }
+ },
+ {
+  "name": "P2-escalera-tasas-gen",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P2INT",
+  "description": "Comida que crece y se agota en manchas quietas. La reproducción sigue siendo por edad con energía regalada: la comida solo alarga la vida. Física de la escalera (ADR-019): neuronas neutrales, tasas fijas, CPPN neutral corregida, asexual. Gemelo: σ y tasa estructural como gen.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "edad",
+   "drift": 0.0
+  },
+  "config": {
+   "MUTATION_RATES": "evolutivas"
+  }
+ },
+ {
+  "name": "P2-escalera-sexual",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P2INT",
+  "description": "Comida que crece y se agota en manchas quietas. La reproducción sigue siendo por edad con energía regalada: la comida solo alarga la vida. Física de la escalera (ADR-019): neuronas neutrales, tasas fijas, CPPN neutral corregida, asexual. Gemelo: reproducción sexual (cruce corregido, ADR-018) con tasas fijas.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "edad",
+   "drift": 0.0
+  },
+  "config": {
+   "REPRODUCTION": "sexual"
+  }
+ }
+]
