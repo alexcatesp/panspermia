@@ -672,3 +672,10 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Decisión del responsable (09:17):** sustrato **asexual**; en P2, gemelo con sexo (cruce corregido) y tasas fijas, donde la ventaja de juntar mejoras puede aparecer. El cruce queda en el código como opción.
 - **Con esto, en P0 solo quedan A4 (cuánto se muta, ahora con tasas fijas: elegir σ y la tasa estructural) y C2 (muerte y vejez).** La GPU está libre desde las 08:54.
+
+### 09:26–09:28 · A4 y C2 decididos: todos los factores de P0 cerrados
+
+- **Decisiones del responsable (09:28):**
+  - A4: se mantienen σ = 0,05 y tasa estructural = 1. P1 con tasas fijas no muestra exceso ni defecto; se revisa con el gemelo de P2;
+  - C2: la vejez es una ley del mundo en toda la escalera; como gen, peldaño propio tras P5.
+- **Estado:** todas las filas de `docs/escalera/p0_factores.md` en ✅ o ⏭. Siguiente: ADR de cierre de P0 y rama de integración (5 ramas → un sustrato con tests, determinismo y la CPPN neutral corregida comprobada en P0).

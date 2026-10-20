@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-20 09:17",
+ "actualizado": "2026-10-20 09:28",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -60,7 +60,7 @@
    "estado": "en curso",
    "resultado": null,
    "anade": "decidir la física de la herencia antes de subir",
-   "texto": "No se pasa a P1 hasta cerrar todos los factores (docs/escalera/p0_factores.md). Cerrados por bibliografía: herencia darwiniana (B2), codificación CPPN (E1); población inicial irrelevante (C3).",
+   "texto": "No se pasa a P1 hasta cerrar todos los factores (docs/escalera/p0_factores.md). Cerrados por bibliografía: herencia darwiniana (B2), codificación CPPN (E1); población inicial irrelevante (C3). 20-10, 09:28: todos los factores cerrados; faltan la ADR de cierre y la rama de integración.",
    "ref": "docs/escalera/p0_factores.md"
   },
   {
@@ -101,11 +101,11 @@
    "padre": "p0cierre",
    "titulo": "A4 · Cuánto se muta (σ, τ, 11 %)",
    "corto": "A4 Cuánto se muta (σ, τ, 11 %)",
-   "estado": "decision",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "positivo",
    "anade": "Cuánto se muta (σ, τ, 11 %)",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "La divergencia neutral crece casi en línea recta (de 10,5 a 49). P0 no puede juzgar si se muta demasiado: prueba de carga mutacional en la entrada de P1."
+   "texto": "La divergencia neutral crece casi en línea recta (de 10,5 a 49). P0 no puede juzgar si se muta demasiado: prueba de carga mutacional en la entrada de P1. Decisión (20-10, 09:28): se mantienen σ = 0,05 y tasa estructural = 1; P1 con tasas fijas no muestra exceso ni defecto. Revisar con el gemelo de P2."
   },
   {
    "id": "p0f-A5",
@@ -156,10 +156,11 @@
    "padre": "p0cierre",
    "titulo": "C2 · Muerte y vejez: ley o gen",
    "corto": "C2 Muerte y vejez: ley o gen",
-   "estado": "decision",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "positivo",
    "anade": "Muerte y vejez: ley o gen",
-   "ref": "docs/escalera/p0_factores.md"
+   "ref": "docs/escalera/p0_factores.md",
+   "texto": " Decisión (20-10, 09:28): ley del mundo en toda la escalera; la vejez como gen, peldaño propio tras P5."
   },
   {
    "id": "p0f-C4",
@@ -844,6 +845,17 @@
    "anade": "transmisión de lo aprendido entre individuos, no por los genes",
    "texto": "Idea del responsable (18-10-2026). La copia social sola no mejora a la población si nadie aprende por su cuenta (paradoja de Rogers 1988); hace falta mezclar aprendizaje individual y social. En robots ya se comparte la experiencia de una flota (robótica en la nube: Kehoe et al. 2015; agarre aprendido con 14 robots: Levine et al. 2017). Riesgo: si todos copian lo mismo, se pierde diversidad y se comparten también los errores. Idea del responsable: buscar el equilibrio entre copiar y aprender por cuenta propia, para favorecer la «mutación» de ideas. Solución conocida: copiar con espíritu crítico, es decir, aprender solo si lo copiado falla (Enquist et al. 2007); en un torneo de estrategias ganó copiar mucho y bien (Rendell et al. 2010). Plan del responsable (18-10, 22:56): cuando llegue el momento, explorar el peso de copiar frente a innovar. Propuesta: primero un barrido de pesos fijos y luego dejar que el peso sea un gen, igual que A3 hace con la tasa de mutación.",
    "ref": "docs/bibliografia/escalera/refs.bib"
+  },
+  {
+   "id": "vejez",
+   "padre": "P6si",
+   "titulo": "Peldaño de la vejez: que el envejecimiento evolucione (C2)",
+   "corto": "Vejez como gen",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "la vejez deja de ser una ley del mundo y pasa a ser un gen",
+   "texto": "Decisión del responsable (20-10, 09:28): en la escalera la vejez es una ley del mundo; cuando aprender compense (tras P5), un peldaño propio la deja evolucionar. En la Tierra, el envejecimiento evoluciona (Williams 1957, Kirkwood 1977) y en mundos con espacio puede convenir una muerte programada (Werfel et al. 2015). Cambia cuánto dura una generación y cuánto compensa aprender.",
+   "ref": "docs/escalera/p0_factores.md"
   }
  ],
  "hipotesis": [
