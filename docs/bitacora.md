@@ -698,3 +698,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Control (terminó a las 10:39):** P0-feliz-control-int s0 coincide **bit a bit** con P0-feliz s0 (0 diferencias en 300 épocas, salvo el tiempo de cálculo). **Firme.**
 - **P0-escalera, 5 mundos (10:39–12:28), época 300:** neuronas 6,5–8,8 (máx. 22); CPPN 48–54 aristas y 4,0–5,7 nodos, aristas − nodos 44–49 (media 46,5; la deriva pura daba 47–48); σ = 0,05 y tasa = 1 en todos; el f16 borra el 0,7 % de las perturbaciones. Análisis: `scratchpad/p0int_an.py` → `runs/fase1d/_analisis_P0int.json`; `p0_host.py P0-escalera` → `_host_P0-escalera.json`.
 - **Conclusión: firme.** Los cuatro criterios del ADR-019 se cumplen y P0 queda cerrado del todo. Siguiente: plantear P2 con el responsable (base y dos gemelos: tasas como gen; sexo con tasas fijas).
+
+### 13:38 · P1-escalera en marcha
+
+- **Decisión del responsable** (tras la comprobación): antes de P2 se repite P1 con todas las reglas nuevas juntas, para que el padre de P2 tenga la misma física. Hasta ahora P1 solo se había simulado con las reglas viejas, cambiando un factor cada vez.
+- **Qué:** P1-peaje con la física de la escalera, 5 mundos (rama `escalera-int`, `48d3099`, cola `p1int.json`, `scratchpad/p1int.sh`, marca `runs/fase1d/p1int_hecho`). Empezó a las 13:38.
+- **Mientras corre:** se prepara el plan de P2 (base y dos gemelos) para revisarlo con el responsable antes de lanzarlo.

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-20 12:31",
+ "actualizado": "2026-10-20 13:38",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -62,6 +62,20 @@
    "anade": "decidir la física de la herencia antes de subir",
    "texto": "No se pasa a P1 hasta cerrar todos los factores (docs/escalera/p0_factores.md). Cerrados por bibliografía: herencia darwiniana (B2), codificación CPPN (E1); población inicial irrelevante (C3). 20-10, 09:28: todos los factores cerrados; faltan la ADR de cierre y la rama de integración. ADR-019 (10:17): rama escalera-int (sustrato 2.6.0) con la física elegida; comprobación en P0 en marcha (P0-escalera y control bit a bit). 12:31: la comprobación pasa. Control idéntico bit a bit a P0-feliz s0; P0-escalera con neuronas 6,5–8,8, CPPN con aristas − nodos 44–49 (como la deriva pura) y σ = 0,05. P2 sale de escalera-int.",
    "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "P1esc",
+   "padre": "P1",
+   "titulo": "P1-escalera: el peaje con la física de la escalera",
+   "corto": "P1-escalera",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "la física integrada (ADR-019) en P1",
+   "texto": "Decisión del responsable (20-10, tras la comprobación de P0): repetir P1 con todas las reglas nuevas juntas antes de P2, para que el padre de P2 use la misma física. Rama escalera-int, cola p1int.json, 5 mundos; en marcha desde las 13:38. Pregunta de P1: con peaje, ¿la selección baja el empuje y el cerebro respecto a P0-escalera?",
+   "cola": "p1int.json",
+   "condicion": "P1-escalera",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU"
   },
   {
    "id": "p0f-A1",
