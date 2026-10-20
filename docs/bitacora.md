@@ -626,3 +626,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Decisión del responsable (23:39):** ver P1 y decidir A2, A3 y B1 caso a caso; lo no concluyente se prueba en P2 antes de fijarlo.
 - **Propuestas pendientes:** ADR de cierre de P0 con rama de integración y tests antes de P2; revisar la batería de capacidad (ADR del responsable) antes de los peldaños con aprendizaje.
 
+## 20-10-2026
+
+### 23:22–02:32 · A3 con selección: P1 con tasas fijas frente a P1-peaje
+
+- **Qué:** P1-peaje-tasas-fijas (rama `escalera-p0x`, cola `p1x.json`, 5 mundos), de 23:22 a 02:26, 0,62 h por mundo; σ = 0,05 y tasa estructural = 1 en todos los bichos. Llenos, sin extinciones ni pausas. Referencia: P1-peaje (tasas como gen), emparejado por semilla.
+- **Datos:** `runs/fase1d/_analisis_A3_P1.json` (series, ventana 151–300) y `_host_P1-peaje.json`, `_host_P1-peaje-tasas-fijas.json` (genomas de la época 300, en CPU).
+- **Resultado:**
+  - tasas como gen en P1, época 300: mediana de σ 0,0046–0,0069 (empieza en 0,05) y de la tasa estructural 0,05–0,13 (empieza en 1). En P0 subían;
+  - con tasas fijas: neuronas 0,48–0,54 frente a 0,11–0,42 (5/5); distancia estructural 63–79 frente a 13–27 (5/5); vida media 516–518 frente a 521–528 pasos (5/5 menor); nacimientos 5/5 mayores;
+  - f16 (A7): borra entre el 9 y el 22 % de las perturbaciones con σ como gen, y el 0,7 % con σ fija.
+- **Conclusión (firme para P1):** con selección y sin nada que ganar, la tasa de mutación como gen baja un orden de magnitud (dirección de la barrera de la deriva, lynch2016driftbarrier). Con tasas fijas, la población arrastra una carga de mutaciones algo mayor. Lo que P1 no puede decir es si mutar tan poco frena la adaptación cuando sí hay algo que ganar (P2).
+- **Pendiente:** decisión del responsable sobre A3 (y con ella A7).

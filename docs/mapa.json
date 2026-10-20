@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-19 23:28",
+ "actualizado": "2026-10-20 02:32",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -94,7 +94,7 @@
    "resultado": "positivo",
    "anade": "Tasas de mutación: gen o constante",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "Tasas fijas: algo menos de neuronas (5/5, pero de −0,05 a −5,5). Todos los mundos mutan igual y f16 deja de ser un problema (0,7 % borrado). El responsable decide tras P1 con tasas fijas frente a P1 de referencia (en cola)."
+   "texto": "P0: tasas fijas, algo menos de neuronas (5/5, efecto pequeño) y f16 deja de ser un problema. P1 (20-10, 02:32): con selección, las tasas como gen bajan solas (σ 10 veces, tasa estructural 8–20 veces); con tasas fijas, algo más de carga de mutaciones (5/5). Falta saber si mutar tan poco frena la adaptación en P2. Decide el responsable."
   },
   {
    "id": "p0f-A4",
@@ -127,7 +127,7 @@
    "resultado": null,
    "anade": "Precisión f16",
    "ref": "docs/escalera/p0_factores.md",
-   "texto": "f16 borra entre el 6 y el 10 % de las pequeñas perturbaciones cuando σ deriva hacia abajo, y solo el 0,7 % con σ fija en 0,05. Se decide con A3."
+   "texto": "f16 borra el 6–10 % de las pequeñas perturbaciones en P0 y el 9–22 % en P1 cuando σ es gen (la selección la baja); solo el 0,7 % con σ fija en 0,05. Se decide con A3."
   },
   {
    "id": "p0f-B1",
