@@ -733,3 +733,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Decisión:** el responsable delegó qué simular de noche; Claude eligió alargar P2-escalera y P2-escalera-sexual hasta 600 épocas, para ver si el cerebro (7,6 → 4–6 neuronas) se estabiliza y si la ventaja del sexo aparece con el tiempo. El responsable autorizó expresamente el umbral de 0,4 también en la prolongación (ampliación del ADR-020). Un primer intento de firmar la revisión sin esa autorización expresa fue bloqueado por los permisos, como corresponde.
 - **Cómo:** `scratchpad/p2largo.sh` espera a `p2resume_hecho`, copia cada mundo terminado a `<condición>-600/s<semilla>` (los originales no se tocan) y continúa desde la época 300 (cola `scratchpad/p2largo.json`, marca `runs/fase1d/p2largo_hecho`). Unos 10 mundos × 30 min.
+
+### 23:20 · Cola de P2 terminada; reanudación en marcha
+
+- La cola `p2int.json` terminó a las 23:20 (base 16:48–18:39, tasas como gen hasta 21:08, sexual hasta 23:20).
+- El gemelo sexual también se pausó en 3 de 5 mundos, siempre por `patch_gain` (0,20–0,22): s0 en la época 300, s3 en la 200 y s4 en la 100. Se firmaron según el ADR-020 (solo mancha o laberinto).
+- 23:21: `p2resume.sh` reanuda 8 mundos hasta la época 300 (unas 800 épocas en total). Después arranca solo `p2largo.sh`.
