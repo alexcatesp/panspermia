@@ -1,0 +1,55 @@
+[
+ {
+  "name": "P0-escalera",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P0INT",
+  "description": "Mundo feliz: vivir es gratis, no hay comida y todos mueren a la misma edad (600 pasos). Nacen por edad con energía regalada. Control neutro: lo que hacen las medidas sin selección. Física de la escalera (ADR-019): neuronas neutrales, tasas fijas, CPPN neutral corregida, asexual.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 0,
+   "k_mean": 0.0,
+   "repro_mode": "edad",
+   "max_age": 600
+  }
+ },
+ {
+  "name": "P0-feliz-control-int",
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P0INT",
+  "description": "Mundo feliz: vivir es gratis, no hay comida y todos mueren a la misma edad (600 pasos). Nacen por edad con energía regalada. Control neutro: lo que hacen las medidas sin selección. Control de la integración (ADR-019): física de la spec v1 elegida a mano; debe coincidir bit a bit con P0-feliz s0.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 0,
+   "k_mean": 0.0,
+   "repro_mode": "edad",
+   "max_age": 600
+  },
+  "config": {
+   "NEURON_MUTATION": "nest",
+   "MUTATION_RATES": "evolutivas",
+   "CPPN_MUTATION": "nest"
+  }
+ }
+]

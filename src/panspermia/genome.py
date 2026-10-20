@@ -172,7 +172,7 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
         raise ValueError(f"MUTATION_RATES desconocida: {C.MUTATION_RATES}")
     if C.CPPN_MUTATION == "nest":
         p_add, p_del, p_split, p_del_node = C.P_ADD_EDGE, C.P_DEL_EDGE, C.P_SPLIT_EDGE, C.P_DEL_NODE
-    elif C.CPPN_MUTATION == "neutral":
+    elif C.CPPN_MUTATION in ("neutral", "neutral_corregida"):
         r = C.CPPN_NEUTRAL_RATES
         p_add, p_del, p_split, p_del_node = r["add_edge"], r["del_edge"], r["split"], r["del_node"]
     else:
@@ -206,16 +206,28 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     W = W.at[i, j].set(jnp.where(do, jax.random.normal(ks[8]), W[i, j]))
 
     # Eliminar conexión CPPN
-    e, ok = _choose(ks[9], W_mask)
+    removable = W_mask
+    if C.CPPN_MUTATION == "neutral_corregida":  # ADR-019: no dejar un nodo oculto sin entrada o sin salida
+        hid = jnp.asarray(_IS_HIDDEN) & node_mask
+        n_in, n_out = jnp.sum(W_mask, axis=0), jnp.sum(W_mask, axis=1)
+        last_out = (hid & (n_out == 1))[:, None]   # i es oculto y esta es su única salida
+        last_in = (hid & (n_in == 1))[None, :]     # j es oculto y esta es su única entrada
+        removable = W_mask & ~last_out & ~last_in
+    e, ok = _choose(ks[9], removable)
     do = happens(ks[10], p_del) & ok
     i, j = e // n, e % n
     W_mask = W_mask.at[i, j].set(jnp.where(do, False, W_mask[i, j]))
     W = W.at[i, j].set(jnp.where(do, 0.0, W[i, j]))
 
     # Dividir conexión: activa un nodo oculto libre k con i < k < j
-    e, ok = _choose(ks[11], W_mask)
-    i, j = e // n, e % n
     idx = jnp.arange(n)
+    splittable = W_mask
+    if C.CPPN_MUTATION == "neutral_corregida":  # ADR-019: elegir solo aristas que se pueden dividir (hay hueco entre i y j)
+        free_cum = jnp.cumsum(jnp.asarray(_IS_HIDDEN) & ~node_mask)   # huecos libres con índice ≤ k
+        between = free_cum[jnp.maximum(idx - 1, 0)][None, :] - free_cum[:, None]  # libres en (i, j)
+        splittable = W_mask & (between > 0)
+    e, ok = _choose(ks[11], splittable)
+    i, j = e // n, e % n
     free_k = jnp.asarray(_IS_HIDDEN) & ~node_mask & (idx > i) & (idx < j)
     k_node, ok_k = _choose(ks[12], free_k)
     do = happens(ks[13], p_split) & ok & ok_k
@@ -232,8 +244,27 @@ def mutate(genome: Genome, key: jax.Array) -> Genome:
     W = W.at[k_node, j].set(jnp.where(do, w_ij, W[k_node, j]))
 
     # Eliminar nodo CPPN oculto (la forma canónica limpia sus aristas)
-    k_node, ok = _choose(ks[15], jnp.asarray(_IS_HIDDEN) & node_mask)
-    do = happens(ks[16], p_del_node) & ok
+    if C.CPPN_MUTATION == "neutral_corregida":
+        # ADR-019: contraer, la inversa de dividir. El nodo k (con a entradas y b salidas, las dos
+        # ≥ 1 porque quitar aristas no deja nodos ocultos aislados) se cambia por el mínimo de aristas
+        # que mantiene unidos a sus vecinos: la primera entrada con cada salida y cada entrada con la
+        # primera salida (a + b − 1, con peso w_ak·w_kb). Neto: −1 nodo y −1 arista, como dividir al
+        # revés; un nodo nacido de dividir i→j devuelve i→j.
+        # Solo nodos cuya contracción no choca con aristas que ya existen (si chocara, se perderían
+        # aristas de más y la receta adelgazaría sola).
+        fi, fo = jnp.argmax(W_mask, axis=0), jnp.argmax(W_mask, axis=1)  # primera entrada y salida de cada k
+        all_pairs = ((W_mask.T[:, :, None] & (idx[None, None, :] == fo[:, None, None]))
+                     | ((idx[None, :, None] == fi[:, None, None]) & W_mask[:, None, :]))  # [k, a, b]
+        clean = ~jnp.any(all_pairs & W_mask[None], axis=(1, 2))
+        k_node, ok = _choose(ks[15], jnp.asarray(_IS_HIDDEN) & node_mask & clean)
+        do = happens(ks[16], p_del_node) & ok
+        pairs = all_pairs[k_node]
+        new = pairs & valid_edge & ~W_mask & do
+        W = jnp.where(new, W[:, k_node][:, None] * W[k_node, :][None, :], W)
+        W_mask = W_mask | new
+    else:
+        k_node, ok = _choose(ks[15], jnp.asarray(_IS_HIDDEN) & node_mask)
+        do = happens(ks[16], p_del_node) & ok
     node_mask = node_mask.at[k_node].set(jnp.where(do, False, node_mask[k_node]))
 
     # Cambiar activación de un nodo activo no de entrada

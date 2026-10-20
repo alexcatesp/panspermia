@@ -1,11 +1,12 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.5.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.6.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
                              # 2.4: reproducción sexual y lugar de nacimiento elegibles, ADR-017;
-                             # 2.5: el cruce hereda la CPPN entera de un progenitor, ADR-018)
+                             # 2.5: el cruce hereda la CPPN entera de un progenitor, ADR-018;
+                             # 2.6: física de la herencia de la escalera por defecto y CPPN neutral corregida, ADR-019)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -65,17 +66,23 @@ NEURON_MOVE_SIGMA = 0.05
 #   neurona» compensa a «duplicar» con la misma tasa. Sin selección, el tamaño no tiene rumbo.
 # - "terrestre": se pierde el doble de lo que se gana, como el sesgo de deleción de la Tierra
 #   (Kuo y Ochman 2009): 1/3 de los cambios encienden y «perder» es el doble de «duplicar».
-NEURON_MUTATION = "nest"
+# Física de la escalera (ADR-019, cierre de P0): "neutral".
+NEURON_MUTATION = "neutral"
 NEURON_MUTATION_P_ON = {"neutral": 0.5, "terrestre": 1 / 3}
 P_DEL_NEURON = {"neutral": 0.01, "terrestre": 0.02}
 # Tasas de mutación (ADR-016): "evolutivas" (spec v1: σ autoadaptativa y tasa estructural como gen,
 # que sin selección deriva hacia arriba por el suelo en 0) o "fijas" (σ = SIGMA_INIT y tasa = 1,
 # constantes del mundo; los genes no cambian).
-MUTATION_RATES = "evolutivas"
+# Física de la escalera (ADR-019): "fijas" (σ = 0,05 y tasa 1, A3 y A4; con ellas f16 basta, A7).
+MUTATION_RATES = "fijas"
 # Física de la mutación de la CPPN (ADR-016): "nest" (spec v1: añadir arista 5 %, quitar 2 %, dividir
 # 3 %, quitar nodo 1 %: crece sin selección) o "neutral" (ganar y perder con la misma tasa; el total
-# de cambios estructurales por hijo, 11 %, no cambia).
-CPPN_MUTATION = "nest"
+# de cambios estructurales por hijo, 11 %, no cambia) o "neutral_corregida" (ADR-019: las tasas de la
+# neutral, con cada operador emparejado con su inverso: quitar un nodo lo contrae (sus vecinos
+# quedan unidos por el mínimo de aristas: −1 nodo y −1 arista, lo contrario de dividir), quitar una
+# arista nunca aísla un nodo oculto y dividir solo elige aristas divisibles; sin esto la neutral
+# pierde aristas sola). Física de la escalera: "neutral_corregida".
+CPPN_MUTATION = "neutral_corregida"
 CPPN_NEUTRAL_RATES = {"add_edge": 0.035, "del_edge": 0.035, "split": 0.02, "del_node": 0.02}
 # Reproducción (ADR-017, corregida en ADR-018): "asexual" (spec v1) o "sexual": el hijo mezcla los
 # genes del padre y de una pareja adulta elegida al azar entre sus vecinos (rejilla 3 × 3); sin pareja
