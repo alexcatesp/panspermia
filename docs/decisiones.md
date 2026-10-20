@@ -485,3 +485,5 @@ Respuesta según la bibliografía:
 - Riesgo asumido: P2 es un mundo cerrado, sin señal, ataque ni química, y sin conexión con nada.
 
 **Pendiente antes de P3:** ADR de revisión de la batería, con pruebas que no se saturen (por ejemplo, la mancha más lejos o comparar con los bichos del peldaño anterior en vez de con el azar) y umbrales por peldaño.
+
+**Ampliación (responsable, 20-10-2026, 22:47: «sí, autorizo el 0,4 en la prolongación»).** El mismo umbral de 0,4 en mancha y laberinto se aplica a la prolongación de P2 hasta 600 épocas (P2-escalera-600 y P2-escalera-sexual-600, copias de los mundos originales desde su época 300). Preguntas: ¿se estabiliza el cerebro o se sigue vaciando?, ¿aparece con el tiempo la ventaja del sexo? Las épocas 151–300 prerregistradas no cambian.

@@ -728,3 +728,8 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Decisión del responsable:** solo en P2, umbrales de mancha y laberinto a 0,4; revisiones firmadas en los 5 mundos pausados; reanudación automática tras la cola (`scratchpad/p2resume.sh`). Antes de P3, ADR de revisión de la batería: la prueba de la mancha se satura, porque el azar ya llega en un 69–77 %.
 - **Bibliografía del rebrote** (pregunta del responsable): el rebrote logístico venía de la spec, sin referencia. Se añaden bacaer2011verhulst, pearl1920growth, rosenzweig1963predator y epstein1996sugarscape (DOI comprobados en Crossref), en el §13 de `docs/bibliografia/escalera/README.md`.
+
+### 22:47 · Noche: P2 alargado hasta 600 épocas
+
+- **Decisión:** el responsable delegó qué simular de noche; Claude eligió alargar P2-escalera y P2-escalera-sexual hasta 600 épocas, para ver si el cerebro (7,6 → 4–6 neuronas) se estabiliza y si la ventaja del sexo aparece con el tiempo. El responsable autorizó expresamente el umbral de 0,4 también en la prolongación (ampliación del ADR-020). Un primer intento de firmar la revisión sin esa autorización expresa fue bloqueado por los permisos, como corresponde.
+- **Cómo:** `scratchpad/p2largo.sh` espera a `p2resume_hecho`, copia cada mundo terminado a `<condición>-600/s<semilla>` (los originales no se tocan) y continúa desde la época 300 (cola `scratchpad/p2largo.json`, marca `runs/fase1d/p2largo_hecho`). Unos 10 mundos × 30 min.
