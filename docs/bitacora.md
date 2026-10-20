@@ -739,3 +739,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - La cola `p2int.json` terminó a las 23:20 (base 16:48–18:39, tasas como gen hasta 21:08, sexual hasta 23:20).
 - El gemelo sexual también se pausó en 3 de 5 mundos, siempre por `patch_gain` (0,20–0,22): s0 en la época 300, s3 en la 200 y s4 en la 100. Se firmaron según el ADR-020 (solo mancha o laberinto).
 - 23:21: `p2resume.sh` reanuda 8 mundos hasta la época 300 (unas 800 épocas en total). Después arranca solo `p2largo.sh`.
+
+### 01:11–01:20 (21-10) · P2 completo: pasa; los gemelos no cambian la física
+
+- **Reanudación terminada a las 01:11** (`p2resume.sh`, 23:21–01:11): los 15 mundos de P2 tienen las épocas 1–300 sin huecos. A las 01:11 arrancó `p2largo.sh` (copias `-600`).
+- **P2-escalera (primaria, 151–300):** vida 3.578–7.585 frente a 523–524 en P1-escalera, **5/5**; empuje 9,0–10,8 frente a 0,05–0,13, **5/5** (p = 0,031). Unos 330 mueren de vejez por época.
+- **Cerebro:** 7,6 neuronas en las épocas 51–100 → 4,1–6,4 en 151–300 → 2,2–5,5 en la 300 (P1: 0,19). La CPPN pierde casi todos sus nodos ocultos (0,5–0,9; P1: 3,7–5,1) y mantiene aristas − nodos (47–50). **Buscar comida es innato:** VA de la ingesta entre −0,016 y −0,004.
+- **Tasas como gen:** σ baja de 0,05 a 0,006–0,019 y la tasa sube a 1,08–1,45 (5/5); vida e ingesta frente a la base, 3/5. **A4 se mantiene** (la regla pedía, además, vivir más). El f16 borra el 2–6 % de las perturbaciones.
+- **Sexo (cruce corregido, tasas fijas):** vida mayor que la base en 4/5 (s3 no) e ingesta en 3/5. **No llega al 5/5: se sigue asexual.** Más regular entre mundos y con menos muertes por hambre (4/5). La generación máxima se duplica porque el hijo hereda la del padre más avanzado (`genome.py`), no porque nazcan más.
+- **Conclusión: firme** para la primaria de P2; **indicio** para el sexo (4/5) y para la bajada de σ. Detalle en `p0_factores.md`; datos en `runs/fase1d/_analisis_P2int.json` y `_host_P2-escalera*.json` (`scratchpad/p2_an.py`, `p2_host.sh`, en CPU).
