@@ -163,7 +163,10 @@ def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
              + env.wave_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
     z = jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0)
     z = z / jnp.sqrt(jnp.sum(env.wave_amp ** 2) / 2)
-    return jnp.where(env.walls, 0.0, env.k_mean * jnp.maximum(0.0, 1.0 + C.K_CONTRAST * z))
+    K = env.k_mean * jnp.maximum(0.0, 1.0 + C.K_CONTRAST * z)
+    if C.K_CUT is not None:  # comida dispersa (ADR-022)
+        K = jnp.where(z >= C.K_CUT, K, 0.0)
+    return jnp.where(env.walls, 0.0, K)
 
 
 def algae_type_a(env: EnvParams, step: jax.Array) -> jax.Array:

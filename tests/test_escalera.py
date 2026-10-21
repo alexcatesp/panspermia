@@ -72,3 +72,15 @@ def test_toll_without_food_costs_energy_and_movement_costs_more():
     e0 = world.energy_update(s0, jnp.array([0.0, 10.0] + [0.0] * 6), jnp.zeros(8), jnp.zeros(8),
                              jnp.zeros(8, bool))
     assert np.all(np.asarray(e0)[:2] == config.E_INIT)
+
+
+def test_sparse_food_cut_keeps_height(monkeypatch):
+    """ADR-022: con K_CUT solo queda comida en las crestas, a la misma altura que sin corte."""
+    env = world.make_env(b"escalera-test")
+    k0 = np.asarray(world.kmax_field(env, jnp.int32(0)))
+    monkeypatch.setattr(config, "K_CUT", 1.5)
+    k1 = np.asarray(world.kmax_field(env, jnp.int32(0)))
+    assert 0.03 < np.mean(k1 > 0) < 0.2 and np.mean(k0 > 0) > 0.8
+    assert np.array_equal(k1[k1 > 0], k0[k1 > 0])
+    s = island.init_island(0, b"escalera-test", n_max=64, n_init=16)
+    assert np.array_equal(np.asarray(s.resources) > 0, k1 > 0)  # empieza lleno solo en las crestas

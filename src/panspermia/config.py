@@ -1,12 +1,13 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.6.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.7.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
                              # 2.4: reproducción sexual y lugar de nacimiento elegibles, ADR-017;
                              # 2.5: el cruce hereda la CPPN entera de un progenitor, ADR-018;
-                             # 2.6: física de la herencia de la escalera por defecto y CPPN neutral corregida, ADR-019)
+                             # 2.6: física de la herencia de la escalera por defecto y CPPN neutral corregida, ADR-019;
+                             # 2.7: comida dispersa elegible (config.K_CUT), P2-buscar, ADR-022)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -195,6 +196,11 @@ K_WAVES = 8
 K_WAVE_MAX_FREQ = 4          # números de onda enteros => periódico en el toro
 K_DRIFT = 0.002              # rad / unidad de tiempo
 K_CONTRAST = 0.8
+# Comida dispersa (P2-buscar, ADR-022): solo hay comida donde el campo normalizado z >= K_CUT, con la
+# misma altura que sin corte. None = el mundo de siempre. Es una opción de compilación (como
+# REPRODUCTION) y no un campo de EnvParams: un `where` en el grafo hace que XLA reordene el cálculo
+# del campo y el mundo de siempre deja de ser idéntico bit a bit.
+K_CUT: float | None = None
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1
