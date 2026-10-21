@@ -884,3 +884,19 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Lectura:** con coste, los hijos son menos y más caros; los bichos viven 2–3 veces más, se mueven más y conservan el cerebro (3,4–6,3 neuronas frente a 0,9). El examen de la época 100 sube con coste 5 y 10 (una sola semilla: indicio). Los tres sobreviven, pero el arranque es justo (8–13 bichos).
 - **Decisión del responsable (22:38):** correr los tres costes (5, 10 y 20), 5 mundos cada uno, y compararlos; criterio, el examen mayor que P3-escaso (`diseno.md` v1.1). Duración estimada: no cabe ninguno más antes de las 07:00. Cola `p3coste.json` (`7104c15`), `scratchpad/p3coste.sh`: espera a `p3disperso_hecho`, pasa la suite completa en GPU y lanza coste 10 → 20 → 5.
+
+### 22:45–22:48 (21-10) · Sonda de hambre (petición del responsable)
+
+- **Pregunta del responsable:** ¿cambia la conducta del bicho según la energía que siente? Si es así, ha aparecido algo parecido al hambre: una motivación interna que nadie le ha programado.
+- **Método** (`scratchpad/hunger_probe.py`, solo observa, CPU): para cada mundo guardado (época 300), dos copias idénticas salvo la entrada de energía del cerebro (`tanh(E/50)`), fijada en "hambriento" (E = 5) o "saciado" (E = 100). La energía real, la física, el azar y la plasticidad no cambian.
+  1. **Respuesta inmediata:** empuje y giro con las mismas observaciones salvo la energía.
+  2. **Conducta durante 200 pasos** (sin nacimientos): recorrido, desplazamiento neto y velocidad, emparejados por bicho.
+- **Nulos:** P0-escalera (la energía no cambia nunca, así que la selección no puede usarla; solo deriva) y genomas al azar con el entorno de P3-escaso (`--azar`).
+- **Lectura, escrita antes de los datos:** hay "hambre" en un tipo de mundo si, en al menos 4 de 5 mundos independientes:
+  - la población responde en una misma dirección (más del 90 % de los bichos);
+  - la dirección coincide entre mundos;
+  - el tamaño de la respuesta inmediata (media de |Δempuje| / desviación del empuje) supera al de los dos nulos.
+
+  Una dirección consistente dentro de un mundo no basta, porque los parientes comparten genes también por deriva: tiene que repetirse en mundos independientes.
+- **Prueba** (P3-escaso s0, 50 pasos, 71 s): el 99,9 % de los bichos empujan algo menos cuando se sienten hambrientos (−0,23; un 9 % de la desviación del empuje); el recorrido apenas cambia. Pendiente de los nulos y del resto de mundos.
+- **En marcha:** `scratchpad/hunger_all.sh` (CPU, 8 núcleos): P0, P3-escaso, P2, P3, P1, nulo al azar y P2-buscar, 5 semillas cada uno → `runs/fase1d/_hambre.jsonl`.
