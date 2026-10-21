@@ -883,3 +883,4 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 | 20 | 13 | 2.372 | **2.525** | **10,4** | 5,5 | 915 | 0,031 |
 
 - **Lectura:** con coste, los hijos son menos y más caros; los bichos viven 2–3 veces más, se mueven más y conservan el cerebro (3,4–6,3 neuronas frente a 0,9). El examen de la época 100 sube con coste 5 y 10 (una sola semilla: indicio). Los tres sobreviven, pero el arranque es justo (8–13 bichos).
+- **Decisión del responsable (22:40):** correr los tres costes (5, 10 y 20), 5 mundos cada uno, y compararlos; criterio, el examen mayor que P3-escaso (`diseno.md` v1.1). Duración estimada: no cabe ninguno más antes de las 07:00. Cola `p3coste.json` (`7104c15`), `scratchpad/p3coste.sh`: espera a `p3disperso_hecho`, pasa la suite completa en GPU y lanza coste 10 → 20 → 5.

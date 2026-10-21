@@ -190,3 +190,18 @@ Rama `escalera-buscar` (`8faa492`, sustrato 2.7.0, examen sin química), cola `p
 
 - **Extinción o pausa:** un mundo extinguido cuenta como fallo. Si la batería pausa un mundo (ganancia ≥ 0,2), se usa su último examen, se respeta la pausa y decide el responsable.
 - **Predicción:** en la calibración se mueven más (empuje 8,6–9,3 frente a 6,4–7,9) y conservan más neuronas (2,2–6,0 frente a 0,9–1,9) que P3-escaso, pero en la época 100 el examen sigue bajo (0,02–0,05) y peor que los controles fijos. Con hijos casi gratis, es dudoso que buscar compense (de ahí P3-coste).
+
+## v1.1 · 21-10-2026, 22:40 · P3-coste: cada hijo cuesta (decisión del responsable, ADR-023)
+
+Escrito antes de tener datos de los 5 mundos. Calibración (`scratchpad/p3ccal.json`, semilla 0, 100 épocas): con coste 5, 10 y 20 los tres sobreviven (mínimo al arrancar: 8–13 bichos); vida 1.588–2.525 frente a 789, neuronas 3,4–6,3 frente a 0,9, examen en la época 100: 0,11 / 0,16 / 0,03 frente a 0,00. El responsable decidió (22:40) correr los tres costes, 5 mundos cada uno, y compararlos.
+
+Rama `escalera-coste` (`7104c15`, sustrato 2.8.0, examen sin química), cola `p3coste.json`, semillas 0–4, 300 épocas. Orden en la GPU: tras P3-disperso, suite completa de tests en GPU (si falla, no se lanza) → coste 10 → coste 20 → coste 5 (`scratchpad/p3coste.sh`; marcas `p3coste10_hecho`, `p3coste20_hecho`, `p3coste5_hecho` y `p3coste_hecho`). Padre: P3-escaso. Hermano: P3-disperso.
+
+| Mundo | Cambia respecto a P3-escaso | Pregunta (5 de 5 semillas emparejadas) |
+|---|---|---|
+| **P3-coste10**, **P3-coste20**, **P3-coste5** | `REPRO_COST` 10, 20 o 5: energía que el padre pierde con cada hijo, aparte de la que cede | **Primaria (la misma que P3-disperso, para cada coste):** `cap_patch_success` (examen limpio) en la época 300 **mayor** que en P3-escaso (s0 0,000; s1 0,000; s2 0,047; s3 0,016; s4 0,047). Secundarias, descriptivas: vida, neuronas, empuje, VA, genes de reproducción y población, y su tendencia con el coste (5 → 10 → 20) |
+
+- **Extinción o pausa:** un mundo extinguido cuenta como fallo de ese coste. Si la batería pausa un mundo (ganancia ≥ 0,2), se usa su último examen, se respeta la pausa y decide el responsable.
+- **Tres pruebas:** cada coste se juzga por separado; no se elige "el mejor" a posteriori como si fuera el único. Si pasan varios, se informa de todos.
+- **Predicción:** vidas más largas y más neuronas que P3-escaso en los tres. El examen, dudoso: una sola semilla de calibración.
+- **Duración estimada** (por los tiempos de la calibración: ~0,65 h por mundo): P3-disperso hasta ~02:15; tests ~35 min; cada coste ~3,3 h. Coste 10 hacia las 06:00, coste 20 hacia las 09:20 y coste 5 hacia las 12:30 (estimaciones). No cabe ningún coste más antes de las 07:00.
