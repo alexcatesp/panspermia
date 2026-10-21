@@ -1,0 +1,29 @@
+[
+ {
+  "name": "P2-buscar",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P2BUSCAR",
+  "description": "Hermano de P2-escalera con comida dispersa (K_CUT 1,5, ADR-022): solo quedan las crestas de las mismas manchas, a la misma altura; 9 % del suelo con comida y el 60 % a más de 60 u (fuera de la vista). Reproducción por edad con energía regalada, como P2. Examen sin química (ADR-021).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "edad",
+   "drift": 0.0
+  },
+  "config": {
+   "K_CUT": 1.5
+  }
+ }
+]
