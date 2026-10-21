@@ -28,7 +28,7 @@
 
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba | Estado |
 |---|---|---|---|---|---|---|
-| B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex; ligamiento: hill1966linkage, thompson2014supergenes, charlesworth2000ydegeneration, birky1995uniparental | P0-feliz-sexual (✅ 5 mundos): **el cruce por índice rompe la receta del cerebro** (entre el 83 y el 88 % de los nodos de la CPPN quedan sin salida). Era un error de implementación: **corregido (ADR-018, la CPPN se hereda entera, como un supergén) y se repite** (P0-feliz-sexual-bloques). Repetición (✅ 5 mundos): la receta queda sana (3–8 % de nodos sin salida) y la variedad no se pierde. **Responsable (19-10, 15:14): decidir tras P1-peaje-sexual-bloques** (supergén o marcas históricas) | ✅ asexual (P2: el sexo gana en 4/5, no en 5/5; se mira a 600 épocas) |
+| B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex; ligamiento: hill1966linkage, thompson2014supergenes, charlesworth2000ydegeneration, birky1995uniparental | P0-feliz-sexual (✅ 5 mundos): **el cruce por índice rompe la receta del cerebro** (entre el 83 y el 88 % de los nodos de la CPPN quedan sin salida). Era un error de implementación: **corregido (ADR-018, la CPPN se hereda entera, como un supergén) y se repite** (P0-feliz-sexual-bloques). Repetición (✅ 5 mundos): la receta queda sana (3–8 % de nodos sin salida) y la variedad no se pierde. **Responsable (19-10, 15:14): decidir tras P1-peaje-sexual-bloques** (supergén o marcas históricas) | ✅ asexual (P2: el sexo gana en 4/5 hasta la época 300 y en 3/5 hasta la 600) |
 | B2 | **Herencia de lo aprendido** | darwiniana: el hijo nace con los pesos innatos, no con los aprendidos | Heredar lo aprendido (lamarckiano) acelera en mundos **estables** (Ackley y Littman 1994), pero cae más en óptimos locales (Whitley et al. 1994) y es **peor cuando el mundo cambia**: hereda lo que servía en un mundo que ya no existe (Sasaki y Tokoro 2000). Aprender sin heredarlo también acelera la evolución (efecto Baldwin; Hinton y Nowlan 1987), según la pendiente de la ganancia (Paenke et al. 2007). Además, con una codificación indirecta (CPPN) no se puede reescribir la receta a partir de los pesos aprendidos | whitley1994lamarck, ackley1994lamarck, sasaki2000lamarck, hinton1987learning, paenke2007plasticity | Ninguna en P0 (no hay nada que aprender). La transmisión de lo aprendido entre bichos (cultura) sería un peldaño social, no genético | ✅ 📚 |
 | B3 | ¿Quién paga la energía del hijo? | dotación regalada (P0, P1) o cedida por el padre (P3+) | — | — | Es de P3 | ⏭ |
 
@@ -363,3 +363,28 @@ Criterios prerregistrados en `diseno.md` v0.6. Medias de las épocas 151–300, 
 - **Gemelo de tasas como gen (A4):** la selección **baja σ entre 3 y 8 veces** (de 0,05 a 0,006–0,019) y **sube la tasa estructural** (de 1 a 1,08–1,45) en 5/5, pero no viven más ni comen más que la base (3/5 en las dos). Con σ tan baja, el redondeo a f16 borra el 2–6 % de las perturbaciones (0,5 % con σ fija). Según la regla prerregistrada (revisar A4 solo si además viven más), **A4 se mantiene**.
 - **Gemelo sexual (B1):** vive más que la base en 4 de 5 mundos (s3 no) y come más en 3 de 5. **No llega al 5/5 prerregistrado: se sigue asexual.** Es más regular entre mundos (vida 5.248–6.711 frente a 3.578–7.585), con menos muertes por hambre en 4/5 y el doble de generaciones (el hijo hereda la generación del padre más avanzado, así que el contador corre más; no es más reproducción: nacen menos). Indicio, no decisión: la prolongación a 600 épocas lo mira con más tiempo.
 - Datos: `runs/fase1d/P2-escalera*`, `_analisis_P2int.json`, `_host_P2-escalera*.json` (`scratchpad/p2_an.py`, `p2_host.sh`).
+
+### 21-10-2026, 06:39 · P2 hasta 600 épocas: base y sexual (10 mundos)
+
+Copias de P2-escalera y P2-escalera-sexual continuadas desde la época 300 (`scratchpad/p2largo.sh`, 01:11–06:39; umbral de mancha y laberinto a 0,4, ampliación del ADR-020). Ningún mundo se pausó ni se extinguió. Medias por ventana (rango de los 5 mundos):
+
+| Medida | Mundo | 51–150 | 151–300 | 301–450 | 451–600 |
+|---|---|---|---|---|---|
+| Neuronas ocultas | base | 6,9–7,6 | 4,1–6,4 | 1,9–4,4 | **1,5–2,9** |
+| | sexual | 7,0–7,6 | 3,8–5,7 | 2,1–3,0 | **1,5–2,3** |
+| Empuje | base | 9,7–11,3 | 9,0–10,8 | 8,4–9,8 | 8,0–8,7 |
+| | sexual | 9,5–10,2 | 8,7–9,3 | 8,0–8,6 | 7,6–8,1 |
+| Masa | base | 0,66–0,89 | 0,41–0,68 | 0,34–0,52 | 0,31–0,40 |
+| Vida media | base | 3.540–5.535 | 3.578–7.585 | 3.319–8.026 | 4.185–9.410 |
+| | sexual | 4.731–6.113 | 5.248–6.711 | 5.837–8.864 | 5.148–10.349 |
+| Comida por época (miles) | base | 413–492 | 345–482 | 318–434 | 307–416 |
+| | sexual | 434–473 | 378–423 | 358–406 | 325–410 |
+| Sexual > base en vida / comida | | 4/5 · 3/5 | 4/5 · 3/5 | 3/5 · 3/5 | **3/5 · 3/5** |
+
+- **El cerebro no se estabiliza: se sigue vaciando**, en los 10 mundos, de 7 neuronas a 1,5–2,9 (época 600: 0,8–2,7 en la base y 1,1–2,1 con sexo), igual que el cuerpo (masa) y, más despacio, el empuje. Todo indica que ir hacia la comida quieta no necesita neuronas ocultas: con 1–2 de media siguen llegando a la mancha el 84–99 % de las veces (los sentidos conectados a los músculos bastan). Con la comida quieta, la selección hace lo mismo que en P1, pero más despacio: quitar lo que cuesta y no hace falta.
+- **Comen menos y viven igual o más:** la ingesta baja un 15–25 % mientras la vida se mantiene o sube; gastan menos (menos masa y empuje).
+- **Aprender sigue sin servir:** VA de la ingesta entre −0,03 y +0,04 en todas las ventanas.
+- **El sexo no gana con el tiempo:** su ventaja en vida pasa de 4/5 a 3/5, y la ingesta se queda en 3/5. Mantiene más variedad estructural (distancia 44–51 frente a 19–35) y clados vivos. **B1 queda cerrado: asexual.**
+- **Batería:** ganancia en la mancha de 0,11–0,27 (umbral 0,4); el éxito sigue en el 84–99 % con un cerebro casi vacío. Confirma que la prueba no mide cerebro (ADR de revisión antes de P3).
+- **Para P3 y P4:** mientras la comida no se mueva ni haya nada que recordar, el cerebro no compensa. Es la pregunta de P4 (comida móvil).
+- Datos: `runs/fase1d/P2-escalera-600`, `P2-escalera-sexual-600`, `_analisis_P2largo.json` (`scratchpad/p2l_an.py`).

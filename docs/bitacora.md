@@ -748,3 +748,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Tasas como gen:** σ baja de 0,05 a 0,006–0,019 y la tasa sube a 1,08–1,45 (5/5); vida e ingesta frente a la base, 3/5. **A4 se mantiene** (la regla pedía, además, vivir más). El f16 borra el 2–6 % de las perturbaciones.
 - **Sexo (cruce corregido, tasas fijas):** vida mayor que la base en 4/5 (s3 no) e ingesta en 3/5. **No llega al 5/5: se sigue asexual.** Más regular entre mundos y con menos muertes por hambre (4/5). La generación máxima se duplica porque el hijo hereda la del padre más avanzado (`genome.py`), no porque nazcan más.
 - **Conclusión: firme** para la primaria de P2; **indicio** para el sexo (4/5) y para la bajada de σ. Detalle en `p0_factores.md`; datos en `runs/fase1d/_analisis_P2int.json` y `_host_P2-escalera*.json` (`scratchpad/p2_an.py`, `p2_host.sh`, en CPU).
+
+### 06:39 (21-10) · P2 hasta 600 épocas: el cerebro se sigue vaciando; el sexo no gana
+
+- **Qué:** `p2largo.sh` (01:11–06:39) continuó P2-escalera y P2-escalera-sexual desde la época 300 hasta la 600 en copias `-600`. Ninguno se pausó (ganancias ≤ 0,30, umbral 0,4) ni se extinguió.
+- **Cerebro:** 7 neuronas (51–150) → 4–6 (151–300) → 2–4 (301–450) → **1,5–2,9** (451–600) en los 10 mundos; época 600: 0,8–2,7. No se estabiliza. La masa y el empuje bajan también, más despacio. La ingesta cae un 15–25 % y la vida se mantiene o sube.
+- **VA ≈ 0** en todas las ventanas: buscar comida quieta es innato y no necesita cerebro (éxito en la mancha del 84–99 % con 1–2 neuronas).
+- **Sexo:** vida mayor que la base en 4/5 hasta la época 300 y en 3/5 en 301–600; ingesta en 3/5 en todas las ventanas. Más variedad estructural (44–51 frente a 19–35). **B1 cerrado: asexual.**
+- **Conclusión: firme.** Con comida quieta, la selección hace lo mismo que en P1, más despacio: quita lo que cuesta y no se usa. El cerebro solo puede compensar cuando haya algo que seguir o recordar (P4, comida móvil). Detalle en `p0_factores.md`; datos en `runs/fase1d/_analisis_P2largo.json`.

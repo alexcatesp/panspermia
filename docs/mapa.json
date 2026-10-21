@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 01:20",
+ "actualizado": "2026-10-21 06:39",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -271,7 +271,7 @@
    "estado": "hecho",
    "resultado": "positivo",
    "anade": "comida en manchas quietas",
-   "texto": "¿Sirve la comida? ¿Van a por ella? Viven más que en P1 y se mueven más (ir hacia la comida compensa). 20-10, 16:48: en marcha con la física integrada (P2-escalera; padre P1-escalera) y dos gemelos: tasas como gen y sexo con tasas fijas (diseno v0.6). 21-10, 01:20: pasa en 5/5. Vida 3.578–7.585 (P1-escalera 523–524), empuje 9,0–10,8 (0,05–0,13). Buscar comida es innato: VA ≈ 0. El cerebro baja despacio (7,6 → 4–6 neuronas) y la CPPN pierde sus nodos ocultos. 8 mundos pausados por la batería y reanudados (ADR-020). La base sigue hasta 600 épocas (P2-escalera-600) para ver si el cerebro se estabiliza.",
+   "texto": "¿Sirve la comida? ¿Van a por ella? Viven más que en P1 y se mueven más (ir hacia la comida compensa). 20-10, 16:48: en marcha con la física integrada (P2-escalera; padre P1-escalera) y dos gemelos: tasas como gen y sexo con tasas fijas (diseno v0.6). 21-10, 01:20: pasa en 5/5. Vida 3.578–7.585 (P1-escalera 523–524), empuje 9,0–10,8 (0,05–0,13). Buscar comida es innato: VA ≈ 0. El cerebro baja despacio (7,6 → 4–6 neuronas) y la CPPN pierde sus nodos ocultos. 8 mundos pausados por la batería y reanudados (ADR-020). La base sigue hasta 600 épocas (P2-escalera-600) para ver si el cerebro se estabiliza. 06:39: a 600 épocas el cerebro se sigue vaciando (1,5–2,9 neuronas; masa y empuje también bajan) y VA sigue en 0: con comida quieta, el cerebro no compensa.",
    "cola": "p2int.json",
    "condicion": "P2-escalera",
    "ref": "docs/escalera/diseno.md",
@@ -297,10 +297,10 @@
    "padre": "P2",
    "titulo": "P2 gemelo: reproducción sexual con tasas fijas",
    "corto": "P2 · sexo",
-   "estado": "en curso",
-   "resultado": "indicio",
+   "estado": "hecho",
+   "resultado": "negativo",
    "anade": "cruce corregido (B1, ADR-018)",
-   "texto": "¿Compensa el sexo al juntar mejoras? Vida o ingesta mayor que la base en 5/5. 21-10, 01:20: vive más que la base en 4/5 y come más en 3/5: no llega al 5/5, se sigue asexual. Más regular entre mundos. Sigue hasta 600 épocas (P2-escalera-sexual-600) para ver si la ventaja aparece con el tiempo.",
+   "texto": "¿Compensa el sexo al juntar mejoras? Vida o ingesta mayor que la base en 5/5. 21-10, 01:20: vive más que la base en 4/5 y come más en 3/5: no llega al 5/5, se sigue asexual. Más regular entre mundos. Sigue hasta 600 épocas (P2-escalera-sexual-600) para ver si la ventaja aparece con el tiempo. 06:39: a 600 épocas la ventaja baja a 3/5 en vida y se queda en 3/5 en ingesta. B1 cerrado: asexual. Conserva más variedad estructural.",
    "cola": "p2largo.json",
    "condicion": "P2-escalera-sexual-600",
    "ref": "docs/escalera/diseno.md",
