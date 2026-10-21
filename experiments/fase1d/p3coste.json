@@ -1,0 +1,86 @@
+[
+ {
+  "name": "P3-coste10",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P3COSTE10",
+  "description": "P3-escaso (k_mean 1,902, hijos pagados) con coste fijo por hijo 10, energía que se pierde (ADR-023). Hermano de P3-disperso; padre P3-escaso.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 1.902
+  },
+  "config": {
+   "REPRO_COST": 10.0
+  }
+ },
+ {
+  "name": "P3-coste20",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P3COSTE20",
+  "description": "P3-escaso (k_mean 1,902, hijos pagados) con coste fijo por hijo 20, energía que se pierde (ADR-023). Hermano de P3-disperso; padre P3-escaso.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 1.902
+  },
+  "config": {
+   "REPRO_COST": 20.0
+  }
+ },
+ {
+  "name": "P3-coste5",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P3COSTE5",
+  "description": "P3-escaso (k_mean 1,902, hijos pagados) con coste fijo por hijo 5, energía que se pierde (ADR-023). Hermano de P3-disperso; padre P3-escaso.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 1.902
+  },
+  "config": {
+   "REPRO_COST": 5.0
+  }
+ }
+]
