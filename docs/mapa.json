@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 21:11",
+ "actualizado": "2026-10-21 21:54",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -360,6 +360,19 @@
    "texto": "Decisión del responsable (21-10, 21:10): antes de P4, comprobar si con los hijos pagados compensa buscar comida dispersa y lejana. La misma comida total que P3-escaso, en manchas más ricas y lejanas. En calibración desde las 21:11.",
    "condicion": "P3-disperso",
    "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU"
+  },
+  {
+   "id": "P3c",
+   "padre": "P3e",
+   "titulo": "P3-coste: cada hijo cuesta",
+   "corto": "P3-coste",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "coste fijo por hijo, energía que se pierde (REPRO_COST, ADR-023)",
+   "texto": "Observación del responsable (21-10, 21:42): con hijos cada vez más baratos no van a buscar comida. En P3-escaso hacer un hijo no cuesta nada aparte de lo cedido, y la selección elige hijos de 3–5 de energía. Hermano de P3-disperso: solo cambia el coste. Rama escalera-coste (sustrato 2.8.0; sin coste, idéntica bit a bit). Pendiente de calibrar.",
+   "condicion": "P3-coste",
+   "ref": "docs/decisiones.md",
    "recurso": "GPU"
   },
   {

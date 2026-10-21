@@ -521,3 +521,13 @@ Respuesta según la bibliografía:
 4. **Criterio** en `diseno.md` v0.8. Si la batería pausa un mundo (ganancia ≥ 0,2), se respeta la pausa y decide el responsable: sería la primera capacidad real medida con el examen limpio.
 
 Bibliografía: viswanathan1999random, viswanathan2008levy, charnov1976optimal (`docs/bibliografia/escalera/README.md` §14).
+
+## ADR-023 · 21-10-2026 · Coste fijo por hijo (decisión del responsable)
+
+**Contexto.** En P3-escaso, el padre cede al hijo una parte de su energía y no se pierde nada más: hacer un hijo no cuesta. La selección lleva el umbral casi al suelo (10,5–19,3) y la fracción cedida a 0,26–0,40. Los hijos nacen con 3–5 unidades de energía: si mueren, el padre apenas pierde nada. Así, un bocado en la mancha de al lado basta para reproducirse. El responsable (21-10, 21:42): "como siga siendo cada vez más barato tener hijos, no van a ir a buscar comida". En la Tierra, construir un hijo cuesta energía que nadie recibe, y las crías muy pequeñas sobreviven peor (compromiso entre tamaño y número de hijos).
+
+**Decisión (responsable, 21-10-2026, poco después de las 21:42).**
+1. **Coste fijo por hijo** (`config.REPRO_COST`, sustrato 2.8.0, rama `escalera-coste`, worktree `panspermia-coste`, creada desde `escalera-buscar`): en el modo "energia", el padre paga lo que cede más el coste; el coste se pierde. Además de superar su umbral, el padre tiene que poder pagarlo (energía · (1 − fracción) > coste). Es una opción de compilación, como `K_CUT`. Con coste 0, la huella coincide con `escalera-int` en un mundo con hijos regalados y en otro con hijos pagados (`scratchpad/bitid2.py`, 800 pasos, CPU). Test: `test_fixed_offspring_cost_is_lost`. Tests de la escalera y unitarios: 14 en verde (CPU).
+2. **P3-coste** es hermano de P3-disperso (los dos cuelgan de P3-escaso): solo cambia el coste. El valor se calibra antes (no se puede subir tanto que los mundos se extingan al arrancar). El criterio se escribe en `diseno.md` antes de lanzarlo.
+3. **Coste según el tamaño del hijo:** el responsable no lo descarta. Se aparca como variante posterior (añade la interacción con la masa, que también evoluciona).
+4. Si ni P3-disperso ni P3-coste bastan por separado, se combinan después.

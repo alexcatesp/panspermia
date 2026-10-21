@@ -856,3 +856,10 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Conclusión: positivo (firme).** La comida limita la población. Pero, como en P2, con comida quieta el cerebro no compensa: la selección ahorra en todo. Detalle en `p0_factores.md`.
 - **Decisión del responsable (21:10):** B3 cerrado: el padre paga (P3-escaso es la base de lo siguiente). Siguiente: P4, si ya no quedan dudas sobre la comida quieta (cuánta y dónde).
 - **Decisión del responsable (21:10):** antes de P4, **P3-disperso**: la misma comida total que P3-escaso, concentrada en el 9 % del suelo (`K_CUT` 1,5). Con el corte queda el 21,9 % de la comida, así que `k_mean` = 1,902 / 0,219 = **8,686** (pico de K ≈ 30). Calibración: `scratchpad/p3dcal.json`, rama `escalera-buscar`, semillas 0–2, 100 épocas (`runs/fase1d/_calP3/P3cal-disperso`).
+
+### 21:42–21:54 (21-10) · Coste fijo por hijo (ADR-023)
+
+- **Observación del responsable:** con hijos cada vez más baratos, no van a buscar comida. Comprobado en el código: tener un hijo no cuesta nada aparte de lo cedido.
+- **Decisión del responsable:** P3-disperso y P3-coste por separado (hermanos, los dos desde P3-escaso). Coste fijo por hijo; el coste según el tamaño, más adelante.
+- **Hecho:** rama `escalera-coste` (`59eba78`, sustrato 2.8.0, desde `escalera-buscar`): `config.REPRO_COST`. Con coste 0, huella idéntica a `escalera-int` con hijos regalados (`6e95fcba…`) y pagados (`65bdc0c7…`). Tests de la escalera y unitarios: 14 en verde (CPU).
+- **Siguiente:** calibrar el coste en la GPU cuando acabe la calibración de P3-disperso.
