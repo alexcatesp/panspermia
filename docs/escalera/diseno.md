@@ -152,3 +152,14 @@ Escrito antes de tener datos de P3. Rama `escalera-int` (sustrato 2.6.0, con el 
 - **Extinción:** un mundo extinguido no cuenta como "población menor". Se informa aparte y, si ocurre, se investiga la calibración antes de subir (P0–P3 son cimientos).
 - **Predicción:** la comida limita la población y comer bien da más hijos. Así, la selección por comer bien pasa de "vivir más" a "dejar más descendencia". Que eso haga útil al cerebro con comida quieta es dudoso (P2 a 600 épocas: un reflejo basta). Se mira en las secundarias.
 - **Batería:** examen sin química y umbrales de mancha 0,2 y laberinto 0,25 (ADR-021). Una pausa ahora sí sería una señal que revisar.
+
+## v0.8 · 21-10-2026, 09:46 · P2-buscar: comida dispersa (decisión del responsable, ADR-022)
+
+Escrito antes de tener datos. Rama `escalera-buscar` (sustrato 2.7.0), cola `p2buscar.json`, semillas 0–4, 300 épocas. Hermano de P2-escalera: solo cambia la comida (`K_CUT` 1,5). Examen sin química (ADR-021).
+
+| Mundo | Cambia respecto a P2-escalera | Pregunta (5 de 5 semillas emparejadas) |
+|---|---|---|
+| **P2-buscar** | comida solo en las crestas: 9 % del suelo, 60 % fuera de la vista | **Primaria:** `cap_patch_success` (examen limpio) en la época 300 **mayor** que la de P2-escalera en la época 300, medida con el examen limpio sobre su checkpoint: s0 0,000, s1 0,031, s2 0,109, s3 0,016, s4 0,109. Secundarias, descriptivas: `hidden_mean` y `lifespan_mean` (151–300) frente a P2; `thrust_mean`; VA |
+
+- **Si un mundo se pausa** (ganancia ≥ 0,2) antes de la época 300, se usa su último examen: una ganancia ≥ 0,2 implica un éxito ≥ 0,2, por encima de cualquier valor de P2. La pausa se respeta y decide el responsable.
+- **Predicción:** puede evolucionar una búsqueda innata (reflejo más un patrón de movimiento) sin que crezca el cerebro y sin aprendizaje (VA ≈ 0), porque las manchas no se mueven (viswanathan1999random). Si además se conserva más cerebro que en P2, sería la primera señal de que el cerebro compensa.

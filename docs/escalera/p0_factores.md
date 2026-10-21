@@ -46,7 +46,7 @@
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
 | D1 | **Dónde nace el hijo** | pegado al padre (a 2 radios) | Crea vecindarios de parientes (aislamiento por distancia). Eso favorece la cooperación y la señal, pero la competencia local entre parientes puede anularlo. Cambiarlo más tarde cambiaría toda la evolución social | wright1943isolation, taylor1992viscous, west2002kincompetition, werfel2015death | P0-feliz-nacer-azar (✅ 5 mundos) y control (✅ 1 mundo, idéntico bit a bit). **En P0 no cambia nada genético** (5/5 idénticos); solo el parentesco del vecindario: junto al padre, 22–62 veces el global; al azar, ≈ 1. **Responsable (19-10, 11:15): junto al padre por ahora; las dos opciones se prueban en el peldaño social** | ✅ ⏭ social |
-| D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0 | ⏭ P2 (densidad de comida) |
+| D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0. P2 con el examen limpio: no buscan (≤ 11 %) porque la comida cubre el 87 % del suelo. **Responsable (21-10): P2-buscar con comida dispersa (K_CUT 1,5, ADR-022)** | 🔬 P2-buscar |
 
 ## E. Codificación del cerebro
 

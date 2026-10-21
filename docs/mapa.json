@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 09:11",
+ "actualizado": "2026-10-21 09:46",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -303,6 +303,20 @@
    "texto": "¿Compensa el sexo al juntar mejoras? Vida o ingesta mayor que la base en 5/5. 21-10, 01:20: vive más que la base en 4/5 y come más en 3/5: no llega al 5/5, se sigue asexual. Más regular entre mundos. Sigue hasta 600 épocas (P2-escalera-sexual-600) para ver si la ventaja aparece con el tiempo. 06:39: a 600 épocas la ventaja baja a 3/5 en vida y se queda en 3/5 en ingesta. B1 cerrado: asexual. Conserva más variedad estructural.",
    "cola": "p2largo.json",
    "condicion": "P2-escalera-sexual-600",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU"
+  },
+  {
+   "id": "P2b",
+   "padre": "P1esc",
+   "titulo": "P2-buscar: comida dispersa (hermano de P2)",
+   "corto": "P2-buscar",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "comida solo en las crestas (K_CUT 1,5, D2)",
+   "texto": "Pregunta del responsable (21-10, 09:30): con el examen limpio, P2 no busca (≤ 11 %), porque la comida está casi siempre a la vista. ¿Con comida escasa y lejana (9 % del suelo, 60 % fuera de la vista) aprenden a buscarla? Primaria: más éxito en el examen limpio que P2 en la época 300 (5/5). Se lanza tras P3 (ADR-022).",
+   "cola": "p2buscar.json",
+   "condicion": "P2-buscar",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU"
   },

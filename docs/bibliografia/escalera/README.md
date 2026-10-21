@@ -127,3 +127,9 @@ Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de
   - en vida artificial, Sugarscape (epstein1996sugarscape) usa una regla parecida: el azúcar vuelve a crecer hasta la capacidad de cada casilla, en un paisaje de dos montañas.
 - **Lo que no viene de la bibliografía:** los números (r, K, el contraste de las manchas y el goteo) se calibraron en la fase 1 para que las poblaciones sobrevivan (ADR-008). El goteo es necesario porque la logística pura deja una casilla a cero para siempre.
 - **Qué implica para P2:** una casilla a medio comer rebrota deprisa (lo máximo, a media carga), y una rapada tarda unos 50 pasos en recuperar la mitad. Comer en la mancha sin rapar compensa más que vaciarla.
+
+## 14. Comida dispersa: ¿obliga a buscar? (D2, P2-buscar, pregunta del responsable)
+
+- **Hueco:** en P2 la comida cubre el 87 % del suelo y casi siempre está a la vista; basta un reflejo (seguir lo que se ve). Para que buscar compense, la comida tiene que estar más lejos de lo que alcanzan los sentidos.
+- **Búsqueda aleatoria óptima** (viswanathan1999random, viswanathan2008levy): cuando los objetivos son escasos y están fuera del alcance de los sentidos, la estrategia de movimiento importa. Una búsqueda con tramos largos de vez en cuando (tipo Lévy) encuentra más que un paseo al azar y no necesita memoria. Predicción para P2-buscar: puede evolucionar una búsqueda innata (reflejo más un patrón de movimiento), sin cerebro grande ni aprendizaje.
+- **Teorema del valor marginal** (charnov1976optimal): cuándo dejar una mancha que se agota para ir a otra. Con manchas separadas, se mide indirectamente en el éxito del examen y en la ingesta.

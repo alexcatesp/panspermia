@@ -507,3 +507,17 @@ Respuesta según la bibliografía:
 2. **Umbrales de vuelta a los del ADR-011:** `patch_gain` 0,2, `maze_gain` 0,25, `comm_mi_bits` 0,5. El 0,4 del ADR-020 y su ampliación quedan revocados para P3 y los peldaños siguientes; los mundos nuevos no llevan `CAPABILITY_REVIEW.json`.
 3. **Dónde:** rama `escalera-int` (base de P3), commit `005ade7`; 79 tests en verde y 1 lento saltado (30 min en GPU). `main` y las ramas de la 1d no tienen el interruptor `chem_on`; heredarán la corrección cuando la escalera se integre en `main`. Hasta entonces, cualquier ejecución desde esas ramas lleva el examen contaminado.
 4. Sin umbrales por peldaño por ahora: con el examen limpio, P2 no se acerca a ninguno.
+
+## ADR-022 · 21-10-2026 · P2-buscar: comida dispersa para que buscar compense (decisión del responsable)
+
+**Contexto.** Con el examen limpio (ADR-021), los bichos de P2 encuentran la mancha lejana como mucho el 11 % de las veces, igual o peor que nadar recto sin cerebro. En su mundo, la comida cubre el 87 % del suelo y casi siempre está a la vista: basta un reflejo. El responsable preguntó (09:30) si hacía falta comprobar P2 con mucha menos comida, para forzar la búsqueda. Es el factor D2 (densidad de comida), aplazado a P2 en `p0_factores.md`.
+
+**Por qué no basta con bajar la comida.** Con K = k_mean · máx(0, 1 + 0,8·z), bajar `k_mean` reduce la comida de cada celda, pero no deja suelo vacío. Ni con el contraste al máximo se pasa del 50 % vacío. Para obligar a buscar, la comida debe estar más lejos que el alcance de los sentidos (60 u).
+
+**Decisión (responsable, 21-10-2026, 09:30 y 09:46).**
+1. **Corte del campo** (`config.K_CUT`, sustrato 2.7.0, rama `escalera-buscar`, worktree `panspermia-buscar`): solo hay comida donde z ≥ K_CUT, a la misma altura que sin corte. Son las mismas manchas, quedándose solo sus crestas. Es una opción de compilación, como `REPRODUCTION`: probado como campo de `EnvParams`, un `where` en el grafo hacía que XLA reordenara el cálculo y el mundo de siempre dejaba de ser idéntico bit a bit. Sin corte, la rama da la misma huella que `escalera-int` (mundo P2 pequeño, 600 pasos, en CPU).
+2. **K_CUT = 1,5** (calibración en `fase1d-w0`): 9 % del suelo con comida, 22 % de la comida de P2, 13 manchas, distancia media a la comida de 89 u (el examen la pone a 90) y el 60 % del suelo fuera de la vista. Alternativas medidas: 1,0 (17 % con comida; 41 % fuera de la vista) y 2,0 (4 %; 78 %).
+3. **P2-buscar** es hermano de P2-escalera (mismo padre, P1-escalera): solo cambia la comida. 5 mundos, 300 épocas, cola `p2buscar.json`. Se lanza al terminar P3, tras pasar la suite completa de tests en GPU (`scratchpad/p2buscar.sh`, marca `runs/fase1d/p2buscar_hecho`).
+4. **Criterio** en `diseno.md` v0.8. Si la batería pausa un mundo (ganancia ≥ 0,2), se respeta la pausa y decide el responsable: sería la primera capacidad real medida con el examen limpio.
+
+Bibliografía: viswanathan1999random, viswanathan2008levy, charnov1976optimal (`docs/bibliografia/escalera/README.md` §14).

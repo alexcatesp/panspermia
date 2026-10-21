@@ -787,3 +787,22 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Decisión del responsable (tras el ADR-021):** P3 base, 5 mundos, sin gemelos.
 - **Qué:** hijos pagados (`repro_mode` "energia"); comida quieta. Rama `escalera-int`, `c01b46b`, cola `p3int.json`, `scratchpad/p3int.sh`, marca `runs/fase1d/p3int_hecho`. Primer peldaño con el examen sin química y los umbrales originales. Criterio en `diseno.md` v0.7 (09:11): población menor que en P2 en 5/5.
+
+### 09:30–09:46 (21-10) · P2-buscar preparado (ADR-022)
+
+- **Pregunta del responsable:** ¿hay que probar P2 con mucha menos comida para forzarles a buscar? Bajar `k_mean` no basta (sigue habiendo comida a la vista en casi todo el suelo); hace falta comida más lejos que los sentidos.
+- **Hecho:** rama `escalera-buscar` (`21c4155`, `fff4e79`; sustrato 2.7.0) con `config.K_CUT`: solo comida donde z ≥ corte, a la misma altura.
+  - Primer intento como campo de `EnvParams`: el mundo sin corte **dejaba de ser idéntico bit a bit**, porque XLA reordenaba el cálculo del campo (huella `312bfd…` frente a `b96d18…`). Como opción de compilación, la huella coincide con `escalera-int` (`scratchpad/bitid.py`, mundo P2 de 256 bichos, 600 pasos, CPU).
+  - Tests de la escalera y unitarios en CPU: 13 en verde.
+- **Calibración** (`scratchpad/buscar_cal.py`, `fase1d-w0`):
+
+| Corte | Suelo con comida | Comida total | Fuera de la vista (> 60 u) | Distancia media |
+|---|---|---|---|---|
+| ninguno | 87 % | 100 % | 0 % | 0 u |
+| 1,0 | 17 % | 37 % | 41 % | 65 u |
+| **1,5 (elegido)** | **9 %** | **22 %** | **60 %** | **89 u** |
+| 2,0 | 4 % | 10 % | 78 % | 131 u |
+
+- **Decisión del responsable:** corte 1,5; primaria, el éxito en el examen limpio en la época 300 mayor que P2 en 5/5 (`diseno.md` v0.8). Bibliografía §14 (viswanathan1999random, viswanathan2008levy, charnov1976optimal; DOI comprobados en Crossref).
+- **Lanzamiento:** `scratchpad/p2buscar.sh` espera a `p3int_hecho`, pasa la suite completa en GPU y lanza 5 mundos (marca `p2buscar_hecho`).
+- **Avance de P3 (s0, época 290):** población siempre llena (4.096) aunque los hijos se paguen.
