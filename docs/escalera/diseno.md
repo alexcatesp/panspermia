@@ -163,3 +163,17 @@ Escrito antes de tener datos. Rama `escalera-buscar` (sustrato 2.7.0), cola `p2b
 
 - **Si un mundo se pausa** (ganancia ≥ 0,2) antes de la época 300, se usa su último examen: una ganancia ≥ 0,2 implica un éxito ≥ 0,2, por encima de cualquier valor de P2. La pausa se respeta y decide el responsable.
 - **Predicción:** puede evolucionar una búsqueda innata (reflejo más un patrón de movimiento) sin que crezca el cerebro y sin aprendizaje (VA ≈ 0), porque las manchas no se mueven (viswanathan1999random). Si además se conserva más cerebro que en P2, sería la primera señal de que el cerebro compensa.
+
+## v0.9 · 21-10-2026, 16:56 · P3-escaso: hijos pagados con la mitad de comida (decisión del responsable)
+
+Escrito antes de tener datos. P3-escalera no pasó por techo: con la comida de P2, entre el 40 y el 94 % de los vivos esperan una plaza libre, y la población se queda en 4.096. P2-buscar mostró que, con energía regalada, la comida escasa no baja la población. El responsable decidió (13:26 y 16:47) repetir P3 con menos comida, desde cero y con la cantidad calibrada (`scratchpad/p3cal2.json`: con ½, 3/3 sobreviven y se estabilizan en 2.700–2.930; con ⅜, 2/3 se extinguen al arrancar).
+
+Rama `escalera-int` (`f02e61f`, sustrato 2.6.0, examen sin química), cola `p3escaso.json`, semillas 0–4, 300 épocas. Padre: P3-escalera.
+
+| Mundo | Cambia respecto a P3-escalera | Pregunta (5 de 5 semillas, épocas 151–300) |
+|---|---|---|
+| **P3-escaso** | `k_mean` 1,902 (la mitad de 3,805) | **Primaria:** `population` media **menor que 4.096** (P3-escalera). Secundarias, descriptivas, frente a P3-escalera: `lifespan_mean`, `thrust_mean`, `hidden_mean`, VA, genes de reproducción (umbral y fracción) y examen limpio |
+
+- **Extinción:** un mundo extinguido no cuenta como "población menor": la primaria fallaría en ese mundo. Se informa aparte (la calibración da mínimos de 16–55 bichos al arrancar).
+- **Predicción:** población de 2.700–3.000; si la comida frena, la selección premia comer mejor para tener hijos, y la vida será más corta que en P3-escalera (calibración: 660–1.001). Si el cerebro sirve para comer mejor con comida escasa y quieta, las neuronas no deberían vaciarse como en P2-buscar (calibración, época 100: 0,9–1,9; dudoso).
+- **Batería:** examen sin química, umbrales 0,2 y 0,25 (ADR-021). Una pausa sería una señal real: decide el responsable.

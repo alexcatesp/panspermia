@@ -833,3 +833,16 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - **½ (1,90):** sobrevive, pero en la época 1 quedan solo 26 bichos (con la comida entera, unos 300). Después crece hasta 2.617 en la época 40, todavía subiendo y cada vez más despacio; el alga en pie baja de 32.700 a 6.700.
   - **¼ (0,95) y ⅛ (0,48):** se extinguen al empezar (época 8 y época 1).
 - **Lectura:** con menos comida, la población sí queda por debajo del tope (en la época 40), pero **el arranque es un cuello de botella**. Los genomas al azar tienen que encontrar comida con la energía inicial, y con ½ en otras semillas podrían extinguirse. Hace falta más calibración: `scratchpad/p3cal2.json`, con ½ y ⅜, semillas 0–2 y 100 épocas, desde las 15:53.
+- **Decisión del responsable (16:47):** P3 con menos comida **desde cero**, con la cantidad que salga de la calibración 2.
+
+### 15:53–16:53 (21-10) · Calibración 2 de P3 con menos comida
+
+- **Qué:** `scratchpad/p3cal2.json`: `k_mean` ½ (1,90) y ⅜ (1,43), semillas 0–2, 100 épocas (`runs/fase1d/_calP3/P3cal2-*`).
+- **½:** los 3 mundos sobreviven (mínimo al arrancar: 16, 55 y 40 bichos). Población en la época 100: 2.927, 2.771 y 2.709, casi estable desde la época 50–75 (s0 todavía sube despacio). Épocas 91–100: vida 660–1.001, casi todas las muertes por hambre, empuje 6,4–7,9 y neuronas 0,9–1,9.
+- **⅜:** 2 de 3 se extinguen al arrancar (épocas 6 y 10); s0 sobrevive con 2.076 (vida 1.442, neuronas 5,5).
+- **Lectura:** ½ es la única cantidad que sobrevive en 3/3, y deja la población un 30 % por debajo del tope: la comida pasa a ser el freno. El riesgo de extinción al arrancar sigue (mínimos de 16–55 bichos).
+
+### 16:56 (21-10) · P3-escaso en marcha
+
+- **Decisión del responsable:** ½ de comida (`k_mean` 1,902), 5 mundos, criterio de P3 (`diseno.md` v0.9: población menor que 4.096 en 5/5; extinción = no).
+- **Qué:** rama `escalera-int`, `f02e61f`, cola `p3escaso.json`, `scratchpad/p3escaso.sh` (log `runs/fase1d/p3escaso.log`, marca `p3escaso_hecho`). Padre: P3-escalera.

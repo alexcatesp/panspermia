@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 15:38",
+ "actualizado": "2026-10-21 16:56",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -328,12 +328,26 @@
    "estado": "hecho",
    "resultado": "negativo",
    "anade": "los hijos se pagan con energía",
-   "texto": "¿Limita la comida a la población? Menos población que en P2: ya no se llena el mundo. 21-10, 09:11: en marcha con la física integrada (P3-escalera; padre P2-escalera), 5 mundos, sin gemelos; examen sin química (ADR-021). Criterio en diseno v0.7. 21-10, 11:53: no pasa (0/5) por techo: la población se queda en 4.096 como en P2; entre el 40 y el 94 % de los vivos tienen energía para un hijo y esperan un hueco. La comida de P2 alimenta a más bichos de los que caben. El umbral baja de 55 a 22–36 (4/5). VA ≈ 0; examen limpio sin pausas (mancha 3–8 %). Responsable (21-10, 13:26): esperar a P2-buscar; si sale bien, P3 sobre P2-buscar; si no, P3 con menos comida.",
+   "texto": "¿Limita la comida a la población? Menos población que en P2: ya no se llena el mundo. 21-10, 09:11: en marcha con la física integrada (P3-escalera; padre P2-escalera), 5 mundos, sin gemelos; examen sin química (ADR-021). Criterio en diseno v0.7. 21-10, 11:53: no pasa (0/5) por techo: la población se queda en 4.096 como en P2; entre el 40 y el 94 % de los vivos tienen energía para un hijo y esperan un hueco. La comida de P2 alimenta a más bichos de los que caben. El umbral baja de 55 a 22–36 (4/5). VA ≈ 0; examen limpio sin pausas (mancha 3–8 %). Responsable (21-10, 13:26): esperar a P2-buscar; si sale bien, P3 sobre P2-buscar; si no, P3 con menos comida. P2-buscar salió mal: P3-escaso (½ de comida, desde cero) en marcha desde las 16:56.",
    "cola": "p3int.json",
    "condicion": "P3-escalera",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true
+  },
+  {
+   "id": "P3e",
+   "padre": "P3",
+   "titulo": "P3-escaso: hijos pagados con la mitad de comida",
+   "corto": "P3-escaso",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "la mitad de comida (k_mean 1,902)",
+   "texto": "P3 no pudo contestar por techo (sobraba comida). Decisión del responsable (21-10): repetirlo desde cero con la mitad de comida (calibración: con ½, 3/3 sobreviven y se estabilizan en 2.700–2.930; con ⅜, 2/3 se extinguen). Primaria: población menor que 4.096 en 5/5 (151–300); un mundo extinguido no cuenta. En marcha desde las 16:56 (diseno v0.9).",
+   "cola": "p3escaso.json",
+   "condicion": "P3-escaso",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU"
   },
   {
    "id": "P4",
