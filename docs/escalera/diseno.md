@@ -140,3 +140,15 @@ Escrito antes de tener datos de P2. Rama `escalera-int` (sustrato 2.6.0), cola `
   - si el sexo gana en 5/5, se adopta desde P2 y se anota que P0 y P1 fueron asexuales;
   - si no, se sigue con la base.
 - **Orden:** la base primero; después, los gemelos.
+
+## v0.7 · 21-10-2026, 09:11 · P3 con la física integrada (decisión del responsable)
+
+Escrito antes de tener datos de P3. Rama `escalera-int` (sustrato 2.6.0, con el examen sin química del ADR-021), cola `p3int.json`, semillas 0–4, 300 épocas. Padre: P2-escalera (pasa en 5/5). Sin gemelos (decisión del responsable).
+
+| Mundo | Cambia respecto a P2-escalera | Pregunta (5 de 5 semillas emparejadas, épocas 151–300) |
+|---|---|---|
+| **P3-escalera** | `repro_mode` "energia": se reproduce quien supera su umbral de energía (gen, 10–100) y cede al hijo una fracción de la suya (gen); la energía ya no se regala | **Primaria:** `population` **menor** que en P2-escalera (siempre 4.096). Secundarias, descriptivas: `hidden_mean`, `thrust_mean`, `lifespan_mean` frente a P2; VA |
+
+- **Extinción:** un mundo extinguido no cuenta como "población menor". Se informa aparte y, si ocurre, se investiga la calibración antes de subir (P0–P3 son cimientos).
+- **Predicción:** la comida limita la población y comer bien da más hijos. Así, la selección por comer bien pasa de "vivir más" a "dejar más descendencia". Que eso haga útil al cerebro con comida quieta es dudoso (P2 a 600 épocas: un reflejo basta). Se mira en las secundarias.
+- **Batería:** examen sin química y umbrales de mancha 0,2 y laberinto 0,25 (ADR-021). Una pausa ahora sí sería una señal que revisar.
