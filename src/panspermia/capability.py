@@ -105,8 +105,13 @@ def _run_probe(env, genomes, phenos, ws, valid, angles, resources, steps: int,
 
 
 def _probe_env(walls: np.ndarray):
+    """Entorno de examen: campo congelado y sin química (ADR-021).
+
+    Con la química encendida, el nutriente que suelta el bicho se degrada en alga en su propia celda
+    y se lo come: aprobaba sin buscar (genomas al azar, 0,77 con el mapa vacío)."""
     env = world.make_env(b"capability-probe")
-    return env.replace(regrow=jnp.float32(0.0), walls=jnp.asarray(walls), seasonal=jnp.float32(0.0))
+    return env.replace(regrow=jnp.float32(0.0), walls=jnp.asarray(walls), seasonal=jnp.float32(0.0),
+                       chem_on=jnp.float32(0.0))
 
 
 def _success(intake: jax.Array, valid: jax.Array) -> float:

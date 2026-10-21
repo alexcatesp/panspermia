@@ -177,6 +177,19 @@ def test_straight_walker_does_not_pass_patch():
     assert max(s) < 0.15, s
 
 
+def test_probe_without_food_nobody_eats():
+    """Regresión del ADR-021: sin comida en el mapa del examen, nadie come (la química no fabrica alga)."""
+    p = 32
+    g = jax.vmap(G.random_minimal)(jax.random.split(jax.random.PRNGKey(5), p))
+    ph = develop_batch(g)
+    angles = jax.random.uniform(jax.random.PRNGKey(6), (p,), maxval=2 * np.pi)
+    food, walls = capability.patch_layout()
+    env = capability._probe_env(walls)
+    intake = capability._run_probe(env, g, ph, ph.w0.astype(jnp.float32), jnp.ones((p,), bool), angles,
+                                   jnp.zeros_like(jnp.asarray(food)), 300)
+    assert float(jnp.max(intake)) == 0.0
+
+
 def test_runner_pause_and_review(tmp_path, monkeypatch):
     """El runner pausa al superar un umbral y no continúa sin revisión humana."""
     from panspermia import run as runner
