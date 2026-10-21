@@ -806,3 +806,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Decisión del responsable:** corte 1,5; primaria, el éxito en el examen limpio en la época 300 mayor que P2 en 5/5 (`diseno.md` v0.8). Bibliografía §14 (viswanathan1999random, viswanathan2008levy, charnov1976optimal; DOI comprobados en Crossref).
 - **Lanzamiento:** `scratchpad/p2buscar.sh` espera a `p3int_hecho`, pasa la suite completa en GPU y lanza 5 mundos (marca `p2buscar_hecho`).
 - **Avance de P3 (s0, época 290):** población siempre llena (4.096) aunque los hijos se paguen.
+
+### 11:53–12:01 (21-10) · P3-escalera: no pasa por techo
+
+- **Qué:** P3-escalera (hijos pagados), 5 mundos, 09:11–11:53, rama `escalera-int` (`c01b46b`), examen sin química. Ninguna pausa ni extinción.
+- **Resultado:** la población queda en 4.096 en los 5 mundos (primaria **0/5**). El mundo tarda más en llenarse (época 6–54 frente a 2), pero se llena. Entre el 40 y el 94 % de los vivos superan su umbral y esperan un hueco: el freno es el tope de plazas, no la comida.
+- **Genes:** el umbral baja de 55 a 22–36 en 4/5 (s4 se queda en 51 con hijos más ricos, 0,62).
+- **Secundarias:** vida mayor en 4/5, empuje menor en 4/5, VA ≈ 0 y neuronas 1,6–7,8. Examen limpio: mancha 3–8 %, ganancia −0,13 a −0,02; laberinto 0,00–0,01.
+- **Conclusión:** negativo según el criterio, pero **por techo** (la comida de P2 alimenta a más de 4.096 bichos). Detalle en `p0_factores.md`. Datos: `runs/fase1d/P3-escalera`, `_analisis_P3int.json`, `_genes_P3int.json`.
+- **Después:** P2-buscar arrancó sus tests a las 11:53 (`p2buscar.sh`).

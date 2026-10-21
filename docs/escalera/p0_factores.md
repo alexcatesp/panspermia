@@ -388,3 +388,40 @@ Copias de P2-escalera y P2-escalera-sexual continuadas desde la época 300 (`scr
 - **Batería:** ganancia en la mancha de 0,11–0,27 (umbral 0,4); el éxito sigue en el 84–99 % con un cerebro casi vacío. Confirma que la prueba no mide cerebro (ADR de revisión antes de P3).
 - **Para P3 y P4:** mientras la comida no se mueva ni haya nada que recordar, el cerebro no compensa. Es la pregunta de P4 (comida móvil).
 - Datos: `runs/fase1d/P2-escalera-600`, `P2-escalera-sexual-600`, `_analisis_P2largo.json` (`scratchpad/p2l_an.py`).
+
+### 21-10-2026, 11:53 · P3-escalera: hijos pagados (5 mundos)
+
+Criterio prerregistrado en `diseno.md` v0.7. Rama `escalera-int` (`c01b46b`), examen sin química (ADR-021). 09:11–11:53; ningún mundo se pausó ni se extinguió. Medias de las épocas 151–300, emparejadas por semilla con P2-escalera:
+
+| Medida | P2-escalera | **P3-escalera** | P3 frente a P2 |
+|---|---|---|---|
+| Población (**primaria**: menor que en P2) | 4.096 | **4.096** | **0/5: no pasa** |
+| Época en que se llena el mundo | 2 | 6–54 | — |
+| Vida media | 3.578–7.585 | 4.727–7.141 | mayor en 4/5 |
+| Empuje | 9,0–10,8 | 7,9–9,9 | menor en 4/5 |
+| Comida ingerida por época (miles) | 345–482 | 345–467 | mayor en 3/5 |
+| Neuronas ocultas | 4,1–6,4 | 1,6–7,8 | menos en 3/5 |
+| VA de la ingesta | −0,016 a −0,004 | −0,057 a +0,010 | ≈ 0 |
+| Nacimientos por época | 541–1.157 | 582–884 | — |
+| Muertes por hambre / por vejez (por época) | 223–823 / 318–344 | 234–506 / 345–387 | — |
+| Generación máxima | 61–80 | 60–212 | — |
+| Examen limpio: mancha (éxito / ganancia) | — | 0,03–0,08 / −0,13 a −0,02 | sin pausa |
+| Examen limpio: laberinto (ganancia) | — | 0,00–0,01 | sin pausa |
+
+Genes de reproducción de los vivos (`scratchpad/p3_genes.py`, épocas 100, 200 y 300; al nacer, el umbral medio es 55 y la fracción 0,5):
+
+| Mundo | Umbral (época 300, p10–p90) | Fracción al hijo | Vivos por encima del umbral (100 / 200 / 300) |
+|---|---|---|---|
+| s0 | 21,8 (17,7–27,0) | 0,40 | 51 / 93 / 65 % |
+| s1 | 36,5 (20,0–49,9) | 0,55 | 64 / 70 / 40 % |
+| s2 | 30,2 (24,9–36,1) | 0,48 | 94 / 92 / 40 % |
+| s3 | 22,2 (17,6–27,7) | 0,49 | 84 / 83 / 85 % |
+| s4 | 51,4 (42,1–65,2) | 0,62 | 89 / 83 / 77 % |
+
+- **La primaria no pasa (0/5).** Con los hijos pagados, el mundo tarda más en llenarse (de la época 2 a la 6–54), pero se llena y se queda lleno. En s0 y s3 baja a veces de 4.096 dentro de la época (mínimo 3.786), pero vuelve a llenarse.
+- **El freno no es la comida, sino el tope de 4.096 plazas.** Entre el 40 y el 94 % de los vivos tienen energía de sobra para reproducirse y esperan un hueco libre. La comida de P2 (87 % del suelo) alimenta a más bichos de los que caben. La pregunta "¿limita la comida a la población?" no se puede contestar con esta comida: la respuesta del mundo es "aún no".
+- **La selección sí ve los genes nuevos:** el umbral baja de 55 a 22–36 en 4 de 5 mundos (tener hijos antes, cuando hay que pelear por un hueco); s4 lo mantiene en 51 con hijos más ricos (0,62). Son dos estrategias distintas, sin ganador claro.
+- **Secundarias:** viven algo más (4/5) y empujan algo menos (4/5); el cerebro sigue sin hacer falta (VA ≈ 0 y menos neuronas en 3/5). Con comida quieta, los hijos pagados no cambian lo que importa para el cerebro.
+- **Examen limpio:** encuentran la mancha lejana el 3–8 % de las veces, peor que los controles fijos (ganancia negativa). No hubo pausas: con el examen limpio, ninguna señal.
+- **Conclusión:** negativo según el criterio prerregistrado, pero por techo: no se ha medido lo que se quería medir. Siguiente paso, con el responsable.
+- Datos: `runs/fase1d/P3-escalera`, `_analisis_P3int.json`, `_genes_P3int.json` (`scratchpad/p3_an.py`, `p3_genes.py`).
