@@ -487,3 +487,23 @@ Respuesta según la bibliografía:
 **Pendiente antes de P3:** ADR de revisión de la batería, con pruebas que no se saturen (por ejemplo, la mancha más lejos o comparar con los bichos del peldaño anterior en vez de con el azar) y umbrales por peldaño.
 
 **Ampliación (responsable, 20-10-2026, 22:47: «sí, autorizo el 0,4 en la prolongación»).** El mismo umbral de 0,4 en mancha y laberinto se aplica a la prolongación de P2 hasta 600 épocas (P2-escalera-600 y P2-escalera-sexual-600, copias de los mundos originales desde su época 300). Preguntas: ¿se estabiliza el cerebro o se sigue vaciando?, ¿aparece con el tiempo la ventaja del sexo? Las épocas 151–300 prerregistradas no cambian.
+
+**Revisión (21-10-2026):** la valoración de este ADR era errónea. La prueba no era objetiva: estaba contaminada por la química del examen (ADR-021). Las 8 pausas de P2 fueron falsas alarmas, y el 0,4 deja de aplicarse.
+
+## ADR-021 · 21-10-2026 · Batería v2.1: el examen sin química; umbrales de vuelta a 0,2 y 0,25 (decisión del responsable)
+
+**Contexto.** Al preparar la revisión de la batería pedida en el ADR-020 se vio que los genomas al azar aprueban la mancha y el laberinto exactamente igual (0,766) en todos los mundos desde la fase 1b. En la fase 1 su éxito era 0,0.
+- **Causa:** `capability._probe_env` parte de `world.make_env`, que deja `chem_on = 1`. En el examen, el bicho suelta nutriente, que al degradarse se convierte en alga en su propia celda (`world.chem_step`), y se lo come.
+- **Prueba:** con el mapa del examen vacío, los genomas al azar comen lo mismo que con la mancha (éxito 0,734; ingesta de hasta 229, frente a 24 de comida en la mancha).
+
+**Datos** (`runs/fase1d/_bateria_quimica.jsonl`; bitácora del 21-10, 08:04). Batería con la química apagada en el examen, sobre 30 checkpoints:
+- **P2, épocas 100–600 (base y sexual):** la población encuentra la mancha lejana el 0–14 % de las veces, frente al 0–2 % del azar y al 6–20 % de nadar sin cerebro. Ganancia de −0,17 a +0,03; laberinto, 0–3 %.
+- **P0 y P1:** 0–2 %.
+- **Lectura:** ninguna población ha mostrado una capacidad real de búsqueda. Las 8 pausas de P2 (ADR-020) fueron **falsas alarmas**. La "saturación" era este error, no un defecto del diseño de la mancha.
+- **Alcance:** la salvaguarda estuvo mal medida en toda la fase 1d y la escalera. Con la referencia al azar en 0,75, la ganancia no podía pasar de 0,25. Las conclusiones de la 1d no dependen de la batería (se apoyan en la sonda emparejada y en VA), pero sus columnas `cap_*` no son válidas.
+
+**Decisión (responsable, 21-10-2026, 08:10).**
+1. **El examen se hace sin química** (`chem_on = 0` en `_probe_env`): solo cuenta la comida de la mancha o del laberinto. Test de regresión: con el mapa del examen vacío, nadie come. La simulación de los mundos no cambia (la batería solo observa).
+2. **Umbrales de vuelta a los del ADR-011:** `patch_gain` 0,2, `maze_gain` 0,25, `comm_mi_bits` 0,5. El 0,4 del ADR-020 y su ampliación quedan revocados para P3 y los peldaños siguientes; los mundos nuevos no llevan `CAPABILITY_REVIEW.json`.
+3. **Dónde:** rama `escalera-int` (base de P3), commit `005ade7`; 79 tests en verde y 1 lento saltado (30 min en GPU). `main` y las ramas de la 1d no tienen el interruptor `chem_on`; heredarán la corrección cuando la escalera se integre en `main`. Hasta entonces, cualquier ejecución desde esas ramas lleva el examen contaminado.
+4. Sin umbrales por peldaño por ahora: con el examen limpio, P2 no se acerca a ninguno.

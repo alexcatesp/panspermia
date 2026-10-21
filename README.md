@@ -61,7 +61,7 @@ El runner guarda una fila de estadísticas por época (demografía y complejidad
 | `world.py` | Mundo 2D: biogeografía, recursos, vecindad, rayos, física, energía |
 | `island.py` | `IslandState`, `world_step`, `epoch`, nacimientos y reinyección |
 | `metrics.py` | Estadísticas por época, descriptor conductual, novedad, grupos, Bedau-Packard (solo observan) |
-| `capability.py` | Batería de capacidad (salvaguarda 5): comunicación, anillo, laberinto |
+| `capability.py` | Batería de capacidad (salvaguarda 5): comunicación, mancha lejana y laberinto, con el examen sin química (ADR-021, rama `escalera-int`) |
 | `record.py` | Grabación de épocas para el visor |
 | `run.py` | Runner: Parquet, Orbax, pruebas periódicas y pausa por capacidad |
 | `viewer.py` + `viewer_static/` | Visor web local del mundo |

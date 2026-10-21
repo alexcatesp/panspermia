@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 06:39",
+ "actualizado": "2026-10-21 08:10",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -493,6 +493,18 @@
    "ref": "ADR-011",
    "anade": "referencia trivial",
    "corto": "Batería v2",
+   "principal": false
+  },
+  {
+   "id": "bateria21",
+   "padre": "bateria2",
+   "titulo": "Batería v2.1: el examen sin química",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "texto": "21-10: desde la fase 1b, la química del examen fabricaba comida y los genomas al azar aprobaban (0,77). Con la química apagada, el azar saca 0 y P2 no muestra capacidad real (ganancia ≤ +0,03): las 8 pausas de P2 eran falsas alarmas. Umbrales de vuelta a 0,2 y 0,25 (decisión del responsable). Rama escalera-int.",
+   "ref": "ADR-021",
+   "anade": "examen sin química",
+   "corto": "Batería v2.1",
    "principal": false
   },
   {

@@ -776,3 +776,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - **La salvaguarda ha estado mal medida desde la fase 1b** (toda la 1d y la escalera). Con la referencia al azar en 0,75, la ganancia máxima posible era 0,25: una capacidad real habría hecho saltar la alarma tarde o nunca. Ninguna población ha mostrado capacidad real (ganancias limpias ≤ +0,03), así que no hubo un riesgo escondido, pero la protección no estaba funcionando como se creía.
   - **La "saturación"** que motivaba el ADR de revisión era este error, no un defecto del diseño de la mancha.
 - **Conclusión: firme.** Pendiente: ADR-021 (corrección y umbrales), con decisión del responsable.
+
+### 08:10–08:51 (21-10) · ADR-021: el examen sin química
+
+- **Decisión del responsable:** el examen se hace con la química apagada y los umbrales vuelven a 0,2 (mancha) y 0,25 (laberinto); el 0,4 del ADR-020 queda revocado.
+- **Hecho:** `escalera-int`, commit `005ade7`: `chem_on = 0` en `capability._probe_env` y test de regresión (con el mapa vacío, nadie come). Tests: 79 en verde y 1 lento saltado (08:20–08:51 en GPU).
+- **Pendiente:** `main` y las ramas de la 1d no tienen el interruptor `chem_on`; heredarán la corrección al integrar la escalera. Siguiente: P3.

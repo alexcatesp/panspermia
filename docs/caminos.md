@@ -11,6 +11,8 @@ Criterio: una idea biológica (veneno, cambio ambiental, depredación) no se des
 | Camino | Estado | Evidencia | Condición de reapertura | Referencia |
 | --- | --- | --- | --- | --- |
 | Prueba del anillo en la batería de capacidad | Descartado | Avanzar recto sin cerebro saca 1,0 | — | ADR-010, ADR-011 |
+| Examen de capacidad con la química encendida | Descartado | El nutriente soltado se degrada en alga en la celda del bicho: el azar aprueba con 0,77 incluso con el mapa vacío | — | ADR-021 |
+| Umbrales de mancha y laberinto a 0,4 (P2) | Descartado | Se subieron por una saturación que era el error de la química | Solo si una capacidad real y revisada lo justifica | ADR-020, ADR-021 |
 | Valor del aprendizaje por supervivencia de la cohorte a una época | Descartado | Edad media ~140 pasos frente a épocas de 1.000: compara casi ceros | — (sustituido por la sonda emparejada a nivel de población) | ADR-010 |
 | Instalación con `uv pip` | Descartado | Rechaza al azar ruedas NVIDIA válidas («Invalid Wheel-Version») | Nueva versión de uv que lo arregle | ADR-005 |
 | Algas tóxicas plenas desde el paso 0 (sin rampa) | Aparcado | 505 de 512 muertos en la primera época; extinción en 2–3 épocas | Mundos sembrados con migrantes que ya distinguen algas (fase 4, flujo libre → granja) | ADR-008 (calibración) |
