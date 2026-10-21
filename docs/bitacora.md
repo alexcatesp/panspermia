@@ -846,3 +846,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
 - **Decisión del responsable:** ½ de comida (`k_mean` 1,902), 5 mundos, criterio de P3 (`diseno.md` v0.9: población menor que 4.096 en 5/5; extinción = no).
 - **Qué:** rama `escalera-int`, `f02e61f`, cola `p3escaso.json`, `scratchpad/p3escaso.sh` (log `runs/fase1d/p3escaso.log`, marca `p3escaso_hecho`). Padre: P3-escalera.
+
+### 20:01 (21-10) · P3-escaso: la comida frena (pasa 5/5)
+
+- **Qué:** P3-escaso (½ de comida, hijos pagados), 5 mundos, 16:56–20:01, rama `escalera-int` (`f02e61f`). Ninguna pausa ni extinción (mínimo al arrancar: 16–73).
+- **Primaria: 5/5.** Población 2.516–2.690 (épocas 151–300; mínimo 2.381). Solo el 1–3 % de los vivos tienen energía para un hijo (P3-escalera: 40–94 %).
+- **Genes:** umbral de 55 a 10,5–19,3 (casi el suelo en 3/5); fracción al hijo de 0,5 a 0,26–0,40. Hijos baratos y muchos: 3.800–5.600 nacimientos por época, vida 483–688 y casi ninguna muerte por vejez.
+- **Secundarias:** neuronas 0,05–1,45, masa 0,26–0,28 y empuje 6,4–7,8 (todo menor en 5/5); VA ≈ 0. Examen limpio: mancha 0–5 %, ganancia −0,13 a −0,06; laberinto 0–0,02. Sin pausas.
+- **Conclusión: positivo (firme).** La comida limita la población. Pero, como en P2, con comida quieta el cerebro no compensa: la selección ahorra en todo. Detalle en `p0_factores.md`.

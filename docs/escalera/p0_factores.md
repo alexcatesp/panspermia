@@ -30,7 +30,7 @@
 |---|---|---|---|---|---|---|
 | B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex; ligamiento: hill1966linkage, thompson2014supergenes, charlesworth2000ydegeneration, birky1995uniparental | P0-feliz-sexual (✅ 5 mundos): **el cruce por índice rompe la receta del cerebro** (entre el 83 y el 88 % de los nodos de la CPPN quedan sin salida). Era un error de implementación: **corregido (ADR-018, la CPPN se hereda entera, como un supergén) y se repite** (P0-feliz-sexual-bloques). Repetición (✅ 5 mundos): la receta queda sana (3–8 % de nodos sin salida) y la variedad no se pierde. **Responsable (19-10, 15:14): decidir tras P1-peaje-sexual-bloques** (supergén o marcas históricas) | ✅ asexual (P2: el sexo gana en 4/5 hasta la época 300 y en 3/5 hasta la 600) |
 | B2 | **Herencia de lo aprendido** | darwiniana: el hijo nace con los pesos innatos, no con los aprendidos | Heredar lo aprendido (lamarckiano) acelera en mundos **estables** (Ackley y Littman 1994), pero cae más en óptimos locales (Whitley et al. 1994) y es **peor cuando el mundo cambia**: hereda lo que servía en un mundo que ya no existe (Sasaki y Tokoro 2000). Aprender sin heredarlo también acelera la evolución (efecto Baldwin; Hinton y Nowlan 1987), según la pendiente de la ganancia (Paenke et al. 2007). Además, con una codificación indirecta (CPPN) no se puede reescribir la receta a partir de los pesos aprendidos | whitley1994lamarck, ackley1994lamarck, sasaki2000lamarck, hinton1987learning, paenke2007plasticity | Ninguna en P0 (no hay nada que aprender). La transmisión de lo aprendido entre bichos (cultura) sería un peldaño social, no genético | ✅ 📚 |
-| B3 | ¿Quién paga la energía del hijo? | dotación regalada (P0, P1) o cedida por el padre (P3+) | — | — | Es de P3. P3-escalera (21-10, 11:53): con el padre pagando no hay extinción, pero el mundo se sigue llenando (4.096); el freno es el tope, no la comida | 🔬 P3: pendiente del responsable |
+| B3 | ¿Quién paga la energía del hijo? | dotación regalada (P0, P1) o cedida por el padre (P3+) | — | — | Es de P3. P3-escalera (21-10, 11:53): con el padre pagando no hay extinción, pero el mundo se sigue llenando (4.096); el freno es el tope, no la comida. P3-escaso (20:01, ½ de comida): la comida frena (población 2.516–2.690, 5/5); la selección elige hijos baratos (umbral 10–19, fracción 0,26–0,40) | 🔬 cedida por el padre (P3-escaso ✓); pendiente del responsable |
 
 ## C. Demografía
 
@@ -451,3 +451,35 @@ Criterio prerregistrado en `diseno.md` v0.8 (ADR-022). Rama `escalera-buscar` (`
 - **Aprender perjudica (indicio):** el gemelo con la plasticidad apagada come entre un 12 y un 45 % más en los 5 mundos. Con tan poca comida, lo que se aprende en vida parece desviar al bicho del reflejo innato. Es la primera VA claramente distinta de cero de la escalera; hay que confirmarla antes de interpretarla.
 - **Para P3:** aquí la comida sí es el freno (se agota), pero la población no baja porque la energía de los hijos se regala. Es justo lo que P3 cambia.
 - **Conclusión:** negativo. Datos: `runs/fase1d/P2-buscar`, `_analisis_P2buscar.json` (`scratchpad/p2b_an.py`).
+
+### 21-10-2026, 20:01 · P3-escaso: hijos pagados con la mitad de comida (5 mundos)
+
+Criterio prerregistrado en `diseno.md` v0.9. Rama `escalera-int` (`f02e61f`), `k_mean` 1,902, examen sin química. 16:56–20:01; ningún mundo se pausó ni se extinguió (mínimo al arrancar: 16–73 bichos). Medias de las épocas 151–300, emparejadas por semilla con P3-escalera:
+
+| Medida | P3-escalera | **P3-escaso** | P3-escaso frente a P3 |
+|---|---|---|---|
+| Población (**primaria**: menor que 4.096) | 4.096 | **2.516–2.690** (mínimo 2.381) | **5/5: pasa** |
+| Vivos con energía para un hijo (época 300) | 40–85 % | **1–3 %** | la comida frena |
+| Umbral para tener hijos (época 300; al nacer, 55) | 22–51 | **10,5–19,3** (suelo: 10) | más bajo en 5/5 |
+| Fracción de energía al hijo (época 300; al nacer, 0,5) | 0,40–0,62 | **0,26–0,40** | más baja en 5/5 |
+| Vida media | 4.727–7.141 | **483–688** | 7–14 veces menor |
+| Energía media | 70–168 | 6–9 | — |
+| Nacimientos / muertes por hambre (por época) | 582–884 / 234–506 | 3.792–5.587 / 3.770–5.587 | — |
+| Muertes por vejez (por época) | 345–387 | 0–32 | — |
+| Generación máxima | 60–212 | 335–452 | — |
+| Comida ingerida por época (miles) | 345–467 | 176–192 | la mitad |
+| Empuje | 7,9–9,9 | 6,4–7,8 | menor en 5/5 |
+| Masa | 0,32–0,67 | 0,26–0,28 | menor en 5/5 |
+| Neuronas ocultas | 1,6–7,8 | **0,05–1,45** (época 300: 0,06–1,51) | menos en 5/5 |
+| VA de la ingesta | −0,057 a +0,010 | −0,021 a +0,009 | ≈ 0 |
+| Examen limpio: mancha (éxito / ganancia, época 300) | 0,03–0,08 / −0,13 a −0,02 | 0,00–0,05 / −0,13 a −0,06 | sin pausa |
+| Examen limpio: laberinto | 0,00–0,01 | 0,00–0,02 | sin pausa |
+
+Genes de reproducción: `scratchpad/p3e_genes.py`, `_genes_P3escaso.json`.
+
+- **La primaria pasa (5/5):** con la mitad de comida y los hijos pagados, la población se estabiliza en unos 2.500–2.700 bichos, un 35–39 % por debajo del tope. Ahora **la comida es el freno**: solo el 1–3 % de los vivos tienen energía para un hijo (en P3-escalera, el 40–94 %).
+- **La selección elige hijos baratos y muchos:** el umbral baja casi al suelo (10,5–11,4 en 3/5) y la fracción cedida al hijo cae de 0,5 a 0,26–0,40. Cada hijo nace con unas 3–5 unidades de energía y vive unos 500–700 pasos; casi nadie llega a viejo. Es una estrategia "r" (muchos hijos pequeños), no una de buscadores mejores.
+- **El cerebro se vacía todavía más:** 0,05–1,45 neuronas (menos que en P3-escalera en 5/5), cuerpo más pequeño y empuje menor. VA ≈ 0. Con comida quieta y escasa, la selección ahorra en todo: cuerpo, cerebro y dote del hijo.
+- **Examen limpio:** encuentran la mancha lejana el 0–5 % de las veces, peor que los controles fijos. Sin pausas.
+- **Conclusión: positivo** según el criterio prerregistrado (la comida limita la población). P3-escaso es el primer mundo de la escalera donde la comida decide quién tiene hijos. Pero, igual que en P2, buscar comida quieta no necesita cerebro.
+- Datos: `runs/fase1d/P3-escaso`, `_analisis_P3escaso.json`, `_genes_P3escaso.json` (`scratchpad/p3e_an.py`, `p3e_genes.py`).
