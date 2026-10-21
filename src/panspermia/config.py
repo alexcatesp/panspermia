@@ -1,13 +1,14 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.7.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.8.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
                              # 2.4: reproducción sexual y lugar de nacimiento elegibles, ADR-017;
                              # 2.5: el cruce hereda la CPPN entera de un progenitor, ADR-018;
                              # 2.6: física de la herencia de la escalera por defecto y CPPN neutral corregida, ADR-019;
-                             # 2.7: comida dispersa elegible (config.K_CUT), P2-buscar, ADR-022)
+                             # 2.7: comida dispersa elegible (config.K_CUT), P2-buscar, ADR-022;
+                             # 2.8: coste fijo por hijo elegible (config.REPRO_COST), P3-coste, ADR-023)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -201,6 +202,11 @@ K_CONTRAST = 0.8
 # REPRODUCTION) y no un campo de EnvParams: un `where` en el grafo hace que XLA reordene el cálculo
 # del campo y el mundo de siempre deja de ser idéntico bit a bit.
 K_CUT: float | None = None
+# Coste fijo por hijo (P3-coste, ADR-023): energía que el padre gasta en construir al hijo y que nadie
+# recibe, aparte de la que le cede. Solo en el modo «energia»: además de superar su umbral, el padre
+# ha de poder pagarlo (tras ceder y pagar le queda energía). 0 = sin coste. Opción de compilación,
+# como K_CUT, para que el mundo de siempre siga idéntico bit a bit.
+REPRO_COST: float = 0.0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

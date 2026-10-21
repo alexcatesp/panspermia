@@ -209,6 +209,8 @@ def _births(state: IslandState, key: jax.Array):
     by_age = state.env.repro_mode == C.REPRO_MODES["edad"]  # escalera, peldaños 0 y 1
     eligible = (state.alive & (by_age | (state.energy >= state.pheno.repro_threshold))
                 & (state.age >= C.MIN_REPRO_AGE))
+    if C.REPRO_COST > 0:  # coste fijo por hijo (ADR-023): el padre ha de poder pagarlo
+        eligible = eligible & (by_age | (state.energy * (1 - state.pheno.offspring_frac) > C.REPRO_COST))
     scores = jnp.where(eligible, jax.random.uniform(k[0], (n,)), -1.0)
     top, parents = jax.lax.top_k(scores, b)                        # orden aleatorio determinista
     slots = jnp.nonzero(~state.alive, size=b, fill_value=n)[0]
@@ -233,6 +235,8 @@ def _births(state: IslandState, key: jax.Array):
         e_split = state.pheno.offspring_frac[parents] * state.energy[parents]
         e_child = jnp.where(valid, jnp.where(by_age, jnp.float32(C.E_INIT), e_split), 0.0)
         e_paid = jnp.where(by_age, 0.0, e_child)  # en modo «edad» el padre no paga
+        if C.REPRO_COST > 0:  # lo que cuesta construir al hijo se pierde (ADR-023)
+            e_paid = jnp.where(valid & ~by_age, e_paid + jnp.float32(C.REPRO_COST), e_paid)
         p_idx = jnp.where(valid, parents, n)
         theta = jax.random.uniform(k[2], (b,), maxval=2 * math.pi)
         offset = 2 * state.pheno.radius[parents][:, None] * jnp.stack([jnp.cos(theta), jnp.sin(theta)], -1)

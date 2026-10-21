@@ -84,3 +84,21 @@ def test_sparse_food_cut_keeps_height(monkeypatch):
     assert np.array_equal(k1[k1 > 0], k0[k1 > 0])
     s = island.init_island(0, b"escalera-test", n_max=64, n_init=16)
     assert np.array_equal(np.asarray(s.resources) > 0, k1 > 0)  # empieza lleno solo en las crestas
+
+
+def test_fixed_offspring_cost_is_lost(monkeypatch):
+    """ADR-023: con coste fijo, el padre pierde lo que cede más el coste, el hijo recibe solo lo cedido
+    y quien no puede pagarlo no tiene hijos."""
+    monkeypatch.setattr(config, "REPRO_COST", 10.0)
+    s = island.init_island(0, b"escalera-test", n_max=16, n_init=4, env_overrides={"repro_mode": "energia"})
+    s = s.replace(age=jnp.where(s.alive, config.MIN_REPRO_AGE, 0),
+                  energy=jnp.where(s.alive, jnp.array([60.0, 60.0, 18.0, 18.0] + [0.0] * 12), 0.0),
+                  pheno=s.pheno.replace(repro_threshold=jnp.full(16, 15.0), offspring_frac=jnp.full(16, 0.5)))
+    s2, n, newborn = island._births(s, jax.random.PRNGKey(1))
+    e = np.asarray(s2.energy)
+    assert int(n) == 2                                   # 18 · 0,5 = 9 < 10: los dos últimos no pueden pagar
+    assert np.allclose(e[:4], [20.0, 20.0, 18.0, 18.0])  # 60 − 30 cedidos − 10 de coste
+    assert np.allclose(e[np.asarray(newborn)], 30.0)
+    monkeypatch.setattr(config, "REPRO_COST", 0.0)       # sin coste, los cuatro tienen hijo
+    _, n, _ = island._births(s, jax.random.PRNGKey(1))
+    assert int(n) == 4
