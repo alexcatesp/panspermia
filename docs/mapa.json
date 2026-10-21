@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 20:01",
+ "actualizado": "2026-10-21 21:11",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -346,6 +346,19 @@
    "texto": "P3 no pudo contestar por techo (sobraba comida). Decisión del responsable (21-10): repetirlo desde cero con la mitad de comida (calibración: con ½, 3/3 sobreviven y se estabilizan en 2.700–2.930; con ⅜, 2/3 se extinguen). Primaria: población menor que 4.096 en 5/5 (151–300); un mundo extinguido no cuenta. En marcha desde las 16:56 (diseno v0.9). 21-10, 20:01: pasa (5/5). Población 2.516–2.690; solo el 1–3 % puede tener un hijo (la comida frena). La selección elige hijos baratos y muchos (umbral 10–19, fracción 0,26–0,40, vida ~500–700). El cerebro se vacía (0,05–1,45), VA ≈ 0; examen limpio sin pausas.",
    "cola": "p3escaso.json",
    "condicion": "P3-escaso",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU"
+  },
+  {
+   "id": "P3d",
+   "padre": "P3e",
+   "titulo": "P3-disperso: la misma comida, en pocos sitios",
+   "corto": "P3-disperso",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "comida concentrada en el 9 % del suelo (K_CUT 1,5, k_mean 8,686; misma comida total)",
+   "texto": "Decisión del responsable (21-10, 21:10): antes de P4, comprobar si con los hijos pagados compensa buscar comida dispersa y lejana. La misma comida total que P3-escaso, en manchas más ricas y lejanas. En calibración desde las 21:11.",
+   "condicion": "P3-disperso",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU"
   },
