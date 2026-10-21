@@ -900,3 +900,28 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   Una dirección consistente dentro de un mundo no basta, porque los parientes comparten genes también por deriva: tiene que repetirse en mundos independientes.
 - **Prueba** (P3-escaso s0, 50 pasos, 71 s): el 99,9 % de los bichos empujan algo menos cuando se sienten hambrientos (−0,23; un 9 % de la desviación del empuje); el recorrido apenas cambia. Pendiente de los nulos y del resto de mundos.
 - **En marcha:** `scratchpad/hunger_all.sh` (CPU, 8 núcleos): P0, P3-escaso, P2, P3, P1, nulo al azar y P2-buscar, 5 semillas cada uno → `runs/fase1d/_hambre.jsonl`.
+
+### 00:09–00:29 (22-10) · Sonda de hambre: resultado
+
+- **Datos:** `runs/fase1d/_hambre.jsonl` (respuesta inmediata y 200 pasos; terminó a las 00:09) y `runs/fase1d/_hambre_dir.jsonl`. Este segundo fichero repite solo la respuesta inmediata y separa a los bichos que empujan más, menos o igual al sentirse hambrientos (|Δ| ≤ 10⁻⁶). Hacía falta porque `frac_pos` sola no distinguía «menos» de «nada»; terminó a las 00:29. Script en `escalera-int`: `scripts/hunger_probe.py` (`68ba9bf`, ya con esas fracciones).
+- **Nulos (tamaño |Δempuje| / desviación):**
+  - P0 (5 mundos): 0,017–0,028; ningún mundo pasa del 15 % en una dirección; el 75–84 % de los bichos no cambian.
+  - Al azar (5 mundos): 0,008–0,011.
+  - Umbral de tamaño: 0,028.
+
+| Mundos | Tamaño (5 mundos) | Por encima de los nulos | Bichos que empujan menos / más con hambre | > 90 % en una dirección |
+|---|---|---|---|---|
+| P1-escalera | 0,004–0,019 | 0/5 | 1–6 % / ≤ 0,5 % (el resto no cambia) | 0/5 |
+| P2-escalera | 0,07–0,17 | 5/5 | 23–38 % / 9–56 % | 0/5 |
+| P3-escalera | 0,05–0,11 | 5/5 | 11–58 % / 13–36 % | 0/5 |
+| P2-buscar | 0,04–0,12 | 5/5 | 30–67 % / 18–49 % | 0/5 |
+| P3-escaso | 0,007–0,108 | 3/5 | s0 99,8 %, s1 99,6 %; s2 44 %, s3 9 %, s4 31 % | 2/5 (s0, s1: menos) |
+
+- **Lectura prerregistrada: no hay hambre en ningún tipo de mundo.** P3-escaso es el que más se acerca: en 2 de 5 mundos casi todos empujan algo menos cuando se sienten hambrientos (ahorran), pero la regla pide 4 de 5. **Negativo.**
+- **Lo que sí se ve (indicio):** en los mundos con comida y selección (P2, P3, P2-buscar), el cerebro usa la entrada de energía. La respuesta es 3–7 veces mayor que en los nulos, pero en sentidos opuestos según el bicho y el mundo. La energía sentida mueve la conducta, pero no de una forma común ni útil que la selección haya fijado.
+- **En 200 pasos** el recorrido apenas cambia:
+  - |Δrecorrido| / desviación: 0,25–0,51 en los mundos con comida, frente a 0,05–0,08 en P0 y 0,12–0,26 al azar. El nulo al azar sale ruidoso porque solo sobreviven 10–76 bichos en las dos copias.
+  - En ningún mundo más del 60 % cambia en el mismo sentido.
+  - **Curiosidad de P1:** el 93–98 % de los bichos recorren algo menos cuando se creen hambrientos (5/5), pero apenas se mueven (2–8 unidades) y el tamaño es menor que en P0.
+- **Por qué cuadra:** la energía solo cambia lo que conviene hacer si hay una decisión que dependa de ella, por ejemplo arriesgarse a buscar lejos o quedarse. En estos mundos la conducta innata (avanzar a la comida que se ve) vale igual con hambre que sin ella, y el cerebro se vacía (P3-escaso: 0,05–1,45 neuronas).
+- **Siguiente:** repetir la sonda en P3-disperso y en P3-coste cuando terminen. Allí la comida está lejos o cada hijo cuesta, y la energía debería pesar más en las decisiones.
