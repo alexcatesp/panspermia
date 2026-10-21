@@ -863,3 +863,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Decisión del responsable:** P3-disperso y P3-coste por separado (hermanos, los dos desde P3-escaso). Coste fijo por hijo; el coste según el tamaño, más adelante.
 - **Hecho:** rama `escalera-coste` (`59eba78`, sustrato 2.8.0, desde `escalera-buscar`): `config.REPRO_COST`. Con coste 0, huella idéntica a `escalera-int` con hijos regalados (`6e95fcba…`) y pagados (`65bdc0c7…`). Tests de la escalera y unitarios: 14 en verde (CPU).
 - **Siguiente:** calibrar el coste en la GPU cuando acabe la calibración de P3-disperso.
+
+### 21:11–21:55 (21-10) · Calibración de P3-disperso
+
+- **Qué:** `scratchpad/p3dcal.json` (rama `escalera-buscar`): `K_CUT` 1,5 y `k_mean` 8,686, semillas 0–2, 100 épocas.
+- **Resultado:** 3/3 sobreviven. El mínimo al arrancar es 90–106 bichos (P3-escaso: 16–55), y la población en la época 100 es 2.099–2.495. Épocas 91–100 frente a la calibración de P3-escaso: empuje 8,6–9,3 (6,4–7,9), neuronas 2,2–6,0 (0,9–1,9), vida 297–439 (660–1.001), alga en pie 11.700–18.400 (4.500–5.300). Examen en la época 100: 0,02–0,05, ganancia −0,09 a −0,05.
+- **Lanzamiento:** criterio en `diseno.md` v1.0. Cola `p3disperso.json` (`8faa492`), `scratchpad/p3disperso.sh`: espera a que termine la calibración del coste (`p3ccal.json`, costes 5, 10 y 20, semilla 0, 100 épocas, desde las 21:55) y lanza 5 mundos (marca `p3disperso_hecho`).

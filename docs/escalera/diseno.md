@@ -177,3 +177,16 @@ Rama `escalera-int` (`f02e61f`, sustrato 2.6.0, examen sin química), cola `p3es
 - **Extinción:** un mundo extinguido no cuenta como "población menor": la primaria fallaría en ese mundo. Se informa aparte (la calibración da mínimos de 16–55 bichos al arrancar).
 - **Predicción:** población de 2.700–3.000; si la comida frena, la selección premia comer mejor para tener hijos, y la vida será más corta que en P3-escalera (calibración: 660–1.001). Si el cerebro sirve para comer mejor con comida escasa y quieta, las neuronas no deberían vaciarse como en P2-buscar (calibración, época 100: 0,9–1,9; dudoso).
 - **Batería:** examen sin química, umbrales 0,2 y 0,25 (ADR-021). Una pausa sería una señal real: decide el responsable.
+
+## v1.0 · 21-10-2026, 22:05 · P3-disperso: la misma comida, en pocos sitios (decisión del responsable)
+
+Escrito antes de tener datos de los 5 mundos. Decisión del responsable (21:10): antes de P4, comprobar si con hijos pagados compensa buscar comida dispersa. Calibración (`scratchpad/p3dcal.json`, semillas 0–2, 100 épocas): 3/3 sobreviven (mínimo al arrancar 90–106 bichos; población en la época 100: 2.099–2.495).
+
+Rama `escalera-buscar` (`8faa492`, sustrato 2.7.0, examen sin química), cola `p3disperso.json`, semillas 0–4, 300 épocas. Padre: P3-escaso. Hermano: P3-coste (ADR-023).
+
+| Mundo | Cambia respecto a P3-escaso | Pregunta (5 de 5 semillas emparejadas) |
+|---|---|---|
+| **P3-disperso** | `K_CUT` 1,5 y `k_mean` 8,686: la misma comida total (1,902 / 0,219), concentrada en el 9 % del suelo | **Primaria:** `cap_patch_success` (examen limpio) en la época 300 **mayor** que en P3-escaso (s0 0,000; s1 0,000; s2 0,047; s3 0,016; s4 0,047). Secundarias, descriptivas: población, vida, empuje, neuronas, VA y genes de reproducción |
+
+- **Extinción o pausa:** un mundo extinguido cuenta como fallo. Si la batería pausa un mundo (ganancia ≥ 0,2), se usa su último examen, se respeta la pausa y decide el responsable.
+- **Predicción:** en la calibración se mueven más (empuje 8,6–9,3 frente a 6,4–7,9) y conservan más neuronas (2,2–6,0 frente a 0,9–1,9) que P3-escaso, pero en la época 100 el examen sigue bajo (0,02–0,05) y peor que los controles fijos. Con hijos casi gratis, es dudoso que buscar compense (de ahí P3-coste).
