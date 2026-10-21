@@ -756,3 +756,23 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **VA ≈ 0** en todas las ventanas: buscar comida quieta es innato y no necesita cerebro (éxito en la mancha del 84–99 % con 1–2 neuronas).
 - **Sexo:** vida mayor que la base en 4/5 hasta la época 300 y en 3/5 en 301–600; ingesta en 3/5 en todas las ventanas. Más variedad estructural (44–51 frente a 19–35). **B1 cerrado: asexual.**
 - **Conclusión: firme.** Con comida quieta, la selección hace lo mismo que en P1, más despacio: quita lo que cuesta y no se usa. El cerebro solo puede compensar cuando haya algo que seguir o recordar (P4, comida móvil). Detalle en `p0_factores.md`; datos en `runs/fase1d/_analisis_P2largo.json`.
+
+### 07:15–08:04 (21-10) · La batería tenía trampa desde la fase 1b: la química del examen fabrica comida
+
+- **Sospecha:** en todos los mundos de la fase 1d y de la escalera, los genomas al azar "aprueban" la mancha y el laberinto **exactamente igual** (0,766 en las dos pruebas), y la población también saca casi lo mismo en las dos. En la fase 1 (sin química), la referencia al azar era 0,0.
+- **Causa (comprobada):** `capability._probe_env` parte de `world.make_env`, que deja `chem_on = 1`. En el examen, el bicho suelta nutriente, que al degradarse vuelve como alga a su propia celda (`world.chem_step`), y se lo come. Con un mapa **sin comida**, los genomas al azar comen lo mismo (éxito 0,734 e ingesta de hasta 229, cuando la mancha solo tiene 24). El examen medía "comer y soltar sustancias", no "buscar la mancha".
+- **Batería con la química apagada en el examen** (`scratchpad/bat_ckpt.py`, GPU, 07:26–08:00; 30 casos; `runs/fase1d/_bateria_quimica.jsonl`):
+
+| Mundos | Química encendida (como hasta ahora): población / azar / ganancia | **Química apagada**: población / azar / mejor política fija / ganancia |
+|---|---|---|
+| P0-escalera, época 300 | 0,34–0,75 / 0,75–0,77 / −0,41 a 0,00 | 0,00–0,02 / 0,00 / 0,05–0,11 / −0,11 a −0,03 |
+| P1-escalera, época 300 | 0,02–0,09 / 0,75–0,77 / −0,73 a −0,66 | 0,00 / 0,00 / 0,05–0,11 / −0,11 a −0,05 |
+| P2-escalera, épocas 100, 300 y 600 | 0,75–0,98 / 0,64–0,84 / +0,03 a +0,30 | **0,00–0,11** / 0,00–0,02 / 0,06–0,19 / **−0,17 a 0,00** |
+| P2-escalera-sexual, época 600 | 0,86–1,00 / 0,64–0,84 / +0,09 a +0,34 | **0,03–0,14** / 0,00–0,02 / 0,09–0,20 / −0,14 a +0,03 |
+| Laberinto, todos | — | población 0,00–0,03, ganancia 0,00–0,03 |
+
+- **Lectura:**
+  - **Las 11 pausas de P2 fueron falsas alarmas**, como las del anillo (ADR-010). Con el examen limpio, los bichos de P2 encuentran la mancha lejana el 0–14 % de las veces, igual o peor que nadar recto sin cerebro. No buscan: en su mundo hay comida a la vista casi siempre, y la siguen con un reflejo. Los datos de P2 no cambian (la batería solo observa).
+  - **La salvaguarda ha estado mal medida desde la fase 1b** (toda la 1d y la escalera). Con la referencia al azar en 0,75, la ganancia máxima posible era 0,25: una capacidad real habría hecho saltar la alarma tarde o nunca. Ninguna población ha mostrado capacidad real (ganancias limpias ≤ +0,03), así que no hubo un riesgo escondido, pero la protección no estaba funcionando como se creía.
+  - **La "saturación"** que motivaba el ADR de revisión era este error, no un defecto del diseño de la mancha.
+- **Conclusión: firme.** Pendiente: ADR-021 (corrección y umbrales), con decisión del responsable.
