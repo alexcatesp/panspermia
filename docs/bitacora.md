@@ -869,3 +869,17 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Qué:** `scratchpad/p3dcal.json` (rama `escalera-buscar`): `K_CUT` 1,5 y `k_mean` 8,686, semillas 0–2, 100 épocas.
 - **Resultado:** 3/3 sobreviven. El mínimo al arrancar es 90–106 bichos (P3-escaso: 16–55), y la población en la época 100 es 2.099–2.495. Épocas 91–100 frente a la calibración de P3-escaso: empuje 8,6–9,3 (6,4–7,9), neuronas 2,2–6,0 (0,9–1,9), vida 297–439 (660–1.001), alga en pie 11.700–18.400 (4.500–5.300). Examen en la época 100: 0,02–0,05, ganancia −0,09 a −0,05.
 - **Lanzamiento:** criterio en `diseno.md` v1.0. Cola `p3disperso.json` (`8faa492`), `scratchpad/p3disperso.sh`: espera a que termine la calibración del coste (`p3ccal.json`, costes 5, 10 y 20, semilla 0, 100 épocas, desde las 21:55) y lanza 5 mundos (marca `p3disperso_hecho`).
+
+### 21:55–22:34 (21-10) · Calibración del coste por hijo (ADR-023)
+
+- **Qué:** `scratchpad/p3ccal.json` (rama `escalera-coste`): P3-escaso con coste 5, 10 y 20; semilla 0, 100 épocas (`runs/fase1d/_calP3/P3cal-coste*`).
+- **Resultado** (épocas 91–100; entre paréntesis, P3-escaso en la misma semilla):
+
+| Coste | Mínimo al arrancar | Población (época 100) | Vida | Empuje | Neuronas | Nacimientos por época | Examen (época 100) |
+|---|---|---|---|---|---|---|---|
+| 0 | 16 | 2.927 | 789 | 6,4 | 0,9 | 3.476 | 0,000 |
+| 5 | 11 | 2.568 | 1.588 | 9,0 | 3,4 | 1.574 | 0,109 |
+| 10 | 8 | 2.372 | 1.910 | 9,8 | **6,3** | 1.244 | **0,156** |
+| 20 | 13 | 2.372 | **2.525** | **10,4** | 5,5 | 915 | 0,031 |
+
+- **Lectura:** con coste, los hijos son menos y más caros; los bichos viven 2–3 veces más, se mueven más y conservan el cerebro (3,4–6,3 neuronas frente a 0,9). El examen de la época 100 sube con coste 5 y 10 (una sola semilla: indicio). Los tres sobreviven, pero el arranque es justo (8–13 bichos).
