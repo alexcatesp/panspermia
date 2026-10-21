@@ -1,0 +1,26 @@
+[
+ {
+  "name": "P3-escalera",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P3INT",
+  "description": "Hijos pagados: se reproduce quien supera su umbral de energía y cede una parte al hijo; la comida (manchas quietas) es la única fuente de energía. Física de la escalera (ADR-019), asexual, tasas fijas. Examen de capacidad sin química (ADR-021). Padre: P2-escalera.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0
+  }
+ }
+]
