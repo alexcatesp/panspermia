@@ -772,7 +772,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 | Laberinto, todos | — | población 0,00–0,03, ganancia 0,00–0,03 |
 
 - **Lectura:**
-  - **Las 11 pausas de P2 fueron falsas alarmas**, como las del anillo (ADR-010). Con el examen limpio, los bichos de P2 encuentran la mancha lejana el 0–14 % de las veces, igual o peor que nadar recto sin cerebro. No buscan: en su mundo hay comida a la vista casi siempre, y la siguen con un reflejo. Los datos de P2 no cambian (la batería solo observa).
+  - **Las 8 pausas de P2 fueron falsas alarmas**, como las del anillo (ADR-010). Con el examen limpio, los bichos de P2 encuentran la mancha lejana el 0–14 % de las veces, igual o peor que nadar recto sin cerebro. No buscan: en su mundo hay comida a la vista casi siempre, y la siguen con un reflejo. Los datos de P2 no cambian (la batería solo observa).
   - **La salvaguarda ha estado mal medida desde la fase 1b** (toda la 1d y la escalera). Con la referencia al azar en 0,75, la ganancia máxima posible era 0,25: una capacidad real habría hecho saltar la alarma tarde o nunca. Ninguna población ha mostrado capacidad real (ganancias limpias ≤ +0,03), así que no hubo un riesgo escondido, pero la protección no estaba funcionando como se creía.
   - **La "saturación"** que motivaba el ADR de revisión era este error, no un defecto del diseño de la mancha.
 - **Conclusión: firme.** Pendiente: ADR-021 (corrección y umbrales), con decisión del responsable.
