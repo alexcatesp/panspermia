@@ -816,3 +816,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Conclusión:** negativo según el criterio, pero **por techo** (la comida de P2 alimenta a más de 4.096 bichos). Detalle en `p0_factores.md`. Datos: `runs/fase1d/P3-escalera`, `_analisis_P3int.json`, `_genes_P3int.json`.
 - **Después:** P2-buscar arrancó sus tests a las 11:53 (`p2buscar.sh`).
 - **Decisión del responsable (13:26):** esperar a P2-buscar. Si sale bien, el siguiente es P3 sobre P2-buscar (hijos pagados con comida dispersa); si sale mal, P3 con menos comida (`k_mean`).
+
+### 15:38 (21-10) · P2-buscar: no buscan; el mundo se vuelve como P1
+
+- **Qué:** P2-buscar (`K_CUT` 1,5, ADR-022), 5 mundos, rama `escalera-buscar` (`fff4e79`). Tests en GPU: 80 en verde (11:53–12:27). Mundos: 12:27–15:38, sin pausas ni extinciones.
+- **Primaria (examen limpio en la época 300 mayor que en P2): 1/5.** Los 5 mundos sacan 0,016 (P2: 0,00–0,11); ganancia −0,16 a −0,05; laberinto 0.
+- **Secundarias:** vida 533–545 (P1: 523; P2: 3.578–7.585), empuje 2,4–3,9, neuronas 0,6–0,9, ingesta 7–25 veces menor, alga en pie 10–40 veces menor. Casi todas las muertes son por hambre.
+- **Lectura:** los 4.096 bichos agotan la comida escasa, y como los hijos nacen con energía regalada, la población sigue llena sin comer. Buscar no compensa; la selección premia gastar poco, como en P1.
+- **Indicio nuevo:** VA de la ingesta entre −0,45 y −0,12 en 5/5: aprender en vida perjudica. Pendiente de confirmar.
+- **Conclusión:** negativo. Según lo decidido a las 13:26, el siguiente es P3 con menos comida (`k_mean`); se calibra y se plantea al responsable antes de lanzarlo. Detalle en `p0_factores.md`; datos en `runs/fase1d/P2-buscar`, `_analisis_P2buscar.json`.

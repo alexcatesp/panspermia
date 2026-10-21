@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 13:26",
+ "actualizado": "2026-10-21 15:38",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -311,10 +311,10 @@
    "padre": "P1esc",
    "titulo": "P2-buscar: comida dispersa (hermano de P2)",
    "corto": "P2-buscar",
-   "estado": "pendiente",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "negativo",
    "anade": "comida solo en las crestas (K_CUT 1,5, D2)",
-   "texto": "Pregunta del responsable (21-10, 09:30): con el examen limpio, P2 no busca (≤ 11 %), porque la comida está casi siempre a la vista. ¿Con comida escasa y lejana (9 % del suelo, 60 % fuera de la vista) aprenden a buscarla? Primaria: más éxito en el examen limpio que P2 en la época 300 (5/5). Se lanza tras P3 (ADR-022).",
+   "texto": "Pregunta del responsable (21-10, 09:30): con el examen limpio, P2 no busca (≤ 11 %), porque la comida está casi siempre a la vista. ¿Con comida escasa y lejana (9 % del suelo, 60 % fuera de la vista) aprenden a buscarla? Primaria: más éxito en el examen limpio que P2 en la época 300 (5/5). Se lanza tras P3 (ADR-022). 21-10, 15:38: no pasa (1/5; 0,016 en los 5 mundos). Con energía regalada, los 4.096 bichos agotan la comida escasa: viven como en P1 (533–545 pasos), mueren de hambre, el cerebro se vacía (0,6–0,9) y aprender perjudica (VA −0,45 a −0,12, indicio).",
    "cola": "p2buscar.json",
    "condicion": "P2-buscar",
    "ref": "docs/escalera/diseno.md",

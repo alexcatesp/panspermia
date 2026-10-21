@@ -46,7 +46,7 @@
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
 | D1 | **Dónde nace el hijo** | pegado al padre (a 2 radios) | Crea vecindarios de parientes (aislamiento por distancia). Eso favorece la cooperación y la señal, pero la competencia local entre parientes puede anularlo. Cambiarlo más tarde cambiaría toda la evolución social | wright1943isolation, taylor1992viscous, west2002kincompetition, werfel2015death | P0-feliz-nacer-azar (✅ 5 mundos) y control (✅ 1 mundo, idéntico bit a bit). **En P0 no cambia nada genético** (5/5 idénticos); solo el parentesco del vecindario: junto al padre, 22–62 veces el global; al azar, ≈ 1. **Responsable (19-10, 11:15): junto al padre por ahora; las dos opciones se prueban en el peldaño social** | ✅ ⏭ social |
-| D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0. P2 con el examen limpio: no buscan (≤ 11 %) porque la comida cubre el 87 % del suelo. **Responsable (21-10): P2-buscar con comida dispersa (K_CUT 1,5, ADR-022)** | 🔬 P2-buscar |
+| D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0. P2 con el examen limpio: no buscan (≤ 11 %) porque la comida cubre el 87 % del suelo. **Responsable (21-10): P2-buscar con comida dispersa (K_CUT 1,5, ADR-022).** P2-buscar (15:38): no buscan (examen 1/5); con energía regalada, la comida escasa da un mundo como P1 | ✗ P2-buscar (con hijos regalados, la comida dispersa no enseña a buscar); pendiente del responsable |
 
 ## E. Codificación del cerebro
 
@@ -425,3 +425,29 @@ Genes de reproducción de los vivos (`scratchpad/p3_genes.py`, épocas 100, 200 
 - **Examen limpio:** encuentran la mancha lejana el 3–8 % de las veces, peor que los controles fijos (ganancia negativa). No hubo pausas: con el examen limpio, ninguna señal.
 - **Conclusión:** negativo según el criterio prerregistrado, pero por techo: no se ha medido lo que se quería medir. Siguiente paso, con el responsable.
 - Datos: `runs/fase1d/P3-escalera`, `_analisis_P3int.json`, `_genes_P3int.json` (`scratchpad/p3_an.py`, `p3_genes.py`).
+
+### 21-10-2026, 15:38 · P2-buscar: comida dispersa (5 mundos)
+
+Criterio prerregistrado en `diseno.md` v0.8 (ADR-022). Rama `escalera-buscar` (`fff4e79`, sustrato 2.7.0, `K_CUT` 1,5), examen sin química. Tests en GPU: 80 en verde (11:53–12:27); mundos 12:27–15:38, sin pausas ni extinciones. Secundarias: medias de las épocas 151–300, emparejadas por semilla con P2-escalera.
+
+| Medida | P2-escalera | **P2-buscar** | P2-buscar frente a P2 |
+|---|---|---|---|
+| Examen limpio en la época 300 (**primaria**: mayor que en P2) | 0,00 / 0,03 / 0,11 / 0,02 / 0,11 | **0,016 en los 5** | **1/5: no pasa** |
+| Ganancia en la mancha (época 300) | — | −0,16 a −0,05 | sin pausa |
+| Laberinto (éxito) | — | 0,00 | — |
+| Vida media | 3.578–7.585 | **533–545** | menor en 5/5 (como P1: 523–524) |
+| Empuje | 9,0–10,8 | 2,4–3,9 | menor en 5/5 |
+| Comida ingerida por época (miles) | 345–482 | 18–53 | 7–25 veces menos |
+| Comida en pie (alga total) | 10.304–19.154 | 415–1.701 | 10–40 veces menos |
+| Neuronas ocultas (época 300) | 4,1–6,4 (151–300) | 0,6–0,9 (0,5–0,85) | menos en 5/5 |
+| VA de la ingesta | −0,016 a −0,004 | **−0,45 a −0,12** | aprender perjudica |
+| Nacimientos / muertes por hambre (por época) | 541–1.157 / 223–823 | 7.512–7.681 / 7.508–7.681 | — |
+| Muertes por vejez (por época) | 318–344 | 0–4 | — |
+| Generación máxima | 61–80 | 528–593 | — |
+
+- **La primaria no pasa (1/5).** Nadie aprende a buscar: encuentran la mancha lejana el 1,6 % de las veces (1 de 64), peor que los controles fijos (6–17 %).
+- **El mundo se parece a P1, no a P2.** Viven lo mismo que con el peaje y sin comida (533–545 pasos frente a 523), casi todos mueren de hambre y nadie llega a viejo. El cerebro se vacía (0,6–0,9 neuronas), como en P1.
+- **Por qué:** los 4.096 bichos se comen la comida en cuanto crece (queda entre 10 y 40 veces menos alga en pie que en P2). Encontrar una mancha apenas alarga la vida, porque casi siempre está vacía. Y como los hijos nacen con energía regalada (`repro_mode` "edad"), la población sigue llena sin comer. Buscar no compensa: la selección premia gastar poco, igual que en P1.
+- **Aprender perjudica (indicio):** el gemelo con la plasticidad apagada come entre un 12 y un 45 % más en los 5 mundos. Con tan poca comida, lo que se aprende en vida parece desviar al bicho del reflejo innato. Es la primera VA claramente distinta de cero de la escalera; hay que confirmarla antes de interpretarla.
+- **Para P3:** aquí la comida sí es el freno (se agota), pero la población no baja porque la energía de los hijos se regala. Es justo lo que P3 cambia.
+- **Conclusión:** negativo. Datos: `runs/fase1d/P2-buscar`, `_analisis_P2buscar.json` (`scratchpad/p2b_an.py`).
