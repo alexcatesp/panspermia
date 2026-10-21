@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 08:10",
+ "actualizado": "2026-10-21 09:11",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -311,12 +311,12 @@
    "padre": "P2",
    "titulo": "P3 · Hijos pagados",
    "corto": "P3 · Hijos pagados",
-   "estado": "auto",
+   "estado": "en curso",
    "resultado": null,
    "anade": "los hijos se pagan con energía",
-   "texto": "¿Limita la comida a la población? Menos población que en P2: ya no se llena el mundo.",
-   "cola": "escalera.json",
-   "condicion": "P3-hijos-pagados",
+   "texto": "¿Limita la comida a la población? Menos población que en P2: ya no se llena el mundo. 21-10, 09:11: en marcha con la física integrada (P3-escalera; padre P2-escalera), 5 mundos, sin gemelos; examen sin química (ADR-021). Criterio en diseno v0.7.",
+   "cola": "p3int.json",
+   "condicion": "P3-escalera",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true

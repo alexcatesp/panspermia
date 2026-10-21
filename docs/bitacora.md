@@ -782,3 +782,8 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Decisión del responsable:** el examen se hace con la química apagada y los umbrales vuelven a 0,2 (mancha) y 0,25 (laberinto); el 0,4 del ADR-020 queda revocado.
 - **Hecho:** `escalera-int`, commit `005ade7`: `chem_on = 0` en `capability._probe_env` y test de regresión (con el mapa vacío, nadie come). Tests: 79 en verde y 1 lento saltado (08:20–08:51 en GPU).
 - **Pendiente:** `main` y las ramas de la 1d no tienen el interruptor `chem_on`; heredarán la corrección al integrar la escalera. Siguiente: P3.
+
+### 09:11 (21-10) · P3-escalera en marcha
+
+- **Decisión del responsable (tras el ADR-021):** P3 base, 5 mundos, sin gemelos.
+- **Qué:** hijos pagados (`repro_mode` "energia"); comida quieta. Rama `escalera-int`, `c01b46b`, cola `p3int.json`, `scratchpad/p3int.sh`, marca `runs/fase1d/p3int_hecho`. Primer peldaño con el examen sin química y los umbrales originales. Criterio en `diseno.md` v0.7 (09:11): población menor que en P2 en 5/5.
