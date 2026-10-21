@@ -825,3 +825,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Lectura:** los 4.096 bichos agotan la comida escasa, y como los hijos nacen con energía regalada, la población sigue llena sin comer. Buscar no compensa; la selección premia gastar poco, como en P1.
 - **Indicio nuevo:** VA de la ingesta entre −0,45 y −0,12 en 5/5: aprender en vida perjudica. Pendiente de confirmar.
 - **Conclusión:** negativo. Según lo decidido a las 13:26, el siguiente es P3 con menos comida (`k_mean`); se calibra y se plantea al responsable antes de lanzarlo. Detalle en `p0_factores.md`; datos en `runs/fase1d/P2-buscar`, `_analisis_P2buscar.json`.
+
+### 15:40–15:52 (21-10) · Calibración de P3 con menos comida
+
+- **Qué:** P3-escalera con `k_mean` reducido (el de `fase1d-w0` es 3,805), semilla 0, 40 épocas (`scratchpad/p3cal.json`, datos en `runs/fase1d/_calP3`).
+- **Resultado:**
+  - **½ (1,90):** sobrevive, pero en la época 1 quedan solo 26 bichos (con la comida entera, unos 300). Después crece hasta 2.617 en la época 40, todavía subiendo y cada vez más despacio; el alga en pie baja de 32.700 a 6.700.
+  - **¼ (0,95) y ⅛ (0,48):** se extinguen al empezar (época 8 y época 1).
+- **Lectura:** con menos comida, la población sí queda por debajo del tope (en la época 40), pero **el arranque es un cuello de botella**. Los genomas al azar tienen que encontrar comida con la energía inicial, y con ½ en otras semillas podrían extinguirse. Hace falta más calibración: `scratchpad/p3cal2.json`, con ½ y ⅜, semillas 0–2 y 100 épocas, desde las 15:53.
