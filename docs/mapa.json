@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-21 22:40",
+ "actualizado": "2026-10-21 22:38",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -371,7 +371,7 @@
    "estado": "en curso",
    "resultado": null,
    "anade": "coste fijo por hijo, energía que se pierde (REPRO_COST, ADR-023)",
-   "texto": "Observación del responsable (21-10, 21:42): con hijos cada vez más baratos no van a buscar comida. En P3-escaso hacer un hijo no cuesta nada aparte de lo cedido, y la selección elige hijos de 3–5 de energía. Hermano de P3-disperso: solo cambia el coste. Rama escalera-coste (sustrato 2.8.0; sin coste, idéntica bit a bit). Pendiente de calibrar. Calibración (22:34): con coste 5, 10 y 20 viven 2–3 veces más y conservan 3–6 neuronas (frente a 0,9). Decisión del responsable (22:40): los tres costes, 5 mundos cada uno, tras P3-disperso (diseno v1.1; orden 10 → 20 → 5).",
+   "texto": "Observación del responsable (21-10, 21:42): con hijos cada vez más baratos no van a buscar comida. En P3-escaso hacer un hijo no cuesta nada aparte de lo cedido, y la selección elige hijos de 3–5 de energía. Hermano de P3-disperso: solo cambia el coste. Rama escalera-coste (sustrato 2.8.0; sin coste, idéntica bit a bit). Pendiente de calibrar. Calibración (22:34): con coste 5, 10 y 20 viven 2–3 veces más y conservan 3–6 neuronas (frente a 0,9). Decisión del responsable (22:38): los tres costes, 5 mundos cada uno, tras P3-disperso (diseno v1.1; orden 10 → 20 → 5).",
    "condicion": "P3-coste10",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",

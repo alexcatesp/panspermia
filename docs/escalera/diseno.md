@@ -191,9 +191,9 @@ Rama `escalera-buscar` (`8faa492`, sustrato 2.7.0, examen sin química), cola `p
 - **Extinción o pausa:** un mundo extinguido cuenta como fallo. Si la batería pausa un mundo (ganancia ≥ 0,2), se usa su último examen, se respeta la pausa y decide el responsable.
 - **Predicción:** en la calibración se mueven más (empuje 8,6–9,3 frente a 6,4–7,9) y conservan más neuronas (2,2–6,0 frente a 0,9–1,9) que P3-escaso, pero en la época 100 el examen sigue bajo (0,02–0,05) y peor que los controles fijos. Con hijos casi gratis, es dudoso que buscar compense (de ahí P3-coste).
 
-## v1.1 · 21-10-2026, 22:40 · P3-coste: cada hijo cuesta (decisión del responsable, ADR-023)
+## v1.1 · 21-10-2026, 22:38 · P3-coste: cada hijo cuesta (decisión del responsable, ADR-023)
 
-Escrito antes de tener datos de los 5 mundos. Calibración (`scratchpad/p3ccal.json`, semilla 0, 100 épocas): con coste 5, 10 y 20 los tres sobreviven (mínimo al arrancar: 8–13 bichos); vida 1.588–2.525 frente a 789, neuronas 3,4–6,3 frente a 0,9, examen en la época 100: 0,11 / 0,16 / 0,03 frente a 0,00. El responsable decidió (22:40) correr los tres costes, 5 mundos cada uno, y compararlos.
+Escrito antes de tener datos de los 5 mundos. Calibración (`scratchpad/p3ccal.json`, semilla 0, 100 épocas): con coste 5, 10 y 20 los tres sobreviven (mínimo al arrancar: 8–13 bichos); vida 1.588–2.525 frente a 789, neuronas 3,4–6,3 frente a 0,9, examen en la época 100: 0,11 / 0,16 / 0,03 frente a 0,00. El responsable decidió (22:38) correr los tres costes, 5 mundos cada uno, y compararlos.
 
 Rama `escalera-coste` (`7104c15`, sustrato 2.8.0, examen sin química), cola `p3coste.json`, semillas 0–4, 300 épocas. Orden en la GPU: tras P3-disperso, suite completa de tests en GPU (si falla, no se lanza) → coste 10 → coste 20 → coste 5 (`scratchpad/p3coste.sh`; marcas `p3coste10_hecho`, `p3coste20_hecho`, `p3coste5_hecho` y `p3coste_hecho`). Padre: P3-escaso. Hermano: P3-disperso.
 
