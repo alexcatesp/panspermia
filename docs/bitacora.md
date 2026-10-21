@@ -815,3 +815,4 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Secundarias:** vida mayor en 4/5, empuje menor en 4/5, VA ≈ 0 y neuronas 1,6–7,8. Examen limpio: mancha 3–8 %, ganancia −0,13 a −0,02; laberinto 0,00–0,01.
 - **Conclusión:** negativo según el criterio, pero **por techo** (la comida de P2 alimenta a más de 4.096 bichos). Detalle en `p0_factores.md`. Datos: `runs/fase1d/P3-escalera`, `_analisis_P3int.json`, `_genes_P3int.json`.
 - **Después:** P2-buscar arrancó sus tests a las 11:53 (`p2buscar.sh`).
+- **Decisión del responsable (13:26):** esperar a P2-buscar. Si sale bien, el siguiente es P3 sobre P2-buscar (hijos pagados con comida dispersa); si sale mal, P3 con menos comida (`k_mean`).
