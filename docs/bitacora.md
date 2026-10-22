@@ -1147,3 +1147,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - liedtke2021dispersers: en un modelo de individuos, los que se quedan suelen aprender más que los que dispersan.
   - isler2009expensive: en animales, cerebros grandes van con vidas lentas. En P4-salto64 es al revés: cerebros mayores en los cuerpos grandes de vida rápida.
 - **Pendiente:** pruebas causales (cuerpo fijo grande o pequeño; distancia del hijo independiente del radio; repetir desde un mismo checkpoint antes de que los mundos se separen), cuando la GPU quede libre.
+
+### 23:45–23:50 (22-10) · Decisión del responsable: tres pruebas causales de la masa
+
+- **Responsable (23:45):** cuerpo fijo (grande frente a chico), repetir s1 y s2 desde la época 50 con otro azar e hijo a distancia fija. Criterios en `diseno.md` v1.6.
+- **Código:** rama `escalera-masa` (`62fcb9b`, sustrato 2.11.0).
+  - Con las opciones apagadas es idéntica bit a bit a `escalera-p4`: huella `1349ee079018dfcf` en un P4-salto64 pequeño de 800 pasos, CPU.
+  - Tests nuevos `test_fixed_body_radius` y `test_fixed_birth_offset`, con los de P4: 7 en verde (CPU).
+  - Como el runner no guarda la época 50 (solo 100, 200 y las 5 últimas), s1 y s2 se repiten hasta la 50, lo que sirve además de prueba de determinismo. Después, `scripts/branch_run.py` cambia la clave del mundo.
+- **Encadenado:** `scratchpad/masa_dia.sh`, en espera de `tripa_hecho`.

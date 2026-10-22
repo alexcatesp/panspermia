@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 23:23",
+ "actualizado": "2026-10-22 23:50",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -417,6 +417,21 @@
    "principal": false,
    "cola": "p4sitio.json",
    "condicion": "P4-salto64"
+  },
+  {
+   "id": "P4gm",
+   "padre": "P4g",
+   "titulo": "Pruebas de la masa: ¿el cuerpo grande hace que aprender compense?",
+   "corto": "P4-salto64 · masa",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "cuerpo fijo grande o chico; ramas desde la época 50 con otro azar; hijo a distancia fija",
+   "texto": "En P4-salto64 aprender compensó solo en los mundos que conservaron cuerpos grandes (s0, s2): correlación masa-VA +0,65. La dispersión de los hijos no lo explica (manchas de 46 u de radio; el hijo nace a 13 u o a 4,5 u). Responsable (22-10, 23:45): tres pruebas causales (diseno v1.6), rama escalera-masa (sustrato 2.11.0), cola masa.json; arrancan tras la tripa.",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": false,
+   "cola": "masa.json",
+   "condicion": "P4-salto64-grande"
   },
   {
    "id": "P4e",

@@ -296,3 +296,19 @@ Escrito antes de lanzar.
   - **Añadida a las 23:15, antes de lanzar** (artículo traído por el responsable: xu2026sparse; schultz1997neural): ¿la modulación `m` sigue a la tripa en bruto o a su sorpresa? Se medirá por mundo la correlación de `m` con la tripa y con la tripa menos su media reciente del propio bicho (huella exponencial; detalle en el análisis). También, si anular las moduladoras que más pesan de la tripa reduce la ingesta más que anular otras al azar. Solo se describe; no forma parte del criterio.
 - **Predicción:** abierta. Es la primera vez que la consecuencia de comer es visible. Si la evolución engancha la tripa a la modulación, debería aparecer VA > 0 en P4-alga-tripa. Lo más probable, de todos modos, es que pase en algunos mundos y no en 5/5.
 - **Duración estimada:** suite ~30 min y unas 9 h para los 15 mundos (unos 37 min cada uno).
+
+## v1.6 · 22-10-2026, 23:50 · Pruebas de la masa (decisión del responsable, 23:45)
+
+Escrito antes de lanzar. En P4-salto64, aprender compensó solo en los mundos que conservaron cuerpos grandes (s0, s2). La dispersión de los hijos no lo explica (bitácora, 23:28–23:40). El responsable pidió tres pruebas causales.
+
+- **Rama** `escalera-masa` (worktree `panspermia-masa`, `62fcb9b`, sustrato 2.11.0), desde `escalera-p4`. `config.BODY_RADIUS_FIXED` y `config.BIRTH_OFFSET_FIXED`; con los dos a 0, idéntica bit a bit a 2.10. Script `scripts/branch_run.py`.
+- **Mundos** (todos P4-salto64; 300 épocas):
+  1. **P4-salto64-grande:** radio fijo 6,6 (masa 2,72), semillas 0–4.
+  2. **P4-salto64-chico:** radio fijo 2,25 (masa 0,32), semillas 0–4.
+  3. **P4-salto64-rama1–3:** s1 (que encogió) y s2 (que siguió grande), retomados en la época 50 con otro azar. Antes, `masa_e50.json` repite s1 y s2 hasta la época 50, que debe coincidir con P4-salto64.
+  4. **P4-salto64-hijo8:** el hijo nace siempre a 8 u del padre (2·`RADIUS_REF`), semillas 0–4.
+- **Preguntas y lectura:**
+  - (1) y (2): ¿el cuerpo grande hace que aprender compense? Sí si el VA de las épocas 151–300 es mayor en «grande» que en «chico» en 5/5 semillas emparejadas, y mayor que 0 en «grande» en 5/5.
+  - (3): ¿es contingente el camino de cada mundo? Sí si alguna rama de s1 acaba grande (masa > 1,5 en las épocas 151–300) o alguna de s2 acaba pequeña.
+  - (4): ¿influye la distancia del hijo? Se compara con P4-salto64: el número de mundos grandes y su VA. Es descriptiva: con 5 mundos, solo un cambio claro (0 o 5 mundos grandes) contaría.
+- **Orden y duración:** `scratchpad/masa_dia.sh` espera a `tripa_hecho`. Después pasa la suite en GPU y hace e50 → ramas → `masa.json` (log `runs/fase1d/masa.log`, marca `masa_hecho`). Unas 12–13 h, desde las ~9:15 del 23-10.
