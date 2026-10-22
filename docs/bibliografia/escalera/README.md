@@ -133,3 +133,14 @@ Pregunta del responsable (19-10-2026): ¿heredar la receta del cerebro entera de
 - **Hueco:** en P2 la comida cubre el 87 % del suelo y casi siempre está a la vista; basta un reflejo (seguir lo que se ve). Para que buscar compense, la comida tiene que estar más lejos de lo que alcanzan los sentidos.
 - **Búsqueda aleatoria óptima** (viswanathan1999random, viswanathan2008levy): cuando los objetivos son escasos y están fuera del alcance de los sentidos, la estrategia de movimiento importa. Una búsqueda con tramos largos de vez en cuando (tipo Lévy) encuentra más que un paseo al azar y no necesita memoria. Predicción para P2-buscar: puede evolucionar una búsqueda innata (reflejo más un patrón de movimiento), sin cerebro grande ni aprendizaje.
 - **Teorema del valor marginal** (charnov1976optimal): cuándo dejar una mancha que se agota para ir a otra. Con manchas separadas, se mide indirectamente en el éxito del examen y en la ingesta.
+
+## 15. ¿Buscar de forma innata o aprender? Hijos, hambre y mundos que cambian (P3, P4; preguntas del responsable, 21-10)
+
+DOI comprobados en Crossref el 22-10 a las 08:35. Todas las referencias se citaron antes de memoria en la conversación.
+
+- **La búsqueda innata basta en las bacterias.** *E. coli* busca alternando tramos rectos y giros al azar; si la cosa mejora, alarga los tramos (berg1972chemotaxis). Es búsqueda sin aprender, como la de nuestros bichos en P2–P3.
+- **Buscar en la zona y luego alejarse.** El gusano *C. elegans*, tras perder la comida, busca primero cerca y después se aleja; lo controlan dopamina y glutamato (hills2004dopamine). Según Hills (hills2006foraging), esta búsqueda localizada es el origen evolutivo de la cognición dirigida a metas. Es lo más parecido a "hambre que cambia la conducta", y nuestra sonda de hambre no lo encuentra.
+- **El tipo de búsqueda depende del entorno** (humphries2010environmental): los depredadores marinos usan movimientos tipo Lévy donde la comida es escasa y paseos al azar donde abunda. Apoya P3-disperso: la dispersión cambia la estrategia, aunque no obliga a aprender.
+- **Tamaño frente a número de hijos** (smith1974optimal): según el entorno compensa tener muchos hijos pequeños o pocos y grandes. Lo vemos en P3-escaso (hijos baratos) frente a P3-disperso y P3-coste (hijos más caros).
+- **Cuándo compensa aprender** (stephens1991change, dunlap2009components): cuando el mundo cambia entre generaciones (lo que sirvió a los padres no sirve a los hijos), pero es estable durante una vida (lo aprendido sigue valiendo). Si no cambia nunca, gana lo innato; si cambia a cada momento, aprender no sirve. Esta es la base de P4.
+- **Anticiparse sin aprender** (mitchell2009adaptive): los microbios anticipan cambios que se repiten siempre en el mismo orden, por evolución y no por aprendizaje. Es el riesgo de P4 si el cambio es regular: puede bastar una respuesta innata.
