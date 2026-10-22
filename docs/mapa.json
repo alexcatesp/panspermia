@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 18:49",
+ "actualizado": "2026-10-22 19:55",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -408,13 +408,15 @@
    "padre": "P4",
    "titulo": "P4-generación: la comida cambia entre generaciones",
    "corto": "P4-generación",
-   "estado": "pendiente",
+   "estado": "en curso",
    "resultado": null,
-   "anade": "la comida salta a un sitio al azar cada 1.000 pasos (unas 2–3 generaciones)",
-   "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009). Calibración (22-10): con saltos a cualquier sitio se extingue (las manchas quedan a cientos de unidades y los bichos ven a 64). Decisión del responsable (12:08): salto corto, con todo el campo desplazado 64 o 128 u (FOOD_JUMP_DIST, sustrato 2.10.0). Segunda calibración desde las 12:16. Segunda calibración (12:44–12:58): viable con saltos de 64 y 128 u. Con 64 u, VA de 0,86 y 0,77 en las épocas 60 y 80 (indicio, una semilla); con 128 u, el VA se apaga y el cerebro se vacía. En espera hasta ver P4-alga (responsable, 15:13). P4-alga ya ha terminado (no pasa, 3/5): se decide con el responsable.",
+   "anade": "todo el campo de comida se desplaza 64 u en dirección al azar cada 1.000 pasos (unas 2–3 generaciones)",
+   "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009). Calibración (22-10): con saltos a cualquier sitio se extingue (las manchas quedan a cientos de unidades y los bichos ven a 64). Decisión del responsable (12:08): salto corto, con todo el campo desplazado 64 o 128 u (FOOD_JUMP_DIST, sustrato 2.10.0). Segunda calibración desde las 12:16. Segunda calibración (12:44–12:58): viable con saltos de 64 y 128 u. Con 64 u, VA de 0,86 y 0,77 en las épocas 60 y 80 (indicio, una semilla); con 128 u, el VA se apaga y el cerebro se vacía. En espera hasta ver P4-alga (responsable, 15:13). P4-alga ya ha terminado (no pasa, 3/5): se decide con el responsable. Responsable (19:55): se lanza P4-salto64, 5 mundos × 300 épocas (criterio en diseno v1.4: VA de las épocas 151–300 > 0 y > P3-disperso en 5/5). El salto de 128 u queda en espera.",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
-   "principal": false
+   "principal": false,
+   "cola": "p4sitio.json",
+   "condicion": "P4-salto64"
   },
   {
    "id": "P4e",

@@ -266,3 +266,14 @@ Escrito antes de lanzar los 5 mundos, con la calibración ya hecha.
 - **Secundarias, descriptivas:** VA_log, neuronas, empuje, ingesta, vida, población, genes de reproducción, examen limpio (época 300) y sonda de hambre. Además, una medida propia de P4-alga: la fracción de la ingesta que viene del alga que alimenta en cada momento, si se puede calcular sin tocar la simulación.
 - **Predicción:** P4-alga es donde más se espera VA > 0 (stephens1991change, dunlap2009components). Pero la calibración da VA ≈ 0 a partir de la época 40 y el cerebro se vacía (2,45 neuronas). Lo más probable es que salga negativo: con el signo del canal de recurso visible, puede bastar una regla innata del tipo «come las dos y quédate donde ganes energía».
 - **Duración estimada** (por la calibración, ~0,23 h por 100 épocas): suite ~40 min y unas 3,5 h para los 5 mundos.
+
+## v1.4 · 22-10-2026, 19:55 · P4-salto64: criterio fijado (decisión del responsable)
+
+Escrito antes de lanzar, con P4-alga ya cerrado (no pasa, 3/5; `p0_factores.md`).
+
+- **Decisión del responsable (19:55):** tras P4-alga se lanza el hermano de P4-sitio con salto corto de 64 u cada 1.000 pasos. El de 128 u y las semillas extra de P4-alga quedan en espera.
+- **Mundo:** rama `escalera-p4` (`ba5e16e`, sustrato 2.10.0), cola `p4sitio.json`. Es P3-disperso (`K_CUT` 1,5, `k_mean` 8,686) con `FOOD_JUMP_PERIOD` 1.000 y `FOOD_JUMP_DIST` 64: cada 1.000 pasos (unas 2–3 generaciones) todo el campo de comida se desplaza 64 u en dirección al azar respecto a su sitio de siempre. Semillas 0–4, 300 épocas, desde cero. El código es el mismo con el que la suite pasó a las 15:43 (84 correctos y 1 omitido): solo se añade la cola, así que no se repite la suite.
+- **Primaria (5/5 semillas emparejadas):** VA de la ingesta (gemelo congelado), media de las épocas 151–300, **mayor que 0 y mayor que en P3-disperso** con la misma semilla. Valores de P3-disperso: s0 −0,020; s1 +0,026; s2 +0,070; s3 −0,118; s4 +0,012. Un mundo extinguido o pausado sin revisión cuenta como fallo.
+- **Secundarias, descriptivas:** VA_log, pruebas de VA positivas, neuronas, empuje, masa, ingesta, vida, nacimientos, población, genes de reproducción, examen limpio (época 300) y sonda de hambre (con `K_CUT` y el salto activados).
+- **Predicción:** es el único hermano con VA alto sostenido en la calibración (0,86 y 0,77 en las épocas 60 y 80, una semilla). Pero el VA alto de las primeras épocas ya se apagó antes en los mundos de comida dispersa (P2-buscar, P3-disperso) y en P4-alga solo se sostuvo en un mundo de cinco. Lo más probable: VA > 0 en varios mundos, pero no en 5/5.
+- **Duración estimada:** unas 3–3,5 h (P4-alga tardó 37 min por mundo).

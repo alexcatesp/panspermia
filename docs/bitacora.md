@@ -1087,3 +1087,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Genes de reproducción (CPU, 18:50–19:05, `_genes_P4alga.json`): umbral 11,2–13,2 y fracción 0,22–0,31 en la época 300 (hijos baratos, como en P3-escaso); el 4,8–8,3 % de los vivos tiene energía para un hijo (1–3 % en P3-escaso).
   - Sonda de hambre (`scratchpad/p4a_hunger.py`, con el sorteo de algas activado): **0/5**. Lo más parecido es s0, donde el 87,2 % empuja menos al sentirse hambriento (la regla pide más del 90 % en 4 de 5 mundos).
 - **Conclusión: negativo**, como se predijo en v1.3. Aparcado (`caminos.md`). Siguiente paso, con el responsable.
+
+### 19:55 (22-10) · Decisión del responsable: P4-salto64; lanzamiento
+
+- **Responsable:** tras P4-alga (no pasa, 3/5), se lanza **P4-salto64**: P3-disperso con el campo de comida desplazado 64 u en dirección al azar cada 1.000 pasos. El salto de 128 u y las semillas 5–9 de P4-alga quedan en espera.
+- **Criterio prerregistrado** antes de lanzar (`diseno.md` v1.4): VA de la ingesta (épocas 151–300) mayor que 0 y mayor que en P3-disperso, en 5/5 semillas emparejadas.
+- **Lanzamiento:** cola `p4sitio.json` de `escalera-p4` (`ba5e16e`), `scratchpad/p4sitio.sh` (log `runs/fase1d/p4sitio.log`, marca `p4sitio_hecho`). Sin repetir la suite: el código es el mismo con el que pasó a las 15:43.
