@@ -531,3 +531,20 @@ Bibliografía: viswanathan1999random, viswanathan2008levy, charnov1976optimal (`
 2. **P3-coste** es hermano de P3-disperso (los dos cuelgan de P3-escaso): solo cambia el coste. El valor se calibra antes (no se puede subir tanto que los mundos se extingan al arrancar). El criterio se escribe en `diseno.md` antes de lanzarlo.
 3. **Coste según el tamaño del hijo:** el responsable no lo descarta. Se aparca como variante posterior (añade la interacción con la masa, que también evoluciona).
 4. Si ni P3-disperso ni P3-coste bastan por separado, se combinan después.
+
+## ADR-024 · 22-10-2026 · La tripa: el cerebro siente la energía que le da lo que come (decisión del responsable)
+
+**Contexto.** Desde P2 los peldaños dan negativo: el cerebro se vacía y el valor de aprender (VA) queda en ≈ 0. El responsable (20:57): «¿No te parece que estamos dando palos de ciego?». Un diagnóstico (`scratchpad/diag_aprender.py`, P4-alga s1, época 300) mostró tres cosas:
+- casi todos los bichos pueden aprender (97,7 % con una moduladora expresada);
+- la única pista de haber comido es el nivel de energía `tanh(E/50)`, que con un bocado cambia 0,007, frente a 0,134 de media en los rayos;
+- la modulación no se correlaciona con comer (0,007).
+
+La consecuencia de comer existe, pero el cerebro casi no la ve.
+
+**Decisión (responsable, 22-10-2026, 22:22, tras discutirlo).**
+1. **Un canal nuevo, la «tripa»:** la última entrada del cerebro lleva la energía que ha dado lo comido, con su signo (alga que alimenta +, alga vacía 0, veneno −). No dice qué alga es, eso ya lo ve el bicho por el signo del canal de recurso. Tampoco incluye el gasto de vivir o moverse, que no cambia entre generaciones y enterraría la señal.
+2. **Ventana de 4 pasos** (`GUT_WINDOW` = `PLASTICITY_EVERY`): la entrada suma lo ganado en los últimos 4 pasos, para que cada paso de aprendizaje vea todos los bocados desde el anterior. Escala: `tanh(suma / GUT_OBS_SCALE)`, con `GUT_OBS_SCALE` = 1 (un bocado lleno, 0,5 de energía, da 0,46; cuatro, 0,96).
+3. **No se conecta a nada.** Es una entrada más, como los rayos. Que la evolución la use para modular la plasticidad (un refuerzo) es lo que se quiere ver, no algo que se programe. Ninguna métrica decide la reproducción y no hay retropropagación (principios 1 y 5).
+4. **Sustrato 3.0.0** (rama `escalera-tripa`, worktree `panspermia-tripa`, desde `escalera-p4`): `OBS_DIM` pasa de 79 a 80 (`N_PRE` 144), `IslandState.gut` f32[N, 4] y `EnvParams.gut_sense` (0 por defecto). Con el canal apagado no es idéntico bit a bit al 2.10, porque cambian las posiciones de las entradas en el sustrato de la CPPN. Por eso el control es un gemelo en el mismo sustrato con `gut_sense` 0.
+5. **Aparcado:** un segundo canal «he mordido» (como el gusto), una copia de la acción como entrada, la señal con retraso (efecto Garcia) y la energía neta (con el gasto de moverse).
+6. Antecedentes: la recompensa como entrada y la modulación evolucionada (niv2002evolution y soltoggio2008evolutionary, por verificar en Crossref y añadir a `docs/bibliografia/escalera/`). En la fase 1d, E9 añadió un sentido de malestar con el mismo esquema (sustrato 3.0.0 de `fase1d-e9`, otra rama: no se mezclan).

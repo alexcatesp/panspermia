@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 19:55",
+ "actualizado": "2026-10-22 22:45",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -458,6 +458,21 @@
    "principal": true,
    "cola": "p4.json",
    "condicion": "P4-alga"
+  },
+  {
+   "id": "P4at",
+   "padre": "P4a",
+   "titulo": "P4-alga con tripa: el cerebro siente lo que le da lo que come",
+   "corto": "P4-alga + tripa",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "una entrada nueva, la tripa: la energía que ha dado lo comido en los últimos 4 pasos, con su signo (ADR-024)",
+   "texto": "Diagnóstico (22-10, 22:04): casi todos pueden aprender, pero un bocado mueve la entrada de energía 0,007 (los rayos, 0,134) y la modulación no se correlaciona con comer. Responsable (22:22): un canal con la energía de lo comido y su signo, ventana de 4 pasos (la de la plasticidad), sin conectarlo a nada; sustrato 3.0.0, rama escalera-tripa. Cola tripa.json: P4-alga-tripa, control P4-alga-sin-tripa (mismo sustrato) y contraste P3-escaso-tripa (ahí se predice VA ≈ 0). Criterio en diseno v1.5: VA > 0 y > control en 5/5.",
+   "ref": "docs/decisiones.md",
+   "recurso": "GPU",
+   "principal": true,
+   "cola": "tripa.json",
+   "condicion": "P4-alga-tripa"
   },
   {
    "id": "P5",

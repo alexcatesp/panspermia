@@ -277,3 +277,21 @@ Escrito antes de lanzar, con P4-alga ya cerrado (no pasa, 3/5; `p0_factores.md`)
 - **Secundarias, descriptivas:** VA_log, pruebas de VA positivas, neuronas, empuje, masa, ingesta, vida, nacimientos, población, genes de reproducción, examen limpio (época 300) y sonda de hambre (con `K_CUT` y el salto activados).
 - **Predicción:** es el único hermano con VA alto sostenido en la calibración (0,86 y 0,77 en las épocas 60 y 80, una semilla). Pero el VA alto de las primeras épocas ya se apagó antes en los mundos de comida dispersa (P2-buscar, P3-disperso) y en P4-alga solo se sostuvo en un mundo de cinco. Lo más probable: VA > 0 en varios mundos, pero no en 5/5.
 - **Duración estimada:** unas 3–3,5 h (P4-alga tardó 37 min por mundo).
+
+## v1.5 · 22-10-2026, 22:45 · La tripa (ADR-024): criterio fijado (decisión del responsable, 22:22)
+
+Escrito antes de lanzar.
+
+- **Mundos** (rama `escalera-tripa`, sustrato 3.0.0, cola `tripa.json`; semillas 0–4, 300 épocas, desde cero):
+  - **P4-alga-tripa:** P4-alga (doble de algas, `ALGA_SWAP_PERIOD` 2.000) con la tripa.
+  - **P4-alga-sin-tripa:** el mismo mundo en el mismo sustrato, con la entrada a 0 (control).
+  - **P3-escaso-tripa:** P3-escaso con la tripa (contraste: la comida que alimenta no cambia nunca).
+- Antes, la suite completa en GPU; si falla, no se lanza (`scratchpad/tripa_noche.sh`, que espera a `p4sitio_hecho`; log `runs/fase1d/tripa.log`, marca `tripa_hecho`).
+- **Primaria (5/5 semillas emparejadas):** VA de la ingesta (gemelo congelado), media de las épocas 151–300, de P4-alga-tripa **mayor que 0 y mayor que en P4-alga-sin-tripa** con la misma semilla. Un mundo extinguido o pausado sin revisión cuenta como fallo.
+- **Contraste de la teoría (secundaria prerregistrada):** en P3-escaso-tripa se predice VA ≈ 0. Si P4-alga-tripa pasa y P3-escaso-tripa no muestra VA > 0, es lo que predicen stephens1991change y dunlap2009components: aprender compensa cuando cambia qué pista lleva al premio.
+- **Secundarias, descriptivas:**
+  - las de v1.3 (VA_log, pruebas de VA positivas, neuronas, empuje, ingesta, vida, población, genes, examen, sonda de hambre);
+  - el diagnóstico de `diag_aprender.py`: correlación entre la modulación y lo comido, peso de la tripa en las moduladoras y suelo de ruido del VA;
+  - P4-alga-sin-tripa frente a P4-alga (2.10), para ver cuánto cambia el sustrato nuevo por sí solo.
+- **Predicción:** abierta. Es la primera vez que la consecuencia de comer es visible. Si la evolución engancha la tripa a la modulación, debería aparecer VA > 0 en P4-alga-tripa. Lo más probable, de todos modos, es que pase en algunos mundos y no en 5/5.
+- **Duración estimada:** suite ~30 min y unas 9 h para los 15 mundos (unos 37 min cada uno).

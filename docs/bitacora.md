@@ -1110,3 +1110,14 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Correlación entre la modulación y la subida de energía: 0,007.
   - Indicio: la señal de «he comido» está enterrada y la modulación no la usa.
 - **Diagnóstico completo** en marcha desde las 22:07 (P4-alga, P3-escaso y P3-disperso, 5 semillas cada uno; salida `runs/fase1d/_diag_aprender.jsonl`).
+
+### 22:11–22:45 (22-10) · La tripa: discusión, decisión del responsable (ADR-024) y preparación de la noche
+
+- **Discusión con el responsable:**
+  - ¿Más energía por bocado? No: es una consecuencia ecológica, no una señal, y el cerebro solo ve un nivel.
+  - ¿Una entrada «has comido»? Solo sirve si lleva lo que ha dado lo comido, con su signo; un «he mordido» se enciende igual con las dos algas.
+  - ¿Entrada de la acción y de la energía neta? La acción ya está en la regla de plasticidad (las neuronas de acción son «post»). El gasto de moverse no cambia entre generaciones y enterraría la señal.
+  - Problema técnico: la plasticidad se aplica 1 de cada 4 pasos, así que una señal de un solo paso perdería 3 de cada 4 bocados.
+- **Decisión (22:22):** un canal con la energía de lo comido en los últimos 4 pasos y su signo; 15 mundos esta noche; criterio 5/5 (`diseno.md` v1.5). La escala la fijé después en 1 (no en 0,5, como dije en la conversación), porque la ventana suma hasta 4 bocados: uno da 0,46 y cuatro, 0,96.
+- **Código:** rama `escalera-tripa` (worktree `panspermia-tripa`, sustrato 3.0.0). Test nuevo `test_gut_sense_reports_energy_from_eating_over_window`: la entrada es tanh(suma/escala), el alga vacía da 0 y apagada vale 0 sin tocar las demás entradas. Primera pasada en CPU: un fallo de tolerancia (0,22776 frente a 0,22776, energía en f32 cerca de 50), corregido.
+- **Noche:** `scratchpad/tripa_noche.sh` espera a `p4sitio_hecho`, pasa la suite en GPU y lanza `tripa.json` (P4-alga-tripa, P4-alga-sin-tripa, P3-escaso-tripa; log `runs/fase1d/tripa.log`, marca `tripa_hecho`).
