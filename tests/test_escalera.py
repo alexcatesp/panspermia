@@ -102,3 +102,43 @@ def test_fixed_offspring_cost_is_lost(monkeypatch):
     monkeypatch.setattr(config, "REPRO_COST", 0.0)       # sin coste, los cuatro tienen hijo
     _, n, _ = island._births(s, jax.random.PRNGKey(1))
     assert int(n) == 4
+
+
+def test_food_jumps_each_period(monkeypatch):
+    """P4-sitio: las manchas se quedan quietas dentro de un periodo y saltan a otro sitio al cambiar
+    de periodo, con la misma comida total aproximada; cada mundo salta a su manera."""
+    env, other = _env(drift=0.0), world.with_overrides(world.make_env(b"otro-mundo"), drift=0.0)
+    base = np.asarray(world.kmax_field(env, jnp.int32(500)))
+    monkeypatch.setattr(config, "FOOD_JUMP_PERIOD", 100)
+    a, b, c = (np.asarray(world.kmax_field(env, jnp.int32(t))) for t in (100, 199, 200))
+    assert np.array_equal(a, b) and not np.allclose(a, c) and not np.allclose(a, base)
+    assert abs(a.mean() - c.mean()) < 0.2 * a.mean()
+    oa, oc = (np.asarray(world.kmax_field(other, jnp.int32(t))) for t in (100, 200))
+    assert not np.allclose(np.corrcoef(a.ravel(), c.ravel())[0, 1], np.corrcoef(oa.ravel(), oc.ravel())[0, 1])
+
+
+def test_alga_swap_only_one_alga_feeds(monkeypatch):
+    """P4-alga: dentro de un periodo alimenta siempre la misma alga; entre periodos se sortea. El alga
+    que no toca se come pero no da energía ni cuenta como ingesta."""
+    monkeypatch.setattr(config, "ALGA_SWAP_PERIOD", 1000)
+    env = _env(seasonal=0)
+    draws = [bool(world.nourishing_is_a(env, jnp.int32(1000 * k))) for k in range(40)]
+    assert 5 < sum(draws) < 35
+    assert all(bool(world.nourishing_is_a(env, jnp.int32(1000 * k + 999))) == draws[k] for k in range(5))
+    ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0, "metabolism": 0}
+    s = island.init_island(0, b"escalera-test", n_max=2, n_init=2, env_overrides=ov)
+    a = np.asarray(world.algae_type_a(s.env, s.step))
+    cells = [np.argwhere(a)[0], np.argwhere(~a)[0]]                     # una celda de cada alga
+    pos = jnp.asarray([(c + 0.5) * world.RES_CELL for c in cells], jnp.float32)
+    s = s.replace(pos=pos, vel=jnp.zeros_like(s.vel), energy=jnp.full(2, 50.0),
+                  resources=jnp.full_like(s.resources, 5.0))
+    eat = jnp.array([1.0, 0.0, 0.0])                                    # quieto y comiendo
+    feeds = 0 if bool(world.nourishing_is_a(s.env, s.step)) else 1        # agente sobre el alga que alimenta
+    out = {}
+    for period in (1000, 0):
+        monkeypatch.setattr(config, "ALGA_SWAP_PERIOD", period)
+        s2, _ = island.world_step(s, plastic=False, births=False, control=eat)
+        out[period] = (np.asarray(s2.energy), np.asarray(s2.behavior.intake))
+    assert out[1000][1][feeds] > 0 and out[1000][1][1 - feeds] == 0
+    assert np.isclose(out[1000][0][feeds], out[0][0][feeds])
+    assert out[1000][0][1 - feeds] < out[0][0][1 - feeds]

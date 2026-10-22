@@ -300,6 +300,10 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     toxicity = jnp.clip(state.step.astype(jnp.float32) / C.TOXIC_RAMP_STEPS, 0.0, 1.0)
     gain, intake, toxic_in, nutrient, resources, chem = world.eat(
         state.resources, state.chem, pos, alive0, actions, toxic, toxicity)
+    if C.ALGA_SWAP_PERIOD > 0:  # P4-alga: el alga que no toca se come, pero no alimenta
+        empty = world.algae_type_a(state.env, state.step) != world.nourishing_is_a(state.env, state.step)
+        empty_in = jnp.where(empty.ravel()[world._res_index(pos)], intake, 0.0)
+        gain, intake = gain - empty_in, intake - empty_in
     signal = jnp.where(alive0 & (state.env.signal_on > 0), actions[:, 4], 0.0)
     rbin = _recovery_bin(pos, state.tox_since, state.step)
     nb = len(C.RECOVERY_EDGES) + 1

@@ -155,12 +155,29 @@ def step_patches(env: EnvParams, patches: jax.Array, step: jax.Array, key: jax.A
 _RES_CENTERS = (jnp.arange(RES, dtype=jnp.float32) + 0.5) / RES
 
 
+def _world_draw(env: EnvParams, tag: int, step: jax.Array, period: int) -> jax.Array:
+    """Clave del sorteo número step // period de este mundo (P4). Sale de sus propias fases, así que
+    es determinista e independiente entre mundos, y no hace falta pasar la clave de la isla."""
+    seed = jax.lax.bitcast_convert_type(env.wave_phase[0], jnp.uint32)
+    key = jnp.stack([seed, jnp.uint32(tag)])
+    return jax.random.fold_in(key, (step // period).astype(jnp.uint32))
+
+
+def nourishing_is_a(env: EnvParams, step: jax.Array) -> jax.Array:
+    """bool: True si ahora alimenta el alga A (P4-alga, `C.ALGA_SWAP_PERIOD` > 0)."""
+    return jax.random.bernoulli(_world_draw(env, 2, step, C.ALGA_SWAP_PERIOD))
+
+
 def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
     """Kmax [RES, RES]: manchas por suma de ondas planas toroidales que derivan lentamente."""
     t = step.astype(jnp.float32) * C.DT
     cx, cy = jnp.meshgrid(_RES_CENTERS, _RES_CENTERS, indexing="ij")
+    wave_phase = env.wave_phase
+    if C.FOOD_JUMP_PERIOD > 0:  # P4-sitio: las manchas saltan a un sitio al azar cada periodo
+        wave_phase = wave_phase + jax.random.uniform(_world_draw(env, 1, step, C.FOOD_JUMP_PERIOD),
+                                                     (C.K_WAVES,), maxval=2 * math.pi)
     phase = (2 * math.pi * (env.wave_k[:, 0, None, None] * cx + env.wave_k[:, 1, None, None] * cy)
-             + env.wave_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
+             + wave_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
     z = jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0)
     z = z / jnp.sqrt(jnp.sum(env.wave_amp ** 2) / 2)
     K = env.k_mean * jnp.maximum(0.0, 1.0 + C.K_CONTRAST * z)

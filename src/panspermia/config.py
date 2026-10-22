@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.8.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.9.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -8,7 +8,8 @@ SUBSTRATE_VERSION = "2.8.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 2.5: el cruce hereda la CPPN entera de un progenitor, ADR-018;
                              # 2.6: física de la herencia de la escalera por defecto y CPPN neutral corregida, ADR-019;
                              # 2.7: comida dispersa elegible (config.K_CUT), P2-buscar, ADR-022;
-                             # 2.8: coste fijo por hijo elegible (config.REPRO_COST), P3-coste, ADR-023)
+                             # 2.8: coste fijo por hijo elegible (config.REPRO_COST), P3-coste, ADR-023;
+                             # 2.9: comida que cambia de sitio y alga que alimenta (FOOD_JUMP_PERIOD, ALGA_SWAP_PERIOD), P4)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -207,6 +208,15 @@ K_CUT: float | None = None
 # ha de poder pagarlo (tras ceder y pagar le queda energía). 0 = sin coste. Opción de compilación,
 # como K_CUT, para que el mundo de siempre siga idéntico bit a bit.
 REPRO_COST: float = 0.0
+# P4 (decisión del responsable, 22-10): el mundo cambia a un ritmo dado. Opciones de compilación, como
+# K_CUT, para que el mundo de siempre siga idéntico bit a bit (0 = apagado).
+# FOOD_JUMP_PERIOD: cada tantos pasos, las manchas de comida saltan a un sitio al azar (fases nuevas de
+# las ondas). La comida vieja se seca y la nueva rebrota (crecimiento logístico de siempre).
+# ALGA_SWAP_PERIOD: cada tantos pasos se sortea qué alga alimenta (A o B, las que el bicho ya distingue
+# por el signo del canal de recurso); la otra se come pero no da energía ni cuenta como ingesta.
+# El sorteo usa una clave propia de cada mundo (sacada de sus fases), así que los mundos son independientes.
+FOOD_JUMP_PERIOD: int = 0
+ALGA_SWAP_PERIOD: int = 0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1
