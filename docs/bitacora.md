@@ -1130,3 +1130,20 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - s0 y s2: cuerpos grandes (masa 2,7–2,9), vidas de 130 pasos, muchos nacimientos (14.000–19.000 por época), los cerebros más grandes desde P0 (s2: 9,5 neuronas) y VA > 0 (s2: positivo en las 15 pruebas).
   - s1, s3 y s4: cuerpos pequeños, vidas de 600–660 pasos, 2 neuronas y VA ≈ 0.
 - **Lectura:** el mejor indicio de la escalera, pero en 2 de 5 mundos. Tabla en `p0_factores.md`. Determinismo comprobado: las épocas 1–100 de s0 repiten la calibración.
+
+### 23:28–23:40 (22-10) · ¿Por qué aprenden los mundos de cuerpos grandes? (preguntas del responsable)
+
+- **La masa es genética**, no se gana comiendo: masa = (radio / 4)², con el radio en [2, 8] fijado por un gen del cuerpo. Un cuerpo grande cuesta más (0,1·masa por unidad de tiempo), acelera menos con el mismo empuje, empuja a los pequeños en los choques y deja a sus hijos más lejos (a 2 radios).
+- **No hay relación programada entre el tamaño del cuerpo y el del cerebro:** cada neurona cuesta 0,02, sea cual sea el cuerpo. Tampoco hay límite de espacio para nacer: el hijo ocupa un hueco libre de la tabla, no del suelo. Si cae encima de otro, los choques los separan.
+- **Datos (solo observan):**
+  - Sin selección (P0), los cuerpos derivan a masas de 1,5–2,2: ser grande es el punto de partida.
+  - En P4-salto64 los cinco mundos empiezan grandes y con VA > 0 en las primeras 75 épocas. s1, s3 y s4 encogen (masa 0,3–0,4) y su VA cae a la vez. s0 y s2 siguen grandes y conservan el VA.
+  - Correlación de Spearman entre masa y VA a lo largo de las pruebas: +0,65 en P4-salto64 (n = 75) y +0,77 en P3-disperso; en P3-escaso, +0,46; en P4-alga, +0,08. Ojo: al principio todo es alto (masa, cerebro y VA) y baja a la vez, así que parte de la correlación es la tendencia común en el tiempo.
+  - En P3-disperso, s1 y s2 (masa 1,25) son también los de mayor VA de ese peldaño.
+- **Hipótesis de la dispersión de los hijos: no se sostiene con estos datos** (`scratchpad/masa_mecanismo.py`, checkpoints de la época 300). Las manchas de comida tienen un radio equivalente mediano de 46 u (p90: 71 u; 13 manchas, 8,9 % del suelo). Un padre grande deja al hijo a 13 u y uno pequeño, a 4,5 u: los dos dentro de la mancha. La fracción de vivos sobre comida es parecida (17–27 %).
+  - Los mundos grandes tienen empuje bajo (2,5–3,8 frente a 5,1–7,0). Su alcance de visión no es coherente entre ellos (s0: 55 u; s2: 18 u).
+- **Bibliografía** (DOI comprobados en Crossref; `docs/bibliografia/escalera/` §17): no se encontró este resultado tal cual.
+  - sol2005big: aves con cerebros grandes prosperan mejor en sitios nuevos.
+  - liedtke2021dispersers: en un modelo de individuos, los que se quedan suelen aprender más que los que dispersan.
+  - isler2009expensive: en animales, cerebros grandes van con vidas lentas. En P4-salto64 es al revés: cerebros mayores en los cuerpos grandes de vida rápida.
+- **Pendiente:** pruebas causales (cuerpo fijo grande o pequeño; distancia del hijo independiente del radio; repetir desde un mismo checkpoint antes de que los mundos se separen), cuando la GPU quede libre.
