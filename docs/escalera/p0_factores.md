@@ -545,3 +545,41 @@ Genes de reproducción: `_genes_P3coste{5,10,20}.json` (`scratchpad/p3c{5,10,20}
 - **El cerebro no cambia:** 0,2–2,5 neuronas, como P3-escaso; VA ≈ 0 en los 15 mundos. Tampoco hay hambre.
 - **Conclusión: negativo** con los tres costes. Encarecer los hijos no hace que buscar lejos ni aprender compensen cuando la comida cubre el 87 % del suelo. **Camino aparcado.** P4-alga cuelga de P3-escaso (decisión del responsable de las 09:11).
 - Datos: `runs/fase1d/P3-coste5`, `P3-coste10`, `P3-coste20`.
+
+### 22-10-2026, 18:49 · P4-alga: cada 2.000 pasos se sortea qué alga alimenta (5 mundos)
+
+Criterio prerregistrado en `diseno.md` v1.3. Rama `escalera-p4` (`2e41573`, sustrato 2.10.0), cola `p4.json`: P3-escaso con el doble de algas (`k_mean` 3,804) y `ALGA_SWAP_PERIOD` 2.000. Suite en GPU antes de lanzar (15:14–15:43): 84 correctos y 1 omitido. Mundos: 15:43–18:49. Ninguno se pausó ni se extinguió. Medias de las épocas 151–300, emparejadas por semilla con P3-escaso:
+
+| Medida | P3-escaso | P4-alga |
+|---|---|---|
+| VA de la ingesta (**primaria**: > 0 y > P3-escaso) | −0,000 / +0,001 / +0,009 / −0,021 / −0,003 | +0,019 / +0,090 / +0,017 / −0,011 / −0,082: **3/5** |
+| VA_log de la ingesta | −0,000 / +0,001 / +0,008 / −0,021 / −0,003 | +0,019 / +0,086 / +0,015 / −0,015 / −0,093 |
+| Pruebas de VA positivas (épocas 160–300, 8 por mundo) | — | 6 / 8 / 5 / 3 / 3 |
+| Población | 2.516–2.690 (mínimo 2.381–2.563) | 2.554–2.918 (mínimo 2.028–2.209) |
+| Vida media | 483–688 | **280–313** |
+| Nacimientos por época | 3.792–5.587 | **8.366–9.945** |
+| Generación máxima | 335–452 | 436–583 |
+| Energía media | 6–9 | 7 |
+| Comida ingerida por época (miles; solo la que alimenta) | 176–192 | 171–202 |
+| Comida en pie (miles) | 4,4–5,4 | **34,5–35,7** |
+| Empuje | 6,4–7,8 | 5,7–5,9 |
+| Masa | 0,26–0,28 | 0,26–0,34 |
+| Neuronas ocultas | 0,05–1,45 | 0,52–1,91 (más en 4/5) |
+| Examen limpio: mancha, época 300 | 0,000 / 0,000 / 0,047 / 0,016 / 0,047 | 0,000 / 0,000 / 0,031 / 0,125 / 0,047 |
+| Controles fijos del examen (época 300) | 0,08–0,16 | 0,06–0,16 |
+| Examen limpio: laberinto | 0,00–0,02 | 0,00–0,02 |
+| Umbral para tener hijos (época 300) | 10,5–19,3 | 11,2–13,2 |
+| Fracción de energía al hijo (época 300) | 0,26–0,40 | 0,22–0,31 |
+| Vivos con energía para un hijo (época 300) | 1–3 % | 4,8–8,3 % |
+| Sonda de hambre (regla de la bitácora, 21-10, 22:48) | 2/5 | 0/5 (s0: 87,2 % empuja menos) |
+
+Genes de reproducción: `_genes_P4alga.json` (`scratchpad/p4a_genes.py`); sonda de hambre (`scratchpad/p4a_hunger.py`, con `ALGA_SWAP_PERIOD` 2.000) en `_hambre.jsonl`.
+
+- **La primaria no pasa (3/5).** s0, s1 y s2 superan a P3-escaso; s3 y s4 no (s4, −0,082).
+- **El VA deja de ser plano.** En P3-escaso, cada prueba da casi 0; en P4-alga oscila entre −0,26 y +0,23 de una prueba a otra. **s1 es la excepción: positivo en las 15 pruebas** (+0,01 a +0,20; media +0,09 en las épocas 151–300). Indicio, un solo mundo.
+- **La historia de vida cambia:** hijos baratos (umbral 11–13, fracción 0,22–0,31), más vivos listos para tener uno (5–8 %), vidas de la mitad, el doble de nacimientos y más generaciones. La vida sigue bajando hasta el final (de 578–875 pasos en las épocas 1–50 a 237–304 en las 251–300). Se mueven menos que en P3-escaso (empuje 5,7–5,9, frente a 10,9 en la calibración de las épocas 51–100).
+- **Hay mucha más comida en pie** (7–8 veces la de P3-escaso), pero casi todas las muertes siguen siendo de hambre, como en P3-escaso. No se ha medido cuánta de esa comida es del alga que alimenta en cada momento.
+- **El cerebro se vacía igual,** algo más despacio en s3 y s4 (4–8 neuronas hasta la época 150). Al final, 0,5–1,9 neuronas.
+- La fracción de la ingesta que viene del alga que alimenta **no se puede calcular sin tocar la simulación**: la ingesta del alga vacía se resta antes de guardar las estadísticas.
+- **Conclusión: negativo**, como se predijo. Que cambie qué alga alimenta acelera las generaciones, pero no hace que aprender compense de forma estable. s1 es el único mundo con VA > 0 sostenido.
+- Datos: `runs/fase1d/P4-alga`; análisis `runs/fase1d/_analisis_P4alga.json` (`scratchpad/p4a_an.py`).

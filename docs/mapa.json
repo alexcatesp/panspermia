@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 15:13",
+ "actualizado": "2026-10-22 18:49",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -411,7 +411,7 @@
    "estado": "pendiente",
    "resultado": null,
    "anade": "la comida salta a un sitio al azar cada 1.000 pasos (unas 2–3 generaciones)",
-   "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009). Calibración (22-10): con saltos a cualquier sitio se extingue (las manchas quedan a cientos de unidades y los bichos ven a 64). Decisión del responsable (12:08): salto corto, con todo el campo desplazado 64 o 128 u (FOOD_JUMP_DIST, sustrato 2.10.0). Segunda calibración desde las 12:16. Segunda calibración (12:44–12:58): viable con saltos de 64 y 128 u. Con 64 u, VA de 0,86 y 0,77 en las épocas 60 y 80 (indicio, una semilla); con 128 u, el VA se apaga y el cerebro se vacía. En espera hasta ver P4-alga (responsable, 15:13).",
+   "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009). Calibración (22-10): con saltos a cualquier sitio se extingue (las manchas quedan a cientos de unidades y los bichos ven a 64). Decisión del responsable (12:08): salto corto, con todo el campo desplazado 64 o 128 u (FOOD_JUMP_DIST, sustrato 2.10.0). Segunda calibración desde las 12:16. Segunda calibración (12:44–12:58): viable con saltos de 64 y 128 u. Con 64 u, VA de 0,86 y 0,77 en las épocas 60 y 80 (indicio, una semilla); con 128 u, el VA se apaga y el cerebro se vacía. En espera hasta ver P4-alga (responsable, 15:13). P4-alga ya ha terminado (no pasa, 3/5): se decide con el responsable.",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": false
@@ -447,10 +447,10 @@
    "padre": "P3e",
    "titulo": "P4-alga: cambia qué alga alimenta",
    "corto": "P4-alga",
-   "estado": "en curso",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "negativo",
    "anade": "cada 2.000 pasos se sortea qué alga (A o B) alimenta; la otra no da nada",
-   "texto": "Decisión del responsable (22-10, 09:11). Es la condición de Stephens al pie de la letra: cambia qué señal lleva al premio, entre generaciones pero no durante una vida. Los bichos ya distinguen A y B por el signo del canal de recurso. Padre: P3-escaso, porque el coste 5 no pasó (2/5, 22-10, 10:51). Es donde más se espera VA > 0, y hace de puente hacia P5 (veneno). Calibración (11:29): con la mitad de las algas sin alimento, la comida útil cae a la mitad y el mundo se extingue en la época 5. Decisión del responsable (12:08): el doble de algas (k_mean 3,804), para que la comida útil media sea la de P3-escaso. Segunda calibración desde las 12:16. Calibración (12:30): viable, empuje 10,9 frente a 6,5, VA ≈ 0 desde la época 40. Responsable (15:13): se lanza, 5 mundos × 300 épocas (criterio en diseno v1.3: VA de las épocas 151–300 > 0 y > P3-escaso en 5/5).",
+   "texto": "Decisión del responsable (22-10, 09:11). Es la condición de Stephens al pie de la letra: cambia qué señal lleva al premio, entre generaciones pero no durante una vida. Los bichos ya distinguen A y B por el signo del canal de recurso. Padre: P3-escaso, porque el coste 5 no pasó (2/5, 22-10, 10:51). Es donde más se espera VA > 0, y hace de puente hacia P5 (veneno). Calibración (11:29): con la mitad de las algas sin alimento, la comida útil cae a la mitad y el mundo se extingue en la época 5. Decisión del responsable (12:08): el doble de algas (k_mean 3,804), para que la comida útil media sea la de P3-escaso. Segunda calibración desde las 12:16. Calibración (12:30): viable, empuje 10,9 frente a 6,5, VA ≈ 0 desde la época 40. Responsable (15:13): se lanza, 5 mundos × 300 épocas (criterio en diseno v1.3: VA de las épocas 151–300 > 0 y > P3-escaso en 5/5). Resultado (18:49): no pasa (3/5; VA +0,019 / +0,090 / +0,017 / −0,011 / −0,082). El VA deja de ser plano y oscila entre −0,26 y +0,23 de una prueba a otra; s1 es positivo en las 15 pruebas (indicio, un mundo). Vidas de la mitad (280–313), el doble de nacimientos, empuje 5,7–5,9, el cerebro se vacía igual (0,5–1,9 neuronas). Hijos baratos (umbral 11–13); sin hambre (0/5).",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true,

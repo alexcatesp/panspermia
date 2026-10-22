@@ -1072,3 +1072,18 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Responsable:** se lanza **solo P4-alga** con el doble de algas, 5 mundos × 300 épocas. La comida efímera queda **aparcada** (`caminos.md`). Los saltos cortos cada 1.000 pasos quedan en espera.
 - **Criterio prerregistrado** antes de lanzar (`diseno.md` v1.3, `6390637`): VA de la ingesta (media de las épocas 151–300) mayor que 0 y mayor que en P3-escaso, en 5/5 semillas emparejadas.
 - **Lanzamiento:** cola `p4.json` de `escalera-p4` (`2e41573`), `scratchpad/p4alga.sh`. Primero la suite completa en GPU (si falla, no se lanza); después, los 5 mundos (log `runs/fase1d/p4alga.log`, marca `p4alga_hecho`). Duración estimada: ~40 min de tests y ~3,5 h de mundos.
+
+### 15:14–18:49 (22-10) · P4-alga: resultado
+
+- **Qué:** `escalera-p4` (`2e41573`, sustrato 2.10.0), cola `p4.json`, `scratchpad/p4alga.sh`. Suite completa en GPU (15:14–15:43, `runs/fase1d/p4_tests.log`): **84 correctos y 1 omitido**. Mundos: 15:43–18:49 (unos 37 min cada uno), sin pausas ni extinciones. Criterio en `diseno.md` v1.3. Tabla completa en `p0_factores.md` (P4-alga).
+- **Primaria (VA de la ingesta, épocas 151–300, > 0 y > P3-escaso): 3/5, no pasa.** P4-alga: +0,019 / +0,090 / +0,017 / −0,011 / −0,082; P3-escaso: −0,000 / +0,001 / +0,009 / −0,021 / −0,003.
+- **Lectura:**
+  - El VA ya no es plano: de una prueba a otra oscila entre −0,26 y +0,23 (en P3-escaso, ±0,03). **s1 es positivo en las 15 pruebas** (+0,01 a +0,20). Indicio, un solo mundo.
+  - Vidas de la mitad (280–313 frente a 483–688), el doble de nacimientos (8.400–9.900 por época) y más generaciones (436–583). Se mueven menos (empuje 5,7–5,9).
+  - El cerebro se vacía igual (0,5–1,9 neuronas en las épocas 151–300), algo más tarde en s3 y s4.
+  - Hay 7–8 veces más comida en pie que en P3-escaso; no se ha medido de qué alga es.
+  - Examen limpio en la época 300: 0,000 / 0,000 / 0,031 / 0,125 / 0,047 (solo s3 supera a sus controles fijos).
+  - La fracción de la ingesta del alga que alimenta no se puede calcular sin tocar la simulación (la del alga vacía se resta antes de las estadísticas).
+  - Genes de reproducción (CPU, 18:50–19:05, `_genes_P4alga.json`): umbral 11,2–13,2 y fracción 0,22–0,31 en la época 300 (hijos baratos, como en P3-escaso); el 4,8–8,3 % de los vivos tiene energía para un hijo (1–3 % en P3-escaso).
+  - Sonda de hambre (`scratchpad/p4a_hunger.py`, con el sorteo de algas activado): **0/5**. Lo más parecido es s0, donde el 87,2 % empuja menos al sentirse hambriento (la regla pide más del 90 % en 4 de 5 mundos).
+- **Conclusión: negativo**, como se predijo en v1.3. Aparcado (`caminos.md`). Siguiente paso, con el responsable.
