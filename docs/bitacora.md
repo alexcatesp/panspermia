@@ -956,3 +956,52 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Ningún mundo llega al 90 % en una dirección (0/5).
 - **Recorrido en 200 pasos:** igual con y sin hambre (46–53 % recorren más).
 - **No hay hambre** según la regla. La única novedad es que el sentido dominante es empujar más con hambre en 5/5, al revés que en P3-escaso, pero en minoría. Queda pendiente P3-coste.
+
+### 07:53–09:05 (22-10) · P3-coste: costes 10 y 20 (resultado)
+
+- **Qué:** P3-escaso con un coste fijo por hijo (`REPRO_COST`, ADR-023). Rama `escalera-coste` (`7104c15`, sustrato 2.8.0), cola `p3coste.json`. La suite en GPU pasó: 81 tests correctos y 1 omitido, en 39 min (01:58–02:38).
+  - Coste 10: de 02:38 a 05:21.
+  - Coste 20: de 05:21 a 07:53.
+  - Coste 5: desde las 07:53.
+- **Criterio** (`diseno.md` v1.1, cada coste por separado): examen limpio (mancha) en la época 300 mayor que P3-escaso (0,000 / 0,000 / 0,047 / 0,016 / 0,047) en 5/5.
+
+| Medida (épocas 151–300) | P3-escaso | Coste 10 | Coste 20 |
+|---|---|---|---|
+| Examen, época 300 (**primaria**) | — | 0,000 / 0,062 / 0,125 / 0,031 / 0,047: **3/5, no pasa** | 0,031 / 0,109 / 0,000 / 0,141 / 0,000: **3/5, no pasa** |
+| Controles fijos del examen (época 300) | 0,08–0,16 | 0,13–0,28 | 0,13–0,25 |
+| Población | 2.516–2.690 | 2.459–2.631 | 2.371–2.505 |
+| Vida media | 483–688 | 1.626–2.846 | 2.859–3.689 |
+| Energía media | 6–9 | 16–24 | 23–28 |
+| Empuje | 6,4–7,8 | 7,4–9,1 | 8,2–9,2 |
+| Neuronas ocultas | 0,05–1,45 | 0,82–1,97 | 0,64–2,45 |
+| Masa | 0,26–0,28 | 0,27–0,31 | 0,29–0,31 |
+| VA de la ingesta | −0,021 a +0,009 | −0,007 a +0,001 | −0,009 a +0,001 |
+| Umbral para tener hijos (época 300) | 10,5–19,3 | 31,6–45,1 | 50,5–61,4 |
+| Fracción de energía al hijo (época 300) | 0,26–0,40 | 0,39–0,53 | 0,39–0,48 |
+| Vivos con energía para un hijo (época 300) | 1–3 % | 0,1–0,4 % | ≤ 0,1 % |
+
+- **Lectura:**
+  - El coste hace lo esperado con los hijos: el umbral sube con el coste y viven 3–6 veces más.
+  - Comen más (200–213 mil por época frente a 176–192 mil) y empujan algo más.
+  - El cerebro apenas cambia (≤ 2,5 neuronas) y VA ≈ 0.
+  - El examen sube en 3/5 con los dos costes y queda por debajo de los controles fijos, salvo en coste 20 s3 (0,141 frente a 0,125).
+- **Conclusión: negativo para 10 y 20** (3/5 cada uno). Encarecer los hijos cambia la historia de vida (pocos hijos caros, vidas largas; smith1974optimal), pero no hace que buscar lejos ni aprender compensen.
+- **Sonda de hambre** (CPU, 08:30–09:05): no hay hambre, 0/5 en los dos costes.
+  - Coste 10: el sentido dominante cambia de un mundo a otro; s0 llega al 78 % empujando menos con hambre.
+  - Coste 20: s1 y s3 empujan más (63–74 %); s4 apenas responde.
+  - Genes: `_genes_P3coste10.json` y `_genes_P3coste20.json` (`scratchpad/p3c{10,20}_genes.py`).
+
+### 08:35 (22-10) · Bibliografía verificada
+
+- Las siete referencias que se habían citado de memoria tienen DOI comprobado en Crossref: Berg y Brown 1972, Hills 2004 y 2006, Humphries 2010, Smith y Fretwell 1974, Stephens 1991, Dunlap y Stephens 2009, Mitchell 2009.
+- Están en `docs/bibliografia/escalera/refs.bib` y en el README §15 (`be47a77`).
+
+### 09:06 (22-10) · Decisión del responsable: P4 antes que comida efímera y olfato
+
+- **P4 primero, con la comida efímera como hermana.** P4 cambia una sola cosa: el ritmo al que la comida cambia de sitio. Tres ritmos:
+  - **Entre generaciones:** el mundo cambia de una generación a otra pero es estable durante una vida. Es la condición en la que, según stephens1991change y dunlap2009components, aprender compensa.
+  - **Dentro de una vida:** comida efímera.
+  - **El lento de siempre:** la deriva `K_DRIFT`.
+- **El olfato queda aparcado:** es un sentido nuevo y lo más probable es que dé una búsqueda innata, como la de *E. coli* (berg1972chemotaxis).
+- **Padre de P4:** se decide al terminar el coste 5 (hacia las 10:30). Si pasa, P4 se construye sobre él; si no, sobre P3-escaso. Mientras tanto se prepara el diseño y el código.
+- Riesgo anotado (mitchell2009adaptive): si el cambio entre generaciones es regular, puede bastar una anticipación innata. Para evitarlo, el sitio nuevo de la comida será al azar.

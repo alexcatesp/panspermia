@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 02:18",
+ "actualizado": "2026-10-22 09:06",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -357,7 +357,7 @@
    "estado": "hecho",
    "resultado": "negativo",
    "anade": "engañar al cerebro con la energía que siente (5 frente a 100)",
-   "texto": "Petición del responsable (21-10, 22:45): si la conducta cambia según la energía del bicho, ha aparecido algo parecido al hambre. Dos copias de cada mundo guardado que solo difieren en la energía sentida; nulos: P0 y genomas al azar. Lectura prerregistrada: en ≥ 4/5 mundos, > 90 % de los bichos en la misma dirección, coincidente entre mundos y mayor que los nulos. 22-10, 00:29: no hay hambre en ningún tipo de mundo. P3-escaso se acerca (2/5: casi todos empujan algo menos con hambre). En P2, P3 y P2-buscar el cerebro usa la energía 3–7 veces más que los nulos, pero en sentidos opuestos según el bicho (indicio). P3-disperso (22-10, 02:18): tampoco (0/5; los que empujan más con hambre, 27–39 %, ganan a los que empujan menos en 5/5). Falta P3-coste.",
+   "texto": "Petición del responsable (21-10, 22:45): si la conducta cambia según la energía del bicho, ha aparecido algo parecido al hambre. Dos copias de cada mundo guardado que solo difieren en la energía sentida; nulos: P0 y genomas al azar. Lectura prerregistrada: en ≥ 4/5 mundos, > 90 % de los bichos en la misma dirección, coincidente entre mundos y mayor que los nulos. 22-10, 00:29: no hay hambre en ningún tipo de mundo. P3-escaso se acerca (2/5: casi todos empujan algo menos con hambre). En P2, P3 y P2-buscar el cerebro usa la energía 3–7 veces más que los nulos, pero en sentidos opuestos según el bicho (indicio). P3-disperso (22-10, 02:18): tampoco (0/5; los que empujan más con hambre, 27–39 %, ganan a los que empujan menos en 5/5). Costes 10 y 20 (09:05): tampoco (0/5).",
    "ref": "bitácora 22-10, 00:09",
    "recurso": "CPU",
    "principal": false
@@ -384,7 +384,7 @@
    "estado": "en curso",
    "resultado": null,
    "anade": "coste fijo por hijo, energía que se pierde (REPRO_COST, ADR-023)",
-   "texto": "Observación del responsable (21-10, 21:42): con hijos cada vez más baratos no van a buscar comida. En P3-escaso hacer un hijo no cuesta nada aparte de lo cedido, y la selección elige hijos de 3–5 de energía. Hermano de P3-disperso: solo cambia el coste. Rama escalera-coste (sustrato 2.8.0; sin coste, idéntica bit a bit). Pendiente de calibrar. Calibración (22:34): con coste 5, 10 y 20 viven 2–3 veces más y conservan 3–6 neuronas (frente a 0,9). Decisión del responsable (22:38): los tres costes, 5 mundos cada uno, tras P3-disperso (diseno v1.1; orden 10 → 20 → 5).",
+   "texto": "Observación del responsable (21-10, 21:42): con hijos cada vez más baratos no van a buscar comida. En P3-escaso hacer un hijo no cuesta nada aparte de lo cedido, y la selección elige hijos de 3–5 de energía. Hermano de P3-disperso: solo cambia el coste. Rama escalera-coste (sustrato 2.8.0; sin coste, idéntica bit a bit). Pendiente de calibrar. Calibración (22:34): con coste 5, 10 y 20 viven 2–3 veces más y conservan 3–6 neuronas (frente a 0,9). Decisión del responsable (22:38): los tres costes, 5 mundos cada uno, tras P3-disperso (diseno v1.1; orden 10 → 20 → 5). 22-10: coste 10 (02:38–05:21) y coste 20 (05:21–07:53) no pasan (3/5 cada uno). Viven 3–6 veces más, con hijos caros (umbral 32–45 y 50–61), pero el cerebro apenas cambia (≤ 2,5 neuronas) y VA ≈ 0. El coste 5 corre desde las 07:53.",
    "condicion": "P3-coste10",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
@@ -392,18 +392,55 @@
   },
   {
    "id": "P4",
-   "padre": "P3",
-   "titulo": "P4 · Comida móvil",
-   "corto": "P4 · Comida móvil",
-   "estado": "auto",
+   "padre": "P3e",
+   "titulo": "P4 · La comida cambia de sitio",
+   "corto": "P4 · Comida que cambia",
+   "estado": "pendiente",
    "resultado": null,
-   "anade": "la comida se desplaza",
-   "texto": "¿Obliga la comida móvil a moverse más? Más empuje que en P3. La deriva es lenta respecto a una vida, así que aprender probablemente aún no compensa.",
-   "cola": "escalera.json",
-   "condicion": "P4-comida-movil",
+   "anade": "el ritmo al que la comida cambia de sitio",
+   "texto": "Decisión del responsable (22-10, 09:06): P4 antes que la comida efímera y el olfato. Cambia una sola cosa, el ritmo al que la comida cambia de sitio, con tres hermanos: entre generaciones (estable durante una vida: la condición en la que, según Stephens, aprender compensa), dentro de una vida (comida efímera) y la deriva lenta de siempre. La pregunta es si aparece VA > 0. Padre: el coste 5 si pasa; si no, P3-escaso (se decide hacia las 10:30). El olfato queda aparcado.",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true
+  },
+  {
+   "id": "P4g",
+   "padre": "P4",
+   "titulo": "P4-generación: la comida cambia entre generaciones",
+   "corto": "P4-generación",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "la comida salta a un sitio al azar cada ~1 vida",
+   "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009).",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
+   "id": "P4e",
+   "padre": "P4",
+   "titulo": "P4-efímera: la comida dura menos que una vida",
+   "corto": "P4-efímera",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "la comida salta varias veces por vida",
+   "texto": "Comida que aparece y desaparece varias veces en una vida: puede premiar buscar cerca de donde se comió (búsqueda localizada, Hills 2004) o volver inútil lo aprendido.",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": false
+  },
+  {
+   "id": "P4l",
+   "padre": "P4",
+   "titulo": "P4-lento: la deriva de siempre",
+   "corto": "P4-lento",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "las manchas se desplazan despacio (K_DRIFT)",
+   "texto": "El P4 original: deriva lenta comparada con una vida. Control de los otros dos ritmos.",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": false
   },
   {
    "id": "P5",
