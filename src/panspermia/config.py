@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.9.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.10.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -9,7 +9,8 @@ SUBSTRATE_VERSION = "2.9.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 2.6: física de la herencia de la escalera por defecto y CPPN neutral corregida, ADR-019;
                              # 2.7: comida dispersa elegible (config.K_CUT), P2-buscar, ADR-022;
                              # 2.8: coste fijo por hijo elegible (config.REPRO_COST), P3-coste, ADR-023;
-                             # 2.9: comida que cambia de sitio y alga que alimenta (FOOD_JUMP_PERIOD, ALGA_SWAP_PERIOD), P4)
+                             # 2.9: comida que cambia de sitio y alga que alimenta (FOOD_JUMP_PERIOD, ALGA_SWAP_PERIOD), P4;
+                             # 2.10: salto corto de la comida (FOOD_JUMP_DIST), P4)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -217,6 +218,11 @@ REPRO_COST: float = 0.0
 # El sorteo usa una clave propia de cada mundo (sacada de sus fases), así que los mundos son independientes.
 FOOD_JUMP_PERIOD: int = 0
 ALGA_SWAP_PERIOD: int = 0
+# FOOD_JUMP_DIST (decisión del responsable, 22-10, 12:08): si es > 0, en vez de saltar a un sitio al azar,
+# en cada periodo todo el campo de comida se desplaza esta distancia (u) en una dirección al azar respecto a
+# su sitio de siempre (traslación rígida: misma forma y misma comida total). Entre dos periodos seguidos
+# las manchas se mueven entre 0 y 2·FOOD_JUMP_DIST (de media, ~1,27·FOOD_JUMP_DIST).
+FOOD_JUMP_DIST: float = 0.0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

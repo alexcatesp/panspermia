@@ -117,6 +117,27 @@ def test_food_jumps_each_period(monkeypatch):
     assert not np.allclose(np.corrcoef(a.ravel(), c.ravel())[0, 1], np.corrcoef(oa.ravel(), oc.ravel())[0, 1])
 
 
+def test_food_short_jump_is_rigid_shift(monkeypatch):
+    """P4-sitio con salto corto: dentro de un periodo el campo no cambia; en cada periodo es el de siempre
+    desplazado FOOD_JUMP_DIST en una dirección al azar (misma forma y misma comida total)."""
+    env = _env(drift=0.0)
+    base = np.asarray(world.kmax_field(env, jnp.int32(0)))
+    monkeypatch.setattr(config, "FOOD_JUMP_PERIOD", 100)
+    monkeypatch.setattr(config, "FOOD_JUMP_DIST", 128.0)
+    cell = config.WORLD_L / base.shape[0]
+    dirs = []
+    for t in (100, 200, 300):
+        a, b = (np.asarray(world.kmax_field(env, jnp.int32(u))) for u in (t, t + 99))
+        assert np.array_equal(a, b)
+        assert abs(a.mean() - base.mean()) < 0.02 * base.mean()
+        xc = np.real(np.fft.ifft2(np.fft.fft2(a) * np.conj(np.fft.fft2(base))))   # correlación en el toro
+        s = np.array(np.unravel_index(np.argmax(xc), xc.shape), dtype=float)
+        s = (s + base.shape[0] / 2) % base.shape[0] - base.shape[0] / 2
+        assert abs(np.linalg.norm(s) * cell - 128.0) <= 1.5 * cell
+        dirs.append(tuple(s))
+    assert len(set(dirs)) > 1
+
+
 def test_alga_swap_only_one_alga_feeds(monkeypatch):
     """P4-alga: dentro de un periodo alimenta siempre la misma alga; entre periodos se sortea. El alga
     que no toca se come pero no da energía ni cuenta como ingesta."""

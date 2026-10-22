@@ -173,7 +173,11 @@ def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
     t = step.astype(jnp.float32) * C.DT
     cx, cy = jnp.meshgrid(_RES_CENTERS, _RES_CENTERS, indexing="ij")
     wave_phase = env.wave_phase
-    if C.FOOD_JUMP_PERIOD > 0:  # P4-sitio: las manchas saltan a un sitio al azar cada periodo
+    if C.FOOD_JUMP_PERIOD > 0 and C.FOOD_JUMP_DIST > 0:  # P4-sitio, salto corto: traslación rígida
+        theta = jax.random.uniform(_world_draw(env, 1, step, C.FOOD_JUMP_PERIOD), maxval=2 * math.pi)
+        d = (C.FOOD_JUMP_DIST / C.WORLD_L) * jnp.stack([jnp.cos(theta), jnp.sin(theta)])
+        wave_phase = wave_phase - 2 * math.pi * (env.wave_k @ d)                    # K'(x) = K(x − d)
+    elif C.FOOD_JUMP_PERIOD > 0:  # P4-sitio: las manchas saltan a un sitio al azar cada periodo
         wave_phase = wave_phase + jax.random.uniform(_world_draw(env, 1, step, C.FOOD_JUMP_PERIOD),
                                                      (C.K_WAVES,), maxval=2 * math.pi)
     phase = (2 * math.pi * (env.wave_k[:, 0, None, None] * cx + env.wave_k[:, 1, None, None] * cy)
