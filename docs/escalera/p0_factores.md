@@ -583,3 +583,30 @@ Genes de reproducción: `_genes_P4alga.json` (`scratchpad/p4a_genes.py`); sonda 
 - La fracción de la ingesta que viene del alga que alimenta **no se puede calcular sin tocar la simulación**: la ingesta del alga vacía se resta antes de guardar las estadísticas.
 - **Conclusión: negativo**, como se predijo. Que cambie qué alga alimenta acelera las generaciones, pero no hace que aprender compense de forma estable. s1 es el único mundo con VA > 0 sostenido.
 - Datos: `runs/fase1d/P4-alga`; análisis `runs/fase1d/_analisis_P4alga.json` (`scratchpad/p4a_an.py`).
+
+### 22-10-2026, 23:23 · P4-salto64: la comida se desplaza 64 u cada 1.000 pasos (5 mundos)
+
+Criterio prerregistrado en `diseno.md` v1.4. Rama `escalera-p4` (`ba5e16e`, sustrato 2.10.0), cola `p4sitio.json`: P3-disperso con `FOOD_JUMP_PERIOD` 1.000 y `FOOD_JUMP_DIST` 64. Mundos: 19:56–23:23. s4 se cortó en la época 101 porque WSL se paró a las 22:50 por falta de memoria en Windows. Se reanudó desde el checkpoint de la época 100. Ningún mundo se pausó ni se extinguió. Las épocas 1–100 de s0 coinciden con la calibración (VA 0,86 y 0,77 en las épocas 60 y 80): el determinismo se cumple. Medias de las épocas 151–300, emparejadas por semilla con P3-disperso:
+
+| Medida | P3-disperso | P4-salto64 |
+|---|---|---|
+| VA de la ingesta (**primaria**: > 0 y > P3-disperso) | −0,020 / +0,026 / +0,070 / −0,118 / +0,012 | **+0,138** / −0,002 / **+0,338** / −0,075 / −0,013: **2/5** |
+| VA_log de la ingesta | −0,021 / +0,023 / +0,067 / −0,128 / +0,011 | +0,117 / −0,015 / +0,282 / −0,085 / −0,018 |
+| Pruebas de VA positivas (épocas 160–300, 8 por mundo) | — | 6 / 2 / **8** / 2 / 3 |
+| Masa | 0,31–1,26 | **2,65 / 0,36 / 2,91 / 0,36 / 0,34** |
+| Vida media | 287–662 | **129 / 661 / 136 / 597 / 656** |
+| Nacimientos por época | 3.429–8.036 | **19.151 / 4.147 / 13.756 / 4.519 / 4.282** |
+| Neuronas ocultas | 1,55–5,22 | **3,73 / 2,41 / 9,49 / 2,07 / 2,31** |
+| Empuje | 5,5–9,1 | 2,5 / 6,9 / 6,0 / 7,4 / 5,4 |
+| Población | 2.242–2.338 | 2.099–2.844 |
+| Comida ingerida por época (miles) | 152–212 | 191–220 |
+| Examen limpio: mancha, época 300 | 0,016 / 0,109 / 0,031 / 0,000 / 0,109 | 0,000 / 0,000 / 0,000 / 0,047 / 0,000 |
+
+- **La primaria no pasa (2/5).**
+- **Los mundos se parten en dos estrategias:**
+  - **s0 y s2: cuerpos grandes de vida corta.** Masa 2,7–2,9, vida 129–136 pasos y 14.000–19.000 nacimientos por época. Tienen **los cerebros más grandes desde P0** (s2: 9,5 neuronas de media en las épocas 151–300; 7,9 en la época 300) y **aprender compensa**. s2 da VA > 0 en las 15 pruebas, con picos de +1,47; s0, en 6 de 8 de la segunda mitad.
+  - **s1, s3 y s4: cuerpos pequeños de vida larga.** Masa 0,3–0,4, vida 597–661 pasos, cerebros de 2 neuronas y VA ≈ 0, como P3-disperso.
+- **Indicio fuerte en 2 mundos:** cuando la comida se mueve entre generaciones y la evolución toma el camino de «grande, corto y muchos hijos», aparecen cerebros y aprender compensa. No sabemos aún por qué unos mundos toman un camino y otros el otro.
+- **El examen limpio no mejora** (0–0,047).
+- **Conclusión: negativo según el criterio,** con el mejor indicio de la escalera. Genes y sonda de hambre: pendientes, en CPU, cuando acaben los tests de la tripa.
+- Datos: `runs/fase1d/P4-salto64`; análisis `runs/fase1d/_analisis_P4salto64.json` (`scratchpad/p4s_an.py`).

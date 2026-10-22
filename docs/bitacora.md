@@ -1121,3 +1121,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Decisión (22:22):** un canal con la energía de lo comido en los últimos 4 pasos y su signo; 15 mundos esta noche; criterio 5/5 (`diseno.md` v1.5). La escala la fijé después en 1 (no en 0,5, como dije en la conversación), porque la ventana suma hasta 4 bocados: uno da 0,46 y cuatro, 0,96.
 - **Código:** rama `escalera-tripa` (worktree `panspermia-tripa`, sustrato 3.0.0). Test nuevo `test_gut_sense_reports_energy_from_eating_over_window`: la entrada es tanh(suma/escala), el alga vacía da 0 y apagada vale 0 sin tocar las demás entradas. Primera pasada en CPU: un fallo de tolerancia (0,22776 frente a 0,22776, energía en f32 cerca de 50), corregido.
 - **Noche:** `scratchpad/tripa_noche.sh` espera a `p4sitio_hecho`, pasa la suite en GPU y lanza `tripa.json` (P4-alga-tripa, P4-alga-sin-tripa, P3-escaso-tripa; log `runs/fase1d/tripa.log`, marca `tripa_hecho`).
+
+### 19:56–23:23 (22-10) · P4-salto64: resultado; caída de WSL
+
+- **Caída (22:50):** Windows avisó de memoria virtual insuficiente (evento 2004: `vmmem` con 16 GB, `pythonw.exe` con 5,5 GB y otro `vmmem` con 4,3 GB) y WSL se paró entero. Coincidieron P4-salto64 en GPU, los tests rápidos de la tripa en CPU y el diagnóstico en CPU, que hace varias copias completas del mundo. Se relanzó todo a las 22:51 con menos cosas a la vez: el suelo de ruido del diagnóstico queda para la GPU, por la mañana. s4 se reanudó desde el checkpoint de la época 100.
+- **Resultado (criterio `diseno.md` v1.4): no pasa (2/5).** VA (épocas 151–300): +0,138 / −0,002 / +0,338 / −0,075 / −0,013, frente a P3-disperso: −0,020 / +0,026 / +0,070 / −0,118 / +0,012.
+- **Dos estrategias:**
+  - s0 y s2: cuerpos grandes (masa 2,7–2,9), vidas de 130 pasos, muchos nacimientos (14.000–19.000 por época), los cerebros más grandes desde P0 (s2: 9,5 neuronas) y VA > 0 (s2: positivo en las 15 pruebas).
+  - s1, s3 y s4: cuerpos pequeños, vidas de 600–660 pasos, 2 neuronas y VA ≈ 0.
+- **Lectura:** el mejor indicio de la escalera, pero en 2 de 5 mundos. Tabla en `p0_factores.md`. Determinismo comprobado: las épocas 1–100 de s0 repiten la calibración.
