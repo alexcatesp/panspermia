@@ -1006,7 +1006,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Padre de P4:** se decide al terminar el coste 5 (hacia las 10:30). Si pasa, P4 se construye sobre él; si no, sobre P3-escaso. Mientras tanto se prepara el diseño y el código.
 - Riesgo anotado (mitchell2009adaptive): si el cambio entre generaciones es regular, puede bastar una anticipación innata. Para evitarlo, el sitio nuevo de la comida será al azar.
 
-### 09:11–09:30 (22-10) · P4: dos familias de hermanos (decisión del responsable) y código
+### 09:11–09:20 (22-10) · P4: dos familias de hermanos (decisión del responsable) y código
 
 - Al diseñar P4 aparecieron dos problemas. Primero, los bichos ven la comida, así que la regla innata «ve hacia lo que ves» sirve aunque la comida cambie de sitio. Segundo, la comida de P3-escaso cubre el 87 % del suelo.
 - **Responsable (09:11):**

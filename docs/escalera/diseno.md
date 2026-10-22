@@ -206,7 +206,7 @@ Rama `escalera-coste` (`7104c15`, sustrato 2.8.0, examen sin química), cola `p3
 - **Predicción:** vidas más largas y más neuronas que P3-escaso en los tres. El examen, dudoso: una sola semilla de calibración.
 - **Duración estimada** (por los tiempos de la calibración: ~0,65 h por mundo): P3-disperso hasta ~02:15; tests ~35 min; cada coste ~3,3 h. Coste 10 hacia las 06:00, coste 20 hacia las 09:20 y coste 5 hacia las 12:30 (estimaciones). No cabe ningún coste más antes de las 07:00.
 
-## v1.2 · 22-10-2026, 09:30 · P4: el mundo cambia a un ritmo dado (decisiones del responsable, 09:06 y 09:11) — borrador
+## v1.2 · 22-10-2026, 09:20 · P4: el mundo cambia a un ritmo dado (decisiones del responsable, 09:06 y 09:11) — borrador
 
 Escrito antes de tener datos. Los criterios se fijan tras la calibración y antes de lanzar los 5 mundos.
 
