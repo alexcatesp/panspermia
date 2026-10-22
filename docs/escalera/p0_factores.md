@@ -30,7 +30,7 @@
 |---|---|---|---|---|---|---|
 | B1 | **Sexo** (recombinación) | solo asexual; el sexo estaba previsto para la fase 3 | Sin recombinación, las mejoras compiten en lugar de sumarse (interferencia clonal) y las mutaciones dañinas se acumulan (trinquete de Muller). En poblaciones grandes, el sexo acelera mucho la adaptación. Añadirlo más tarde invalidaría todo lo anterior | muller1964ratchet, felsenstein1974recombination, colegrave2002sex, mcdonald2016sex; ligamiento: hill1966linkage, thompson2014supergenes, charlesworth2000ydegeneration, birky1995uniparental | P0-feliz-sexual (✅ 5 mundos): **el cruce por índice rompe la receta del cerebro** (entre el 83 y el 88 % de los nodos de la CPPN quedan sin salida). Era un error de implementación: **corregido (ADR-018, la CPPN se hereda entera, como un supergén) y se repite** (P0-feliz-sexual-bloques). Repetición (✅ 5 mundos): la receta queda sana (3–8 % de nodos sin salida) y la variedad no se pierde. **Responsable (19-10, 15:14): decidir tras P1-peaje-sexual-bloques** (supergén o marcas históricas) | ✅ asexual (P2: el sexo gana en 4/5 hasta la época 300 y en 3/5 hasta la 600) |
 | B2 | **Herencia de lo aprendido** | darwiniana: el hijo nace con los pesos innatos, no con los aprendidos | Heredar lo aprendido (lamarckiano) acelera en mundos **estables** (Ackley y Littman 1994), pero cae más en óptimos locales (Whitley et al. 1994) y es **peor cuando el mundo cambia**: hereda lo que servía en un mundo que ya no existe (Sasaki y Tokoro 2000). Aprender sin heredarlo también acelera la evolución (efecto Baldwin; Hinton y Nowlan 1987), según la pendiente de la ganancia (Paenke et al. 2007). Además, con una codificación indirecta (CPPN) no se puede reescribir la receta a partir de los pesos aprendidos | whitley1994lamarck, ackley1994lamarck, sasaki2000lamarck, hinton1987learning, paenke2007plasticity | Ninguna en P0 (no hay nada que aprender). La transmisión de lo aprendido entre bichos (cultura) sería un peldaño social, no genético | ✅ 📚 |
-| B3 | ¿Quién paga la energía del hijo? | dotación regalada (P0, P1) o cedida por el padre (P3+) | — | — | Es de P3. P3-escalera (21-10, 11:53): con el padre pagando no hay extinción, pero el mundo se sigue llenando (4.096); el freno es el tope, no la comida. P3-escaso (20:01, ½ de comida): la comida frena (población 2.516–2.690, 5/5); la selección elige hijos baratos (umbral 10–19, fracción 0,26–0,40)  **Responsable (21-10, 21:10): el padre paga, con la mitad de comida, en el resto de la escalera** | ✅ cedida por el padre |
+| B3 | ¿Quién paga la energía del hijo? | dotación regalada (P0, P1) o cedida por el padre (P3+) | — | — | Es de P3. P3-escalera (21-10, 11:53): con el padre pagando no hay extinción, pero el mundo se sigue llenando (4.096); el freno es el tope, no la comida. P3-escaso (20:01, ½ de comida): la comida frena (población 2.516–2.690, 5/5); la selección elige hijos baratos (umbral 10–19, fracción 0,26–0,40)  **Responsable (21-10, 21:10): el padre paga, con la mitad de comida, en el resto de la escalera.** P3-coste (22-10, 10:51; coste fijo por hijo de 5, 10 o 20, ADR-023): no pasa (2/5, 3/5, 3/5); vidas 2–6 veces más largas y hijos caros, pero ni cerebro ni VA. Aparcado | ✅ cedida por el padre |
 
 ## C. Demografía
 
@@ -514,3 +514,34 @@ Genes de reproducción: `scratchpad/p3d_genes.py`, `_genes_P3disperso.json`.
 - **VA mezclado:** aprender en vida ayuda en unos mundos (s1, s2) y perjudica en otro (s3). No hay señal común.
 - **Conclusión: negativo** según el criterio prerregistrado (3/5). **Indicio:** la dispersión de la comida, por sí sola, encarece a los hijos y mantiene más cerebro, que es justo lo que P3-escaso había perdido. Pero no basta para que buscar lejos compense de forma clara.
 - Datos: `runs/fase1d/P3-disperso`, `_analisis_P3disperso.json`, `_genes_P3disperso.json` (`scratchpad/p3d_an.py`, `p3d_genes.py`).
+
+### 22-10-2026, 10:51 · P3-coste: cada hijo cuesta 5, 10 o 20 (15 mundos)
+
+Criterio prerregistrado en `diseno.md` v1.1, cada coste por separado. Rama `escalera-coste` (`7104c15`, sustrato 2.8.0), `REPRO_COST` 5, 10 o 20 sobre P3-escaso. Suite en GPU antes de lanzar: 81 correctos y 1 omitido. Coste 10: 02:38–05:21; coste 20: 05:21–07:53; coste 5: 07:53–10:51. Ningún mundo se pausó ni se extinguió. Medias de las épocas 151–300, emparejadas por semilla con P3-escaso:
+
+| Medida | P3-escaso | Coste 5 | Coste 10 | Coste 20 |
+|---|---|---|---|---|
+| Examen limpio: mancha, época 300 (**primaria**: mayor) | 0,000 / 0,000 / 0,047 / 0,016 / 0,047 | 0,062 / 0,031 / 0,016 / 0,000 / 0,016: **2/5** | 0,000 / 0,062 / 0,125 / 0,031 / 0,047: **3/5** | 0,031 / 0,109 / 0,000 / 0,141 / 0,000: **3/5** |
+| Controles fijos del examen (época 300) | 0,08–0,16 | 0,11–0,25 | 0,13–0,28 | 0,13–0,25 |
+| Población | 2.516–2.690 | 2.549–2.698 | 2.459–2.631 | 2.371–2.505 |
+| Vida media | 483–688 | **1.022–1.967** | **1.626–2.846** | **2.859–3.689** |
+| Energía media | 6–9 | 11–16 | 16–24 | 23–28 |
+| Generación máxima | 335–452 | 217–321 | 161–272 | 149–218 |
+| Comida ingerida por época (miles) | 176–192 | 189–198 | 200–205 | 201–213 |
+| Empuje | 6,4–7,8 | 6,4–8,3 | 7,4–9,1 | 8,2–9,2 |
+| Masa | 0,26–0,28 | 0,27–0,29 | 0,27–0,31 | 0,29–0,31 |
+| Neuronas ocultas | 0,05–1,45 | 0,18–1,42 | 0,82–1,97 | 0,64–2,45 |
+| VA de la ingesta | −0,021 a +0,009 | −0,030 a +0,005 | −0,007 a +0,001 | −0,009 a +0,001 |
+| Umbral para tener hijos (época 300) | 10,5–19,3 | 21,1–34,1 | 31,6–45,1 | 50,5–61,4 |
+| Fracción de energía al hijo (época 300) | 0,26–0,40 | 0,32–0,54 | 0,39–0,53 | 0,39–0,48 |
+| Vivos con energía para un hijo (época 300) | 1–3 % | 0,1–0,9 % | 0,1–0,4 % | ≤ 0,1 % |
+| Sonda de hambre (regla de la bitácora, 21-10, 22:48) | 2/5 | 0/5 (s2: 89,7 % empuja menos) | 0/5 | 0/5 |
+| Examen limpio: laberinto | 0,00–0,02 | 0,00–0,02 | 0,00–0,01 | 0,00 |
+
+Genes de reproducción: `_genes_P3coste{5,10,20}.json` (`scratchpad/p3c{5,10,20}_genes.py`); sonda de hambre en `_hambre.jsonl`.
+
+- **La primaria no pasa con ningún coste** (2/5, 3/5 y 3/5). El examen sube en algunos mundos y baja en otros, sin relación con el coste, y casi siempre queda por debajo de los controles fijos (solo coste 20 s3 los supera: 0,141 frente a 0,125).
+- **El coste cambia la historia de vida, en orden con el coste (5 → 10 → 20):** umbral más alto, más energía por hijo, menos nacimientos, vidas 2–6 veces más largas y menos generaciones. Comen algo más y empujan algo más. Es la predicción de smith1974optimal: si cada hijo cuesta, compensan pocos hijos bien provistos.
+- **El cerebro no cambia:** 0,2–2,5 neuronas, como P3-escaso; VA ≈ 0 en los 15 mundos. Tampoco hay hambre.
+- **Conclusión: negativo** con los tres costes. Encarecer los hijos no hace que buscar lejos ni aprender compensen cuando la comida cubre el 87 % del suelo. **Camino aparcado.** P4-alga cuelga de P3-escaso (decisión del responsable de las 09:11).
+- Datos: `runs/fase1d/P3-coste5`, `P3-coste10`, `P3-coste20`.

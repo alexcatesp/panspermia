@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 09:20",
+ "actualizado": "2026-10-22 11:13",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -381,10 +381,10 @@
    "padre": "P3e",
    "titulo": "P3-coste: cada hijo cuesta",
    "corto": "P3-coste",
-   "estado": "en curso",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "negativo",
    "anade": "coste fijo por hijo, energía que se pierde (REPRO_COST, ADR-023)",
-   "texto": "Observación del responsable (21-10, 21:42): con hijos cada vez más baratos no van a buscar comida. En P3-escaso hacer un hijo no cuesta nada aparte de lo cedido, y la selección elige hijos de 3–5 de energía. Hermano de P3-disperso: solo cambia el coste. Rama escalera-coste (sustrato 2.8.0; sin coste, idéntica bit a bit). Pendiente de calibrar. Calibración (22:34): con coste 5, 10 y 20 viven 2–3 veces más y conservan 3–6 neuronas (frente a 0,9). Decisión del responsable (22:38): los tres costes, 5 mundos cada uno, tras P3-disperso (diseno v1.1; orden 10 → 20 → 5). 22-10: coste 10 (02:38–05:21) y coste 20 (05:21–07:53) no pasan (3/5 cada uno). Viven 3–6 veces más, con hijos caros (umbral 32–45 y 50–61), pero el cerebro apenas cambia (≤ 2,5 neuronas) y VA ≈ 0. El coste 5 corre desde las 07:53.",
+   "texto": "Observación del responsable (21-10, 21:42): con hijos cada vez más baratos no van a buscar comida. En P3-escaso hacer un hijo no cuesta nada aparte de lo cedido, y la selección elige hijos de 3–5 de energía. Hermano de P3-disperso: solo cambia el coste. Rama escalera-coste (sustrato 2.8.0; sin coste, idéntica bit a bit). Pendiente de calibrar. Calibración (22:34): con coste 5, 10 y 20 viven 2–3 veces más y conservan 3–6 neuronas (frente a 0,9). Decisión del responsable (22:38): los tres costes, 5 mundos cada uno, tras P3-disperso (diseno v1.1; orden 10 → 20 → 5). 22-10: coste 10 (02:38–05:21) y coste 20 (05:21–07:53) no pasan (3/5 cada uno). Viven 3–6 veces más, con hijos caros (umbral 32–45 y 50–61), pero el cerebro apenas cambia (≤ 2,5 neuronas) y VA ≈ 0. Coste 5 (07:53–10:51): tampoco pasa (2/5); vida 1.022–1.967, umbral 21–34, neuronas 0,2–1,4, VA ≈ 0. Sonda de hambre: 0/5 con los tres costes. Camino aparcado; P4-alga cuelga de P3-escaso.",
    "condicion": "P3-coste10",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
@@ -450,7 +450,7 @@
    "estado": "pendiente",
    "resultado": null,
    "anade": "cada 2.000 pasos se sortea qué alga (A o B) alimenta; la otra no da nada",
-   "texto": "Decisión del responsable (22-10, 09:11). Es la condición de Stephens al pie de la letra: cambia qué señal lleva al premio, entre generaciones pero no durante una vida. Los bichos ya distinguen A y B por el signo del canal de recurso. Padre: el coste 5 si pasa; si no, P3-escaso. Es donde más se espera VA > 0, y hace de puente hacia P5 (veneno).",
+   "texto": "Decisión del responsable (22-10, 09:11). Es la condición de Stephens al pie de la letra: cambia qué señal lleva al premio, entre generaciones pero no durante una vida. Los bichos ya distinguen A y B por el signo del canal de recurso. Padre: P3-escaso, porque el coste 5 no pasó (2/5, 22-10, 10:51). Es donde más se espera VA > 0, y hace de puente hacia P5 (veneno).",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true

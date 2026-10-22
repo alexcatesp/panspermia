@@ -1017,3 +1017,20 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Bit a bit igual a `escalera-coste` con los dos apagados (edad `6e95fcba…`, energía `65bdc0c7…`).
   - Tests de `test_escalera.py` y `test_units.py`, en CPU: 15 correctos más los 2 nuevos. Al principio el test del alga fallaba porque el propio test calculaba el alga que alimenta con el periodo ya a 0; corregido el test.
 - **Calibración** (semilla 0, 100 épocas): P4-generación (salto cada 1.000 pasos), P4-efímera (cada 150), P4-lento (deriva de siempre) y P4-alga (sorteo cada 2.000). Arranca al terminar el coste 5. Diseño en `diseno.md` v1.2 (borrador).
+
+### 10:51–11:12 (22-10) · P3-coste 5: resultado y cierre de P3-coste
+
+- **Qué:** coste 5 por hijo sobre P3-escaso (`7104c15`, cola `p3coste.json`), de 07:53 a 10:51. Ningún mundo se pausó ni se extinguió.
+- **Primaria** (`diseno.md` v1.1): examen limpio en la época 300 de 0,062 / 0,031 / 0,016 / 0,000 / 0,016 frente a 0,000 / 0,000 / 0,047 / 0,016 / 0,047 en P3-escaso: **mejor solo en s0 y s1, 2/5, no pasa.** Controles fijos: 0,11–0,25.
+- **Secundarias** (épocas 151–300): vida 1.022–1.967 (frente a 483–688); umbral 21–34 (época 300); fracción al hijo 0,32–0,54; energía 11–16; neuronas 0,18–1,42; VA −0,030 a +0,005; población 2.549–2.698.
+- **Sonda de hambre** (CPU, 10:52–11:12): 0/5. La que más se acerca es s2 (89,7 % empuja menos con hambre, `abs_rel` 0,032, apenas por encima del máximo de P0, 0,028). En s0 y s4 domina empujar menos (57 %), en s1 se reparte y s3 casi no responde (93 % sin cambio). Genes: `_genes_P3coste5.json` (`scratchpad/p3c5_genes.py`).
+- **Cierre de P3-coste: negativo con los tres costes** (5: 2/5; 10: 3/5; 20: 3/5). El coste ordena la historia de vida (5 → 10 → 20: umbral 21–34 → 32–45 → 50–61, vida ×2–3 → ×3–4 → ×5–6), pero ni el cerebro, ni VA, ni el examen, ni el hambre siguen ese orden. **Camino aparcado** (`caminos.md`). Tabla completa en `p0_factores.md`.
+- **Consecuencia (regla del responsable de las 09:11):** P4-alga cuelga de **P3-escaso**. La calibración ya usaba esa configuración.
+
+### 10:51–11:13 (22-10) · Calibración de P4: fallo al arrancar y primeros resultados
+
+- **Fallo:** a las 10:51 la cola se negó a arrancar porque `FOOD_JUMP_PERIOD` y `ALGA_SWAP_PERIOD` no estaban en `experiment.CONFIG_OVERRIDABLE`. Olvido al escribir el sustrato 2.9.0, que los tests no cubrían porque no pasan por la cola. Corregido en `escalera-p4` (`3fa7776`); las dos constantes se leen al trazar, así que se pueden sustituir. El guion dejaba la marca `p4cal_hecho` aunque el barrido fallara; ahora solo la deja si termina bien. Relanzado a las 10:52 (log del fallo en `runs/fase1d/p4cal_fallo1.log`).
+- **P4-generación** (manchas de P3-disperso que saltan a un sitio al azar cada 1.000 pasos): **se extingue** por primera vez en la época 11 y vuelve a extinguirse una y otra vez tras cada resiembra (población de 2 a 315). Termina las 100 épocas con 310 bichos; VA +0,058 en la época 100, sobre una población recién resembrada.
+- **P4-efímera** (salto cada 150 pasos): extinta en la época 1; el lanzador la para tras 20 épocas seguidas extinta.
+- **Por qué** (`world.resources_step`): donde la mancha desaparece, la comida se pierde a un ritmo r = 1,5 (≈ 0,15 por paso) y donde aparece crece desde casi cero hasta llenarse en ~50–80 pasos. El hueco sin comida es corto; lo que mata es la distancia: las manchas cubren el 9 % del suelo y aparecen en cualquier sitio, lejos para bichos con 18–21 de energía.
+- **Sigue:** P4-lento (referencia, P3-disperso tal cual) y P4-alga. Con los cuatro, proponer al responsable cómo suavizar P4-sitio (salto corto en vez de a cualquier sitio, comida vieja que no se pudre de golpe o periodo más largo).
