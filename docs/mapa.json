@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 00:29",
+ "actualizado": "2026-10-22 02:15",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -367,10 +367,10 @@
    "padre": "P3e",
    "titulo": "P3-disperso: la misma comida, en pocos sitios",
    "corto": "P3-disperso",
-   "estado": "en curso",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "negativo",
    "anade": "comida concentrada en el 9 % del suelo (K_CUT 1,5, k_mean 8,686; misma comida total)",
-   "texto": "Decisión del responsable (21-10, 21:10): antes de P4, comprobar si con los hijos pagados compensa buscar comida dispersa y lejana. La misma comida total que P3-escaso, en manchas más ricas y lejanas. En calibración desde las 21:11. Calibración (21:55): 3/3 sobreviven, con más empuje y más neuronas que P3-escaso. Primaria: examen limpio en la época 300 mayor que P3-escaso en 5/5 (diseno v1.0). Se lanza tras la calibración del coste.",
+   "texto": "Decisión del responsable (21-10, 21:10): antes de P4, comprobar si con los hijos pagados compensa buscar comida dispersa y lejana. La misma comida total que P3-escaso, en manchas más ricas y lejanas. En calibración desde las 21:11. Calibración (21:55): 3/3 sobreviven, con más empuje y más neuronas que P3-escaso. Primaria: examen limpio en la época 300 mayor que P3-escaso en 5/5 (diseno v1.0). Se lanza tras la calibración del coste. 22-10, 01:57: no pasa (3/5). Examen en la época 300: 0,016 / 0,109 / 0,031 / 0,000 / 0,109, frente a 0,000 / 0,000 / 0,047 / 0,016 / 0,047; solo s4 supera a los controles. Indicio: los hijos se encarecen (umbral 31–40 frente a 10–19), los cuerpos crecen y conservan más cerebro (1,6–5,2 neuronas, frente a 0,05–1,45); VA mezclado.",
    "condicion": "P3-disperso",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",

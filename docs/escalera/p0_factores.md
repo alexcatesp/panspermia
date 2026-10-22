@@ -46,7 +46,7 @@
 | # | Factor | Hoy | Por qué hay que decidirlo | Bibliografía | Prueba en P0 | Estado |
 |---|---|---|---|---|---|---|
 | D1 | **Dónde nace el hijo** | pegado al padre (a 2 radios) | Crea vecindarios de parientes (aislamiento por distancia). Eso favorece la cooperación y la señal, pero la competencia local entre parientes puede anularlo. Cambiarlo más tarde cambiaría toda la evolución social | wright1943isolation, taylor1992viscous, west2002kincompetition, werfel2015death | P0-feliz-nacer-azar (✅ 5 mundos) y control (✅ 1 mundo, idéntico bit a bit). **En P0 no cambia nada genético** (5/5 idénticos); solo el parentesco del vecindario: junto al padre, 22–62 veces el global; al azar, ≈ 1. **Responsable (19-10, 11:15): junto al padre por ahora; las dos opciones se prueban en el peldaño social** | ✅ ⏭ social |
-| D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0. P2 con el examen limpio: no buscan (≤ 11 %) porque la comida cubre el 87 % del suelo. **Responsable (21-10): P2-buscar con comida dispersa (K_CUT 1,5, ADR-022).** P2-buscar (15:38): no buscan (examen 1/5); con energía regalada, la comida escasa da un mundo como P1 | ✗ P2-buscar (con hijos regalados, la comida dispersa no enseña a buscar); pendiente del responsable |
+| D2 | **Tamaño del mundo** | 1.024 × 1.024 | Sin comida ni interacción no cambia nada | — | Ninguna en P0. P2 con el examen limpio: no buscan (≤ 11 %) porque la comida cubre el 87 % del suelo. **Responsable (21-10): P2-buscar con comida dispersa (K_CUT 1,5, ADR-022).** P2-buscar (15:38): no buscan (examen 1/5); con energía regalada, la comida escasa da un mundo como P1. P3-disperso (22-10, 01:57; hijos pagados, la misma comida que P3-escaso en el 9 % del suelo): examen mejor en 3/5 (no pasa); hijos más caros, cuerpos más grandes y más cerebro (1,6–5,2 neuronas) | ✗ P2-buscar (con hijos regalados, la comida dispersa no enseña a buscar); pendiente del responsable |
 
 ## E. Codificación del cerebro
 
@@ -483,3 +483,34 @@ Genes de reproducción: `scratchpad/p3e_genes.py`, `_genes_P3escaso.json`.
 - **Examen limpio:** encuentran la mancha lejana el 0–5 % de las veces, peor que los controles fijos. Sin pausas.
 - **Conclusión: positivo** según el criterio prerregistrado (la comida limita la población). P3-escaso es el primer mundo de la escalera donde la comida decide quién tiene hijos. Pero, igual que en P2, buscar comida quieta no necesita cerebro.
 - Datos: `runs/fase1d/P3-escaso`, `_analisis_P3escaso.json`, `_genes_P3escaso.json` (`scratchpad/p3e_an.py`, `p3e_genes.py`).
+
+### 22-10-2026, 01:57 · P3-disperso: la misma comida, en pocos sitios (5 mundos)
+
+Criterio prerregistrado en `diseno.md` v1.0. Rama `escalera-buscar` (`8faa492`), `K_CUT` 1,5 y `k_mean` 8,686: la misma comida total que P3-escaso, concentrada en el 9 % del suelo. Corrió de 22:34 a 01:57. Ningún mundo se pausó ni se extinguió. Medias de las épocas 151–300, emparejadas por semilla con P3-escaso:
+
+| Medida | P3-escaso | **P3-disperso** | P3-disperso frente a P3-escaso |
+|---|---|---|---|
+| Examen limpio: mancha, época 300 (**primaria**: mayor) | 0,000 / 0,000 / 0,047 / 0,016 / 0,047 | **0,016 / 0,109 / 0,031 / 0,000 / 0,109** | **3/5: no pasa** (s2 y s3 peor) |
+| Examen limpio: mancha, media de las épocas 151–300 | 0,000–0,062 | 0,031–0,102 | mayor en 4/5 |
+| Controles fijos del examen (época 300) | 0,08–0,16 | 0,06–0,13 | supera a los controles solo en s4 |
+| Población | 2.516–2.690 | **2.242–2.338** (mínimo 1.611) | menor en 5/5 |
+| Umbral para tener hijos (época 300) | 10,5–19,3 | **31,5–40,4** | más alto en 5/5 |
+| Fracción de energía al hijo (época 300) | 0,26–0,40 | 0,32–0,46 | más alta en 4/5 |
+| Vivos con energía para un hijo (época 300) | 1–3 % | 0,6–15 % | — |
+| Energía media | 6–9 | **18–21** | el triple |
+| Vida media | 483–688 | 287–662 | menor en 4/5 |
+| Generación máxima | 335–452 | 624–877 | — |
+| Comida ingerida por época (miles) | 176–192 | 152–212 | mayor en 4/5 |
+| Empuje | 6,4–7,8 | 5,5–9,1 | mayor en 4/5 |
+| Masa | 0,26–0,28 | **0,31–1,26** | mayor en 5/5 |
+| Neuronas ocultas | 0,05–1,45 | **1,55–5,22** (época 300: 1,37–4,27) | más en 5/5 |
+| VA de la ingesta | −0,021 a +0,009 | −0,118 a +0,070 (época 300: −0,21 a +0,13) | mezclado |
+| Examen limpio: laberinto | 0,00–0,02 | 0,00–0,01 | sin pausa |
+
+Genes de reproducción: `scratchpad/p3d_genes.py`, `_genes_P3disperso.json`.
+
+- **La primaria no pasa (3/5).** Encuentran la mancha lejana algo más que en P3-escaso en s0, s1 y s4, pero peor en s2 y s3. Solo s4 supera a los controles fijos. En la media de las épocas 151–300 ganan en 4/5, pero eso es descriptivo.
+- **Cambian cuerpo, cerebro e hijos.** Con la comida en pocas manchas ricas, la selección ya no elige hijos baratos. El umbral se triplica (31–40 frente a 10–19) y cada hijo nace con más energía (unas 10–19 unidades frente a 3–5). Los cuerpos son más grandes (masa hasta 1,26), conservan más cerebro (1,6–5,2 neuronas, más en 5/5) y viven con el triple de energía.
+- **VA mezclado:** aprender en vida ayuda en unos mundos (s1, s2) y perjudica en otro (s3). No hay señal común.
+- **Conclusión: negativo** según el criterio prerregistrado (3/5). **Indicio:** la dispersión de la comida, por sí sola, encarece a los hijos y mantiene más cerebro, que es justo lo que P3-escaso había perdido. Pero no basta para que buscar lejos compense de forma clara.
+- Datos: `runs/fase1d/P3-disperso`, `_analisis_P3disperso.json`, `_genes_P3disperso.json` (`scratchpad/p3d_an.py`, `p3d_genes.py`).

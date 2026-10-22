@@ -925,3 +925,22 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - **Curiosidad de P1:** el 93–98 % de los bichos recorren algo menos cuando se creen hambrientos (5/5), pero apenas se mueven (2–8 unidades) y el tamaño es menor que en P0.
 - **Por qué cuadra:** la energía solo cambia lo que conviene hacer si hay una decisión que dependa de ella, por ejemplo arriesgarse a buscar lejos o quedarse. En estos mundos la conducta innata (avanzar a la comida que se ve) vale igual con hambre que sin ella, y el cerebro se vacía (P3-escaso: 0,05–1,45 neuronas).
 - **Siguiente:** repetir la sonda en P3-disperso y en P3-coste cuando terminen. Allí la comida está lejos o cada hijo cuesta, y la energía debería pesar más en las decisiones.
+
+### 01:57–02:15 (22-10) · P3-disperso: resultado
+
+- **Qué:** P3 con hijos pagados y la misma comida que P3-escaso, concentrada en el 9 % del suelo (`K_CUT` 1,5, `k_mean` 8,686). Rama `escalera-buscar` (`8faa492`), cola `p3disperso.json`, 5 mundos × 300 épocas, de 22:34 a 01:57. Criterio en `diseno.md` v1.0.
+- **Primaria:** éxito en el examen limpio (mancha) en la época 300, mayor que en P3-escaso.
+  - P3-disperso: 0,016 / 0,109 / 0,031 / 0,000 / 0,109.
+  - P3-escaso: 0,000 / 0,000 / 0,047 / 0,016 / 0,047.
+  - Gana en **3/5: no pasa.** En la media de las épocas 151–300 gana en 4/5 (descriptivo). Solo s4 supera a los controles fijos.
+- **Secundarias** (épocas 151–300):
+  - Población 2.242–2.338, frente a 2.516–2.690.
+  - Energía media 18–21, frente a 6–9.
+  - Neuronas 1,55–5,22, frente a 0,05–1,45 (más en 5/5).
+  - Masa 0,31–1,26, frente a 0,26–0,28.
+  - Empuje mayor en 4/5.
+  - Vida 287–662, menor en 4/5.
+  - VA mezclado: −0,12 a +0,07.
+- **Genes** (época 300): umbral 31,5–40,4 (frente a 10,5–19,3) y fracción 0,32–0,46. La selección ya no elige hijos baratos: cada hijo nace con unas 10–19 unidades, frente a 3–5.
+- **Conclusión: negativo** (3/5), con un **indicio**: la dispersión, por sí sola, encarece a los hijos y conserva cerebro y cuerpo, pero no basta para que buscar lejos compense de forma clara. Detalle en `p0_factores.md`; camino aparcado en `caminos.md`.
+- **Sigue:** P3-coste. Tests desde las 01:58; después, costes 10, 20 y 5. Sonda de hambre sobre P3-disperso en CPU desde las 02:05.
