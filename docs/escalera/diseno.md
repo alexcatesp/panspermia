@@ -242,3 +242,27 @@ Escrito antes de tener datos. Los criterios se fijan tras la calibración y ante
   - **P4-alga con el doble de algas** (`k_mean` 3,804): la comida útil media es la de P3-escaso, así que lo único que cambia respecto al padre es qué alga alimenta.
   - **P4-sitio con salto corto:** en cada periodo, todo el campo de comida se traslada `FOOD_JUMP_DIST` en una dirección al azar respecto a su sitio de siempre (traslación rígida: misma forma y misma comida). Rama `escalera-p4`, `5590724`, sustrato 2.10.0; con el salto corto apagado, idéntica bit a bit a `escalera-coste` (test nuevo: el campo es el de siempre desplazado 128 u).
 - **Segunda calibración** (`scratchpad/p4cal2.json`, `p4cal2.sh`; semilla 0, 100 épocas; salida `runs/fase1d/_calP4b`, marca `p4cal2_hecho`), desde las 12:16: P4-alga con doble de algas; P4-sitio con saltos de 64 y 128 u cada 1.000 y cada 150 pasos.
+
+## v1.3 · 22-10-2026, 15:13 · P4-alga: criterio fijado (decisión del responsable)
+
+Escrito antes de lanzar los 5 mundos, con la calibración ya hecha.
+
+- **Segunda calibración (12:16–13:13, `runs/fase1d/_calP4b`, semilla 0, 100 épocas):**
+
+| Variante | ¿Viable? | VA (épocas 20 → 100) | Neuronas (época 100) |
+|---|---|---|---|
+| P4-alga, doble de algas | sí | 0,16 / −0,01 / −0,03 / −0,01 / 0,03 | 2,45 |
+| Salto 64 u cada 1.000 pasos | sí | 0,12 / 0,14 / 0,86 / 0,77 / 0,30 | 7,0 |
+| Salto 128 u cada 1.000 pasos | sí | 0,49 / 0,42 / 0,41 / 0,28 / 0,04 | 0,65 |
+| Salto 64 u cada 150 pasos | extinto en la época 3 (después se recupera) | −0,12 a 0,10 | 2,3 |
+| Salto 128 u cada 150 pasos | extinto | — | — |
+
+- **Decisión del responsable (15:13):**
+  - Se lanza solo **P4-alga** con el doble de algas.
+  - La **comida efímera** (cambios dentro de una vida) queda **aparcada** (`caminos.md`): con 64 y 128 u cada 150 pasos se extingue.
+  - Los saltos cortos cada 1.000 pasos (64 u, con el indicio de VA alto, y 128 u) quedan en espera hasta ver P4-alga.
+- **Mundo:** rama `escalera-p4` (`2e41573`, sustrato 2.10.0), cola `p4.json`. Es P3-escaso con `k_mean` 3,804 (el doble de algas, para que la comida útil media sea la de P3-escaso) y `ALGA_SWAP_PERIOD` 2.000. Semillas 0–4, 300 épocas, desde cero. Antes, la suite completa en GPU; si falla, no se lanza (`scratchpad/p4alga.sh`, marca `p4alga_hecho`).
+- **Primaria (5/5 semillas emparejadas):** VA de la ingesta (gemelo congelado), media de las épocas 151–300, **mayor que 0 y mayor que en P3-escaso** con la misma semilla. Valores de P3-escaso: s0 −0,000; s1 +0,001; s2 +0,009; s3 −0,021; s4 −0,003. Un mundo extinguido o pausado sin revisión cuenta como fallo.
+- **Secundarias, descriptivas:** VA_log, neuronas, empuje, ingesta, vida, población, genes de reproducción, examen limpio (época 300) y sonda de hambre. Además, una medida propia de P4-alga: la fracción de la ingesta que viene del alga que alimenta en cada momento, si se puede calcular sin tocar la simulación.
+- **Predicción:** P4-alga es donde más se espera VA > 0 (stephens1991change, dunlap2009components). Pero la calibración da VA ≈ 0 a partir de la época 40 y el cerebro se vacía (2,45 neuronas). Lo más probable es que salga negativo: con el signo del canal de recurso visible, puede bastar una regla innata del tipo «come las dos y quédate donde ganes energía».
+- **Duración estimada** (por la calibración, ~0,23 h por 100 épocas): suite ~40 min y unas 3,5 h para los 5 mundos.
