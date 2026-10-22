@@ -205,3 +205,34 @@ Rama `escalera-coste` (`7104c15`, sustrato 2.8.0, examen sin química), cola `p3
 - **Tres pruebas:** cada coste se juzga por separado; no se elige "el mejor" a posteriori como si fuera el único. Si pasan varios, se informa de todos.
 - **Predicción:** vidas más largas y más neuronas que P3-escaso en los tres. El examen, dudoso: una sola semilla de calibración.
 - **Duración estimada** (por los tiempos de la calibración: ~0,65 h por mundo): P3-disperso hasta ~02:15; tests ~35 min; cada coste ~3,3 h. Coste 10 hacia las 06:00, coste 20 hacia las 09:20 y coste 5 hacia las 12:30 (estimaciones). No cabe ningún coste más antes de las 07:00.
+
+## v1.2 · 22-10-2026, 09:30 · P4: el mundo cambia a un ritmo dado (decisiones del responsable, 09:06 y 09:11) — borrador
+
+Escrito antes de tener datos. Los criterios se fijan tras la calibración y antes de lanzar los 5 mundos.
+
+- **Decisión 1 (09:06):** P4 va antes que la comida efímera y el olfato. Cambia una sola cosa, el ritmo del cambio, y la comida efímera es su hermana rápida. El olfato queda aparcado (`caminos.md`).
+- **Decisión 2 (09:11).** Al diseñarlo aparecieron dos problemas:
+  - Si los bichos ven la comida, «ir hacia lo que ves» sirve esté donde esté. Por eso que la comida cambie de sitio quizá no obligue a aprender. Según stephens1991change y dunlap2009components, aprender compensa cuando cambia qué señal lleva al premio.
+  - Con la comida de P3-escaso (87 % del suelo), moverla apenas cambia nada.
+
+  El responsable decidió dos familias de hermanos: **P4-sitio**, sobre P3-disperso (comida en manchas), y **P4-alga**. El padre de P4-alga será el coste 5 si pasa; si no, P3-escaso.
+- **Código:** rama `escalera-p4` (worktree `panspermia-p4`, `0ca3215`, sustrato 2.9.0, desde `escalera-coste`).
+  - `config.FOOD_JUMP_PERIOD`: cada periodo, las manchas saltan a un sitio al azar (fases nuevas).
+  - `config.ALGA_SWAP_PERIOD`: cada periodo se sortea qué alga alimenta (A o B, que el bicho ya distingue por el signo del canal de recurso). La otra se come, pero no da energía ni cuenta como ingesta; no es veneno.
+  - El sorteo usa una clave propia de cada mundo y es al azar, no periódico, para que no baste anticiparlo de forma innata (mitchell2009adaptive).
+  - Apagados, el mundo es idéntico bit a bit a `escalera-coste`. Hay dos tests nuevos.
+
+| Mundo | Padre | Cambia | Ritmo (calibración) |
+|---|---|---|---|
+| P4-generación | P3-disperso | la comida salta a un sitio al azar | cada 1.000 pasos (unas 2–3 generaciones de P3-disperso, que se renuevan cada 340–480 pasos) |
+| P4-efímera | P3-disperso | ídem | cada 150 pasos (varias veces por vida) |
+| P4-lento | P3-disperso | la deriva lenta de siempre (`K_DRIFT`) | — |
+| P4-alga | coste 5 o P3-escaso | se sortea qué alga alimenta | cada 2.000 pasos (unas 2–3 generaciones de P3-escaso) |
+
+- **Primaria propuesta (para cada mundo, 5/5 semillas emparejadas):** VA de la ingesta (gemelo congelado, media de las épocas 151–300) mayor que 0 y mayor que en el padre. Un mundo extinguido cuenta como fallo.
+- **Secundarias:** neuronas, examen limpio, sonda de hambre, vida, genes de reproducción.
+- **Predicción:**
+  - P4-sitio: VA ≈ 0, porque la comida se ve y la regla innata basta. Puede aparecer búsqueda tras el salto (empuje, examen).
+  - P4-efímera: o búsqueda localizada (hills2004dopamine) o un mundo demasiado pobre.
+  - P4-alga: es donde más se espera VA > 0.
+- **Calibración** (`scratchpad/p4cal.json`, `p4cal.sh`; semilla 0, 100 épocas; salida `runs/fase1d/_calP4`): arranca sola al terminar P3-coste (marca `p3coste_hecho`) y deja la marca `p4cal_hecho`.

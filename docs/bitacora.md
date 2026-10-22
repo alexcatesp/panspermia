@@ -1005,3 +1005,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **El olfato queda aparcado:** es un sentido nuevo y lo más probable es que dé una búsqueda innata, como la de *E. coli* (berg1972chemotaxis).
 - **Padre de P4:** se decide al terminar el coste 5 (hacia las 10:30). Si pasa, P4 se construye sobre él; si no, sobre P3-escaso. Mientras tanto se prepara el diseño y el código.
 - Riesgo anotado (mitchell2009adaptive): si el cambio entre generaciones es regular, puede bastar una anticipación innata. Para evitarlo, el sitio nuevo de la comida será al azar.
+
+### 09:11–09:30 (22-10) · P4: dos familias de hermanos (decisión del responsable) y código
+
+- Al diseñar P4 aparecieron dos problemas. Primero, los bichos ven la comida, así que la regla innata «ve hacia lo que ves» sirve aunque la comida cambie de sitio. Segundo, la comida de P3-escaso cubre el 87 % del suelo.
+- **Responsable (09:11):**
+  - Sitio y alga, como dos hermanos.
+  - P4-sitio cuelga de P3-disperso.
+  - P4-alga cuelga del coste 5 si pasa; si no, de P3-escaso.
+- **Código:** rama `escalera-p4` (`0ca3215`, sustrato 2.9.0), con `FOOD_JUMP_PERIOD` y `ALGA_SWAP_PERIOD`.
+  - Bit a bit igual a `escalera-coste` con los dos apagados (edad `6e95fcba…`, energía `65bdc0c7…`).
+  - Tests de `test_escalera.py` y `test_units.py`, en CPU: 15 correctos más los 2 nuevos. Al principio el test del alga fallaba porque el propio test calculaba el alga que alimenta con el periodo ya a 0; corregido el test.
+- **Calibración** (semilla 0, 100 épocas): P4-generación (salto cada 1.000 pasos), P4-efímera (cada 150), P4-lento (deriva de siempre) y P4-alga (sorteo cada 2.000). Arranca al terminar el coste 5. Diseño en `diseno.md` v1.2 (borrador).

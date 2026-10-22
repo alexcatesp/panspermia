@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 09:06",
+ "actualizado": "2026-10-22 09:30",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -392,13 +392,13 @@
   },
   {
    "id": "P4",
-   "padre": "P3e",
+   "padre": "P3d",
    "titulo": "P4 · La comida cambia de sitio",
    "corto": "P4 · Comida que cambia",
    "estado": "pendiente",
    "resultado": null,
    "anade": "el ritmo al que la comida cambia de sitio",
-   "texto": "Decisión del responsable (22-10, 09:06): P4 antes que la comida efímera y el olfato. Cambia una sola cosa, el ritmo al que la comida cambia de sitio, con tres hermanos: entre generaciones (estable durante una vida: la condición en la que, según Stephens, aprender compensa), dentro de una vida (comida efímera) y la deriva lenta de siempre. La pregunta es si aparece VA > 0. Padre: el coste 5 si pasa; si no, P3-escaso (se decide hacia las 10:30). El olfato queda aparcado.",
+   "texto": "Decisión del responsable (22-10, 09:06): P4 antes que la comida efímera y el olfato. Cambia una sola cosa, el ritmo al que la comida cambia de sitio, con tres hermanos: entre generaciones (estable durante una vida: la condición en la que, según Stephens, aprender compensa), dentro de una vida (comida efímera) y la deriva lenta de siempre. La pregunta es si aparece VA > 0. El olfato queda aparcado. Decisión del responsable (09:11): dos familias de hermanos. P4-sitio (los tres ritmos) cuelga de P3-disperso, porque con la comida de P3-escaso (87 % del suelo) moverla no cambia nada. P4-alga (se sortea qué alga alimenta) cuelga del coste 5 si pasa; si no, de P3-escaso. Rama escalera-p4 (sustrato 2.9.0); en calibración tras P3-coste (diseno v1.2).",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true
@@ -410,11 +410,11 @@
    "corto": "P4-generación",
    "estado": "pendiente",
    "resultado": null,
-   "anade": "la comida salta a un sitio al azar cada ~1 vida",
+   "anade": "la comida salta a un sitio al azar cada 1.000 pasos (unas 2–3 generaciones)",
    "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009).",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
-   "principal": true
+   "principal": false
   },
   {
    "id": "P4e",
@@ -423,7 +423,7 @@
    "corto": "P4-efímera",
    "estado": "pendiente",
    "resultado": null,
-   "anade": "la comida salta varias veces por vida",
+   "anade": "la comida salta cada 150 pasos (varias veces por vida)",
    "texto": "Comida que aparece y desaparece varias veces en una vida: puede premiar buscar cerca de donde se comió (búsqueda localizada, Hills 2004) o volver inútil lo aprendido.",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
@@ -441,6 +441,19 @@
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": false
+  },
+  {
+   "id": "P4a",
+   "padre": "P3e",
+   "titulo": "P4-alga: cambia qué alga alimenta",
+   "corto": "P4-alga",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "cada 2.000 pasos se sortea qué alga (A o B) alimenta; la otra no da nada",
+   "texto": "Decisión del responsable (22-10, 09:11). Es la condición de Stephens al pie de la letra: cambia qué señal lleva al premio, entre generaciones pero no durante una vida. Los bichos ya distinguen A y B por el signo del canal de recurso. Padre: el coste 5 si pasa; si no, P3-escaso. Es donde más se espera VA > 0, y hace de puente hacia P5 (veneno).",
+   "ref": "docs/escalera/diseno.md",
+   "recurso": "GPU",
+   "principal": true
   },
   {
    "id": "P5",
