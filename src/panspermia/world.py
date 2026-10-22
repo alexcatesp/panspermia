@@ -60,6 +60,7 @@ class EnvParams:
     attack_on: jax.Array   # f32: 0 = nadie puede atacar (ni paga por intentarlo)
     chem_on: jax.Array     # f32: 0 = no se emiten sustancias
     signal_on: jax.Array   # f32: 0 = la señal no se emite (todos ven y oyen 0)
+    gut_sense: jax.Array   # f32: 1 = el cerebro siente la tripa (ADR-024); 0 = la entrada queda a 0
 
 
 def make_env(node_id: bytes) -> EnvParams:
@@ -95,6 +96,7 @@ def make_env(node_id: bytes) -> EnvParams:
         attack_on=jnp.float32(1.0),
         chem_on=jnp.float32(1.0),
         signal_on=jnp.float32(1.0),
+        gut_sense=jnp.float32(0.0),
     )
 
 
@@ -118,7 +120,7 @@ def with_overrides(env: EnvParams, **kw) -> EnvParams:
             raise ValueError(f"repro_mode inválido: {mode}")
     if "max_age" in kw and not 1 <= int(kw["max_age"]) <= C.NO_MAX_AGE:
         raise ValueError("max_age debe estar en [1, NO_MAX_AGE]")
-    for k in ("metabolism", "attack_on", "chem_on", "signal_on"):
+    for k in ("metabolism", "attack_on", "chem_on", "signal_on", "gut_sense"):
         if k in kw and float(kw[k]) not in (0.0, 1.0):
             raise ValueError(f"{k} debe ser 0 o 1")
     if "k_mean" in kw and not float(kw["k_mean"]) >= 0.0:
@@ -295,7 +297,8 @@ def sense(state, cand: jax.Array) -> tuple[jax.Array, jax.Array]:
     Por rayo (16, en el cono del cuerpo): proximidad del obstáculo más cercano, agente o pared
     (1 − d/alcance), recurso medio a lo largo del rayo (relativo a K_MEAN), parentesco del agente
     detectado (1 − distancia de color/√3) y su señal. Después: energía, velocidad (adelante,
-    lateral), reloj (sen, cos) y señal recibida (media de los vecinos dentro del alcance).
+    lateral), reloj (sen, cos) y señal recibida (media de los vecinos dentro del alcance). Al final,
+    las 9 químicas y la tripa (energía de lo comido en los últimos GUT_WINDOW pasos, ADR-024).
     """
     ph = state.pheno
     safe, valid, rel, _, r_j = _gather_neighbors(cand, state.pos, state.vel, ph.radius, state.alive)
@@ -351,7 +354,9 @@ def sense(state, cand: jax.Array) -> tuple[jax.Array, jax.Array]:
         jnp.tanh(state.energy / C.E_OBS_SCALE), v_fwd, v_lat,
         jnp.full((n,), jnp.sin(clock)), jnp.full((n,), jnp.cos(clock)), recv,
     ], axis=-1)
-    obs = jnp.concatenate([rays, own, sense_chem(state.chem, state.pos, heading, lateral)], axis=-1)
+    gut = jnp.tanh(jnp.sum(state.gut, axis=-1) / C.GUT_OBS_SCALE) * state.env.gut_sense
+    obs = jnp.concatenate([rays, own, sense_chem(state.chem, state.pos, heading, lateral), gut[:, None]],
+                          axis=-1)
     return jnp.where(state.alive[:, None], obs, 0.0), jnp.where(state.alive, n_near, 0)
 
 

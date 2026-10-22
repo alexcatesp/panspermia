@@ -61,6 +61,7 @@ class IslandState:
     energy: jax.Array       # f32[N]
     age: jax.Array          # int32[N]
     signal: jax.Array       # f32[N]
+    gut: jax.Array          # f32[N, GUT_WINDOW]: energía de lo comido en los últimos pasos (ADR-024)
     genome: G.Genome        # eje N delante
     pheno: Phenotype        # f16[N, 134, 69] + escalares de cuerpo
     w: jax.Array            # f32[N, 134, 69]
@@ -134,6 +135,7 @@ def _place(state: IslandState, idx, genomes, pheno, pos, angle, energy, uid, par
         energy=set_(state.energy, energy),
         age=set_(state.age, 0),
         signal=set_(state.signal, 0.0),
+        gut=set_(state.gut, 0.0),
         genome=_scatter(state.genome, idx, genomes),
         pheno=_scatter(state.pheno, idx, pheno),
         w=set_(state.w, pheno.w0.astype(jnp.float32)),
@@ -176,6 +178,7 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         energy=jnp.where(alive, jnp.float32(C.E_INIT), jnp.float32(0.0)),
         age=jnp.zeros((n_max,), jnp.int32),
         signal=jnp.zeros((n_max,)),
+        gut=jnp.zeros((n_max, C.GUT_WINDOW)),
         genome=genomes,
         pheno=pheno,
         w=pheno.w0.astype(jnp.float32),
@@ -309,8 +312,9 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     nb = len(C.RECOVERY_EDGES) + 1
     recov_intake = jax.ops.segment_sum(intake, rbin, num_segments=nb)
     recov_toxic = jax.ops.segment_sum(toxic_in, rbin, num_segments=nb)
+    gut = state.gut.at[:, state.step % C.GUT_WINDOW].set(jnp.where(alive0, gain, 0.0))
     state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
-                          signal=signal)
+                          signal=signal, gut=gut)
     atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
     emit_cost, emitted, chem = world.emit(chem, pos, alive0, actions, state.env.chem_on)
     tox_dmg, chem, resources = world.toxin(chem, resources, pos, alive0, state.energy)
@@ -354,6 +358,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     by_age = died & ~by_attack & ~by_poison & (old | (state.age >= C.SENESCENCE_START))
     alive = alive0 & ~died
     state = state.replace(energy=jnp.where(alive, energy, 0.0), alive=alive,
+                          gut=jnp.where(alive[:, None], state.gut, 0.0),
                           age=jnp.where(alive, state.age + 1, 0))
 
     if births:

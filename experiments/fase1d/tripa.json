@@ -1,0 +1,86 @@
+[
+ {
+  "name": "P4-alga-tripa",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "TRIPA",
+  "description": "P4-alga con la tripa (ADR-024; decisión del responsable, 22-10, 22:22): la última entrada del cerebro lleva la energía que ha dado lo comido en los últimos 4 pasos, con su signo. Sustrato 3.0.0. Criterio: diseno.md v1.5.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_SWAP_PERIOD": 2000
+  }
+ },
+ {
+  "name": "P4-alga-sin-tripa",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "TRIPA",
+  "description": "Control de P4-alga-tripa en el mismo sustrato 3.0.0: la entrada de la tripa queda a 0 (gut_sense 0).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804,
+   "gut_sense": 0
+  },
+  "config": {
+   "ALGA_SWAP_PERIOD": 2000
+  }
+ },
+ {
+  "name": "P3-escaso-tripa",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "TRIPA",
+  "description": "Contraste de la teoría: P3-escaso (la comida que alimenta no cambia nunca) con la tripa. Se predice VA ≈ 0: el sentido se cablearía de forma innata.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 1.902,
+   "gut_sense": 1
+  }
+ }
+]

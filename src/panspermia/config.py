@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.10.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.0.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -10,7 +10,8 @@ SUBSTRATE_VERSION = "2.10.0"  # major distinto => migrantes rechazados (2.x: qu�
                              # 2.7: comida dispersa elegible (config.K_CUT), P2-buscar, ADR-022;
                              # 2.8: coste fijo por hijo elegible (config.REPRO_COST), P3-coste, ADR-023;
                              # 2.9: comida que cambia de sitio y alga que alimenta (FOOD_JUMP_PERIOD, ALGA_SWAP_PERIOD), P4;
-                             # 2.10: salto corto de la comida (FOOD_JUMP_DIST), P4)
+                             # 2.10: salto corto de la comida (FOOD_JUMP_DIST), P4;
+                             # 3.0: sentido de la tripa, una entrada más, ADR-024)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -21,7 +22,7 @@ RAY_CONE_DEG = 180.0
 RAY_CHANNELS = 4  # distancia, recurso (con signo según tipo de alga), agente, señal
 N_CHEM = 3        # sustancias: nutriente, toxina, feromona (ADR-008)
 CHEM_OBS = 3 * N_CHEM  # por sustancia: concentración local, gradiente adelante y lateral
-OBS_DIM = N_RAYS * RAY_CHANNELS + 6 + CHEM_OBS  # 64 + energía, vel(2), reloj(2), señal + 9 = 79
+OBS_DIM = N_RAYS * RAY_CHANNELS + 6 + CHEM_OBS + 1  # 64 + energía, vel(2), reloj(2), señal + 9 + tripa = 80
 ACT_DIM = 5 + N_CHEM  # empuje, giro, comer, atacar, señal, emitir nutriente/toxina/feromona = 8
 
 # --- Población ---
@@ -134,6 +135,13 @@ RAY_SAMPLES = 4              # muestras de recurso por rayo
 # Energía (unidades de energía = unidades de recurso)
 E_INIT = 30.0
 E_OBS_SCALE = 50.0
+# Tripa (ADR-024, decisión del responsable del 22-10, 22:22): última entrada del cerebro. Lleva la energía
+# que ha dado lo comido en los últimos GUT_WINDOW pasos, con su signo (alga que alimenta +, alga vacía 0,
+# veneno −): tanh(suma / GUT_OBS_SCALE) si env.gut_sense = 1, y 0 si no. La ventana es la de la
+# plasticidad (PLASTICITY_EVERY), para que cada paso de aprendizaje vea todos los bocados desde el anterior.
+# Un bocado lleno es EAT_RATE · DT = 0,5: con la escala 1, uno da 0,46 y cuatro, 0,96.
+GUT_WINDOW = 4
+GUT_OBS_SCALE = 1.0
 V_OBS_SCALE = 10.0
 CLOCK_PERIOD = 500           # pasos
 C_BASAL = 0.5                # c0

@@ -163,3 +163,34 @@ def test_alga_swap_only_one_alga_feeds(monkeypatch):
     assert out[1000][1][feeds] > 0 and out[1000][1][1 - feeds] == 0
     assert np.isclose(out[1000][0][feeds], out[0][0][feeds])
     assert out[1000][0][1 - feeds] < out[0][0][1 - feeds]
+
+
+def test_gut_sense_reports_energy_from_eating_over_window(monkeypatch):
+    """Tripa (ADR-024): la última entrada es tanh(energía dada por lo comido en los últimos GUT_WINDOW
+    pasos / GUT_OBS_SCALE), con su signo; el alga vacía da 0. Apagada (por defecto), la entrada es 0."""
+    monkeypatch.setattr(config, "ALGA_SWAP_PERIOD", 1000)
+    ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0, "metabolism": 0, "gut_sense": 1}
+    s = island.init_island(0, b"escalera-test", n_max=2, n_init=2, env_overrides=ov)
+    assert float(world.make_env(b"escalera-test").gut_sense) == 0
+    a = np.asarray(world.algae_type_a(s.env, s.step))
+    cells = [np.argwhere(a)[0], np.argwhere(~a)[0]]
+    pos = jnp.asarray([(c + 0.5) * world.RES_CELL for c in cells], jnp.float32)
+    s = s.replace(pos=pos, vel=jnp.zeros_like(s.vel), energy=jnp.full(2, 50.0),
+                  resources=jnp.full_like(s.resources, 5.0))
+    feeds = 0 if bool(world.nourishing_is_a(s.env, s.step)) else 1
+    eat = jnp.array([1.0, 0.0, 0.0])
+    energies = [np.asarray(s.energy)]
+    for _ in range(config.GUT_WINDOW + 1):
+        s, _ = island.world_step(s, plastic=False, births=False, control=eat)
+        energies.append(np.asarray(s.energy))
+    gut = np.asarray(s.gut).sum(1)
+    window = energies[-1] - energies[-1 - config.GUT_WINDOW]   # sin metabolismo: energía = lo comido
+    assert gut[feeds] > 0 and np.isclose(gut[feeds], window[feeds], atol=1e-4)  # energía en f32 cerca de 50
+    assert gut[1 - feeds] == 0
+    obs, _ = world.sense(s, world.neighbors(s.pos, s.alive))
+    assert obs.shape[1] == config.OBS_DIM
+    assert np.allclose(np.asarray(obs[:, -1]), np.tanh(gut / config.GUT_OBS_SCALE), atol=1e-6)
+    off, _ = world.sense(s.replace(env=s.env.replace(gut_sense=jnp.float32(0.0))),
+                         world.neighbors(s.pos, s.alive))
+    assert np.all(np.asarray(off[:, -1]) == 0)
+    assert np.allclose(np.asarray(off[:, :-1]), np.asarray(obs[:, :-1]))
