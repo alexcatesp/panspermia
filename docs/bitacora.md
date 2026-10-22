@@ -1156,3 +1156,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Tests nuevos `test_fixed_body_radius` y `test_fixed_birth_offset`, con los de P4: 7 en verde (CPU).
   - Como el runner no guarda la época 50 (solo 100, 200 y las 5 últimas), s1 y s2 se repiten hasta la 50, lo que sirve además de prueba de determinismo. Después, `scripts/branch_run.py` cambia la clave del mundo.
 - **Encadenado:** `scratchpad/masa_dia.sh`, en espera de `tripa_hecho`.
+
+### 00:32–01:20 (23-10) · La tripa arranca
+
+- **Tests:** la suite en GPU pasó a las 00:32 (85 correctos y 1 omitido, 67 min); los tests rápidos en CPU, a las 01:17 (27 correctos y 1 omitido).
+- **Código:** rama `escalera-tripa` confirmada y subida (`48bb468`, sustrato 3.0.0).
+- **Marcha:** P4-alga-tripa s0 terminó viva (población final 3.555, 0,70 h por mundo). Con ese ritmo, los 15 mundos acaban hacia las 11:00 y las pruebas de la masa empiezan solas después.
