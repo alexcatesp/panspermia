@@ -1047,3 +1047,28 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **P4-sitio con salto corto:** el campo de comida entero se traslada `FOOD_JUMP_DIST` en dirección al azar respecto a su sitio de siempre. Entre dos periodos, las manchas se mueven de 0 a 2·`FOOD_JUMP_DIST` (de media, ~1,27 veces).
 - **Código:** `escalera-p4`, `5590724`, sustrato 2.10.0. Bit a bit igual a `escalera-coste` con todo apagado (edad `6e95fcba…`, energía `65bdc0c7…`). Tests de `test_escalera.py` y `test_units.py` en CPU: 17 correctos, entre ellos el nuevo `test_food_short_jump_is_rigid_shift`, que comprueba con una correlación en el toro que el campo es el de siempre desplazado 128 u.
 - **Segunda calibración** desde las 12:16 (`scratchpad/p4cal2.json`, salida `runs/fase1d/_calP4b`, marca `p4cal2_hecho`), semilla 0 y 100 épocas: P4-alga con doble de algas; P4-sitio con saltos de 64 y 128 u, cada 1.000 y cada 150 pasos.
+
+### 12:16–13:13 (22-10) · Segunda calibración de P4 (salto corto y doble de algas)
+
+- **Qué:** `escalera-p4` (`5590724`, sustrato 2.10.0), `scratchpad/p4cal2.json`, semilla 0, 100 épocas, salida `runs/fase1d/_calP4b`. Medias de las épocas 51–100.
+
+| Variante | Resultado | VA (épocas 20 / 40 / 60 / 80 / 100) | Población | Vida | Masa | Neuronas | Empuje |
+|---|---|---|---|---|---|---|---|
+| P4-alga, doble de algas | viva (2.596 en la época 100) | 0,16 / −0,01 / −0,03 / −0,01 / 0,03 | 2.246 | 812 | 0,50 | 3,35 | 10,9 |
+| Salto 64 u cada 1.000 | viva (2.191) | 0,12 / 0,14 / 0,86 / 0,77 / 0,30 | 2.409 | 184 | 2,87 | 6,70 | 5,1 |
+| Salto 128 u cada 1.000 | viva (2.451) | 0,49 / 0,42 / 0,41 / 0,28 / 0,04 | 2.003 | 303 | 2,35 | 1,98 (época 100: 0,65) | 8,6 |
+| Salto 64 u cada 150 | extinta en la época 3; se recupera (962) | 0,07 / −0,09 / −0,12 / 0,04 / 0,10 | 748 | 491 | 0,73 | 5,84 | 7,2 |
+| Salto 128 u cada 150 | extinta en la época 3; parada | — | — | — | — | — | — |
+| *P4-lento (primera calibración)* | *viva* | *0,32 / 0,02 / 0,58 / 0,13 / 0,05* | *1.509* | *495* | *0,72* | *6,84* | *9,0* |
+| *P3-escaso s0 (épocas 51–100)* | — | *0,07 / −0,01 / −0,00 / 0,00 / −0,00* | *2.765* | *1.010* | — | *2,47* | *6,5* |
+
+- **Lectura:**
+  - **El doble de algas salva a P4-alga.** Se mueven mucho más que en P3-escaso (empuje 10,9 frente a 6,5), comen algo más y VA ≈ 0 desde la época 40.
+  - **Los saltos cortos cada 1.000 pasos son viables.** Con 64 u, el VA de las épocas 60–100 es el más alto de la escalera (media 0,64, frente a 0,25 en P4-lento y 0,15 en P3-disperso s0). Pero el VA alto en las primeras épocas ya se vio en los mundos de comida dispersa y luego se apagó. Con 128 u el VA baja hasta 0,04 y el cerebro se vacía. Los dos dan bichos grandes (masa 2,3–2,9) de vida corta (184–303 pasos) y muchos nacimientos (8.000–12.000 por época), con crisis tras cada salto. **Indicio, una sola semilla.**
+  - **Los cambios dentro de una vida (cada 150 pasos) extinguen el mundo.**
+
+### 15:13 (22-10) · Decisión del responsable: solo P4-alga; efímera aparcada; lanzamiento
+
+- **Responsable:** se lanza **solo P4-alga** con el doble de algas, 5 mundos × 300 épocas. La comida efímera queda **aparcada** (`caminos.md`). Los saltos cortos cada 1.000 pasos quedan en espera.
+- **Criterio prerregistrado** antes de lanzar (`diseno.md` v1.3, `6390637`): VA de la ingesta (media de las épocas 151–300) mayor que 0 y mayor que en P3-escaso, en 5/5 semillas emparejadas.
+- **Lanzamiento:** cola `p4.json` de `escalera-p4` (`2e41573`), `scratchpad/p4alga.sh`. Primero la suite completa en GPU (si falla, no se lanza); después, los 5 mundos (log `runs/fase1d/p4alga.log`, marca `p4alga_hecho`). Duración estimada: ~40 min de tests y ~3,5 h de mundos.
