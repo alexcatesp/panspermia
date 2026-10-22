@@ -1093,3 +1093,20 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Responsable:** tras P4-alga (no pasa, 3/5), se lanza **P4-salto64**: P3-disperso con el campo de comida desplazado 64 u en dirección al azar cada 1.000 pasos. El salto de 128 u y las semillas 5–9 de P4-alga quedan en espera.
 - **Criterio prerregistrado** antes de lanzar (`diseno.md` v1.4): VA de la ingesta (épocas 151–300) mayor que 0 y mayor que en P3-disperso, en 5/5 semillas emparejadas.
 - **Lanzamiento:** cola `p4sitio.json` de `escalera-p4` (`ba5e16e`), `scratchpad/p4sitio.sh` (log `runs/fase1d/p4sitio.log`, marca `p4sitio_hecho`). Sin repetir la suite: el código es el mismo con el que pasó a las 15:43.
+
+### 20:57 (22-10) · ¿Palos de ciego? Decisión del responsable: diagnóstico antes de más peldaños
+
+- **Pregunta del responsable:** «¿No te parece que estamos dando palos de ciego?». Respuesta: en parte sí. Desde P2 llevamos nueve negativos seguidos (P2-buscar, P3, P3-disperso, los tres costes, P4-alga…) cambiando el mundo sin saber por qué no se aprende, y nunca se comprobó si este cerebro puede aprender estas tareas.
+- **Sospechas:**
+  1. El bicho casi no nota que ha comido: su única pista es el nivel de energía (`tanh(E/50)`).
+  2. No conocemos el suelo de ruido del VA.
+  3. En P4-alga, comer el alga equivocada no cuesta nada, así que «come de todo» ya funciona.
+  4. Además, ya hay un sitio donde aprender compensa: E1, con veneno (VA_log > 0 en 40 de 44 mundos). Se podría bajar desde ahí quitando interruptores.
+- **Responsable:** diagnóstico primero, en la CPU; P4-salto64 sigue hasta terminar.
+- **Diagnóstico** (`scratchpad/diag_aprender.py`, solo observa, con el código de `escalera-p4`): (A) quién puede aprender (sin neurona moduladora expresada, m = 0 y no hay plasticidad); (B) suelo de ruido del VA (tres gemelos congelados con una «mariposa»: un bicho desplazado 0,001 u); (C) cuánto cambia el canal de energía con un bocado frente a los rayos, y si la modulación se correlaciona con comer.
+- **Prueba con P4-alga s1, época 300 (22:04–22:06):**
+  - El 97,7 % de los vivos tiene una moduladora expresada, así que casi todos pueden aprender.
+  - Cuando la energía sube (19,5 % de los pasos; +0,40 de media), el canal de energía cambia 0,007, frente a 0,134 de media en los rayos (19 veces menos; p99: 0,009 frente a 0,99).
+  - Correlación entre la modulación y la subida de energía: 0,007.
+  - Indicio: la señal de «he comido» está enterrada y la modulación no la usa.
+- **Diagnóstico completo** en marcha desde las 22:07 (P4-alga, P3-escaso y P3-disperso, 5 semillas cada uno; salida `runs/fase1d/_diag_aprender.jsonl`).
