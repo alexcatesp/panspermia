@@ -293,5 +293,6 @@ Escrito antes de lanzar.
   - las de v1.3 (VA_log, pruebas de VA positivas, neuronas, empuje, ingesta, vida, población, genes, examen, sonda de hambre);
   - el diagnóstico de `diag_aprender.py`: correlación entre la modulación y lo comido, peso de la tripa en las moduladoras y suelo de ruido del VA;
   - P4-alga-sin-tripa frente a P4-alga (2.10), para ver cuánto cambia el sustrato nuevo por sí solo.
+  - **Añadida a las 23:15, antes de lanzar** (artículo traído por el responsable: xu2026sparse; schultz1997neural): ¿la modulación `m` sigue a la tripa en bruto o a su sorpresa? Se medirá por mundo la correlación de `m` con la tripa y con la tripa menos su media reciente del propio bicho (huella exponencial; detalle en el análisis). También, si anular las moduladoras que más pesan de la tripa reduce la ingesta más que anular otras al azar. Solo se describe; no forma parte del criterio.
 - **Predicción:** abierta. Es la primera vez que la consecuencia de comer es visible. Si la evolución engancha la tripa a la modulación, debería aparecer VA > 0 en P4-alga-tripa. Lo más probable, de todos modos, es que pase en algunos mundos y no en 5/5.
 - **Duración estimada:** suite ~30 min y unas 9 h para los 15 mundos (unos 37 min cada uno).
