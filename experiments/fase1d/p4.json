@@ -1,0 +1,30 @@
+[
+ {
+  "name": "P4-alga",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "epochs": 300,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P4",
+  "description": "P4-alga (decisiones del responsable del 22-10, 09:11, 12:08 y 15:13): P3-escaso con el doble de algas (k_mean 3,804, la comida útil media es la de P3-escaso) y el alga que alimenta sorteada cada 2.000 pasos (unas 2–3 generaciones); la otra se come pero no alimenta. Padre: P3-escaso. Criterio: diseno.md v1.3.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804
+  },
+  "config": {
+   "ALGA_SWAP_PERIOD": 2000
+  }
+ }
+]
