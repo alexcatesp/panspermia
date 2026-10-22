@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 11:13",
+ "actualizado": "2026-10-22 12:16",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -411,7 +411,7 @@
    "estado": "pendiente",
    "resultado": null,
    "anade": "la comida salta a un sitio al azar cada 1.000 pasos (unas 2–3 generaciones)",
-   "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009).",
+   "texto": "Estable durante una vida, distinta para los hijos: lo heredado sirve de poco y lo aprendido sí (Stephens 1991; Dunlap y Stephens 2009). El sitio nuevo es al azar, para que no baste anticiparlo de forma innata (Mitchell 2009). Calibración (22-10): con saltos a cualquier sitio se extingue (las manchas quedan a cientos de unidades y los bichos ven a 64). Decisión del responsable (12:08): salto corto, con todo el campo desplazado 64 o 128 u (FOOD_JUMP_DIST, sustrato 2.10.0). Segunda calibración desde las 12:16.",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": false
@@ -424,7 +424,7 @@
    "estado": "pendiente",
    "resultado": null,
    "anade": "la comida salta cada 150 pasos (varias veces por vida)",
-   "texto": "Comida que aparece y desaparece varias veces en una vida: puede premiar buscar cerca de donde se comió (búsqueda localizada, Hills 2004) o volver inútil lo aprendido.",
+   "texto": "Comida que aparece y desaparece varias veces en una vida: puede premiar buscar cerca de donde se comió (búsqueda localizada, Hills 2004) o volver inútil lo aprendido. Calibración (22-10): con saltos a cualquier sitio se extingue (las manchas quedan a cientos de unidades y los bichos ven a 64). Decisión del responsable (12:08): salto corto, con todo el campo desplazado 64 o 128 u (FOOD_JUMP_DIST, sustrato 2.10.0). Segunda calibración desde las 12:16.",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": false
@@ -437,7 +437,7 @@
    "estado": "pendiente",
    "resultado": null,
    "anade": "las manchas se desplazan despacio (K_DRIFT)",
-   "texto": "El P4 original: deriva lenta comparada con una vida. Control de los otros dos ritmos.",
+   "texto": "El P4 original: deriva lenta comparada con una vida. Control de los otros dos ritmos. Calibración (22-10): sano (2.108 bichos, VA −0,18 en la época 100).",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": false
@@ -450,7 +450,7 @@
    "estado": "pendiente",
    "resultado": null,
    "anade": "cada 2.000 pasos se sortea qué alga (A o B) alimenta; la otra no da nada",
-   "texto": "Decisión del responsable (22-10, 09:11). Es la condición de Stephens al pie de la letra: cambia qué señal lleva al premio, entre generaciones pero no durante una vida. Los bichos ya distinguen A y B por el signo del canal de recurso. Padre: P3-escaso, porque el coste 5 no pasó (2/5, 22-10, 10:51). Es donde más se espera VA > 0, y hace de puente hacia P5 (veneno).",
+   "texto": "Decisión del responsable (22-10, 09:11). Es la condición de Stephens al pie de la letra: cambia qué señal lleva al premio, entre generaciones pero no durante una vida. Los bichos ya distinguen A y B por el signo del canal de recurso. Padre: P3-escaso, porque el coste 5 no pasó (2/5, 22-10, 10:51). Es donde más se espera VA > 0, y hace de puente hacia P5 (veneno). Calibración (11:29): con la mitad de las algas sin alimento, la comida útil cae a la mitad y el mundo se extingue en la época 5. Decisión del responsable (12:08): el doble de algas (k_mean 3,804), para que la comida útil media sea la de P3-escaso. Segunda calibración desde las 12:16.",
    "ref": "docs/escalera/diseno.md",
    "recurso": "GPU",
    "principal": true

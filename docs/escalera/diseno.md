@@ -236,3 +236,9 @@ Escrito antes de tener datos. Los criterios se fijan tras la calibración y ante
   - P4-efímera: o búsqueda localizada (hills2004dopamine) o un mundo demasiado pobre.
   - P4-alga: es donde más se espera VA > 0.
 - **Calibración** (`scratchpad/p4cal.json`, `p4cal.sh`; semilla 0, 100 épocas; salida `runs/fase1d/_calP4`): arranca sola al terminar P3-coste (marca `p3coste_hecho`) y deja la marca `p4cal_hecho`.
+- **Padre de P4-alga (10:51):** el coste 5 no pasó (2/5), así que P4-alga cuelga de P3-escaso.
+- **Primera calibración (10:52–11:29, `runs/fase1d/_calP4`; detalle en la bitácora):** solo sobrevive P4-lento (2.108 bichos, VA −0,18 en la época 100). P4-generación se extingue una y otra vez desde la época 11; P4-efímera, en la época 1; P4-alga, en la época 5. Saltar a cualquier sitio deja las manchas a cientos de unidades (los bichos ven a 64), y con el alga sorteada la comida útil cae a la mitad de la de P3-escaso.
+- **Decisión 3 del responsable (12:08):**
+  - **P4-alga con el doble de algas** (`k_mean` 3,804): la comida útil media es la de P3-escaso, así que lo único que cambia respecto al padre es qué alga alimenta.
+  - **P4-sitio con salto corto:** en cada periodo, todo el campo de comida se traslada `FOOD_JUMP_DIST` en una dirección al azar respecto a su sitio de siempre (traslación rígida: misma forma y misma comida). Rama `escalera-p4`, `5590724`, sustrato 2.10.0; con el salto corto apagado, idéntica bit a bit a `escalera-coste` (test nuevo: el campo es el de siempre desplazado 128 u).
+- **Segunda calibración** (`scratchpad/p4cal2.json`, `p4cal2.sh`; semilla 0, 100 épocas; salida `runs/fase1d/_calP4b`, marca `p4cal2_hecho`), desde las 12:16: P4-alga con doble de algas; P4-sitio con saltos de 64 y 128 u cada 1.000 y cada 150 pasos.

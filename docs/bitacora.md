@@ -1034,3 +1034,16 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **P4-efímera** (salto cada 150 pasos): extinta en la época 1; el lanzador la para tras 20 épocas seguidas extinta.
 - **Por qué** (`world.resources_step`): donde la mancha desaparece, la comida se pierde a un ritmo r = 1,5 (≈ 0,15 por paso) y donde aparece crece desde casi cero hasta llenarse en ~50–80 pasos. El hueco sin comida es corto; lo que mata es la distancia: las manchas cubren el 9 % del suelo y aparecen en cualquier sitio, lejos para bichos con 18–21 de energía.
 - **Sigue:** P4-lento (referencia, P3-disperso tal cual) y P4-alga. Con los cuatro, proponer al responsable cómo suavizar P4-sitio (salto corto en vez de a cualquier sitio, comida vieja que no se pudre de golpe o periodo más largo).
+
+### 11:13–11:29 (22-10) · Calibración de P4: P4-lento y P4-alga
+
+- **P4-lento** (P3-disperso con la deriva de siempre, referencia): sano. 2.108 bichos en la época 100 (mínimo 1.865), 294 generaciones, 6,8 neuronas, VA −0,18.
+- **P4-alga** (P3-escaso con el alga sorteada cada 2.000 pasos): 7 bichos en la época 1 y extinta en la época 5; el lanzador la para tras 20 épocas seguidas extinta. P3-escaso ya bajaba a 16–75 bichos al arrancar; si solo alimenta la mitad de las algas, la comida útil cae otra vez a la mitad.
+- **Conclusión:** de las cuatro variantes solo vive la referencia. Tal como estaban diseñadas, P4-sitio y P4-alga mezclan el cambio con una pérdida de comida (por distancia o por cantidad).
+
+### 12:08–12:16 (22-10) · Decisión del responsable: doble de algas y salto corto; segunda calibración
+
+- **P4-alga con el doble de algas** (`k_mean` 3,804, la comida de P2): la comida útil media es la de P3-escaso, de modo que solo cambia qué alga alimenta.
+- **P4-sitio con salto corto:** el campo de comida entero se traslada `FOOD_JUMP_DIST` en dirección al azar respecto a su sitio de siempre. Entre dos periodos, las manchas se mueven de 0 a 2·`FOOD_JUMP_DIST` (de media, ~1,27 veces).
+- **Código:** `escalera-p4`, `5590724`, sustrato 2.10.0. Bit a bit igual a `escalera-coste` con todo apagado (edad `6e95fcba…`, energía `65bdc0c7…`). Tests de `test_escalera.py` y `test_units.py` en CPU: 17 correctos, entre ellos el nuevo `test_food_short_jump_is_rigid_shift`, que comprueba con una correlación en el toro que el campo es el de siempre desplazado 128 u.
+- **Segunda calibración** desde las 12:16 (`scratchpad/p4cal2.json`, salida `runs/fase1d/_calP4b`, marca `p4cal2_hecho`), semilla 0 y 100 épocas: P4-alga con doble de algas; P4-sitio con saltos de 64 y 128 u, cada 1.000 y cada 150 pasos.
