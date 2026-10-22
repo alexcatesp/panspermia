@@ -944,3 +944,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Genes** (época 300): umbral 31,5–40,4 (frente a 10,5–19,3) y fracción 0,32–0,46. La selección ya no elige hijos baratos: cada hijo nace con unas 10–19 unidades, frente a 3–5.
 - **Conclusión: negativo** (3/5), con un **indicio**: la dispersión, por sí sola, encarece a los hijos y conserva cerebro y cuerpo, pero no basta para que buscar lejos compense de forma clara. Detalle en `p0_factores.md`; camino aparcado en `caminos.md`.
 - **Sigue:** P3-coste. Tests desde las 01:58; después, costes 10, 20 y 5. Sonda de hambre sobre P3-disperso en CPU desde las 02:05.
+
+### 02:05–02:18 (22-10) · Sonda de hambre en P3-disperso
+
+- `runs/fase1d/_hambre.jsonl` (mismo método; `--kcut 1,5`, código de `escalera-buscar`).
+- **Tamaño |Δempuje| / desviación:** 0,026–0,136, por encima de los nulos (0,028) en 4/5.
+- **Dirección:**
+  - Empujan más con hambre: 27–39 %.
+  - Empujan menos: 7–26 %.
+  - No cambian: 42–59 %.
+  - Ningún mundo llega al 90 % en una dirección (0/5).
+- **Recorrido en 200 pasos:** igual con y sin hambre (46–53 % recorren más).
+- **No hay hambre** según la regla. La única novedad es que el sentido dominante es empujar más con hambre en 5/5, al revés que en P3-escaso, pero en minoría. Queda pendiente P3-coste.

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 02:15",
+ "actualizado": "2026-10-22 02:18",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -357,7 +357,7 @@
    "estado": "hecho",
    "resultado": "negativo",
    "anade": "engañar al cerebro con la energía que siente (5 frente a 100)",
-   "texto": "Petición del responsable (21-10, 22:45): si la conducta cambia según la energía del bicho, ha aparecido algo parecido al hambre. Dos copias de cada mundo guardado que solo difieren en la energía sentida; nulos: P0 y genomas al azar. Lectura prerregistrada: en ≥ 4/5 mundos, > 90 % de los bichos en la misma dirección, coincidente entre mundos y mayor que los nulos. 22-10, 00:29: no hay hambre en ningún tipo de mundo. P3-escaso se acerca (2/5: casi todos empujan algo menos con hambre). En P2, P3 y P2-buscar el cerebro usa la energía 3–7 veces más que los nulos, pero en sentidos opuestos según el bicho (indicio). Se repetirá en P3-disperso y P3-coste.",
+   "texto": "Petición del responsable (21-10, 22:45): si la conducta cambia según la energía del bicho, ha aparecido algo parecido al hambre. Dos copias de cada mundo guardado que solo difieren en la energía sentida; nulos: P0 y genomas al azar. Lectura prerregistrada: en ≥ 4/5 mundos, > 90 % de los bichos en la misma dirección, coincidente entre mundos y mayor que los nulos. 22-10, 00:29: no hay hambre en ningún tipo de mundo. P3-escaso se acerca (2/5: casi todos empujan algo menos con hambre). En P2, P3 y P2-buscar el cerebro usa la energía 3–7 veces más que los nulos, pero en sentidos opuestos según el bicho (indicio). P3-disperso (22-10, 02:18): tampoco (0/5; los que empujan más con hambre, 27–39 %, ganan a los que empujan menos en 5/5). Falta P3-coste.",
    "ref": "bitácora 22-10, 00:09",
    "recurso": "CPU",
    "principal": false
