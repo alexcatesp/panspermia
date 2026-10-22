@@ -96,6 +96,8 @@ def develop(genome: Genome) -> Phenotype:
     body = genome.body.astype(jnp.float32)
     life = genome.life.astype(jnp.float32)
     radius = _to_range(body[0], C.RADIUS_BOUNDS)
+    if C.BODY_RADIUS_FIXED > 0:  # pruebas de la masa: cuerpo fijo
+        radius = jnp.float32(C.BODY_RADIUS_FIXED)
     return Phenotype(
         w0=masked(C.W_INIT_SCALE * jnp.tanh(o[..., 0])),
         A=coef(1), B=coef(2), C=coef(3), D=coef(4),

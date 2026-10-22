@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "2.10.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "2.11.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -10,7 +10,8 @@ SUBSTRATE_VERSION = "2.10.0"  # major distinto => migrantes rechazados (2.x: qu�
                              # 2.7: comida dispersa elegible (config.K_CUT), P2-buscar, ADR-022;
                              # 2.8: coste fijo por hijo elegible (config.REPRO_COST), P3-coste, ADR-023;
                              # 2.9: comida que cambia de sitio y alga que alimenta (FOOD_JUMP_PERIOD, ALGA_SWAP_PERIOD), P4;
-                             # 2.10: salto corto de la comida (FOOD_JUMP_DIST), P4)
+                             # 2.10: salto corto de la comida (FOOD_JUMP_DIST), P4;
+                             # 2.11: cuerpo fijo y distancia fija del hijo elegibles, pruebas de la masa)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -223,6 +224,12 @@ ALGA_SWAP_PERIOD: int = 0
 # su sitio de siempre (traslación rígida: misma forma y misma comida total). Entre dos periodos seguidos
 # las manchas se mueven entre 0 y 2·FOOD_JUMP_DIST (de media, ~1,27·FOOD_JUMP_DIST).
 FOOD_JUMP_DIST: float = 0.0
+# Pruebas de la masa (decisión del responsable, 22-10, 23:45; P4-salto64 dio VA > 0 solo en los mundos de cuerpos
+# grandes). Opciones de compilación; 0 = apagado, idéntico bit a bit a 2.10.
+# BODY_RADIUS_FIXED: si es > 0, todos los bichos tienen este radio (la masa queda fija); el gen del radio no
+# se expresa. BIRTH_OFFSET_FIXED: si es > 0, el hijo nace a esta distancia del padre en lugar de a 2 radios.
+BODY_RADIUS_FIXED: float = 0.0
+BIRTH_OFFSET_FIXED: float = 0.0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

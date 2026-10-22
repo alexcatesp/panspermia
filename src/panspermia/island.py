@@ -239,7 +239,10 @@ def _births(state: IslandState, key: jax.Array):
             e_paid = jnp.where(valid & ~by_age, e_paid + jnp.float32(C.REPRO_COST), e_paid)
         p_idx = jnp.where(valid, parents, n)
         theta = jax.random.uniform(k[2], (b,), maxval=2 * math.pi)
-        offset = 2 * state.pheno.radius[parents][:, None] * jnp.stack([jnp.cos(theta), jnp.sin(theta)], -1)
+        dist = 2 * state.pheno.radius[parents]
+        if C.BIRTH_OFFSET_FIXED > 0:  # pruebas de la masa: el hijo nace a una distancia fija
+            dist = jnp.full_like(dist, C.BIRTH_OFFSET_FIXED)
+        offset = dist[:, None] * jnp.stack([jnp.cos(theta), jnp.sin(theta)], -1)
         uid = state.next_uid + jnp.arange(b, dtype=jnp.uint32)
         new_clade = (child_g.generation % C.CLADE_DEPTH) == 0
         clade = jnp.where(new_clade, uid, state.lineage.clade[parents])

@@ -163,3 +163,30 @@ def test_alga_swap_only_one_alga_feeds(monkeypatch):
     assert out[1000][1][feeds] > 0 and out[1000][1][1 - feeds] == 0
     assert np.isclose(out[1000][0][feeds], out[0][0][feeds])
     assert out[1000][0][1 - feeds] < out[0][0][1 - feeds]
+
+
+def test_fixed_body_radius(monkeypatch):
+    """Pruebas de la masa: con BODY_RADIUS_FIXED todos tienen ese radio y la masa que le toca."""
+    monkeypatch.setattr(config, "BODY_RADIUS_FIXED", 6.6)
+    s = island.init_island(0, b"escalera-test", n_max=64, n_init=16)
+    a = np.asarray(s.alive)
+    assert np.allclose(np.asarray(s.pheno.radius)[a], 6.6)
+    assert np.allclose(np.asarray(s.pheno.mass)[a], (6.6 / config.RADIUS_REF) ** 2)
+
+
+def test_fixed_birth_offset(monkeypatch):
+    """Pruebas de la masa: con BIRTH_OFFSET_FIXED el hijo nace a esa distancia del padre, sea cual sea su radio."""
+    monkeypatch.setattr(config, "BIRTH_OFFSET_FIXED", 8.0)
+    ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0}
+    s = island.init_island(0, b"escalera-test", n_max=8, n_init=2, env_overrides=ov)
+    s = s.replace(pos=s.pos.at[0].set(jnp.array([100.0, 100.0])).at[1].set(jnp.array([600.0, 600.0])),
+                  energy=jnp.where(s.alive, 1000.0, 0.0), age=jnp.where(s.alive, config.MIN_REPRO_AGE, 0))
+    s2, n_births, newborn = island._births(s, jax.random.PRNGKey(7))
+    assert int(n_births) == 2
+    born = np.flatnonzero(np.asarray(newborn))
+    parents = {int(u): i for i, u in enumerate(np.asarray(s.lineage.uid)[:2])}
+    for b in born:
+        p = parents[int(np.asarray(s2.lineage.parent_uid)[b])]
+        d = np.asarray(s2.pos)[b] - np.asarray(s.pos)[p]
+        d = (d + config.WORLD_L / 2) % config.WORLD_L - config.WORLD_L / 2
+        assert np.isclose(np.linalg.norm(d), 8.0, atol=1e-3)
