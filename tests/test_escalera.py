@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import numpy as np
 import pytest
 
-from panspermia import config, island, world
+from panspermia import brain, config, island, world
 
 # Peldaño 0 con una vida corta para que el test quepa en 300 pasos (en el experimento, 600)
 P0 = {"metabolism": 0, "k_mean": 0.0, "seasonal": 0, "repro_mode": "edad", "max_age": 230,
@@ -194,3 +194,36 @@ def test_gut_sense_reports_energy_from_eating_over_window(monkeypatch):
                          world.neighbors(s.pos, s.alive))
     assert np.all(np.asarray(off[:, -1]) == 0)
     assert np.allclose(np.asarray(off[:, :-1]), np.asarray(obs[:, :-1]))
+
+
+
+def test_eating_brakes_movement(monkeypatch):
+    """Comer frena (ADR-025): con EAT_MOVE_FACTOR 0, quien come no se mueve y quien no come sí; la política
+    fija del examen (control) no frena. Con el factor por defecto (1), comer no cambia el movimiento."""
+    ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0, "metabolism": 0}
+    s0 = island.init_island(0, b"escalera-test", n_max=2, n_init=2, env_overrides=ov)
+    s0 = s0.replace(pos=jnp.asarray([[100.0, 100.0], [600.0, 600.0]]), vel=jnp.zeros_like(s0.vel))
+    real_step = brain.step
+
+    def fake_step(w, h, obs, hid_mask):  # empuje máximo y sin giro; solo el primero come
+        actions, h_new, pre, post = real_step(w, h, obs, hid_mask)
+        fixed = jnp.zeros_like(actions).at[:, 0].set(1.0).at[0, 2].set(1.0).at[1, 2].set(-1.0)
+        return fixed, h_new, pre, post
+
+    def moved(factor, control=None):
+        monkeypatch.setattr(config, "EAT_MOVE_FACTOR", factor)
+        jax.clear_caches()  # la constante se lee al trazar
+        s = s0
+        for _ in range(5):
+            s, _ = island.world_step(s, plastic=False, births=False, control=control)
+        jax.clear_caches()
+        return np.linalg.norm(np.asarray(s.pos) - np.asarray(s0.pos), axis=1)
+
+    monkeypatch.setattr(brain, "step", fake_step)
+    free, braked = moved(1.0), moved(0.0)
+    assert free[0] > 0 and free[1] > 0                              # sin freno, los dos se mueven
+    assert braked[0] == 0 and np.isclose(braked[1], free[1])        # con freno, quien come no se mueve
+    monkeypatch.setattr(brain, "step", real_step)
+    eat_push = jnp.array([1.0, 1.0, 0.0])                           # examen: empuje 1, giro 0, come
+    assert np.all(moved(0.0, control=eat_push) > 0)
+    assert np.allclose(moved(0.0, control=eat_push), moved(1.0, control=eat_push))

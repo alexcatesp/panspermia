@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "3.0.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.1.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -11,7 +11,8 @@ SUBSTRATE_VERSION = "3.0.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 2.8: coste fijo por hijo elegible (config.REPRO_COST), P3-coste, ADR-023;
                              # 2.9: comida que cambia de sitio y alga que alimenta (FOOD_JUMP_PERIOD, ALGA_SWAP_PERIOD), P4;
                              # 2.10: salto corto de la comida (FOOD_JUMP_DIST), P4;
-                             # 3.0: sentido de la tripa, una entrada más, ADR-024)
+                             # 3.0: sentido de la tripa, una entrada más, ADR-024;
+                             # 3.1: comer frena (EAT_MOVE_FACTOR), ADR-025)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -231,6 +232,11 @@ ALGA_SWAP_PERIOD: int = 0
 # su sitio de siempre (traslación rígida: misma forma y misma comida total). Entre dos periodos seguidos
 # las manchas se mueven entre 0 y 2·FOOD_JUMP_DIST (de media, ~1,27·FOOD_JUMP_DIST).
 FOOD_JUMP_DIST: float = 0.0
+# EAT_MOVE_FACTOR (ADR-025, «comer frena»; decisión del responsable, 23-10): mientras la salida de comer está
+# encendida, el empuje se multiplica por este factor (0 = no puede moverse mientras come; el tiempo de
+# manipulación de holling1959some). 1 (por defecto) = como siempre, idéntico bit a bit. La política fija del
+# examen (control, ADR-011) no frena, para que su referencia no cambie.
+EAT_MOVE_FACTOR: float = 1.0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

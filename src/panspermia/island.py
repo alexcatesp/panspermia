@@ -298,7 +298,13 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     if control is not None:
         fixed = jnp.zeros_like(actions).at[:, 0].set(control[1]).at[:, 1].set(control[2]).at[:, 2].set(1.0)
         actions = jnp.where(control[0] > 0, fixed, actions)
-    pos, vel, angle, thrust = world.physics(state, actions, cand)
+    move = actions
+    if C.EAT_MOVE_FACTOR != 1.0:  # comer frena (ADR-025); la política fija del examen no frena
+        brake = jnp.where(actions[:, 2] > 0, jnp.float32(C.EAT_MOVE_FACTOR), jnp.float32(1.0))
+        if control is not None:
+            brake = jnp.where(control[0] > 0, jnp.float32(1.0), brake)
+        move = actions.at[:, 0].multiply(brake)
+    pos, vel, angle, thrust = world.physics(state, move, cand)
     toxic = world.toxic_cells(state.env, state.step, state.toxic_type, state.tox_patches)
     toxicity = jnp.clip(state.step.astype(jnp.float32) / C.TOXIC_RAMP_STEPS, 0.0, 1.0)
     gain, intake, toxic_in, nutrient, resources, chem = world.eat(

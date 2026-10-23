@@ -1,0 +1,54 @@
+[
+ {
+  "name": "_calFrena-0.0",
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 30,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "FRENA",
+  "description": "Calibración de comer frena (ADR-025): factor 0.0, semilla 0, 30 épocas.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_SWAP_PERIOD": 2000,
+   "EAT_MOVE_FACTOR": 0.0
+  }
+ },
+ {
+  "name": "_calFrena-0.25",
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 30,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "FRENA",
+  "description": "Calibración de comer frena (ADR-025): factor 0.25, semilla 0, 30 épocas.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_SWAP_PERIOD": 2000,
+   "EAT_MOVE_FACTOR": 0.25
+  }
+ }
+]
