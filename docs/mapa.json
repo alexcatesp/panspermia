@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-22 23:50",
+ "actualizado": "2026-10-23 13:30",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -479,10 +479,10 @@
    "padre": "P4a",
    "titulo": "P4-alga con tripa: el cerebro siente lo que le da lo que come",
    "corto": "P4-alga + tripa",
-   "estado": "en curso",
-   "resultado": null,
+   "estado": "hecho",
+   "resultado": "negativo",
    "anade": "una entrada nueva, la tripa: la energía que ha dado lo comido en los últimos 4 pasos, con su signo (ADR-024)",
-   "texto": "Diagnóstico (22-10, 22:04): casi todos pueden aprender, pero un bocado mueve la entrada de energía 0,007 (los rayos, 0,134) y la modulación no se correlaciona con comer. Responsable (22:22): un canal con la energía de lo comido y su signo, ventana de 4 pasos (la de la plasticidad), sin conectarlo a nada; sustrato 3.0.0, rama escalera-tripa. Cola tripa.json: P4-alga-tripa, control P4-alga-sin-tripa (mismo sustrato) y contraste P3-escaso-tripa (ahí se predice VA ≈ 0). Criterio en diseno v1.5: VA > 0 y > control en 5/5.",
+   "texto": "Diagnóstico (22-10, 22:04): casi todos pueden aprender, pero un bocado mueve la entrada de energía 0,007 (los rayos, 0,134) y la modulación no se correlaciona con comer. Responsable (22:22): un canal con la energía de lo comido y su signo, ventana de 4 pasos (la de la plasticidad), sin conectarlo a nada; sustrato 3.0.0, rama escalera-tripa. Cola tripa.json: P4-alga-tripa, control P4-alga-sin-tripa (mismo sustrato) y contraste P3-escaso-tripa (ahí se predice VA ≈ 0). Criterio en diseno v1.5: VA > 0 y > control en 5/5. Resultado (23-10, 09:19): no pasa (4/5; VA +0,023, +0,114, +0,004, +0,021 y −0,013 frente a +0,020, +0,057, −0,014, −0,038 y +0,004 sin tripa). P3-escaso-tripa, VA ≈ 0, como se predecía. La modulación no sigue a la tripa ni a su sorpresa más que sin ella (|r| ≤ 0,14), y la tripa pesa como cualquier entrada. Diagnóstico de comer (12:48): la salida de comer está encendida el 74–99 % del tiempo, también sin comida, con el alga vacía y con mucha energía. Comer es gratis, así que no hay decisión que aprender. Negativo, con indicio débil.",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
    "principal": true,
@@ -1063,6 +1063,21 @@
    "anade": "la vejez deja de ser una ley del mundo y pasa a ser un gen",
    "texto": "Decisión del responsable (20-10, 09:28): en la escalera la vejez es una ley del mundo; cuando aprender compense (tras P5), un peldaño propio la deja evolucionar. En la Tierra, el envejecimiento evoluciona (Williams 1957, Kirkwood 1977) y en mundos con espacio puede convenir una muerte programada (Werfel et al. 2015). Cambia cuánto dura una generación y cuánto compensa aprender.",
    "ref": "docs/escalera/p0_factores.md"
+  },
+  {
+   "id": "P4atf",
+   "padre": "P4at",
+   "titulo": "Comer frena: mientras come, el bicho no puede moverse",
+   "corto": "P4-alga + tripa + comer frena",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "comer cuesta tiempo: mientras la salida de comer está encendida, el empuje se multiplica por EAT_MOVE_FACTOR (0, o 0,25 si con 0 no son viables) (ADR-025)",
+   "texto": "Diagnóstico (23-10, 12:48): comer es un reflejo siempre encendido; equivocarse al comer no cuesta nada. Bibliografía §18: en los modelos en que el aprendizaje evoluciona, equivocarse se paga (holling1959some, todd1991exploring, niv2002evolution, mery2002experimental). Responsable (23-10): comer frena (el tiempo de manipulación de Holling); tres familias (P4-alga-tripa-frena, padre P4-alga-tripa; P4-alga-sin-tripa-frena; contraste P3-escaso-tripa-frena). Criterio en diseno v1.7: VA > 0 y > padre en 5/5. Sustrato 3.1.0, rama escalera-frena; tras la masa, calibración del factor y 15 mundos (scratchpad/frena_noche.sh).",
+   "ref": "docs/decisiones.md",
+   "recurso": "GPU",
+   "principal": true,
+   "cola": "frena.json",
+   "condicion": "P4-alga-tripa-frena"
   }
  ],
  "hipotesis": [

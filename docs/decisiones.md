@@ -548,3 +548,19 @@ La consecuencia de comer existe, pero el cerebro casi no la ve.
 4. **Sustrato 3.0.0** (rama `escalera-tripa`, worktree `panspermia-tripa`, desde `escalera-p4`): `OBS_DIM` pasa de 79 a 80 (`N_PRE` 144), `IslandState.gut` f32[N, 4] y `EnvParams.gut_sense` (0 por defecto). Con el canal apagado no es idéntico bit a bit al 2.10, porque cambian las posiciones de las entradas en el sustrato de la CPPN. Por eso el control es un gemelo en el mismo sustrato con `gut_sense` 0.
 5. **Aparcado:** un segundo canal «he mordido» (como el gusto), una copia de la acción como entrada, la señal con retraso (efecto Garcia) y la energía neta (con el gasto de moverse).
 6. Antecedentes: la recompensa como entrada y la modulación evolucionada (niv2002evolution, verificada y añadida a `docs/bibliografia/escalera/` §18 el 23-10; soltoggio2008evolutionary, en `docs/bibliografia/1d/`). En la fase 1d, E9 añadió un sentido de malestar con el mismo esquema (sustrato 3.0.0 de `fase1d-e9`, otra rama: no se mezclan).
+
+## ADR-025 · 23-10-2026 · Comer frena: comer cuesta tiempo (decisión del responsable)
+
+**Contexto.** La tripa (ADR-024) no pasa (4/5): la modulación no se engancha a ella. El responsable preguntó por qué comen siempre y si no tienen saciedad. El diagnóstico (`scratchpad/diag_comer.py`, bitácora 23-10, 12:48) muestra que comer es un reflejo siempre encendido:
+- la salida de comer está activa el 74–99 % de los pasos;
+- comen igual donde no hay nada, con el alga que no alimenta y con mucha energía.
+
+En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga vacía no resta. Equivocarse al comer no cuesta nada, así que no hay decisión que aprender. La bibliografía (`docs/bibliografia/escalera/` §18) coincide: en los modelos en los que el aprendizaje evoluciona (todd1991exploring, niv2002evolution, mery2002experimental), elegir mal se paga. En la naturaleza, mientras se come no se busca: es el tiempo de manipulación (holling1959some).
+
+**Decisión (responsable, 23-10-2026; diagnóstico a las 12:30, «comer frena» a las 12:50, mundos y criterio a las 13:15).**
+1. **Comer frena:** mientras la salida de comer está encendida, el empuje se multiplica por `config.EAT_MOVE_FACTOR`. Con 0, el bicho no puede moverse mientras come. Comer donde no hay nada cuesta tiempo de búsqueda, y quedarse o irse pasan a ser opciones excluyentes (charnov1976optimal). No se añade ningún coste de energía arbitrario. Como el empuje frenado tampoco se cobra, comer es más barato que nadar, pero quita tiempo de nadar.
+2. **Factor:** primero 0, lo más fiel a Holling. Si en la calibración (semilla 0, 30 épocas) se extinguen o la población final queda por debajo de 500, se usa 0,25. Si tampoco es viable, se para y se decide con el responsable.
+3. **La política fija del examen no frena** (control de la batería, ADR-011), para que su referencia no cambie. Los cerebros sí frenan durante el examen; el examen puede salir más difícil, nunca más fácil, así que no hay riesgo de falsas pausas por la salvaguarda 5.
+4. **Sustrato 3.1.0** (rama `escalera-frena`, worktree `panspermia-frena`, desde `escalera-tripa`). Con el factor por defecto (1) el código no cambia: el freno solo se traza si el factor es distinto de 1. Test `test_eating_brakes_movement`.
+5. **Mundos** (cola `frena.json`, o `frena025.json` con el factor 0,25): P4-alga-tripa-frena (padre: P4-alga-tripa), P4-alga-sin-tripa-frena (¿hace falta la tripa cuando comer es una decisión?) y P3-escaso-tripa-frena (contraste con comida que no cambia). Criterio en `docs/escalera/diseno.md` v1.7.
+6. **Aparcado:** coste de energía por bocado, estómago con tope (saciedad) y comida en bocados sueltos. Se reabren si «comer frena» no convierte comer en una decisión.

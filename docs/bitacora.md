@@ -1210,3 +1210,10 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - **Alga que no alimenta:** se la comen igual (69–98 %). La excepción es P4-alga-sin-tripa s4, que la evita (37 % frente al 77 % sobre la buena). Es el único mundo que distingue las algas, y no tiene tripa.
   - **Sin saciedad:** en el cuartil alto de energía de cada bicho comen tanto o más que en el bajo (68–99 % frente a 59–98 %).
 - **Conclusión (firme):** comer es un reflejo siempre encendido, independiente de la comida, del alga y de la energía. Equivocarse al comer no cuesta nada: comer donde no hay nada, o el alga que no alimenta, no resta energía ni tiempo. Así no hay presión para decidir cuándo comer, ni nada que la tripa o la plasticidad puedan mejorar. Es un cuello de botella del mundo, no del cerebro.
+
+### 12:50–13:35 (23-10) · Comer frena (ADR-025): bibliografía, código y encadenado
+
+- **Bibliografía (§18, verificada en Crossref):** holling1959some, stephens1986foraging, todd1991exploring, niv2002evolution, mery2002experimental, mery2003fitness, kawecki2010evolutionary. Todas coinciden: el aprendizaje evoluciona cuando hay una señal del resultado (la tripa) y además elegir mal se paga. Nuestro mundo no tenía lo segundo. `f784518`.
+- **Responsable:** comer frena (12:50); tres familias, 15 mundos; criterio VA > 0 y > padre en 5/5 (13:15).
+- **Código:** rama `escalera-frena` (`b7dc22e`, sustrato 3.1.0): `config.EAT_MOVE_FACTOR`, freno en `island.world_step`; la política fija del examen no frena. Test `test_eating_brakes_movement` en CPU, junto con los de la tripa y el alga: 3 correctos.
+- **Encadenado:** `scratchpad/frena_noche.sh`, en espera de `masa_hecho` (suite → calibración → 15 mundos). Criterio en `diseno.md` v1.7.

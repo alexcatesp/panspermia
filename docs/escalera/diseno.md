@@ -312,3 +312,26 @@ Escrito antes de lanzar. En P4-salto64, aprender compensó solo en los mundos qu
   - (3): ¿es contingente el camino de cada mundo? Sí si alguna rama de s1 acaba grande (masa > 1,5 en las épocas 151–300) o alguna de s2 acaba pequeña.
   - (4): ¿influye la distancia del hijo? Se compara con P4-salto64: el número de mundos grandes y su VA. Es descriptiva: con 5 mundos, solo un cambio claro (0 o 5 mundos grandes) contaría.
 - **Orden y duración:** `scratchpad/masa_dia.sh` espera a `tripa_hecho`. Después pasa la suite en GPU y hace e50 → ramas → `masa.json` (log `runs/fase1d/masa.log`, marca `masa_hecho`). Unas 12–13 h, desde las ~9:15 del 23-10.
+
+## v1.7 · 23-10-2026, 13:30 · Comer frena (ADR-025): criterio fijado (decisión del responsable, 13:15)
+
+Escrito antes de lanzar.
+
+- **Mundos** (rama `escalera-frena`, `b7dc22e`, sustrato 3.1.0; semillas 0–4, 300 épocas, desde cero):
+  - **P4-alga-tripa-frena:** P4-alga-tripa con comer frena. Su padre es P4-alga-tripa.
+  - **P4-alga-sin-tripa-frena:** lo mismo con la tripa apagada. ¿Hace falta la tripa cuando comer es una decisión?
+  - **P3-escaso-tripa-frena:** contraste; la comida que alimenta no cambia nunca.
+- **Orden:** `scratchpad/frena_noche.sh` espera a `masa_hecho`. Después:
+  1. pasa la suite completa en GPU; si falla, no se lanza;
+  2. calibra con la cola `frenacal.json`, factor 0 y 0,25, semilla 0, 30 épocas;
+  3. lanza `frena.json` (factor 0) si ese factor es viable (sin extinción y con 500 bichos o más al final); si no, `frena025.json` (0,25); si ninguno es viable, se para.
+  - Log en `runs/fase1d/frena.log`; marca `frena_hecho`.
+- **Primaria (5/5 semillas emparejadas):** VA de la ingesta (gemelo congelado), media de las épocas 151–300, de P4-alga-tripa-frena **mayor que 0 y mayor que en P4-alga-tripa** con la misma semilla. Un mundo extinguido o pausado sin revisión cuenta como fallo.
+- **Comprobación de la manipulación (secundaria prerregistrada):** con `diag_comer.py`, comer debe pasar a ser una decisión. Se mira si la probabilidad de comer donde no hay nada baja claramente respecto a sobre comida buena; en P4-alga-tripa era igual o mayor (85–98 % frente a 63–95 %). Si no cambia, la manipulación ha fallado y el VA no se interpreta.
+- **Secundarias, descriptivas:**
+  - frena con tripa frente a frena sin ella (VA emparejado);
+  - P3-escaso-tripa-frena (se predice VA ≈ 0);
+  - las de v1.3 y v1.5 (VA_log, pruebas positivas, neuronas, empuje, ingesta, vida, población, genes, examen, sonda de hambre, modulación frente a tripa y sorpresa, peso de la tripa en las moduladoras);
+  - el suelo de ruido del VA, en GPU cuando quede libre.
+- **Predicción:** abierta. Es la primera vez que equivocarse al comer cuesta algo. La bibliografía (§18) predice que la decisión de comer debería volverse sensible al contexto y que el aprendizaje tiene más donde apoyarse. Aun así, 5/5 es exigente.
+- **Duración estimada:** suite de ~1 h, calibración de ~25 min y unos 10 h para los 15 mundos. Empezaría hacia la 1:00 del 24-10 y acabaría hacia las 12:00.
