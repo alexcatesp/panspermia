@@ -335,3 +335,14 @@ Escrito antes de lanzar.
   - el suelo de ruido del VA, en GPU cuando quede libre.
 - **Predicción:** abierta. Es la primera vez que equivocarse al comer cuesta algo. La bibliografía (§18) predice que la decisión de comer debería volverse sensible al contexto y que el aprendizaje tiene más donde apoyarse. Aun así, 5/5 es exigente.
 - **Duración estimada:** suite de ~1 h, calibración de ~25 min y unos 10 h para los 15 mundos. Empezaría hacia la 1:00 del 24-10 y acabaría hacia las 12:00.
+
+## v1.8 · 23-10-2026, 13:58 · Comer frena con 10 mundos por condición (decisión del responsable, 13:55)
+
+Escrito antes de lanzar; sustituye la primaria de v1.7. Motivo: la revisión `docs/escalera/condiciones_aprendizaje.md` (C8). El aprendizaje evoluciona solo en una fracción de los linajes (7 % en pontes2020evolutionary; la mitad de las ejecuciones en niv2002evolution), así que 5/5 con 5 mundos puede no detectar un efecto real.
+
+- **Mundos:** las mismas tres familias de v1.7, con las **semillas 0–9** (30 mundos; colas `frena.json` y `frena025.json` de `escalera-frena`, `cba2bf0`). El padre, P4-alga-tripa, se amplía con las semillas 5–9 (cola `tripa10.json` de `escalera-tripa`, `0c96723`; mismo código que las semillas 0–4).
+- **Primaria (prueba de signos emparejada, unilateral):** pares por semilla. Un par es favorable si el VA de las épocas 151–300 de P4-alga-tripa-frena es mayor que 0 y mayor que el del padre con la misma semilla. **Pasa con al menos 9 pares favorables de 10** (p = 0,011 si no hubiera efecto). Un mundo extinguido o pausado sin revisión cuenta como desfavorable.
+- **Lo demás no cambia:** la comprobación de la manipulación (`diag_comer.py`) y las secundarias de v1.7, ahora con 10 semillas.
+- **Orden:** `scratchpad/frena_noche3.sh` espera a `masa_hecho` y `frena_ok` (visto bueno dado a las 13:57). Después: suite completa en GPU, calibración, los 30 mundos y el padre (semillas 5–9). Marca `frena_hecho`.
+- **Duración estimada:** unas 23 h (35 mundos de ~0,6 h, más la suite y la calibración). Empezaría hacia las 3:15 del 24-10 y acabaría hacia las 2:00 del 25-10.
+- **Decisión del responsable sobre C1 (13:55):** solo el freno en este peldaño, un cambio cada vez. Que el alga buena se sortee para cada bicho al nacer queda para el peldaño siguiente.
