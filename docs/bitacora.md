@@ -1162,3 +1162,33 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Tests:** la suite en GPU pasó a las 00:32 (85 correctos y 1 omitido, 67 min); los tests rápidos en CPU, a las 01:17 (27 correctos y 1 omitido).
 - **Código:** rama `escalera-tripa` confirmada y subida (`48bb468`, sustrato 3.0.0).
 - **Marcha:** P4-alga-tripa s0 terminó viva (población final 3.555, 0,70 h por mundo). Con ese ritmo, los 15 mundos acaban hacia las 11:00 y las pruebas de la masa empiezan solas después.
+
+### 09:19–09:45 (23-10) · La tripa: no pasa (4/5); la modulación no se engancha a la tripa
+
+- **Qué:** cola `tripa.json` (rama `escalera-tripa`, `48bb468`, sustrato 3.0.0), 15 mundos × 300 épocas, de 00:32 a 09:19. Todos vivos al final, sin pausas. Datos en `runs/fase1d/P4-alga-tripa`, `P4-alga-sin-tripa` y `P3-escaso-tripa`; resumen en `_analisis_tripa.json` (`scratchpad/tripa_an.py`).
+- **Primaria (diseno v1.5): 4/5, no pasa.** VA de la ingesta, épocas 151–300, con tripa frente a sin tripa:
+
+  | Semilla | Con tripa | Sin tripa | |
+  |---|---|---|---|
+  | s0 | +0,023 | +0,020 | pasa |
+  | s1 | +0,114 | +0,057 | pasa |
+  | s2 | +0,004 | −0,014 | pasa |
+  | s3 | +0,021 | −0,038 | pasa |
+  | s4 | −0,013 | +0,004 | no |
+
+  Pruebas de VA positivas: 13, 15, 9, 12 y 5 de 15 con tripa; 9, 12, 10, 4 y 12 sin ella.
+- **Contraste prerregistrado:** P3-escaso-tripa da VA ≈ 0 (−0,032 a +0,010), como se predecía.
+- **Otras medidas:**
+  - Población, vida (240–323 pasos), empuje e ingesta son parecidas con y sin tripa.
+  - El cerebro sigue vacío: 0,2–2,5 neuronas ocultas.
+  - Han salido cuerpos grandes (masa ≈ 1,75) en dos mundos con tripa (s0, s4) y en uno sin ella (s3); en P4-alga no había ninguno. Aquí no van con el VA: s4 es grande y su VA es negativo.
+  - El sustrato nuevo por sí solo cambia poco: P4-alga-sin-tripa queda dentro de la dispersión de P4-alga.
+- **Diagnóstico** (`scratchpad/diag_tripa.py`, época 300, CPU; `runs/fase1d/_diag_tripa.jsonl`):
+  - **¿Quién puede aprender?** Con tripa, solo una parte de los bichos tiene moduladoras: 16, 98, 6, 2 y 59 %. Sin tripa son el 41–99 %. Con un 2 % de bichos plásticos, el VA de s3 (+0,021) difícilmente es aprendizaje. Sugiere que diferencias de ±0,02 son ruido; el suelo de ruido se está midiendo.
+  - **Cableado:** la tripa llega a casi todas las moduladoras, pero con el mismo peso que cualquier otra entrada (cociente mediano 0,66–1,36; sin tripa, donde la entrada vale 0, 0,44–1,82). La selección no la ha reforzado.
+  - **Premio o sorpresa (correlación dentro de cada bicho, 200 pasos):**
+    - Con tripa: modulación frente a tripa, −0,10 a +0,02; frente a su sorpresa, −0,01 a +0,06.
+    - Sin tripa: −0,06 a +0,14 y −0,03 a +0,17.
+    - La modulación no sigue a la tripa más que cuando el cerebro no la ve.
+  - **La señal apenas informa:** la tripa está encendida en el 74–79 % de los pasos (P3-escaso, 90–97 %) y nunca es negativa. El alga que no alimenta da 0, no resta. Los bichos pastan casi sin parar, así que la tripa dice «estoy sobre comida», algo que los rayos ya ven.
+- **Conclusión:** **negativo, con indicio débil** (4/5, y solo s1 queda claramente por encima de ±0,05). Ver la consecuencia de comer no basta para que la evolución la enganche a la plasticidad. Pendiente: suelo de ruido del VA, genes y sonda de hambre (en CPU, `scratchpad/tripa_post.sh`), y la ablación de moduladoras.
