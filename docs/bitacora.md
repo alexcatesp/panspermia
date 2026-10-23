@@ -1278,4 +1278,4 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Solo cuentan los nacidos durante la sonda.
   - Mide, por grupo y edad: ingesta por paso, P(comer) con y sin comida, velocidad, giro, hijos y muertes por paso. Al final, |w − w0| por bloque (entrada → oculta, empuje, giro o comer).
   - Prueba con grande s0, 100 pasos: los congelados no cambian ningún peso (0 %) y los plásticos sí (95 %). Usa unos 3 GB de RAM.
-  - Lanzada con `setsid` a las 23:31 (`scratchpad/sonda_mixta.sh`): grande y chico, semillas 0–4, época 300, 1.500 pasos. Log `runs/fase1d/sonda_mixta.log`, salida `runs/fase1d/_sonda_mixta.jsonl`, marca `sonda_mixta_hecha`.
+  - Lanzada con `setsid` a las 23:20 (`scratchpad/sonda_mixta.sh`): grande y chico, semillas 0–4, época 300, 1.500 pasos. Log `runs/fase1d/sonda_mixta.log`, salida `runs/fase1d/_sonda_mixta.jsonl`, marca `sonda_mixta_hecha`.
