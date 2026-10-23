@@ -1218,7 +1218,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Código:** rama `escalera-frena` (`b7dc22e`, sustrato 3.1.0): `config.EAT_MOVE_FACTOR`, freno en `island.world_step`; la política fija del examen no frena. Test `test_eating_brakes_movement` en CPU, junto con los de la tripa y el alga: 3 correctos.
 - **Encadenado:** `scratchpad/frena_noche.sh`, en espera de `masa_hecho` (suite → calibración → 15 mundos). Criterio en `diseno.md` v1.7.
 
-### 13:39–14:35 (23-10) · Revisión de las condiciones para que evolucione el aprendizaje
+### 13:39–13:47 (23-10) · Revisión de las condiciones para que evolucione el aprendizaje
 
 - **Pregunta del responsable (13:39):** si la bibliografía ya lo decía, ¿por qué no revisarla a fondo antes de probar? Decidió hacerlo ya, y que comer frena espere su visto bueno (marca `runs/fase1d/frena_ok`).
 - **Incidente:** la cadena de la masa murió a las 12:17, al cerrarse la sesión anterior de Claude, que era quien la había lanzado. Se perdieron ~1 h 20 min de GPU. Se relanzó a las 13:41 con `setsid`/`nohup` dentro de WSL (`scratchpad/masa_dia4.sh`, log `runs/fase1d/masa_cadena.log`), para que no dependa de la sesión. Comer frena espera igual (`scratchpad/frena_noche2.sh`: `masa_hecho` y `frena_ok`).
