@@ -1229,3 +1229,30 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - C5, decisiones por vida: sin medir.
 - **Aviso estadístico (C8):** el aprendizaje evoluciona en el 7 % de los linajes (Pontes) o en la mitad de las ejecuciones (Niv). Con 5 mundos y 5/5, un efecto real puede no detectarse.
 - **Corrección de §18:** soltoggio2008evolutionary usa laberintos en T, no abejas.
+
+### 23:11–23:20 (23-10) · Pruebas de la masa: grande frente a chico y ramas (hijo8 en curso)
+
+- **Qué:** las pruebas (1)–(3) de `diseno.md` v1.6 ya han terminado (rama `escalera-masa`, sustrato 2.11.0; `runs/fase1d/P4-salto64-{grande,chico,rama1,rama2,rama3}`). Análisis con `scratchpad/masa_an.py` → `runs/fase1d/_analisis_masa.json`. Quedan hijo8 s2–s4 (fin hacia las 00:45).
+- **(1)–(2) Grande frente a chico, VA de las épocas 151–300:**
+
+  | Semilla | Grande | Chico | ¿Grande > 0 y > chico? |
+  |---|---|---|---|
+  | s0 | +0,208 | −0,045 | sí |
+  | s1 | −0,011 | −0,057 | no (grande < 0) |
+  | s2 | +0,137 | −0,076 | sí |
+  | s3 | +0,252 | −0,101 | sí |
+  | s4 | +0,379 | −0,027 | sí |
+
+  - **No pasa por el criterio prerregistrado (4/5)**, pero es el resultado más nítido de la escalera:
+    - grande supera a chico en las 5 parejas;
+    - chico tiene VA negativo en las 5;
+    - grande lo tiene positivo en 4.
+  - Grande s0 se extinguió en la época 82 y se repobló. v1.6 no dice nada sobre extinciones; su VA cuenta igual.
+  - Los cuerpos grandes viven 124–142 pasos y los chicos 411–851, igual que las dos estrategias de P4-salto64. Los grandes comen un 15–25 % más (ingesta 222–235 mil frente a 179–202 mil), con más población (2.730–3.097 frente a 2.330–2.870).
+  - Neuronas: grande 0,4–3,4; chico 1,2–4,1. **El cerebro grande no explica el efecto.**
+- **(3) Ramas desde la época 50 con otro azar:** **no hay contingencia.**
+  - Las tres ramas de s1 acaban pequeñas (masa 0,33–0,37), con VA −0,10 a −0,01.
+  - Las tres de s2 acaban grandes (masa 2,68–2,78), con VA +0,12 a +0,41.
+  - En la época 50 el destino ya estaba fijado, y el VA sigue al cuerpo. Mi previsión (que alguna rama cambiara) era errónea.
+- **(4) Hijo a 8 u (parcial, 2 de 5):** s0 y s1 acaban grandes (masa 2,72 y 2,78; VA +0,37 y +0,13). s1 era pequeño en P4-salto64. Se espera a las 5 semillas.
+- **Conclusión provisional:** **indicio fuerte, causal**: fijar el cuerpo grande hace que aprender compense; fijarlo chico, que no. Pendiente de por qué (vida corta, inercia, ingesta) y de hijo8.
