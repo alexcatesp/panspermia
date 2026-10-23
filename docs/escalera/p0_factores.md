@@ -610,3 +610,30 @@ Criterio prerregistrado en `diseno.md` v1.4. Rama `escalera-p4` (`ba5e16e`, sust
 - **El examen limpio no mejora** (0–0,047).
 - **Conclusión: negativo según el criterio,** con el mejor indicio de la escalera. Genes y sonda de hambre: pendientes, en CPU, cuando acaben los tests de la tripa.
 - Datos: `runs/fase1d/P4-salto64`; análisis `runs/fase1d/_analisis_P4salto64.json` (`scratchpad/p4s_an.py`).
+
+### 23-10-2026, 09:19 · La tripa (ADR-024): la energía de lo comido como entrada (15 mundos)
+
+Criterio prerregistrado en `diseno.md` v1.5. Rama `escalera-tripa` (`48bb468`, sustrato 3.0.0), cola `tripa.json`. Mundos: 00:32–09:19, todos vivos y sin pausas. Medias de las épocas 151–300, emparejadas por semilla:
+
+| Medida | P4-alga-sin-tripa (control) | P4-alga-tripa | P3-escaso-tripa (contraste) |
+|---|---|---|---|
+| VA de la ingesta (**primaria**: tripa > 0 y > control) | +0,020 / +0,057 / −0,014 / −0,038 / +0,004 | +0,023 / **+0,114** / +0,004 / +0,021 / −0,013: **4/5** | −0,025 / +0,004 / +0,010 / +0,001 / −0,032 |
+| Pruebas de VA positivas (de 15) | 9 / 12 / 10 / 4 / 12 | 13 / 15 / 9 / 12 / 5 | 5 / 9 / 15 / 11 / 2 |
+| Vida media | 252–368 | 241–323 | 424–1.460 |
+| Neuronas ocultas | 1,2–1,6 | 0,2–2,5 | 0,1–2,9 |
+| Masa | 0,26–0,31 (s3: 1,57) | 0,27–0,35 (s0 y s4: 1,73–1,76) | 0,26–0,30 |
+| Población | 2.673–2.936 | 2.671–2.950 | 2.543–2.708 |
+| Bichos con moduladora (época 300) | 41–99 % | 16 / 98 / 6 / 2 / 59 % | 2–99 % |
+| Modulación frente a la tripa (dentro de cada bicho) | −0,06 a +0,14 | −0,10 a +0,02 | +0,02 a +0,11 |
+| Modulación frente a la sorpresa de la tripa | −0,03 a +0,17 | −0,01 a +0,06 | +0,01 a +0,08 |
+
+- **La primaria no pasa (4/5).** Solo s1 queda claramente por encima del control. Con un 2 % de bichos plásticos, el +0,021 de s3 difícilmente es aprendizaje: diferencias de ±0,02 son ruido. Suelo de ruido de una época, con un bicho desplazado 0,001 u (s3): hasta 0,025.
+- **Contraste:** P3-escaso-tripa, VA ≈ 0, como se predecía.
+- **La tripa no se engancha a la modulación:** las correlaciones son tan pequeñas como sin tripa y la tripa pesa en las moduladoras como cualquier entrada (cociente mediano ~1).
+- **Comer es un reflejo** (diagnóstico de 12:48, `diag_comer.py`):
+  - la salida de comer está encendida el 74–99 % del tiempo y comen igual donde no hay nada, con el alga que no alimenta y con mucha energía;
+  - el 53–80 % del tiempo están sobre casillas casi agotadas;
+  - comer es gratis, así que no hay decisión que aprender.
+- **Genes** (`_genes_<mundo>.json`, época 300): hijos baratos, como en P3-escaso. Umbral 10,4–13,5 y fracción 0,21–0,45 en P4-alga con y sin tripa; P3-escaso-tripa, umbral 10,2–15,4 (s0, 27,1) y fracción 0,25–0,51.
+- **Conclusión: negativo, con indicio débil.** Siguiente paso: comer frena (ADR-025, `diseno.md` v1.7). Sonda de hambre y ablación de moduladoras: pendientes, para cuando la GPU esté libre (WSL se cayó por memoria a las 10:49).
+- Datos: `runs/fase1d/P4-alga-tripa`, `P4-alga-sin-tripa` y `P3-escaso-tripa`; análisis `runs/fase1d/_analisis_tripa.json` (`scratchpad/tripa_an.py`), `_diag_tripa.jsonl`, `_diag_comer.jsonl`.
