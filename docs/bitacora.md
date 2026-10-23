@@ -1256,3 +1256,20 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - En la época 50 el destino ya estaba fijado, y el VA sigue al cuerpo. Mi previsión (que alguna rama cambiara) era errónea.
 - **(4) Hijo a 8 u (parcial, 2 de 5):** s0 y s1 acaban grandes (masa 2,72 y 2,78; VA +0,37 y +0,13). s1 era pequeño en P4-salto64. Se espera a las 5 semillas.
 - **Conclusión provisional:** **indicio fuerte, causal**: fijar el cuerpo grande hace que aprender compense; fijarlo chico, que no. Pendiente de por qué (vida corta, inercia, ingesta) y de hijo8.
+
+### 23:16–23:20 (23-10) · Masa: el VA de los grandes es sobre todo demográfico (pregunta del responsable: ¿qué aprenden?)
+
+- **Pregunta:** ¿qué aprenden los grandes?
+- **Respuesta honesta: no lo sabemos.** El VA (`metrics.paired_learning_value`) compara la **ingesta total de la población** en una época de 1.000 pasos, con plasticidad frente a congelada. No mide lo que aprende cada bicho. Los grandes viven ~130 pasos, así que en una época se suceden 7–8 generaciones y el VA incluye los nacimientos.
+- **Desglose** (pruebas del gemelo de las épocas 151–300, 8 por mundo). «Por bicho» = (1 + VA ingesta) / (1 + VA población) − 1. Es aproximado: la población es la del final de la época.
+
+  | Mundo | VA ingesta | VA población | VA nacimientos | Por bicho |
+  |---|---|---|---|---|
+  | Grande s0–s4 | +0,21 / −0,01 / +0,14 / +0,25 / +0,38 | +0,15 / −0,02 / +0,21 / +0,31 / +0,73 | +0,12 / −0,01 / +0,11 / +0,17 / +0,26 | +0,09 / +0,09 / +0,11 / −0,03 / −0,13 |
+  | Chico s0–s4 | −0,05 / −0,06 / −0,08 / −0,10 / −0,03 | −0,11 / −0,31 / −0,24 / −0,24 / −0,16 | −0,12 / +0,02 / −0,18 / −0,15 / −0,18 | +0,08 / +0,42 / +0,22 / +0,18 / +0,16 |
+
+- **Lectura (indicio):**
+  - En los grandes, la plasticidad sobre todo **hace que haya más bichos** (más nacimientos, +15 a +73 % de población); por bicho, el efecto es mixto.
+  - En los chicos ocurre lo contrario: con plasticidad hay **menos bichos** (−11 a −31 %), pero cada uno come más.
+  - El contraste grande frente a chico es real, pero «aprender compensa» en los grandes quiere decir «la población crece más». No sabemos todavía si cada bicho come mejor gracias a lo que aprende.
+- **Para saber qué aprenden hace falta una sonda individual:** media población plástica y media congelada en el mismo mundo, para que la ecología sea la misma; ingesta por bicho y por edad; qué conexiones cambian y qué conducta (giro hacia la comida, velocidad, comer). Pendiente de decisión del responsable.
