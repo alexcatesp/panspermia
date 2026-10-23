@@ -1198,3 +1198,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - La suite de `escalera-masa` en GPU dio 85 correctos, 1 omitido y 1 fallo: `test_fixed_body_radius` (radios de 3,5–5,7 en vez de 6,6). Por eso no se lanzó nada.
 - **Causa:** `BODY_RADIUS_FIXED` se lee al trazar. Otro test ya había compilado el desarrollo con el radio libre, y JAX reutilizó esa versión aunque el test cambiara la constante. En CPU pasaba porque se corrió solo. Los mundos no se ven afectados: cada ejecución es un proceso nuevo que fija la configuración antes de compilar.
 - **Arreglo:** los dos tests nuevos vacían la caché de JAX al empezar y al acabar (`96a4f2f`). `scratchpad/masa_dia2.sh` pasa `tests/test_escalera.py` en GPU, donde se reproducía el fallo; el resto de la suite ya había pasado. Después sigue la cadena (e50 → ramas → `masa.json`).
+
+### 12:30–12:48 (23-10) · ¿Comen siempre? Diagnóstico de la salida de comer
+
+- **Pregunta del responsable (12:25):** ¿por qué comen siempre? ¿No tienen saciedad? En el código, comer no cuesta energía (`world.energy_update` no lo cobra), no hay tope de energía y lo que sobra se va en hijos. En la escalera no tienen otra cosa que hacer: ataque, señal y química están apagados. Decidió medir antes de cambiar nada.
+- **Qué:** `scratchpad/diag_comer.py` (solo observa, CPU, época 300): 200 pasos plásticos sin nacimientos, sobre los bichos vivos todo el tiempo. Mide la salida de comer y lo que hay en su casilla: alga que alimenta (> 0,05), casi nada (≤ 0,05) o alga que no alimenta. Datos en `runs/fase1d/_diag_comer.jsonl`.
+- **Resultados** (P4-alga-tripa / P4-alga-sin-tripa / P3-escaso-tripa):
+  - **Salida de comer encendida:** 78–97 % / 74–96 % / 94–99 % de los pasos. Bichos que no la apagan nunca: 8–65 % / 0–56 % / 39–90 %.
+  - **Dónde están:** sobre alga que alimenta solo el 20–39 % de los pasos. El 53–80 % del tiempo están sobre casillas casi agotadas, comiendo migajas del rebrote. Por eso la tripa da positivo el 74–97 % del tiempo, aunque con cantidades pequeñas. Esto corrige lo escrito a las 09:45: la tripa no dice «estoy sobre comida».
+  - **No depende de lo que hay debajo:** comen tanto o más donde no hay nada (75–99 %) que sobre comida (63–98 %).
+  - **Alga que no alimenta:** se la comen igual (69–98 %). La excepción es P4-alga-sin-tripa s4, que la evita (37 % frente al 77 % sobre la buena). Es el único mundo que distingue las algas, y no tiene tripa.
+  - **Sin saciedad:** en el cuartil alto de energía de cada bicho comen tanto o más que en el bajo (68–99 % frente a 59–98 %).
+- **Conclusión (firme):** comer es un reflejo siempre encendido, independiente de la comida, del alga y de la energía. Equivocarse al comer no cuesta nada: comer donde no hay nada, o el alga que no alimenta, no resta energía ni tiempo. Así no hay presión para decidir cuándo comer, ni nada que la tripa o la plasticidad puedan mejorar. Es un cuello de botella del mundo, no del cerebro.
