@@ -168,15 +168,18 @@ def test_alga_swap_only_one_alga_feeds(monkeypatch):
 def test_fixed_body_radius(monkeypatch):
     """Pruebas de la masa: con BODY_RADIUS_FIXED todos tienen ese radio y la masa que le toca."""
     monkeypatch.setattr(config, "BODY_RADIUS_FIXED", 6.6)
+    jax.clear_caches()  # la constante se lee al trazar: otro test pudo compilar ya con el radio libre
     s = island.init_island(0, b"escalera-test", n_max=64, n_init=16)
     a = np.asarray(s.alive)
     assert np.allclose(np.asarray(s.pheno.radius)[a], 6.6)
     assert np.allclose(np.asarray(s.pheno.mass)[a], (6.6 / config.RADIUS_REF) ** 2)
+    jax.clear_caches()  # que los tests siguientes no hereden lo compilado con el radio fijo
 
 
 def test_fixed_birth_offset(monkeypatch):
     """Pruebas de la masa: con BIRTH_OFFSET_FIXED el hijo nace a esa distancia del padre, sea cual sea su radio."""
     monkeypatch.setattr(config, "BIRTH_OFFSET_FIXED", 8.0)
+    jax.clear_caches()
     ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0}
     s = island.init_island(0, b"escalera-test", n_max=8, n_init=2, env_overrides=ov)
     s = s.replace(pos=s.pos.at[0].set(jnp.array([100.0, 100.0])).at[1].set(jnp.array([600.0, 600.0])),
@@ -190,3 +193,4 @@ def test_fixed_birth_offset(monkeypatch):
         d = np.asarray(s2.pos)[b] - np.asarray(s.pos)[p]
         d = (d + config.WORLD_L / 2) % config.WORLD_L - config.WORLD_L / 2
         assert np.isclose(np.linalg.norm(d), 8.0, atol=1e-3)
+    jax.clear_caches()
