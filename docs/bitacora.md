@@ -1257,7 +1257,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **(4) Hijo a 8 u (parcial, 2 de 5):** s0 y s1 acaban grandes (masa 2,72 y 2,78; VA +0,37 y +0,13). s1 era pequeño en P4-salto64. Se espera a las 5 semillas.
 - **Conclusión provisional:** **indicio fuerte, causal**: fijar el cuerpo grande hace que aprender compense; fijarlo chico, que no. Pendiente de por qué (vida corta, inercia, ingesta) y de hijo8.
 
-### 23:16–23:20 (23-10) · Masa: el VA de los grandes es sobre todo demográfico (pregunta del responsable: ¿qué aprenden?)
+### 23:15–23:16 (23-10) · Masa: el VA de los grandes es sobre todo demográfico (pregunta del responsable: ¿qué aprenden?)
 
 - **Pregunta:** ¿qué aprenden los grandes?
 - **Respuesta honesta: no lo sabemos.** El VA (`metrics.paired_learning_value`) compara la **ingesta total de la población** en una época de 1.000 pasos, con plasticidad frente a congelada. No mide lo que aprende cada bicho. Los grandes viven ~130 pasos, así que en una época se suceden 7–8 generaciones y el VA incluye los nacimientos.
