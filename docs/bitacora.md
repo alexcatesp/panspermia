@@ -1230,7 +1230,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Aviso estadístico (C8):** el aprendizaje evoluciona en el 7 % de los linajes (Pontes) o en la mitad de las ejecuciones (Niv). Con 5 mundos y 5/5, un efecto real puede no detectarse.
 - **Corrección de §18:** soltoggio2008evolutionary usa laberintos en T, no abejas.
 
-### 23:11–23:20 (23-10) · Pruebas de la masa: grande frente a chico y ramas (hijo8 en curso)
+### 23:11–23:13 (23-10) · Pruebas de la masa: grande frente a chico y ramas (hijo8 en curso)
 
 - **Qué:** las pruebas (1)–(3) de `diseno.md` v1.6 ya han terminado (rama `escalera-masa`, sustrato 2.11.0; `runs/fase1d/P4-salto64-{grande,chico,rama1,rama2,rama3}`). Análisis con `scratchpad/masa_an.py` → `runs/fase1d/_analisis_masa.json`. Quedan hijo8 s2–s4 (fin hacia las 00:45).
 - **(1)–(2) Grande frente a chico, VA de las épocas 151–300:**
