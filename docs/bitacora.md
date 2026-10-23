@@ -1192,3 +1192,9 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
     - La modulación no sigue a la tripa más que cuando el cerebro no la ve.
   - **La señal apenas informa:** la tripa está encendida en el 74–79 % de los pasos (P3-escaso, 90–97 %) y nunca es negativa. El alga que no alimenta da 0, no resta. Los bichos pastan casi sin parar, así que la tripa dice «estoy sobre comida», algo que los rayos ya ven.
 - **Conclusión:** **negativo, con indicio débil** (4/5, y solo s1 queda claramente por encima de ±0,05). Ver la consecuencia de comer no basta para que la evolución la enganche a la plasticidad. Pendiente: suelo de ruido del VA, genes y sonda de hambre (en CPU, `scratchpad/tripa_post.sh`), y la ablación de moduladoras.
+
+### 09:19–10:30 (23-10) · Pruebas de la masa: un test falla en la suite y se relanzan
+
+- La suite de `escalera-masa` en GPU dio 85 correctos, 1 omitido y 1 fallo: `test_fixed_body_radius` (radios de 3,5–5,7 en vez de 6,6). Por eso no se lanzó nada.
+- **Causa:** `BODY_RADIUS_FIXED` se lee al trazar. Otro test ya había compilado el desarrollo con el radio libre, y JAX reutilizó esa versión aunque el test cambiara la constante. En CPU pasaba porque se corrió solo. Los mundos no se ven afectados: cada ejecución es un proceso nuevo que fija la configuración antes de compilar.
+- **Arreglo:** los dos tests nuevos vacían la caché de JAX al empezar y al acabar (`96a4f2f`). `scratchpad/masa_dia2.sh` pasa `tests/test_escalera.py` en GPU, donde se reproducía el fallo; el resto de la suite ya había pasado. Después sigue la cadena (e50 → ramas → `masa.json`).
