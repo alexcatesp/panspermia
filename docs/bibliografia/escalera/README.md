@@ -163,6 +163,20 @@ DOI comprobados en Crossref el 22-10 a las 08:35. Todas las referencias se citar
 - **holling1959some:** el tiempo de manipulación. Mientras come, el depredador no busca, y eso limita su ingesta (respuesta funcional de tipo II). En la naturaleza, comer quita tiempo a buscar. En Panspermia no: se come mientras se nada.
 - **charnov1976optimal** (ya en la bibliografía) y **stephens1986foraging:** el teorema del valor marginal y la teoría del forrajeo. Quedarse en una mancha o irse son opciones excluyentes, y viajar cuesta tiempo. Por eso hay una decisión: irse cuando la mancha rinde menos que la media del mundo. Si se puede comer y viajar a la vez, la decisión desaparece.
 - **todd1991exploring:** en un mundo con manchas de comida y de veneno y un olor de fiabilidad variable, el aprendizaje asociativo evoluciona cuando el olor es de fiabilidad intermedia. Comerse el veneno cuesta energía.
-- **niv2002evolution** (y soltoggio2008evolutionary, en `1d/`): abejas con plasticidad neuromodulada que evoluciona sola. Reciben el néctar como entrada propia (como la tripa), pero además cada prueba es un aterrizaje en una sola flor: una elección excluyente que gasta una oportunidad.
+- **niv2002evolution:** abejas cuyas reglas de plasticidad hebbiana, dependientes del premio, evolucionan. Reciben el néctar como entrada propia (como la tripa), pero además cada una de sus 100 pruebas por vida termina en una sola flor: una elección excluyente que gasta una oportunidad. **soltoggio2008evolutionary** (en `1d/`): laberintos en T con neuronas moduladoras; el premio está al final de cada recorrido y cambia de brazo durante la vida. *(Corregido el 23-10: antes se decía que Soltoggio también usaba abejas.)*
 - **mery2002experimental, mery2003fitness, kawecki2010evolutionary:** en evolución experimental con moscas, la capacidad de aprender aumenta cuando elegir mal el sustrato de puesta se paga, y disminuye cuando no hace falta, porque aprender tiene un coste (larvas menos competitivas).
 - **Lectura para Panspermia:** en todos los modelos en los que el aprendizaje evoluciona hay una señal del resultado (la tripa la añadió, ADR-024) y también una elección que se paga al equivocarse, en energía o en oportunidades. Nuestro mundo tiene lo primero y no lo segundo: comer es gratis, no excluye moverse y el alga vacía no resta. Es lo que mostró el diagnóstico (bitácora, 23-10, 12:48). De aquí sale «comer frena» (ADR-025).
+
+## 19. Condiciones para que evolucione el aprendizaje (revisión pedida por el responsable, 23-10, 13:39)
+
+La tabla completa, con cada condición cruzada con nuestro mundo, está en `docs/escalera/condiciones_aprendizaje.md`. Referencias nuevas:
+
+- **pontes2020evolutionary** (texto completo leído): en Avida, el aprendizaje asociativo evoluciona cuando el significado de las pistas se sortea para cada organismo pero se mantiene en su vida, cuando los pasos en vacío restan y cuando antes hay reflejos (volver al rastro tras un error) que sirven de piezas. Aun así es raro: 7 % de los linajes, y 2 % el reaprendizaje. Un sistema de valor intrínseco evoluciona junto a la conducta y da el refuerzo.
+- **risi2010evolving:** evolucionar el aprendizaje es engañoso, porque al principio rinde más un truco fijo que aprender.
+- **eliassen2007exploration:** con menos esperanza de vida, compensa menos explorar para aprender.
+- **dridi2016environmental:** muchos retos distintos en una vida favorecen aprender, aunque el mundo no cambie entre generaciones.
+- **tonelli2013relationships:** las codificaciones generativas dan redes más regulares, y estas aprenden mejor.
+- **floreano2000evolutionary:** evolucionar las reglas de plasticidad, no los pesos, da robots que se adaptan.
+- **mayley1996landscapes:** el coste de aprender empuja a que lo aprendido pase a los genes (efecto Baldwin).
+- **nolfi1996learning:** robots que nacen cada generación en un entorno distinto heredan una predisposición a aprender.
+- **dunlap2019components:** componentes del cambio ambiental y evolución del aprendizaje, en teoría y en experimentos.

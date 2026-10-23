@@ -1217,3 +1217,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Responsable:** comer frena (12:50); tres familias, 15 mundos; criterio VA > 0 y > padre en 5/5 (13:15).
 - **Código:** rama `escalera-frena` (`b7dc22e`, sustrato 3.1.0): `config.EAT_MOVE_FACTOR`, freno en `island.world_step`; la política fija del examen no frena. Test `test_eating_brakes_movement` en CPU, junto con los de la tripa y el alga: 3 correctos.
 - **Encadenado:** `scratchpad/frena_noche.sh`, en espera de `masa_hecho` (suite → calibración → 15 mundos). Criterio en `diseno.md` v1.7.
+
+### 13:39–14:35 (23-10) · Revisión de las condiciones para que evolucione el aprendizaje
+
+- **Pregunta del responsable (13:39):** si la bibliografía ya lo decía, ¿por qué no revisarla a fondo antes de probar? Decidió hacerlo ya, y que comer frena espere su visto bueno (marca `runs/fase1d/frena_ok`).
+- **Incidente:** la cadena de la masa murió a las 12:17, al cerrarse la sesión anterior de Claude, que era quien la había lanzado. Se perdieron ~1 h 20 min de GPU. Se relanzó a las 13:41 con `setsid`/`nohup` dentro de WSL (`scratchpad/masa_dia4.sh`, log `runs/fase1d/masa_cadena.log`), para que no dependa de la sesión. Comer frena espera igual (`scratchpad/frena_noche2.sh`: `masa_hecho` y `frena_ok`).
+- **Resultado:** `docs/escalera/condiciones_aprendizaje.md` y bibliografía §19 (9 referencias nuevas verificadas en Crossref; texto completo leído de pontes2020evolutionary y niv2002evolution).
+  - Nuestro mundo cumple C2 (pista fiable), C3 (resultado visible, desde la tripa) y C6 (reflejos previos).
+  - Falla C4: equivocarse no se paga.
+  - Cumple a medias C1: con el alga cambiando cada 2.000 pasos y vidas de ~300, lo conveniente es casi predecible al nacer. En Pontes se sortea para cada organismo; en Niv, en cada generación y además a mitad de la vida.
+  - C5, decisiones por vida: sin medir.
+- **Aviso estadístico (C8):** el aprendizaje evoluciona en el 7 % de los linajes (Pontes) o en la mitad de las ejecuciones (Niv). Con 5 mundos y 5/5, un efecto real puede no detectarse.
+- **Corrección de §18:** soltoggio2008evolutionary usa laberintos en T, no abejas.
