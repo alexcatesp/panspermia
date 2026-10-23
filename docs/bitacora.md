@@ -1272,4 +1272,10 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - En los grandes, la plasticidad sobre todo **hace que haya más bichos** (más nacimientos, +15 a +73 % de población); por bicho, el efecto es mixto.
   - En los chicos ocurre lo contrario: con plasticidad hay **menos bichos** (−11 a −31 %), pero cada uno come más.
   - El contraste grande frente a chico es real, pero «aprender compensa» en los grandes quiere decir «la población crece más». No sabemos todavía si cada bicho come mejor gracias a lo que aprende.
-- **Para saber qué aprenden hace falta una sonda individual:** media población plástica y media congelada en el mismo mundo, para que la ecología sea la misma; ingesta por bicho y por edad; qué conexiones cambian y qué conducta (giro hacia la comida, velocidad, comer). Pendiente de decisión del responsable.
+- **Para saber qué aprenden hace falta una sonda individual:** media población plástica y media congelada en el mismo mundo, para que la ecología sea la misma; ingesta por bicho y por edad; qué conexiones cambian y qué conducta (giro hacia la comida, velocidad, comer).
+- **Decisión del responsable: sonda en CPU, ya.** `scratchpad/sonda_mixta.py` (solo observa; código de `escalera-masa`).
+  - Corre el mundo con plasticidad, pero cada paso devuelve sus pesos a la mitad de los bichos (uid impar). Los recién nacidos entran en un grupo u otro por su uid, sea cual sea el de su padre.
+  - Solo cuentan los nacidos durante la sonda.
+  - Mide, por grupo y edad: ingesta por paso, P(comer) con y sin comida, velocidad, giro, hijos y muertes por paso. Al final, |w − w0| por bloque (entrada → oculta, empuje, giro o comer).
+  - Prueba con grande s0, 100 pasos: los congelados no cambian ningún peso (0 %) y los plásticos sí (95 %). Usa unos 3 GB de RAM.
+  - Lanzada con `setsid` a las 23:31 (`scratchpad/sonda_mixta.sh`): grande y chico, semillas 0–4, época 300, 1.500 pasos. Log `runs/fase1d/sonda_mixta.log`, salida `runs/fase1d/_sonda_mixta.jsonl`, marca `sonda_mixta_hecha`.
