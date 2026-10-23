@@ -1279,3 +1279,32 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Mide, por grupo y edad: ingesta por paso, P(comer) con y sin comida, velocidad, giro, hijos y muertes por paso. Al final, |w − w0| por bloque (entrada → oculta, empuje, giro o comer).
   - Prueba con grande s0, 100 pasos: los congelados no cambian ningún peso (0 %) y los plásticos sí (95 %). Usa unos 3 GB de RAM.
   - Lanzada con `setsid` a las 23:20 (`scratchpad/sonda_mixta.sh`): grande y chico, semillas 0–4, época 300, 1.500 pasos. Log `runs/fase1d/sonda_mixta.log`, salida `runs/fase1d/_sonda_mixta.jsonl`, marca `sonda_mixta_hecha`.
+
+### 23:20–00:18 (23/24-10) · Sonda mixta, grandes: cada bicho aprende a no cerrar la boca sobre la comida
+
+- **Datos:** `runs/fase1d/_sonda_mixta.jsonl` (P4-salto64-grande, época 300, 1.500 pasos; solo cuentan los nacidos durante la sonda). Cada cifra compara a los que aprenden con los congelados del mismo mundo.
+
+  | Semilla | Ingesta por paso | Hijos por paso | Muertes por paso | P(comer \| comida debajo) | P(comer \| sin comida) | Sobre comida | Bichos que cambian pesos |
+  |---|---|---|---|---|---|---|---|
+  | s0 | +14,5 % | +26,5 % | −3,7 % | 0,92 / 0,81 | 0,97 / 0,95 | 22 % / 22 % | 90 % |
+  | s1 | −0,7 % | −0,1 % | +0,5 % | 0,89 / 0,90 | 0,82 / 0,82 | 21 % / 21 % | **4 %** |
+  | s2 | +14,8 % | +32,7 % | −5,5 % | 0,91 / 0,79 | 0,97 / 0,96 | 24 % / 24 % | 100 % |
+  | s3 | +22,2 % | +34,8 % | −11,4 % | 0,93 / 0,78 | 0,99 / 0,98 | 22 % / 21 % | 89 % |
+  | s4 | +44,1 % | +64,9 % | −20,9 % | 0,90 / 0,66 | 0,99 / 0,98 | 23 % / 22 % | 91 % |
+
+- **Por edad** (ingesta de los que aprenden frente a los congelados; tramos <10, 10–25, 25–50, 50–100, 100–150, 150–200, 200–300, ≥300 pasos):
+  - s0: +4, +12, +13, +17, +22, +23, +27, +33 %;
+  - s2: +8, +14, +16, +18, +20, +26, +28, +26 %;
+  - s3: +5, +28, +28, +27, +27, +27, +33, +41 %;
+  - s4: +23, +62, +56, +57, +58, +44, +46, +33 %.
+  - **La ventaja es pequeña al nacer y crece en los primeros 25 pasos:** aprenden en vida.
+- **Qué cambia:**
+  - Los que aprenden no encuentran más comida: pasan el mismo tiempo encima de ella.
+  - Cambia la boca: los congelados la cierran a menudo sobre la comida (P(comer) 0,66–0,81, menos que donde no hay nada, 0,95–0,98), y los que aprenden la mantienen abierta (0,90–0,93).
+  - Donde no hay comida apenas cambia (+0,01 a +0,03).
+  - Los pesos que más cambian son los de los rayos (comida, distancia, parentesco y señal) hacia las ocultas, y de los rayos de comida hacia comer, empuje y giro.
+  - En s0 y s3 también giran más (0,84 frente a 0,72; 0,87 frente a 0,68).
+- **s1 no aprende porque su linaje casi ha perdido la plasticidad:** solo el 4 % de los bichos cambia algún peso. Por eso su VA ≈ 0 (el 4/5 del criterio).
+- **Conclusión (indicio fuerte):** en 4 de 5 mundos grandes, cada bicho aprende en vida a mantener la boca abierta sobre la comida. Corrige un defecto innato: el cerebro con que nace cierra la boca cuando la vista se llena de comida. Gana un 15–44 % de ingesta y un 27–65 % de hijos. El VA de población era la suma de esto y del crecimiento demográfico.
+- **No sabemos todavía** si depende de la experiencia de cada bicho (asociación) o es una maduración programada que siempre va en la misma dirección. También queda por qué la evolución no corrige el defecto en el cerebro innato (¿Baldwin con vidas cortas?).
+- **Memoria:** el compromiso de Windows estaba en 56 de 64 GB. Los chicos (`scratchpad/sonda_chico.sh`) esperan a que la cadena de frena acabe sus tests en GPU y corren después.
