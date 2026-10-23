@@ -7,13 +7,18 @@
    1,
    2,
    3,
-   4
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
   ],
   "epochs": 300,
   "n_max": 4096,
   "n_init": 512,
   "block": "FRENA",
-  "description": "Comer frena (ADR-025; decisión del responsable, 23-10): mientras la salida de comer está encendida, el empuje se multiplica por EAT_MOVE_FACTOR (tiempo de manipulación). Sustrato 3.1.0. Criterio: diseno.md v1.7. Padre: P4-alga-tripa.",
+  "description": "Comer frena (ADR-025; decisión del responsable, 23-10): mientras la salida de comer está encendida, el empuje se multiplica por EAT_MOVE_FACTOR (tiempo de manipulación). Sustrato 3.1.0. Criterio: diseno.md v1.8 (10 semillas). Padre: P4-alga-tripa.",
   "env": {
    "attack_on": 0,
    "chem_on": 0,
@@ -37,13 +42,18 @@
    1,
    2,
    3,
-   4
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
   ],
   "epochs": 300,
   "n_max": 4096,
   "n_init": 512,
   "block": "FRENA",
-  "description": "Comer frena (ADR-025; decisión del responsable, 23-10): mientras la salida de comer está encendida, el empuje se multiplica por EAT_MOVE_FACTOR (tiempo de manipulación). Sustrato 3.1.0. Criterio: diseno.md v1.7. Control: ¿hace falta la tripa cuando comer es una decisión?",
+  "description": "Comer frena (ADR-025; decisión del responsable, 23-10): mientras la salida de comer está encendida, el empuje se multiplica por EAT_MOVE_FACTOR (tiempo de manipulación). Sustrato 3.1.0. Criterio: diseno.md v1.8 (10 semillas). Control: ¿hace falta la tripa cuando comer es una decisión?",
   "env": {
    "attack_on": 0,
    "chem_on": 0,
@@ -67,13 +77,18 @@
    1,
    2,
    3,
-   4
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
   ],
   "epochs": 300,
   "n_max": 4096,
   "n_init": 512,
   "block": "FRENA",
-  "description": "Comer frena (ADR-025; decisión del responsable, 23-10): mientras la salida de comer está encendida, el empuje se multiplica por EAT_MOVE_FACTOR (tiempo de manipulación). Sustrato 3.1.0. Criterio: diseno.md v1.7. Contraste: la comida que alimenta no cambia nunca.",
+  "description": "Comer frena (ADR-025; decisión del responsable, 23-10): mientras la salida de comer está encendida, el empuje se multiplica por EAT_MOVE_FACTOR (tiempo de manipulación). Sustrato 3.1.0. Criterio: diseno.md v1.8 (10 semillas). Contraste: la comida que alimenta no cambia nunca.",
   "env": {
    "attack_on": 0,
    "chem_on": 0,
