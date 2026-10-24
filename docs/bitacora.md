@@ -1309,7 +1309,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **No sabemos todavía** si depende de la experiencia de cada bicho (asociación) o es una maduración programada que siempre va en la misma dirección. También queda por qué la evolución no corrige el defecto en el cerebro innato (¿Baldwin con vidas cortas?).
 - **Memoria:** el compromiso de Windows estaba en 56 de 64 GB. Los chicos (`scratchpad/sonda_chico.sh`) esperan a que la cadena de frena acabe sus tests en GPU y corren después.
 
-### 01:27–02:30 (24-10) · Sonda mixta, chicos: aprenden aún más que los grandes; comer frena se para en la calibración
+### 01:27–02:20 (24-10) · Sonda mixta, chicos: aprenden aún más que los grandes; comer frena se para en la calibración
 
 - **Chicos** (`runs/fase1d/_sonda_mixta.jsonl`, P4-salto64-chico, época 300, 1.500 pasos, CPU 01:27–02:17). Cada cifra compara a los que aprenden con los congelados del mismo mundo:
 
@@ -1332,4 +1332,4 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - factor 0: extinción en la época 19 (población 0–303, repoblada), final 69;
   - factor 0,25: sin extinción, pero con oscilaciones de 64 a 648 bichos; final 476, por debajo del mínimo de 500.
   - Ninguno cumple la regla de viabilidad, así que la cadena se para y espera al responsable. La GPU queda libre desde las 01:32.
-- **Con la GPU libre** (solo observa; no cambia ninguna decisión): sonda mixta en los peldaños anteriores, `scratchpad/sonda_previos.sh` desde las 02:28. Mundos: P4-salto64, P3-disperso, P3-escaso y P4-alga; 5 semillas, época 300, 1.500 pasos. Log `runs/fase1d/sonda_previos.log`, marca `sonda_previos_hecha`. En una prueba de 300 pasos, P4-salto64 s1 (VA ≈ 0) ya da +118 % de ingesta a los que aprenden.
+- **Con la GPU libre** (solo observa; no cambia ninguna decisión): sonda mixta en los peldaños anteriores, `scratchpad/sonda_previos.sh` desde las 02:19. Mundos: P4-salto64, P3-disperso, P3-escaso y P4-alga; 5 semillas, época 300, 1.500 pasos. Log `runs/fase1d/sonda_previos.log`, marca `sonda_previos_hecha`. En una prueba de 300 pasos, P4-salto64 s1 (VA ≈ 0) ya da +118 % de ingesta a los que aprenden.
