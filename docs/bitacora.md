@@ -1387,3 +1387,14 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Comen algo menos que en P4-alga-tripa (74–99 %).
   - s1 empieza a evitar el alga vacía (0,55 frente a 0,73 en la buena).
   - Donde no hay nada todavía comen tanto o más que sobre el alga buena. Es pronto: la comprobación prerregistrada es la de la época 300.
+
+### 21:46 (24-10) · Comer frena con rampa: 20 de 30 mundos; s4 de P4-alga-tripa-frena-rampa se extinguió y renació
+
+- **Terminados:** P4-alga-tripa-frena-rampa y P4-alga-sin-tripa-frena-rampa, semillas 0–9 (unos 34 min por mundo). P3-escaso-tripa-frena-rampa empezó hacia las 21:45.
+- **Población final:** 2.691–4.086 con tripa y 2.587–4.096 sin tripa. Ningún mundo pausado.
+- **P4-alga-tripa-frena-rampa s4 se extinguió** (`extinct_at` 121), con el freno ya total desde la época 100:
+  - En la época 113 la población cae de 2.882 a 181; en la 117 baja de 32 y empieza la reinyección de genomas al azar (704 en total), con `generation_max` a 0.
+  - Desde la época 128 una población nueva prende y llega a 3.735 bichos al final.
+  - Esa población evolucionó desde cero con el freno total, sin rampa, unas 170 épocas. Es un indicio de que el freno total desde cero puede prender, pero solo tras reinyecciones repetidas.
+  - Por el criterio prerregistrado (`diseno.md` v1.9), **ese par cuenta como desfavorable**: para pasar, las otras 9 semillas tienen que ser favorables.
+- **Quedan:** 10 mundos de P3-escaso-tripa-frena-rampa (hasta ~03:30) y el padre P4-alga-tripa con las semillas 5–9 (hasta ~06:30 del 25-10).
