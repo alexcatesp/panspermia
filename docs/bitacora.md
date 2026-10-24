@@ -1333,3 +1333,24 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - factor 0,25: sin extinción, pero con oscilaciones de 64 a 648 bichos; final 476, por debajo del mínimo de 500.
   - Ninguno cumple la regla de viabilidad, así que la cadena se para y espera al responsable. La GPU queda libre desde las 01:32.
 - **Con la GPU libre** (solo observa; no cambia ninguna decisión): sonda mixta en los peldaños anteriores, `scratchpad/sonda_previos.sh` desde las 02:19. Mundos: P4-salto64, P3-disperso, P3-escaso y P4-alga; 5 semillas, época 300, 1.500 pasos. Log `runs/fase1d/sonda_previos.log`, marca `sonda_previos_hecha`. En una prueba de 300 pasos, P4-salto64 s1 (VA ≈ 0) ya da +118 % de ingesta a los que aprenden.
+
+### 02:20–02:40 (24-10) · Sonda mixta en los peldaños anteriores: el aprendizaje individual estaba escondido
+
+- **Datos:** `runs/fase1d/_sonda_mixta.jsonl` (GPU; época 300, 1.500 pasos; código de `escalera-masa` con los interruptores de cada mundo). Ingesta y hijos por paso de los que aprenden frente a sus vecinos congelados; «cambia» es la fracción de los que aprenden que mueve algún peso.
+
+  | Mundo | Ingesta s0–s4 | Hijos s0–s4 | Cambia s0–s4 | VA de población (épocas 151–300) |
+  |---|---|---|---|---|
+  | P4-salto64 | +15 / +71 / +36 / +30 / +59 % | +24 / +74 / +59 / +53 / +57 % | 0,95–1,00 | +0,14 / −0,00 / +0,34 / −0,08 / −0,01 |
+  | P3-disperso | +39 / +44 / +32 / +133 / +166 % | +4 / +27 / +5 / +83 / +10 % | 0,87–1,00 | mezclado |
+  | P3-escaso | −2 / 0 / +26 / +22 / +1 % | −4 / −1 / +24 / +6 / +5 % | **0,01 / 0,00** / 0,98 / 0,98 / **0,01** | ≈ 0 |
+  | P4-alga | +1 / +28 / +52 / +45 / +71 % | +6 / +64 / +133 / +50 / +114 % | **0,21** / 0,98 / 0,98 / 0,99 / 0,99 | −0,26 a +0,23 |
+
+- **Regla sin excepciones en los 20 mundos:**
+  - **donde el linaje conserva la plasticidad (cambia ≥ 0,87), cada bicho aprende en vida.** La ventaja es casi nula al nacer y crece con la edad (por ejemplo, P3-disperso s4: −6 % al nacer y +311 % con más de 300 pasos);
+  - **donde el linaje la ha perdido** (P3-escaso s0, s1 y s4; P4-alga s0), no hay diferencia.
+- **Qué aprenden:**
+  - En P4-salto64 y P3-disperso, a no cerrar la boca sobre la comida y además a estar más tiempo encima de ella: la fracción sobre comida crece con la edad, hasta +70 a +190 %.
+  - En P4-alga la fracción sobre comida apenas cambia (s1, s2) y P(comer) tampoco, pero la ingesta sube un 28–71 %. Hipótesis: comen más el alga que alimenta, porque la sonda cuenta las dos algas como «comida». Sin comprobar.
+- **Consecuencia:** el VA de población llevaba toda la escalera midiendo otra cosa: el efecto del aprendizaje en el tamaño de la población, que puede ser negativo aunque cada bicho aprenda. Los veredictos «VA ≈ 0» de P3 y P4 no significaban «no aprenden».
+- **Pendiente:** control nulo (las dos mitades congeladas), lanzado a las 09:13 en GPU (`scratchpad/sonda_nulo.sh`, salida `runs/fase1d/_sonda_mixta_nulo.jsonl`).
+- **Responsable (09:12): la sonda mixta pasa a ser la medida primaria** de los próximos peldaños (diseño v1.9, por escribir); el VA de población queda como secundaria (efecto ecológico).
