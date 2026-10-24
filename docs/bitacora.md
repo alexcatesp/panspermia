@@ -1354,3 +1354,17 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Consecuencia:** el VA de población llevaba toda la escalera midiendo otra cosa: el efecto del aprendizaje en el tamaño de la población, que puede ser negativo aunque cada bicho aprenda. Los veredictos «VA ≈ 0» de P3 y P4 no significaban «no aprenden».
 - **Pendiente:** control nulo (las dos mitades congeladas), lanzado a las 09:13 en GPU (`scratchpad/sonda_nulo.sh`, salida `runs/fase1d/_sonda_mixta_nulo.jsonl`).
 - **Responsable (09:12): la sonda mixta pasa a ser la medida primaria** de los próximos peldaños (diseño v1.9, por escribir); el VA de población queda como secundaria (efecto ecológico).
+
+### 09:12–09:29 (24-10) · Control nulo; comer frena con rampa; diseño v1.9
+
+- **Control nulo de la sonda mixta** (las dos mitades congeladas; `runs/fase1d/_sonda_mixta_nulo.jsonl`, GPU 09:13–09:22). Siete mundos: P4-salto64 s1 y s4, P3-disperso s3 y s4, P4-alga s2 y s4, P4-salto64-chico s3.
+  - Ingesta entre −2,6 y +3,0 %; por edad, hasta ±13 %.
+  - Hijos entre −7 y +13 %: son ruidosos. Las subidas de hijos de +4 a +10 % de P3-disperso no cuentan.
+  - Con aprendizaje, la ingesta sube de +15 a +166 %: **muy por encima del ruido.**
+  - De paso: en un mundo donde nadie aprende, P(comer | comida debajo) es de solo 0,26–0,56.
+- **Bibliografía del freno** (pregunta del responsable): §20, seis referencias verificadas en Crossref (rescate evolutivo y evolución incremental). Predice que el freno total desde cero extingue y que endurecerlo poco a poco da tiempo a adaptarse.
+- **Decisión del responsable (09:15): rampa del freno hasta 0 en 100 épocas.**
+  - Código: `escalera-frena`, `f33e2c1`, sustrato 3.2.0, `config.EAT_MOVE_RAMP_STEPS`. Test `test_eating_brake_ramp`; con los de freno y tripa, 3 correctos en CPU, tras corregir el test dos veces: el primero comparaba dos bichos distintos y el segundo tenía una tolerancia demasiado fina para f32.
+  - Colas `frenacal_rampa.json` y `frena_rampa.json` (`d2a0ca7`).
+  - `scratchpad/frena_rampa.sh` desde las 09:25: calibración con semillas 0–2 y 150 épocas; si es viable, los 30 mundos y el padre (semillas 5–9). Log `runs/fase1d/frena_rampa_cadena.log`.
+- **Diseño v1.9** (sonda mixta primaria; un par es favorable si A > +5 % y mayor que en el padre; pasa con ≥ 9/10): aprobado por el responsable a las 09:29.

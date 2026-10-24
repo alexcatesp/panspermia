@@ -349,7 +349,7 @@ Escrito antes de lanzar; sustituye la primaria de v1.7. Motivo: la revisión `do
 
 ## v1.9 · 24-10-2026, 09:28 · Sonda mixta como medida primaria; comer frena con rampa (decisiones del responsable, 09:12 y 09:15)
 
-Escrito antes de lanzar los 30 mundos; sustituye la primaria de v1.8.
+Escrito antes de lanzar los 30 mundos; sustituye la primaria de v1.8. **Criterio aprobado por el responsable a las 09:29** (marca `frena_v19_ok`).
 
 **Motivo.** La sonda mixta (bitácora 23/24-10) muestra que el VA de población no mide el aprendizaje de cada bicho:
 - en los 20 mundos de P3 y P4 con plasticidad, cada bicho aprende en vida (ingesta +15 a +166 % frente a sus vecinos congelados), aunque el VA de población sea ≈ 0 o negativo;

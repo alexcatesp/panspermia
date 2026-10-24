@@ -564,3 +564,8 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 4. **Sustrato 3.1.0** (rama `escalera-frena`, worktree `panspermia-frena`, desde `escalera-tripa`). Con el factor por defecto (1) el código no cambia: el freno solo se traza si el factor es distinto de 1. Test `test_eating_brakes_movement`.
 5. **Mundos** (cola `frena.json`, o `frena025.json` con el factor 0,25): P4-alga-tripa-frena (padre: P4-alga-tripa), P4-alga-sin-tripa-frena (¿hace falta la tripa cuando comer es una decisión?) y P3-escaso-tripa-frena (contraste con comida que no cambia). Criterio en `docs/escalera/diseno.md` v1.7.
 6. **Aparcado:** coste de energía por bocado, estómago con tope (saciedad) y comida en bocados sueltos. Se reabren si «comer frena» no convierte comer en una decisión.
+
+**Adenda (24-10-2026).**
+- La calibración del 24-10 (01:26) no dio ningún factor viable: con 0, extinción en la época 19; con 0,25, 476 bichos.
+- Por la bibliografía (§20, rescate evolutivo: gomulkiewicz1995when, bell2009evolutionary, lindsey2013evolutionary; evolución incremental: gomez1997incremental), el responsable decidió endurecer el freno en rampa: `config.EAT_MOVE_RAMP_STEPS` = 100.000, de 1 a 0 en las primeras 100 épocas. Sustrato 3.2.0, `f33e2c1`; con la rampa a 0, idéntico a 3.1; test `test_eating_brake_ramp`.
+- La medida primaria pasa a ser la sonda mixta (`diseno.md` v1.9): el VA de población no mide el aprendizaje de cada bicho.
