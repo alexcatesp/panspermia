@@ -346,3 +346,38 @@ Escrito antes de lanzar; sustituye la primaria de v1.7. Motivo: la revisión `do
 - **Orden:** `scratchpad/frena_noche3.sh` espera a `masa_hecho` y `frena_ok` (visto bueno dado a las 13:57). Después: suite completa en GPU, calibración, los 30 mundos y el padre (semillas 5–9). Marca `frena_hecho`.
 - **Duración estimada:** unas 23 h (35 mundos de ~0,6 h, más la suite y la calibración). Empezaría hacia las 3:15 del 24-10 y acabaría hacia las 2:00 del 25-10.
 - **Decisión del responsable sobre C1 (13:55):** solo el freno en este peldaño, un cambio cada vez. Que el alga buena se sortee para cada bicho al nacer queda para el peldaño siguiente.
+
+## v1.9 · 24-10-2026, 09:35 · Sonda mixta como medida primaria; comer frena con rampa (decisiones del responsable, 09:12 y 09:15)
+
+Escrito antes de lanzar los 30 mundos; sustituye la primaria de v1.8.
+
+**Motivo.** La sonda mixta (bitácora 23/24-10) muestra que el VA de población no mide el aprendizaje de cada bicho:
+- en los 20 mundos de P3 y P4 con plasticidad, cada bicho aprende en vida (ingesta +15 a +166 % frente a sus vecinos congelados), aunque el VA de población sea ≈ 0 o negativo;
+- control nulo, con las dos mitades congeladas (7 mundos): ingesta entre −2,6 y +3,0 %.
+
+**Calibración fallida (24-10, 01:26).** Freno 0 desde cero: extinción. Freno 0,25: 476 bichos. Por la bibliografía (§20, rescate evolutivo y evolución incremental), el freno se endurece en rampa: `config.EAT_MOVE_RAMP_STEPS` = 100.000, de 1 a 0 en las épocas 0–100 (sustrato 3.2.0, `escalera-frena`, `f33e2c1`). Calibración `frenacal_rampa.json`: semillas 0–2, 150 épocas. Es viable si las 3 terminan sin extinción y con 500 bichos o más.
+
+- **Medida primaria: ventaja de aprendizaje A** (`scratchpad/sonda_mixta.py`, solo observa, con el código de la rama de cada mundo):
+  - desde el checkpoint de la época 300, 1.500 pasos con plasticidad, devolviendo cada paso sus pesos a la mitad de los bichos (uid impar);
+  - A = ingesta por paso de los que aprenden / ingesta por paso de los congelados − 1;
+  - solo cuentan los nacidos durante la sonda.
+- **Mundos:**
+  - cola `frena_rampa.json` (`d2a0ca7`): P4-alga-tripa-frena-rampa, P4-alga-sin-tripa-frena-rampa y P3-escaso-tripa-frena-rampa, semillas 0–9, 300 épocas, desde cero;
+  - padre P4-alga-tripa, semillas 0–9 (las 5–9, con la cola `tripa10.json`).
+- **Primaria (prueba de signos emparejada, unilateral).** Un par es favorable si:
+  - A de P4-alga-tripa-frena-rampa es **mayor que +5 %**, por encima del ruido del nulo (máximo de 3 %);
+  - y **mayor que la A del padre** con la misma semilla.
+  - **Pasa con al menos 9 pares favorables de 10** (p = 0,011). Un mundo extinguido o pausado sin revisión cuenta como desfavorable.
+- **Comprobación de la manipulación** (como v1.7, `diag_comer.py`): P(comer | no hay nada) debe bajar claramente respecto a P(comer | alga que alimenta). Si no cambia, A no se interpreta como efecto del freno.
+- **Secundarias, descriptivas:**
+  - curva por edad: A con 50 pasos o más frente a A con menos de 10;
+  - hijos por paso (ruidosos: el nulo da de −7 a +13 %);
+  - el VA de población, como efecto ecológico;
+  - A con tripa frente a sin ella; A en P3-escaso-tripa-frena-rampa;
+  - pesos que cambian;
+  - fracción de linajes con plasticidad (cambia ≥ 0,5);
+  - las de v1.7.
+- **Adaptación de la sonda al sustrato 3.x:** la entrada de la tripa desplaza el bloque de entradas. Hay que ajustar los índices de `weight_change` antes de usarla (no afecta a A).
+- **Predicción:** abierta. En P4-alga sin freno, A ya es de +28 a +71 % en 4 de 5 (s0, sin plasticidad, ≈ 0). La bibliografía (§18) predice que con el freno la decisión de comer se vuelve sensible al contexto. El listón de superar al padre en 9 de 10 es exigente, porque el padre ya aprende.
+- **Orden:** `scratchpad/frena_rampa.sh` calibra; si es viable, espera a la marca `frena_v19_ok` (visto bueno a este criterio) y lanza los 30 mundos y el padre (semillas 5–9). Marca `frena_hecho`.
+- **Duración estimada:** calibración de ~1 h (09:25–10:30) y unas 21 h para los 35 mundos.
