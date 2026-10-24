@@ -1369,7 +1369,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - `scratchpad/frena_rampa.sh` desde las 09:25: calibración con semillas 0–2 y 150 épocas; si es viable, los 30 mundos y el padre (semillas 5–9). Log `runs/fase1d/frena_rampa_cadena.log`.
 - **Diseño v1.9** (sonda mixta primaria; un par es favorable si A > +5 % y mayor que en el padre; pasa con ≥ 9/10): aprobado por el responsable a las 09:29.
 
-### 09:27–10:30 (24-10) · Comer frena con rampa: calibración viable; arrancan los 30 mundos
+### 09:27–10:26 (24-10) · Comer frena con rampa: calibración viable; arrancan los 30 mundos
 
 - **Calibración** (`runs/fase1d/_calFrenaRampa`, semillas 0–2, 150 épocas; el freno llega a 0 en la época 100): **viable en las 3**.
   - Sin extinción; población final de 1.173, 2.439 y 2.433.
