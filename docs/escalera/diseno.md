@@ -347,7 +347,7 @@ Escrito antes de lanzar; sustituye la primaria de v1.7. Motivo: la revisión `do
 - **Duración estimada:** unas 23 h (35 mundos de ~0,6 h, más la suite y la calibración). Empezaría hacia las 3:15 del 24-10 y acabaría hacia las 2:00 del 25-10.
 - **Decisión del responsable sobre C1 (13:55):** solo el freno en este peldaño, un cambio cada vez. Que el alga buena se sortee para cada bicho al nacer queda para el peldaño siguiente.
 
-## v1.9 · 24-10-2026, 09:35 · Sonda mixta como medida primaria; comer frena con rampa (decisiones del responsable, 09:12 y 09:15)
+## v1.9 · 24-10-2026, 09:28 · Sonda mixta como medida primaria; comer frena con rampa (decisiones del responsable, 09:12 y 09:15)
 
 Escrito antes de lanzar los 30 mundos; sustituye la primaria de v1.8.
 
