@@ -1308,3 +1308,28 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Conclusión (indicio fuerte):** en 4 de 5 mundos grandes, cada bicho aprende en vida a mantener la boca abierta sobre la comida. Corrige un defecto innato: el cerebro con que nace cierra la boca cuando la vista se llena de comida. Gana un 15–44 % de ingesta y un 27–65 % de hijos. El VA de población era la suma de esto y del crecimiento demográfico.
 - **No sabemos todavía** si depende de la experiencia de cada bicho (asociación) o es una maduración programada que siempre va en la misma dirección. También queda por qué la evolución no corrige el defecto en el cerebro innato (¿Baldwin con vidas cortas?).
 - **Memoria:** el compromiso de Windows estaba en 56 de 64 GB. Los chicos (`scratchpad/sonda_chico.sh`) esperan a que la cadena de frena acabe sus tests en GPU y corren después.
+
+### 01:27–02:30 (24-10) · Sonda mixta, chicos: aprenden aún más que los grandes; comer frena se para en la calibración
+
+- **Chicos** (`runs/fase1d/_sonda_mixta.jsonl`, P4-salto64-chico, época 300, 1.500 pasos, CPU 01:27–02:17). Cada cifra compara a los que aprenden con los congelados del mismo mundo:
+
+  | Semilla | Ingesta por paso | Hijos por paso | Muertes por paso | P(comer \| comida debajo) | P(comer \| sin comida) | Bichos que cambian pesos |
+  |---|---|---|---|---|---|---|
+  | s0 | +62 % | +116 % | −42 % | 0,87 / 0,55 | 0,93 / 0,90 | 83 % |
+  | s1 | +65 % | +131 % | −39 % | 0,83 / 0,52 | 0,91 / 0,86 | 96 % |
+  | s2 | +58 % | +62 % | −41 % | 0,91 / 0,63 | 0,94 / 0,90 | 100 % |
+  | s3 | +97 % | +184 % | −45 % | 0,91 / 0,61 | 0,95 / 0,91 | 99 % |
+  | s4 | +57 % | +52 % | −50 % | 0,91 / 0,63 | 0,93 / 0,93 | 100 % |
+
+  - Por edad, la ventaja va de +6 a +45 % al nacer a +70 a +250 % con más de 300 pasos.
+  - Es el mismo mecanismo que en los grandes (no cerrar la boca sobre la comida), y más fuerte.
+- **Esto cambia la lectura de la masa.** Los chicos aprenden en vida tanto o más que los grandes. Lo que los separa es la consecuencia para la población:
+  - en un mundo de chicos donde todos aprenden hay menos bichos que en uno donde ninguno aprende (VA de población −0,11 a −0,31);
+  - en uno de grandes, más.
+  - Caveat: en la sonda mixta los que aprenden compiten con los congelados y les quitan comida, así que la ventaja relativa sale inflada. Pero esa es justo la comparación que ve la selección natural.
+  - **Conclusión (indicio fuerte):** el gemelo congelado de población (VA) **no mide el aprendizaje individual**. Mide su efecto en la población entera, que depende de la ecología (¿sobreexplotación de la comida con cuerpos chicos de vida larga?). **Los VA ≈ 0 de peldaños anteriores podrían esconder aprendizaje individual.**
+- **Comer frena se paró solo** (`frena_cadena.log`). Suite: 86 correctos y 1 omitido (00:57–01:26). Calibración (01:26–01:32), semilla 0, 30 épocas:
+  - factor 0: extinción en la época 19 (población 0–303, repoblada), final 69;
+  - factor 0,25: sin extinción, pero con oscilaciones de 64 a 648 bichos; final 476, por debajo del mínimo de 500.
+  - Ninguno cumple la regla de viabilidad, así que la cadena se para y espera al responsable. La GPU queda libre desde las 01:32.
+- **Con la GPU libre** (solo observa; no cambia ninguna decisión): sonda mixta en los peldaños anteriores, `scratchpad/sonda_previos.sh` desde las 02:28. Mundos: P4-salto64, P3-disperso, P3-escaso y P4-alga; 5 semillas, época 300, 1.500 pasos. Log `runs/fase1d/sonda_previos.log`, marca `sonda_previos_hecha`. En una prueba de 300 pasos, P4-salto64 s1 (VA ≈ 0) ya da +118 % de ingesta a los que aprenden.
