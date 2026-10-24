@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "3.1.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.2.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -12,7 +12,8 @@ SUBSTRATE_VERSION = "3.1.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 2.9: comida que cambia de sitio y alga que alimenta (FOOD_JUMP_PERIOD, ALGA_SWAP_PERIOD), P4;
                              # 2.10: salto corto de la comida (FOOD_JUMP_DIST), P4;
                              # 3.0: sentido de la tripa, una entrada más, ADR-024;
-                             # 3.1: comer frena (EAT_MOVE_FACTOR), ADR-025)
+                             # 3.1: comer frena (EAT_MOVE_FACTOR), ADR-025;
+                             # 3.2: rampa del freno (EAT_MOVE_RAMP_STEPS), ADR-025)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -237,6 +238,11 @@ FOOD_JUMP_DIST: float = 0.0
 # manipulación de holling1959some). 1 (por defecto) = como siempre, idéntico bit a bit. La política fija del
 # examen (control, ADR-011) no frena, para que su referencia no cambie.
 EAT_MOVE_FACTOR: float = 1.0
+# EAT_MOVE_RAMP_STEPS (decisión del responsable, 24-10): si es > 0, el freno se endurece poco a poco: el factor
+# pasa de 1 a EAT_MOVE_FACTOR linealmente en estos pasos y después se queda fijo. Un cambio brusco extingue y uno
+# gradual da tiempo a adaptarse (rescate evolutivo: lindsey2013evolutionary, bell2009evolutionary; evolución
+# incremental: gomez1997incremental). 0 (por defecto) = freno fijo desde el principio, como en 3.1.
+EAT_MOVE_RAMP_STEPS: int = 0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

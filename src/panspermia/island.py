@@ -300,7 +300,11 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         actions = jnp.where(control[0] > 0, fixed, actions)
     move = actions
     if C.EAT_MOVE_FACTOR != 1.0:  # comer frena (ADR-025); la política fija del examen no frena
-        brake = jnp.where(actions[:, 2] > 0, jnp.float32(C.EAT_MOVE_FACTOR), jnp.float32(1.0))
+        factor = jnp.float32(C.EAT_MOVE_FACTOR)
+        if C.EAT_MOVE_RAMP_STEPS > 0:  # el freno se endurece poco a poco hasta EAT_MOVE_FACTOR
+            ramp = jnp.clip(state.step.astype(jnp.float32) / C.EAT_MOVE_RAMP_STEPS, 0.0, 1.0)
+            factor = 1.0 - (1.0 - factor) * ramp
+        brake = jnp.where(actions[:, 2] > 0, factor, jnp.float32(1.0))
         if control is not None:
             brake = jnp.where(control[0] > 0, jnp.float32(1.0), brake)
         move = actions.at[:, 0].multiply(brake)

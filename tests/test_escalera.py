@@ -227,3 +227,33 @@ def test_eating_brakes_movement(monkeypatch):
     eat_push = jnp.array([1.0, 1.0, 0.0])                           # examen: empuje 1, giro 0, come
     assert np.all(moved(0.0, control=eat_push) > 0)
     assert np.allclose(moved(0.0, control=eat_push), moved(1.0, control=eat_push))
+
+
+def test_eating_brake_ramp(monkeypatch):
+    """Rampa del freno (3.2): con EAT_MOVE_RAMP_STEPS, el factor pasa de 1 a EAT_MOVE_FACTOR linealmente; a mitad
+    de la rampa, quien come recorre la mitad que sin freno, y al final de la rampa no se mueve."""
+    ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0, "metabolism": 0}
+    s0 = island.init_island(0, b"escalera-test", n_max=2, n_init=2, env_overrides=ov)
+    s0 = s0.replace(pos=jnp.asarray([[100.0, 100.0], [600.0, 600.0]]), vel=jnp.zeros_like(s0.vel))
+    real_step = brain.step
+
+    def fake_step(w, h, obs, hid_mask):  # empuje máximo y sin giro; solo el primero come
+        actions, h_new, pre, post = real_step(w, h, obs, hid_mask)
+        fixed = jnp.zeros_like(actions).at[:, 0].set(1.0).at[0, 2].set(1.0).at[1, 2].set(-1.0)
+        return fixed, h_new, pre, post
+
+    def moved(step):
+        jax.clear_caches()  # las constantes se leen al trazar
+        s, _ = island.world_step(s0.replace(step=jnp.asarray(step, s0.step.dtype)), plastic=False, births=False)
+        jax.clear_caches()
+        return np.linalg.norm(np.asarray(s.pos) - np.asarray(s0.pos), axis=1)
+
+    monkeypatch.setattr(brain, "step", fake_step)
+    free = moved(500)                                           # sin freno (factor 1): referencia de cada bicho
+    monkeypatch.setattr(config, "EAT_MOVE_FACTOR", 0.0)
+    monkeypatch.setattr(config, "EAT_MOVE_RAMP_STEPS", 1000)
+    start, half, end = moved(0), moved(500), moved(2000)
+    assert np.allclose(start, free, rtol=1e-5)                  # al empezar la rampa no frena
+    assert np.isclose(half[0], 0.5 * free[0], rtol=1e-3)        # a mitad, quien come recorre la mitad
+    assert np.isclose(half[1], free[1], rtol=1e-5)              # quien no come, igual
+    assert end[0] == 0 and np.isclose(end[1], free[1], rtol=1e-5)  # al final, freno total
