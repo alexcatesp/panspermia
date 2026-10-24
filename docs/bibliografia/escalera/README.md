@@ -180,3 +180,17 @@ La tabla completa, con cada condición cruzada con nuestro mundo, está en `docs
 - **mayley1996landscapes:** el coste de aprender empuja a que lo aprendido pase a los genes (efecto Baldwin).
 - **nolfi1996learning:** robots que nacen cada generación en un entorno distinto heredan una predisposición a aprender.
 - **dunlap2019components:** componentes del cambio ambiental y evolución del aprendizaje, en teoría y en experimentos.
+
+## 20. Un freno que extingue: cambios bruscos y graduales (comer frena, calibración fallida; pregunta del responsable, 24-10)
+
+En la calibración de comer frena (ADR-025), el freno total desde cero extingue el mundo y el de 0,25 deja menos de 500 bichos. ¿Qué dice la bibliografía? Todos los DOI están comprobados en Crossref (24-10). Ninguna se ha leído completa: lo que sigue sale del resumen y de lo ya conocido.
+
+- **gomulkiewicz1995when:** modelo del «rescate evolutivo». Una población sobrevive a un cambio del ambiente si la mala adaptación inicial no es demasiado grande para su tamaño y su variación heredable.
+- **bell2009evolutionary:** levaduras. Las poblaciones que antes pasaron por un estrés suave sobreviven mejor a uno letal, y el rescate depende del tamaño de la población.
+- **lindsey2013evolutionary:** bacterias con antibiótico. A igual dosis final, la subida brusca extingue y la gradual permite sobrevivir: deja usar mutaciones que, de golpe, no bastarían.
+- **gonzalez2013evolutionary:** revisión del rescate evolutivo, entre la ecología y la evolución.
+- **gomez1997incremental:** en robótica evolutiva, una conducta difícil no evoluciona si se pide desde el principio, pero sí si se empieza por una versión fácil y se endurece poco a poco («evolución incremental»).
+- **saksida1997shaping:** moldeado de la conducta de un robot por aproximaciones sucesivas, como en el condicionamiento instrumental. Es la misma idea aplicada al aprendizaje del individuo.
+- **Ya en la bibliografía:** holling1959some (tiempo de manipulación: mientras se come no se busca); charnov1976optimal y stephens1986foraging (con tiempo de manipulación compensa ser selectivo).
+
+**Implicación (decisión del responsable, 24-10):** endurecer el freno en rampa (`config.EAT_MOVE_RAMP_STEPS`, sustrato 3.2.0): de 1 a 0 en las primeras 100 épocas, para que en las épocas 151–300 el freno ya sea total.
