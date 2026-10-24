@@ -1,0 +1,31 @@
+[
+ {
+  "name": "_calFrenaRampa",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 150,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "FRENA",
+  "description": "Calibración de comer frena con rampa (responsable, 24-10): el freno pasa de 1 a 0 en 100 épocas (EAT_MOVE_RAMP_STEPS 100000); semillas 0–2, 150 épocas.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_SWAP_PERIOD": 2000,
+   "EAT_MOVE_FACTOR": 0.0,
+   "EAT_MOVE_RAMP_STEPS": 100000
+  }
+ }
+]
