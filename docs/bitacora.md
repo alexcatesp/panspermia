@@ -1368,3 +1368,22 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Colas `frenacal_rampa.json` y `frena_rampa.json` (`d2a0ca7`).
   - `scratchpad/frena_rampa.sh` desde las 09:25: calibración con semillas 0–2 y 150 épocas; si es viable, los 30 mundos y el padre (semillas 5–9). Log `runs/fase1d/frena_rampa_cadena.log`.
 - **Diseño v1.9** (sonda mixta primaria; un par es favorable si A > +5 % y mayor que en el padre; pasa con ≥ 9/10): aprobado por el responsable a las 09:29.
+
+### 09:27–10:30 (24-10) · Comer frena con rampa: calibración viable; arrancan los 30 mundos
+
+- **Calibración** (`runs/fase1d/_calFrenaRampa`, semillas 0–2, 150 épocas; el freno llega a 0 en la época 100): **viable en las 3**.
+  - Sin extinción; población final de 1.173, 2.439 y 2.433.
+  - Con el freno ya total (épocas 101–150), la población mínima es de 577, 2.328 y 1.815.
+  - Con la rampa, el mismo freno que antes extinguía deja mundos de miles de bichos, como predice la bibliografía (§20).
+- **Los 30 mundos** (`frena_rampa.json`) empezaron a las 10:21 y después vendrá el padre (semillas 5–9). Unos 36 min por mundo: fin hacia el domingo 25-10 por la mañana.
+- **Comprobación temprana de la manipulación** (`diag_comer.py` en CPU, época 150, solo 50 épocas después de llegar al freno total):
+
+  | Semilla | Comen (% de pasos) | P(comer) alga buena | P(comer) sin nada | P(comer) alga vacía |
+  |---|---|---|---|---|
+  | s0 | 82 | 0,64 | 0,92 | 0,82 |
+  | s1 | 67 | 0,73 | 0,69 | 0,55 |
+  | s2 | 79 | 0,72 | 0,84 | 0,71 |
+
+  - Comen algo menos que en P4-alga-tripa (74–99 %).
+  - s1 empieza a evitar el alga vacía (0,55 frente a 0,73 en la buena).
+  - Donde no hay nada todavía comen tanto o más que sobre el alga buena. Es pronto: la comprobación prerregistrada es la de la época 300.
