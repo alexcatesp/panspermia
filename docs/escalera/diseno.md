@@ -383,3 +383,23 @@ Escrito antes de lanzar los 30 mundos; sustituye la primaria de v1.8. **Criterio
 - **Duración estimada:** calibración de ~1 h (09:25–10:30) y unas 21 h para los 35 mundos.
 
 **Resultado (25-10, 08:45): no pasa.** 6/10 pares favorables (p = 0,38). Mediana de A: con freno +68 %, padre +11 %, sin tripa +51 %, P3-escaso con freno +117 % (10/10). Nulo −1,5 a +1,2 %. La comprobación de la manipulación falla: comen menos (55–89 % de los pasos), pero no distinguen el alga buena de donde no hay nada (1/10). Por este criterio, A no se interpreta como efecto del freno. La ventaja sale de comer menos y moverse más (detalle en la bitácora).
+
+## v2.0 · 25-10-2026, 09:20 · Alga por bicho (ADR-026; decisiones del responsable entre las 09:10 y las 09:20)
+
+Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede saber al nacer, ¿aprenden en vida a distinguir su alga buena de la vacía?
+
+- **Mundos:** cola `algabicho.json` de `escalera-algabicho` (sustrato 3.3.0): P4-alga-bicho-frena-rampa, semillas 0–9, 300 épocas, desde cero. Igual que P4-alga-tripa-frena-rampa (padre), pero con `ALGA_PER_AGENT` = 1 y sin cambio global del alga.
+- **Calibración** (`algabichocal.json`, semillas 0–2, 150 épocas): viable si las 3 terminan sin extinción y con 500 bichos o más. Si no, se para y se decide con el responsable.
+- **Medida primaria: discriminación aprendida**, con la sonda mixta (`scratchpad/sonda_mixta.py`, adaptada a 3.3; solo observa):
+  - desde la época 300, 1.500 pasos con plasticidad; cada paso, la mitad de los bichos (uid impar) vuelve a sus pesos de antes; solo cuentan los nacidos durante la sonda;
+  - en los pasos sobre alga (recurso > 0,05), D = P(comer | su alga buena) − P(comer | su alga vacía), para cada grupo;
+  - un mundo es favorable si **D de los que aprenden − D de los congelados ≥ 0,10**.
+  - **Pasa con al menos 9 mundos favorables de 10** (p = 0,011 si cada mundo tuviera probabilidad ½). Un mundo extinguido o pausado sin revisión cuenta como desfavorable.
+- **Comprobación de la manipulación:** los congelados no pueden saber cuál es su alga, así que su D debe quedar cerca de 0 (|D| < 0,05 en la mayoría de los mundos). Si no, hay una fuga de información y la primaria no se interpreta.
+- **Secundarias, descriptivas:**
+  - ventaja de ingesta A (> +5 %) y su curva por edad;
+  - índice de maduración M (`scratchpad/madura.py`), frente a la mediana de 0,84 del padre;
+  - frente al padre: ingesta, fracción de pasos comiendo, P(comer | nada);
+  - población, neuronas ocultas y fracción de linajes con plasticidad.
+- **Predicción (bibliografía, `condiciones_aprendizaje.md`):** el mundo cumple C1–C4 y C6. Aun así, el aprendizaje es raro (C8): en pontes2020evolutionary aparece en un 7 % de los linajes y en niv2002evolution en la mitad de las ejecuciones. Lo esperable es discriminación en algunos mundos y M más bajo que en el padre; con el listón de 9/10, lo más probable es que no pase aunque el efecto sea real.
+- **Orden:** `scratchpad/algabicho.sh`: suite en GPU, calibración, comprobación de viabilidad y los 10 mundos. Marca `runs/fase1d/algabicho_hecho`.

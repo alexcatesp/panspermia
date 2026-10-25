@@ -1453,3 +1453,10 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - El adulto real (A) come como el criado con comida (E): 200 pasos bastan para rehacer lo que la plasticidad hace en una vida.
 - **Límites:** en D siguen los vecinos y los rayos, así que «sin comida» no es «sin experiencia» (los pesos que más cambian son los de proximidad y parentesco). Además, en el examen el recién nacido tiene la energía del adulto, no la suya.
 - **Conclusión: firme en lo principal.** Lo que se aprende en vida es sobre todo una maduración que no depende de la comida: la evolución usa la plasticidad para terminar de construir un cerebro que nace incompleto. El aprendizaje por la experiencia con la comida existe, pero es minoritario (8 de 27 mundos). Encaja con C1 de `condiciones_aprendizaje.md`: si lo que conviene se puede saber al nacer, no hace falta aprenderlo de la experiencia.
+
+### 09:10–09:21 (25-10) · Alga por bicho: decisión, código y lanzamiento
+
+- **Decisión del responsable** (tras el diagnóstico de maduración): siguiente peldaño, el alga sorteada para cada bicho (C1). Sorteo al azar al nacer, sin herencia; primaria, discriminación aprendida con ≥ 9/10. ADR-026 y `diseno.md` v2.0.
+- **Código:** rama `escalera-algabicho` (worktree `panspermia-algabicho`, `6ecfe9b`, sustrato 3.3.0). `config.ALGA_PER_AGENT`; `world.good_alga_a` sortea por uid con la clave del mundo, sin campo nuevo en el estado. Test `test_alga_per_agent_feeds_each_its_own`; con los del alga, la tripa y el freno, 5 correctos en CPU.
+- **Colas:** `algabichocal.json` (semillas 0–2, 150 épocas) y `algabicho.json` (P4-alga-bicho-frena-rampa, semillas 0–9, 300 épocas).
+- **Cadena** `scratchpad/algabicho.sh`, desde las 09:21: suite en GPU, calibración, viabilidad y los 10 mundos. Logs `runs/fase1d/algabicho_cadena.log` y `algabicho.log`; marca `algabicho_hecho`. Fin estimado: hacia las 17:00.

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-25 09:10",
+ "actualizado": "2026-10-25 09:21",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -1083,13 +1083,15 @@
    "padre": "P4atf",
    "titulo": "El alga buena se sortea para cada bicho al nacer",
    "corto": "+ alga por bicho",
-   "estado": "pendiente",
+   "estado": "en curso",
    "resultado": null,
    "anade": "lo conveniente no se puede saber al nacer: cada bicho nace con su alga buena sorteada (C1 de condiciones_aprendizaje.md)",
-   "texto": "Revisión de la bibliografía (23-10): en pontes2020evolutionary el significado de las pistas se sortea para cada organismo, y en niv2002evolution en cada generación y a mitad de la vida. En P4-alga, el alga buena cambia cada 2.000 pasos y los bichos viven ~300, así que casi siempre se hereda. Responsable (13:55): después de comer frena, un cambio cada vez. El diagnóstico de maduración (25-10) lo apoya: lo que hoy se aprende en vida es sobre todo maduración; con el alga sorteada para cada bicho, solo la experiencia dice qué comer (la madurez no basta), y M debería bajar.",
-   "ref": "docs/escalera/condiciones_aprendizaje.md",
+   "texto": "Revisión de la bibliografía (23-10): en pontes2020evolutionary el significado de las pistas se sortea para cada organismo, y en niv2002evolution en cada generación y a mitad de la vida. En P4-alga, el alga buena cambia cada 2.000 pasos y los bichos viven ~300, así que casi siempre se hereda. Responsable (13:55): después de comer frena, un cambio cada vez. El diagnóstico de maduración (25-10) lo apoya: lo que hoy se aprende en vida es sobre todo maduración; con el alga sorteada para cada bicho, solo la experiencia dice qué comer (la madurez no basta), y M debería bajar. Decisión del responsable (25-10, entre las 09:10 y las 09:20; ADR-026): sorteo al azar al nacer, sin herencia, sobre P4-alga-tripa-frena-rampa y sin el cambio global del alga. Sustrato 3.3.0, rama escalera-algabicho. Primaria (diseno v2.0): discriminación aprendida con la sonda mixta, D(aprenden) − D(congelados) ≥ 0,10 en ≥ 9/10. Suite, calibración y 10 mundos desde las 09:21 (scratchpad/algabicho.sh); fin hacia las 17:00.",
+   "ref": "docs/decisiones.md",
    "recurso": "GPU",
-   "principal": false
+   "principal": true,
+   "cola": "algabicho.json",
+   "condicion": "P4-alga-bicho-frena-rampa"
   }
  ],
  "hipotesis": [

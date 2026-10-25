@@ -569,3 +569,14 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 - La calibración del 24-10 (01:26) no dio ningún factor viable: con 0, extinción en la época 19; con 0,25, 476 bichos.
 - Por la bibliografía (§20, rescate evolutivo: gomulkiewicz1995when, bell2009evolutionary, lindsey2013evolutionary; evolución incremental: gomez1997incremental), el responsable decidió endurecer el freno en rampa: `config.EAT_MOVE_RAMP_STEPS` = 100.000, de 1 a 0 en las primeras 100 épocas. Sustrato 3.2.0, `f33e2c1`; con la rampa a 0, idéntico a 3.1; test `test_eating_brake_ramp`.
 - La medida primaria pasa a ser la sonda mixta (`diseno.md` v1.9): el VA de población no mide el aprendizaje de cada bicho.
+
+## ADR-026 · 25-10-2026 · Alga por bicho: lo que conviene comer no se puede saber al nacer (decisión del responsable)
+
+**Contexto.** Comer frena (ADR-025) no pasa (6/10, 25-10, 08:45). El diagnóstico de maduración (`scratchpad/madura.py`, bitácora 25-10, 09:06) muestra que lo que la plasticidad cambia en vida es sobre todo maduración: criados sin comida, los bichos rinden casi como criados con ella (M ≥ 0,7 en 19 de 27 mundos). En P4-alga, el alga buena cambia para todos cada 2.000 pasos y los bichos viven ~300, así que casi siempre es la de su padre. Lo que conviene se puede saber al nacer y la evolución no necesita aprender de la experiencia. La bibliografía lo predice (C1 de `docs/escalera/condiciones_aprendizaje.md`: stephens1991change, pontes2020evolutionary, niv2002evolution).
+
+**Decisión (responsable, 25-10-2026, entre las 09:10 y las 09:20).**
+1. **Alga por bicho:** con `config.ALGA_PER_AGENT` = 1, a cada bicho le alimenta una sola alga, A o B, sorteada al nacer con probabilidad ½, sin herencia, y la mantiene toda la vida. La otra se come, pero no da energía ni cuenta como ingesta. El sorteo sale del uid del bicho con la clave propia del mundo (`world.good_alga_a`): determinista, sin campo nuevo en el estado e independiente del padre. Como en pontes2020evolutionary, el significado de la pista (el tipo de alga, que ya se ve en los rayos) se sortea para cada organismo.
+2. **Excluye el cambio global del alga** (`ALGA_SWAP_PERIOD`): un cambio cada vez.
+3. **Sobre P4-alga-tripa-frena-rampa** (padre): tripa, freno con rampa de 100 épocas y el doble de algas (`k_mean` 3,804).
+4. **Sustrato 3.3.0** (rama `escalera-algabicho`, worktree `panspermia-algabicho`, desde `escalera-frena`). Apagado (por defecto), el código no cambia. Test `test_alga_per_agent_feeds_each_its_own`.
+5. **Criterio** en `docs/escalera/diseno.md` v2.0: discriminación aprendida con la sonda mixta, ≥ 9/10 mundos.
