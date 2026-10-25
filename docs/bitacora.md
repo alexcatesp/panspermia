@@ -1602,3 +1602,27 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - No se afirmará superioridad frente a los LLM.
   - El escalado espera a tener una capacidad válida (Biología retiró lanzarlo ya).
   - Ya se hacen (b0), la validación exploratoria del crecimiento abierto en CPU, y (d0), el determinismo entre GPU si hay máquina.
+- **(d0) queda pendiente:** solo hay una máquina (RTX 5070 Ti; la 5070 «de referencia» nunca existió, según el responsable). Hace falta una segunda máquina o una GPU alquilada, y eso lo decide él.
+
+### 22:44–23:56 (25-10) · Manchas: suite y calibración viables
+
+- **Suite en GPU (3.5.0):** 90 correctos y 1 omitido (35 min).
+- **Calibración** (`manchascal.json`, 3 semillas × 200 épocas, desde las 22:44): **viable** en las tres.
+  - Población final 2.385, 2.451 y 2.519; media de las épocas 100–149: 2.285, 2.122 y 2.145, por debajo de 3.900.
+  - Energía media 20,0–23,8.
+- **Los 10 mundos (`manchas.json`, 300 épocas) arrancan el 25-10 a las 23:56.** Log en `runs/fase1d/manchas.log`.
+
+### 00:01 (26-10) · H-control: control positivo y negativo de la trampa (en marcha)
+
+- **Script:** `scratchpad/madura_control.py`, que solo observa. Corre sobre los 10 mundos del alga por bicho en la época 300, con examen barajado y congelado, como la primaria de las manchas.
+- **Montaje:**
+  - Se crían E y X y se les impone a mano la regla que buscamos, una taxia del canal de recurso de los rayos (con el signo del tipo de alga) al giro y al empuje.
+  - E+ va hacia su alga y X− hacia la contraria.
+  - Dosis fuerte k = 4 y débil k = 1.
+  - Control negativo: E+ y X− repartidos al azar, bicho a bicho.
+- **Regla, fijada antes de la ejecución completa:**
+  - Positivo: frac_buena y sel_entrada de E+ − X− ≥ 0,05, cada una en ≥ 9/10.
+  - Negativo: |diferencia| < 0,05 en las dos con los cerebros barajados, en ≥ 9/10.
+  - La dosis débil y el ruido de la segunda baraja se informan sin umbral.
+- **Transparencia:** una prueba de 60 pasos con k = 1 en s0 dio señales débiles y mezcladas (frac_buena +0,053, sel_entrada −0,047). Por eso la dosis fuerte se fijó en 4 antes de la ejecución completa.
+- **CPU ligera** (`taskset 0-5`, `scratchpad/control.sh`) mientras la GPU corre las manchas. Datos en `runs/fase1d/_control_algabicho.jsonl`, log `control.log`, marca `control_hecho`.
