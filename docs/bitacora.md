@@ -1526,3 +1526,13 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Población y cerebro** (épocas 280–299, frente al padre con la misma semilla): neuronas 1,6–6,3 (mediana 2,5; padre 1,2), más en 7/10. Vida media 370–1.684 pasos (mediana 687; padre 288), más en 10/10. Energía media 7,2–24 (mediana 13,1; padre 7,9).
 - **Conclusión: negativo para la primaria (firme).** Con el alga sorteada por bicho no aprenden a comer su alga y dejar la otra. Indicio: pasan más tiempo sobre su alga buena, pero puede ser maduración (aprenden a moverse) más el reflejo innato de la tripa. Aprender en vida compensa más que nunca (+136 %), y es sobre todo maduración (M 0,97).
 - La hora «13:30» del comentario de `config.py` y de la descripción de `algabichocal3.json` se corrigió a «entre las 13:25 y las 14:25» (`escalera-algabicho`, `405d413`). Los `run.json` de `_calAlgaBicho3` conservan la descripción antigua.
+
+### 21:53 (25-10) · Alga por bicho: diagnóstico del indicio (regla fijada antes de ver los datos)
+
+- **Decisión del responsable (entre las 21:46 y las 21:52): diagnosticar el indicio** antes de otro peldaño.
+- **Problema de la maduración normal:** criados sin comida, la tripa nunca se enciende, así que no separa «aprender qué alga es la suya» de «aprender a moverse y que el reflejo de la tripa haga el resto».
+- **`scratchpad/madura_alga.py`** (solo observa): las crianzas de `madura.py` (N recién nacido, E con comida, D sin comida, A adulto real) más **X**: con comida, pero con el alga que alimenta invertida durante la crianza, para que la tripa le enseñe la equivocada. Examen con el alga verdadera: `frac_buena` (pasos sobre su alga buena / pasos sobre comida) y `D_comer`.
+- **Regla:**
+  - experiencia del alga si `frac_buena`(E) − `frac_buena`(X) ≥ 0,05 en al menos 8 de 10 mundos;
+  - maduración y reflejo si |E − X| < 0,05 en al menos 8 de 10 y `frac_buena`(D) ≥ N + ½ (E − N).
+- Lanzado a las 21:53 (`scratchpad/madura_alga.sh`, log `runs/fase1d/madura_alga.log`, datos `_madura_alga.jsonl`).
