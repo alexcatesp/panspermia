@@ -259,6 +259,19 @@ def test_eating_brake_ramp(monkeypatch):
     assert end[0] == 0 and np.isclose(end[1], free[1], rtol=1e-5)  # al final, freno total
 
 
+def test_food_ramp(monkeypatch):
+    """Rampa de comida (3.4): la capacidad de las algas empieza en K_MEAN_RAMP_FROM × la de siempre, vale la media a
+    mitad de la rampa y la de siempre al final; apagada, no cambia nada."""
+    env = _env(drift=0.0)
+    base = np.asarray(world.kmax_field(env, jnp.int32(500)))
+    monkeypatch.setattr(config, "K_MEAN_RAMP_STEPS", 1000)
+    monkeypatch.setattr(config, "K_MEAN_RAMP_FROM", 2.0)
+    start, half, end, later = (np.asarray(world.kmax_field(env, jnp.int32(t))) for t in (0, 500, 1000, 5000))
+    assert np.allclose(start, 2.0 * base, rtol=1e-5)
+    assert np.allclose(half, 1.5 * base, rtol=1e-5)
+    assert np.allclose(end, base, rtol=1e-5) and np.allclose(later, base, rtol=1e-5)
+
+
 def test_alga_per_agent_feeds_each_its_own(monkeypatch):
     """Alga por bicho (3.3, ADR-026): a cada bicho le alimenta una sola alga, sorteada por su uid (la mitad,
     A), fija para toda la vida y distinta en cada mundo; sobre la otra come pero no gana nada. Apagado, como

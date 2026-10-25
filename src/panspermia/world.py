@@ -194,7 +194,11 @@ def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
              + wave_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
     z = jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0)
     z = z / jnp.sqrt(jnp.sum(env.wave_amp ** 2) / 2)
-    K = env.k_mean * jnp.maximum(0.0, 1.0 + C.K_CONTRAST * z)
+    k_mean = env.k_mean
+    if C.K_MEAN_RAMP_STEPS > 0:  # rampa de comida (3.4): de K_MEAN_RAMP_FROM × k_mean a k_mean
+        ramp = jnp.clip(step.astype(jnp.float32) / C.K_MEAN_RAMP_STEPS, 0.0, 1.0)
+        k_mean = k_mean * (C.K_MEAN_RAMP_FROM + (1.0 - C.K_MEAN_RAMP_FROM) * ramp)
+    K = k_mean * jnp.maximum(0.0, 1.0 + C.K_CONTRAST * z)
     if C.K_CUT is not None:  # comida dispersa (ADR-022)
         K = jnp.where(z >= C.K_CUT, K, 0.0)
     return jnp.where(env.walls, 0.0, K)

@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "3.3.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.4.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -14,7 +14,8 @@ SUBSTRATE_VERSION = "3.3.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 3.0: sentido de la tripa, una entrada más, ADR-024;
                              # 3.1: comer frena (EAT_MOVE_FACTOR), ADR-025;
                              # 3.2: rampa del freno (EAT_MOVE_RAMP_STEPS), ADR-025;
-                             # 3.3: alga buena sorteada para cada bicho (ALGA_PER_AGENT), ADR-026)
+                             # 3.3: alga buena sorteada para cada bicho (ALGA_PER_AGENT), ADR-026;
+                             # 3.4: rampa de comida (K_MEAN_RAMP_STEPS, K_MEAN_RAMP_FROM), ADR-026)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -249,6 +250,12 @@ EAT_MOVE_RAMP_STEPS: int = 0
 # pero no da energía ni cuenta como ingesta. Lo que conviene comer no se puede saber al nacer (C1 de
 # docs/escalera/condiciones_aprendizaje.md; pontes2020evolutionary). Excluye ALGA_SWAP_PERIOD. 0 (por defecto) = apagado.
 ALGA_PER_AGENT: int = 0
+# K_MEAN_RAMP_STEPS (decisión del responsable, 25-10, 13:30; ADR-026): si es > 0, la capacidad media de las algas
+# empieza en K_MEAN_RAMP_FROM × k_mean y baja linealmente hasta k_mean en estos pasos. Con la mitad de algas desde
+# el principio se extinguen al arrancar y con el doble viven en el tope: rescate evolutivo, como la rampa del freno
+# (lindsey2013evolutionary, bell2009evolutionary). 0 (por defecto) = sin rampa, idéntico bit a bit.
+K_MEAN_RAMP_STEPS: int = 0
+K_MEAN_RAMP_FROM: float = 2.0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

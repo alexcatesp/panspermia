@@ -18,7 +18,9 @@
   "config": {
    "ALGA_PER_AGENT": 1,
    "EAT_MOVE_FACTOR": 0.0,
-   "EAT_MOVE_RAMP_STEPS": 100000
+   "EAT_MOVE_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_FROM": 2.0
   },
   "seeds": [
    0,
@@ -33,6 +35,6 @@
    9
   ],
   "epochs": 300,
-  "description": "Alga por bicho (ADR-026; decisión del responsable, 25-10): cada bicho nace con su alga buena sorteada, sin herencia; la otra se come pero no alimenta. Sobre P4-alga-tripa-frena-rampa (padre), sin el cambio global del alga y con la mitad de algas (k_mean 1,902: la misma comida útil). Sustrato 3.3.0. Criterio: diseno.md v2.0–v2.1 (discriminación aprendida, ≥ 9/10)."
+  "description": "Alga por bicho (ADR-026; decisión del responsable, 25-10): cada bicho nace con su alga buena sorteada, sin herencia; la otra se come pero no alimenta. Sobre P4-alga-tripa-frena-rampa (padre), sin el cambio global del alga; la comida baja del doble a la mitad en 100 épocas (k_mean final 1,902: la misma comida útil). Sustrato 3.4.0. Criterio: diseno.md v2.0–v2.2 (discriminación aprendida, ≥ 9/10)."
  }
 ]
