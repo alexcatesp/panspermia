@@ -1460,3 +1460,14 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Código:** rama `escalera-algabicho` (worktree `panspermia-algabicho`, `6ecfe9b`, sustrato 3.3.0). `config.ALGA_PER_AGENT`; `world.good_alga_a` sortea por uid con la clave del mundo, sin campo nuevo en el estado. Test `test_alga_per_agent_feeds_each_its_own`; con los del alga, la tripa y el freno, 5 correctos en CPU.
 - **Colas:** `algabichocal.json` (semillas 0–2, 150 épocas) y `algabicho.json` (P4-alga-bicho-frena-rampa, semillas 0–9, 300 épocas).
 - **Cadena** `scratchpad/algabicho.sh`, desde las 09:21: suite en GPU, calibración, viabilidad y los 10 mundos. Logs `runs/fase1d/algabicho_cadena.log` y `algabicho.log`; marca `algabicho_hecho`. Fin estimado: hacia las 17:00.
+
+### 09:21–13:02 (25-10) · Alga por bicho: suite correcta; la primera calibración vive en el tope; recalibración con la mitad de algas
+
+- **Suite en GPU** (`escalera-algabicho`, 09:21–09:53): 88 correctos y 1 omitido (`runs/fase1d/algabicho_tests.log`).
+- **Primera calibración** (`algabichocal.json`, `k_mean` 3,804, 09:53–10:47): viable por el criterio escrito (sin extinción, 4.096 bichos en las 3), pero **en el tope**:
+  - en las épocas 100–149 la población mínima es 4.096 en todas (51 de 51) y la energía media es de 72, 90 y 123 (comer frena: 12–22);
+  - cada alga alimenta ahora a la mitad de los bichos, mientras que en comer frena la mitad de las algas no alimentaba a nadie: la comida útil se duplica;
+  - sin hambre, equivocarse de alga no cuesta nada: es el fallo de P3-escalera.
+  - Datos en `runs/fase1d/_calAlgaBicho-k3804`.
+- Los 10 mundos arrancaron a las 10:47. **Decisión del responsable (hacia las 13:00): parar y recalibrar con la mitad de algas** (`k_mean` 1,902, la comida útil de comer frena). Parados a las 13:01; s0–s3 habían terminado (`runs/fase1d/_P4-alga-bicho-k3804-parado`, no cuentan).
+- **Segunda calibración** (`algabichocal2.json`, `b0faa05`; `scratchpad/algabicho2.sh`) desde las 13:02. Viable si las 3 terminan sin extinción, con 500 bichos o más y con una población media por debajo de 3.900 en las épocas 100–149. Si lo es, los 10 mundos (cola `algabicho.json`, ya con `k_mean` 1,902).
