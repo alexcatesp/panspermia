@@ -23,7 +23,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 
 ## Entorno
 
-- Python ≥ 3.11, JAX con CUDA 12. En Windows: **WSL2** (JAX con GPU no corre nativo en Windows). GPU de referencia: RTX 5070 12 GB; GPU de desarrollo: RTX 5070 Ti 16 GB.
+- Python ≥ 3.11, JAX con CUDA 12. En Windows: **WSL2** (JAX con GPU no corre nativo en Windows). GPU de referencia: RTX 5070 12 GB (solo un objetivo de la spec: esa máquina no existe, responsable, 25-10); la única máquina es la de desarrollo, con una RTX 5070 Ti 16 GB.
 - Al arrancar cualquier simulación llamar a `panspermia.island.setup_determinism()` antes de usar JAX: fija `XLA_FLAGS=--xla_gpu_deterministic_ops=true`, `jax_default_matmul_precision="highest"` y desactiva la preasignación de VRAM.
 - Distro WSL: `Ubuntu-24.04` (en `D:\WSL\Ubuntu-24.04`, usuario `aleja`); venv en `~/.venvs/panspermia`. Instalar: `bash scripts/setup_wsl.sh` (usa pip; `uv pip install` falla con las ruedas NVIDIA, ver ADR-005).
 - Ejecutar desde Windows: `wsl -d Ubuntu-24.04 --cd /mnt/d/Development/panspermia -- bash -lc 'source ~/.venvs/panspermia/bin/activate; python -m pytest -q'`.
