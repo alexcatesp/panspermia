@@ -1484,3 +1484,17 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - El comentario de `config.py` y la descripción de la cola dicen «13:30» como hora de la decisión: no está verificada (fue entre las 13:25 y las 14:25). Se corregirá cuando el worktree no esté en uso.
   - Colas `algabichocal3.json` y `algabicho.json` (con la rampa y `k_mean` final 1,902).
 - **Cadena** `scratchpad/algabicho3.sh` desde las 14:25: suite en GPU, calibración (viable si no hay extinción, quedan 500 bichos o más y la población media de las épocas 100–149 es menor de 3.900) y los 10 mundos. Fin estimado hacia las 21:30.
+
+### 14:25–15:53 (25-10) · Alga por bicho con rampa de comida: suite correcta y calibración viable; arrancan los 10 mundos
+
+- **Suite en GPU** (3.4.0, 14:25–14:58): 89 correctos y 1 omitido.
+- **Tercera calibración** (`runs/fase1d/_calAlgaBicho3`, 14:58–15:53): **viable en las 3**, sin extinción y sin tope.
+
+  | Semilla | Población final | Media épocas 100–149 | Energía media 100–149 |
+  |---|---|---|---|
+  | s0 | 2.940 | 2.450 | 9,6 |
+  | s1 | 2.596 | 1.467 | 8,5 |
+  | s2 | 2.443 | 2.311 | 15,8 |
+
+  - En s0 la población nunca baja de 1.149; la energía (8–16) es la de comer frena (12–22) o menor: hay hambre.
+- **Los 10 mundos** (`algabicho.json`) empezaron a las 15:53. Unos 36 min por mundo: fin hacia las 22:00 (marca `algabicho_hecho`).
