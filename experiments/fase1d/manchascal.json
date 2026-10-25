@@ -29,7 +29,7 @@
    1,
    2
   ],
-  "epochs": 150,
-  "description": "Calibración de las manchas de un solo tipo (ADR-027; responsable, 25-10, entre las 21:54 y las 21:59): sobre el alga por bicho, comida en 18 manchas de ~71 u a ~177 u (K_CUT 1,7, 9 % del suelo), cada una de un tipo (dos familias de ondas, sustrato 3.5.0). k_mean 8,792: la misma comida total que el padre, con la rampa del doble a la mitad. Viable si las 3 terminan sin extinción, con 500 bichos o más y con la población media de las épocas 100–149 por debajo de 3.900."
+  "epochs": 200,
+  "description": "Calibración de las manchas (200 épocas, decisión del panel 01, 22:16) de un solo tipo (ADR-027; responsable, 25-10, entre las 21:54 y las 21:59): sobre el alga por bicho, comida en 18 manchas de ~71 u a ~177 u (K_CUT 1,7, 9 % del suelo), cada una de un tipo (dos familias de ondas, sustrato 3.5.0). k_mean 8,792: la misma comida total que el padre, con la rampa del doble a la mitad. Viable si las 3 terminan sin extinción, con 500 bichos o más y con la población media de las épocas 100–199 por debajo de 3.900 (las dos rampas acaban en la época 100)."
  }
 ]
