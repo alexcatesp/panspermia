@@ -1471,3 +1471,16 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Datos en `runs/fase1d/_calAlgaBicho-k3804`.
 - Los 10 mundos arrancaron a las 10:47. **Decisión del responsable (hacia las 13:00): parar y recalibrar con la mitad de algas** (`k_mean` 1,902, la comida útil de comer frena). Parados a las 13:01; s0–s3 habían terminado (`runs/fase1d/_P4-alga-bicho-k3804-parado`, no cuentan).
 - **Segunda calibración** (`algabichocal2.json`, `b0faa05`; `scratchpad/algabicho2.sh`) desde las 13:02. Viable si las 3 terminan sin extinción, con 500 bichos o más y con una población media por debajo de 3.900 en las épocas 100–149. Si lo es, los 10 mundos (cola `algabicho.json`, ya con `k_mean` 1,902).
+
+### 13:24–14:25 (25-10) · Alga por bicho: con la mitad de algas se extinguen al arrancar; rampa de comida (sustrato 3.4.0)
+
+- **Segunda calibración** (`k_mean` 1,902, `runs/fase1d/_calAlgaBicho2`, 13:02–13:24): **no viable**.
+  - s0 y s2 se extinguen en la época 4; la reinyección no prende y se paran hacia la época 20 (64 y 95 bichos).
+  - s1 también se extingue en la época 4, pero una población nueva prende: llega a 2.300 y, con el freno total, se queda en 740–1.458 con energía de 12–13. Una vez en marcha vive como se quería: sin tope y con algo de hambre.
+  - El problema está en el arranque, con cerebros al azar, como con ⅜ de comida en la calibración de P3.
+  - Error mío: el script de viabilidad dividía por cero cuando un mundo se paraba antes de la época 100 (el veredicto, no viable, era el mismo). Corregido en `scratchpad/algabicho3.sh`.
+- **Decisión del responsable (entre las 13:25 y las 14:25): rampa de comida**, del doble a la mitad en las mismas 100 épocas que el freno (rescate evolutivo, §20).
+  - Código: `escalera-algabicho`, `a232a52`, sustrato 3.4.0: `config.K_MEAN_RAMP_STEPS` (100.000) y `K_MEAN_RAMP_FROM` (2), en `world.kmax_field`. Apagada, idéntica a 3.3. Test `test_food_ramp`; con los del alga, la tripa, el freno y la 1d, 10 correctos en CPU.
+  - El comentario de `config.py` y la descripción de la cola dicen «13:30» como hora de la decisión: no está verificada (fue entre las 13:25 y las 14:25). Se corregirá cuando el worktree no esté en uso.
+  - Colas `algabichocal3.json` y `algabicho.json` (con la rampa y `k_mean` final 1,902).
+- **Cadena** `scratchpad/algabicho3.sh` desde las 14:25: suite en GPU, calibración (viable si no hay extinción, quedan 500 bichos o más y la población media de las épocas 100–149 es menor de 3.900) y los 10 mundos. Fin estimado hacia las 21:30.
