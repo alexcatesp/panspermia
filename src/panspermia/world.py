@@ -192,8 +192,11 @@ def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
                                                      (C.K_WAVES,), maxval=2 * math.pi)
     phase = (2 * math.pi * (env.wave_k[:, 0, None, None] * cx + env.wave_k[:, 1, None, None] * cy)
              + wave_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
-    z = jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0)
-    z = z / jnp.sqrt(jnp.sum(env.wave_amp ** 2) / 2)
+    if C.ALGA_PATCH_FAMILIES:  # 3.5 (ADR-027): z = max(z_A, z_B), manchas de un solo tipo
+        z = jnp.maximum(*_family_fields(env.wave_amp, phase))
+    else:
+        z = jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0)
+        z = z / jnp.sqrt(jnp.sum(env.wave_amp ** 2) / 2)
     k_mean = env.k_mean
     if C.K_MEAN_RAMP_STEPS > 0:  # rampa de comida (3.4): de K_MEAN_RAMP_FROM × k_mean a k_mean
         ramp = jnp.clip(step.astype(jnp.float32) / C.K_MEAN_RAMP_STEPS, 0.0, 1.0)
@@ -204,10 +207,24 @@ def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
     return jnp.where(env.walls, 0.0, K)
 
 
+def _family_fields(amp: jax.Array, phase: jax.Array) -> tuple[jax.Array, jax.Array]:
+    """(z_A, z_B) [RES, RES]: las dos familias de ondas (las pares y las impares), normalizadas cada una por separado.
+    Alternas y no por mitades: con el mapa de fase1d-w0, por mitades el alga A tendría el 67 % de la comida."""
+    fam = lambda a, p: jnp.sum(a[:, None, None] * jnp.sin(p), axis=0) / jnp.sqrt(jnp.sum(a ** 2) / 2)
+    return fam(amp[0::2], phase[0::2]), fam(amp[1::2], phase[1::2])
+
+
 def algae_type_a(env: EnvParams, step: jax.Array) -> jax.Array:
     """bool[RES, RES]: True donde el alga es de tipo A (manchas que derivan con el mundo)."""
     t = step.astype(jnp.float32) * C.DT
     cx, cy = jnp.meshgrid(_RES_CENTERS, _RES_CENTERS, indexing="ij")
+    if C.ALGA_PATCH_FAMILIES:  # 3.5 (ADR-027): el tipo es la familia que manda en cada sitio
+        if C.FOOD_JUMP_PERIOD > 0:
+            raise ValueError("ALGA_PATCH_FAMILIES y FOOD_JUMP_PERIOD se excluyen")
+        phase = (2 * math.pi * (env.wave_k[:, 0, None, None] * cx + env.wave_k[:, 1, None, None] * cy)
+                 + env.wave_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
+        z_a, z_b = _family_fields(env.wave_amp, phase)
+        return z_a >= z_b
     phase = (2 * math.pi * (env.wave_k[:, 0, None, None] * cx + env.wave_k[:, 1, None, None] * cy)
              + env.type_phase[:, None, None] + env.drift * env.wave_speed[:, None, None] * t)
     return jnp.sum(env.wave_amp[:, None, None] * jnp.sin(phase), axis=0) > 0

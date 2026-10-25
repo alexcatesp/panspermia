@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "3.4.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.5.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -15,7 +15,8 @@ SUBSTRATE_VERSION = "3.4.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 3.1: comer frena (EAT_MOVE_FACTOR), ADR-025;
                              # 3.2: rampa del freno (EAT_MOVE_RAMP_STEPS), ADR-025;
                              # 3.3: alga buena sorteada para cada bicho (ALGA_PER_AGENT), ADR-026;
-                             # 3.4: rampa de comida (K_MEAN_RAMP_STEPS, K_MEAN_RAMP_FROM), ADR-026)
+                             # 3.4: rampa de comida (K_MEAN_RAMP_STEPS, K_MEAN_RAMP_FROM), ADR-026;
+                             # 3.5: manchas de un solo tipo de alga (ALGA_PATCH_FAMILIES), ADR-027)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -256,6 +257,13 @@ ALGA_PER_AGENT: int = 0
 # (lindsey2013evolutionary, bell2009evolutionary). 0 (por defecto) = sin rampa, idéntico bit a bit.
 K_MEAN_RAMP_STEPS: int = 0
 K_MEAN_RAMP_FROM: float = 2.0
+# ALGA_PATCH_FAMILIES (decisión del responsable, 25-10, entre las 21:54 y las 21:59; ADR-027): si es 1, las K_WAVES ondas
+# del campo se reparten en dos familias (las pares y las impares). Cada familia, normalizada por separado, da
+# su propio campo z_A o z_B; el campo de comida usa z = max(z_A, z_B) y el alga es de tipo A donde z_A >= z_B. Así cada
+# mancha (con K_CUT) es casi siempre de un solo tipo, y el color, que se ve en los rayos, dice qué hay en ella antes de
+# entrar: elegir mancha por el color (todd1991exploring; C2 y C4 de docs/escalera/condiciones_aprendizaje.md).
+# 0 (por defecto) = el mundo de siempre, idéntico bit a bit. Opción de compilación, como K_CUT.
+ALGA_PATCH_FAMILIES: int = 0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

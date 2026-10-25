@@ -307,3 +307,36 @@ def test_alga_per_agent_feeds_each_its_own(monkeypatch):
     monkeypatch.setattr(config, "ALGA_SWAP_PERIOD", 1000)
     with pytest.raises(ValueError):
         island.world_step(s, plastic=False, births=False, control=eat)
+
+
+def test_alga_patch_families(monkeypatch):
+    """Manchas de un solo tipo (3.5, ADR-027): el alga es A donde manda la familia de ondas pares y la comida sigue
+    a la mayor de las dos familias; con corte, cada casilla con comida tiene el tipo de la familia que la levanta.
+    Apagado, el mundo de siempre. No se puede encender junto a los saltos de la comida."""
+    env = _env(drift=0.0, k_mean=2.0)
+    base_k, base_a = (np.asarray(f(env, jnp.int32(0))) for f in (world.kmax_field, world.algae_type_a))
+    monkeypatch.setattr(config, "ALGA_PATCH_FAMILIES", 1)
+    monkeypatch.setattr(config, "K_CUT", 1.7)
+    K, A = np.asarray(world.kmax_field(env, jnp.int32(0))), np.asarray(world.algae_type_a(env, jnp.int32(0)))
+    cx, cy = np.meshgrid(np.asarray(world._RES_CENTERS), np.asarray(world._RES_CENTERS), indexing="ij")
+    k, amp, ph = (np.asarray(x, np.float64) for x in (env.wave_k, env.wave_amp, env.wave_phase))
+    waves = amp[:, None, None] * np.sin(2 * np.pi * (k[:, 0, None, None] * cx + k[:, 1, None, None] * cy) + ph[:, None, None])
+    z_a = waves[0::2].sum(0) / np.sqrt((amp[0::2] ** 2).sum() / 2)
+    z_b = waves[1::2].sum(0) / np.sqrt((amp[1::2] ** 2).sum() / 2)
+    z = np.maximum(z_a, z_b)
+    sure = np.abs(z_a - z_b) > 1e-3                                              # lejos del empate (redondeo f32)
+    assert np.array_equal(A[sure], (z_a >= z_b)[sure])
+    walls = np.asarray(env.walls)
+    expect = np.where((z >= 1.7) & ~walls, 2.0 * np.maximum(0.0, 1 + config.K_CONTRAST * z), 0.0)
+    near_cut = np.abs(z - 1.7) < 1e-3
+    assert np.allclose(K[~near_cut], expect[~near_cut], rtol=1e-4, atol=1e-4)
+    assert 0.03 < (K > 0).mean() < 0.2 and 0.25 < (K * A).sum() / K.sum() < 0.75
+    assert not np.array_equal(A, base_a)
+    monkeypatch.setattr(config, "FOOD_JUMP_PERIOD", 1000)
+    with pytest.raises(ValueError):
+        world.algae_type_a(env, jnp.int32(0))
+    monkeypatch.setattr(config, "FOOD_JUMP_PERIOD", 0)
+    monkeypatch.setattr(config, "ALGA_PATCH_FAMILIES", 0)
+    monkeypatch.setattr(config, "K_CUT", None)
+    assert np.array_equal(np.asarray(world.kmax_field(env, jnp.int32(0))), base_k)
+    assert np.array_equal(np.asarray(world.algae_type_a(env, jnp.int32(0))), base_a)
