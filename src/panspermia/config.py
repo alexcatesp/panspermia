@@ -250,7 +250,7 @@ EAT_MOVE_RAMP_STEPS: int = 0
 # pero no da energía ni cuenta como ingesta. Lo que conviene comer no se puede saber al nacer (C1 de
 # docs/escalera/condiciones_aprendizaje.md; pontes2020evolutionary). Excluye ALGA_SWAP_PERIOD. 0 (por defecto) = apagado.
 ALGA_PER_AGENT: int = 0
-# K_MEAN_RAMP_STEPS (decisión del responsable, 25-10, 13:30; ADR-026): si es > 0, la capacidad media de las algas
+# K_MEAN_RAMP_STEPS (decisión del responsable, 25-10, entre las 13:25 y las 14:25; ADR-026): si es > 0, la capacidad media de las algas
 # empieza en K_MEAN_RAMP_FROM × k_mean y baja linealmente hasta k_mean en estos pasos. Con la mitad de algas desde
 # el principio se extinguen al arrancar y con el doble viven en el tope: rescate evolutivo, como la rampa del freno
 # (lindsey2013evolutionary, bell2009evolutionary). 0 (por defecto) = sin rampa, idéntico bit a bit.
