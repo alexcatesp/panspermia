@@ -48,3 +48,30 @@
 3. **Muchas comparaciones y un umbral exigente.** Con un efecto en una parte de los linajes (C8), 9/10 casi nunca pasa. Por eso hay tamaños de efecto, contador y regla del indicio.
 4. **Mapa único.** Todo vale para `fase1d-w0` hasta la réplica.
 5. **Deuda de ramas y deriva del sustrato.** 17 ramas sin integrar. Señal: más de 60 commits por delante de `main` → integrar (H-int).
+
+## 6. La puerta BOINC: cuándo pedir cómputo a voluntarios
+
+**Decisión del panel 03 (25-10-2026, 22:35), unánime en la segunda ronda.** El responsable concibe la red como un proyecto de computación voluntaria tipo BOINC. Informes en `docs/escalera/panel/03_*`.
+
+**¿Estamos preparados? No.** Falta el fenómeno central (aprendizaje asociativo), una medida firme de crecimiento abierto y una curva de escalado. Estamos a unos tres hitos: un aprendizaje replicado, el crecimiento abierto medido en una ejecución larga y la curva de escalado.
+
+**Paquete de pruebas**, completo y prerregistrado antes de pedir cómputo:
+- **(a) Aprendizaje asociativo real:** el criterio del bicho (§2), con el control positivo y negativo, la ablación de la plasticidad (sin plasticidad, el efecto desaparece) y M por debajo del 50 % de la ventaja.
+- **(b) Crecimiento abierto:** el archivo de novedad y la batería crecen en la mitad tardía de una ejecución larga más que en un nulo de deriva sin selección. La batería da ≈ 0 con la política fija y con genomas al azar.
+- **(c) Escalado:** la capacidad C de (a) o (b), no una aproximación, frente al cómputo. Un eje cada vez (N, épocas, islas), al menos 3 puntos por eje, densidad fija y un nulo de escalado (genomas al azar con N pequeño y grande). Pendiente log-log con su IC95 y un **tamaño de efecto mínimo relevante prerregistrado**: 3 puntos con un IC que excluye 0 no se venden como «curva de escalado». **Si el doble de cómputo no da nada, no se pide cómputo.**
+- **(d) Reproducibilidad entre máquinas:** la misma (versión, semilla, estado) en dos GPU distintas, bit a bit o con una tolerancia fijada antes de medir. Código y datos abiertos, para que un tercero lo reproduzca.
+- **(e) Un resultado intermedio comprensible** para un donante, con un gráfico público de avance.
+
+**Cómo plantearlo:** no decir «más relevante para la IA que los LLM». No es defendible y hundiría la credibilidad. Frase defendible: «Estudiamos si el aprendizaje puede emerger de la selección ecológica; tenemos herramientas de medida rigurosas y, todavía, ningún aprendizaje asociativo demostrado.» Es ciencia básica sobre el origen del aprendizaje, complementaria a los LLM. Los negativos documentados son la mejor credencial.
+
+**Antecedentes** (de memoria; verificar y añadir a la bibliografía antes de citarlos):
+- Network Tierra (Ray, años 90): sin una pregunta medible ni el fenómeno en una sola máquina, distribuir no añade nada.
+- Avida convenció por una métrica clara con nulos.
+- POET: la coevolución entre el entorno y el agente evita el estancamiento.
+- Folding@home y BOINC: la gente dona por una pregunta concreta y un avance visible, con unidades de trabajo verificables por réplica (aquí el determinismo ayuda).
+
+**Qué se hace ya y qué no:**
+- **El escalado espera a tener una C válida.** Escalar hoy mediría maduración, un artefacto que costaría días de GPU.
+- **(b0) ya, exploratorio:** validar una medida de crecimiento abierto contra nulos con los datos existentes (P2 a 600 épocas y la escalera a 300). El nulo y la ventana tardía se fijan antes de mirar, y se declara exploratorio porque esas ejecuciones ya se han visto. En CPU ligera.
+- **(d0):** el determinismo entre la 5070 y la 5070 Ti, cuando el responsable confirme que la otra máquina está disponible, con la tolerancia fijada antes. Dos GPU de la misma generación prueban poco: después, otra arquitectura.
+- **El primer experimento de escalado, cuando exista C:** la escalera de N (1.024, 4.096 y 16.384, con la VRAM reservada) con densidad fija y su nulo, 5 semillas por punto y 10 si hay señal. Después, las épocas, y las islas con P-migra.

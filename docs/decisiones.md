@@ -606,3 +606,8 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 - P5 pasa a ser el **veneno diferido** (P5-d), con el inmediato como contraste.
 - **Regla de parada:** tres diseños independientes desde hoy (manchas, P5-d y un tercero). Después, plasticidad nueva (trazas de elegibilidad) o publicar la maduración.
 - **Discrepancias resueltas:** Método quería que la réplica no contara como diseño y Biología que fuera el tercero. Queda obligatoria para confirmar, pero no gasta intento. Ingeniería pedía 4 intentos y aceptó 3.
+
+## ADR-029 · 25-10-2026 · La puerta BOINC (decisión del panel 03)
+
+**Contexto.** El responsable concibe la red como computación voluntaria tipo BOINC y pregunta si estamos preparados para convencer a la gente (22:33). **Decisión del panel 03 (22:35), unánime en la segunda ronda:** no estamos preparados. Hace falta un paquete de cinco pruebas: aprendizaje real; crecimiento abierto frente a nulos; escalado de una capacidad válida con el cómputo, con un efecto mínimo prerregistrado; reproducibilidad entre máquinas; y un resultado comprensible. No se afirmará ser «más relevante que los LLM». El escalado espera a tener una C válida; ya se hacen la validación exploratoria del crecimiento abierto (b0) y, si hay máquina, el determinismo entre GPU (d0). Detalle en `docs/escalera/hoja_de_ruta.md` §6.
+- Biología quería lanzar ya la escalera de N. Retiró la propuesta ante el argumento de Método: escalar maduración daría una curva sin interpretación. Añadió el nulo de escalado.

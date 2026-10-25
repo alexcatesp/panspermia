@@ -1594,3 +1594,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - H-control: control positivo y negativo de las medidas, en CPU ligera y solo observa; las manchas no se interpretan hasta tenerlo.
   - H-red (rama `red`, CPU) y H-int (integración), sin coincidir con barridos ni entre sí.
 - **Contador de comparaciones (umbral 9/10 o 5/5, peldaños con pregunta de aprendizaje):** P2-buscar, P3-disperso, P3-coste ×3, P4-alga, P4-salto64, la tripa, comer frena, alga por bicho y manchas (en curso) = **11**.
+
+### 22:33–22:36 (25-10) · Panel 03: la puerta BOINC (ADR-029)
+
+- **El responsable:** la red debería ser un proyecto tipo BOINC, y hacen falta pruebas sólidas para convencer de que esto puede ser más relevante para la IA que los LLM. ¿Estamos preparados?
+- **Panel 03, unánime en la segunda ronda: no.** Paquete de pruebas (a)–(e) en `hoja_de_ruta.md` §6.
+  - No se afirmará superioridad frente a los LLM.
+  - El escalado espera a tener una capacidad válida (Biología retiró lanzarlo ya).
+  - Ya se hacen (b0), la validación exploratoria del crecimiento abierto en CPU, y (d0), el determinismo entre GPU si hay máquina.

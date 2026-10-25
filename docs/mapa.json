@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-25 22:30",
+ "actualizado": "2026-10-25 22:36",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -1022,6 +1022,17 @@
    "principal": true,
    "corto": "Red de mundos",
    "texto": "Panel 02 (25-10, 22:28; ADR-028, docs/escalera/hoja_de_ruta.md): la 4a se construye ya, en CPU y en paralelo (rama red), y se conecta como ciencia solo cuando un bicho aprenda de verdad (trampa ≥ 9/10, selectividad de entrada por encima del ruido, réplica en otro mapa). La migración entrará como peldaño propio (P-migra), con islas distintas. Matiza ADR-012."
+  },
+  {
+   "id": "boinc",
+   "padre": "red",
+   "titulo": "Computación voluntaria tipo BOINC",
+   "corto": "BOINC",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "voluntarios donan cómputo a la red de mundos",
+   "texto": "Visión del responsable (25-10). Panel 03 (22:35; ADR-029; hoja_de_ruta.md §6): no estamos preparados. Antes hacen falta (a) aprendizaje asociativo replicado, (b) crecimiento abierto frente a nulos, (c) una curva de escalado de una capacidad válida con el cómputo (si el doble de cómputo no da nada, no se pide), (d) reproducibilidad entre máquinas y (e) un resultado comprensible. Sin afirmar superioridad frente a los LLM: ciencia básica sobre el origen del aprendizaje.",
+   "ref": "docs/escalera/hoja_de_ruta.md"
   },
   {
    "id": "robot",
