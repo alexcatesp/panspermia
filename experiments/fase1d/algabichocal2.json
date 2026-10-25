@@ -1,0 +1,31 @@
+[
+ {
+  "name": "_calAlgaBicho2",
+  "node": "fase1d-w0",
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "ALGABICHO",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 1.902,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_PER_AGENT": 1,
+   "EAT_MOVE_FACTOR": 0.0,
+   "EAT_MOVE_RAMP_STEPS": 100000
+  },
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 150,
+  "description": "Segunda calibración del alga por bicho (responsable, 25-10, 13:00): con k_mean 3,804 los tres mundos viven en el tope de 4.096 con energía de sobra (cada alga alimenta a la mitad de los bichos: la comida útil se duplica). Con la mitad de algas (1,902), la comida útil es la de comer frena. Viable si las 3 terminan sin extinción, con 500 bichos o más y con la población media de las épocas 100–149 por debajo de 3.900."
+ }
+]

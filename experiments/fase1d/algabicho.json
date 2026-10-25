@@ -12,7 +12,7 @@
    "seasonal": 0,
    "repro_mode": "energia",
    "drift": 0.0,
-   "k_mean": 3.804,
+   "k_mean": 1.902,
    "gut_sense": 1
   },
   "config": {
@@ -33,6 +33,6 @@
    9
   ],
   "epochs": 300,
-  "description": "Alga por bicho (ADR-026; decisión del responsable, 25-10): cada bicho nace con su alga buena sorteada, sin herencia; la otra se come pero no alimenta. Sobre P4-alga-tripa-frena-rampa (padre), sin el cambio global del alga. Sustrato 3.3.0. Criterio: diseno.md v2.0 (discriminación aprendida, ≥ 9/10)."
+  "description": "Alga por bicho (ADR-026; decisión del responsable, 25-10): cada bicho nace con su alga buena sorteada, sin herencia; la otra se come pero no alimenta. Sobre P4-alga-tripa-frena-rampa (padre), sin el cambio global del alga y con la mitad de algas (k_mean 1,902: la misma comida útil). Sustrato 3.3.0. Criterio: diseno.md v2.0–v2.1 (discriminación aprendida, ≥ 9/10)."
  }
 ]
