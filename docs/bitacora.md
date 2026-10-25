@@ -1536,3 +1536,25 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - experiencia del alga si `frac_buena`(E) − `frac_buena`(X) ≥ 0,05 en al menos 8 de 10 mundos;
   - maduración y reflejo si |E − X| < 0,05 en al menos 8 de 10 y `frac_buena`(D) ≥ N + ½ (E − N).
 - Lanzado a las 21:53 (`scratchpad/madura_alga.sh`, log `runs/fase1d/madura_alga.log`, datos `_madura_alga.jsonl`).
+
+### 21:52–21:54 (25-10) · Diagnóstico del indicio: no hay aprendizaje del alga; el reflejo de la tripa basta
+
+- `scratchpad/madura_alga.py` (`runs/fase1d/_madura_alga.jsonl`), época 300, crianza de 200 pasos y examen de 500.
+
+  | Semilla | frac_buena N | E | X (alga invertida) | D (sin comida) | A (adulto) | E − X |
+  |---|---|---|---|---|---|---|
+  | s0 | 0,748 | 0,793 | 0,788 | 0,794 | 0,794 | +0,005 |
+  | s1 | 0,826 | 0,852 | 0,855 | 0,840 | 0,898 | −0,003 |
+  | s2 | 0,723 | 0,823 | 0,824 | 0,826 | 0,843 | −0,001 |
+  | s3 | 0,745 | 0,782 | 0,788 | 0,792 | 0,796 | −0,006 |
+  | s4 | 0,852 | 0,839 | 0,840 | 0,853 | 0,856 | −0,001 |
+  | s5 | 0,904 | 0,885 | 0,879 | 0,888 | 0,874 | +0,006 |
+  | s6 | 0,878 | 0,805 | 0,805 | 0,810 | 0,826 | 0,000 |
+  | s7 | 0,823 | 0,764 | 0,777 | 0,756 | 0,819 | −0,013 |
+  | s8 | 0,794 | 0,836 | 0,835 | 0,854 | 0,839 | +0,001 |
+  | s9 | 0,840 | 0,808 | 0,796 | 0,823 | 0,829 | +0,012 |
+
+- **Experiencia del alga: descartada (firme).** |E − X| < 0,05 en 10/10 (máximo 0,013). Que la tripa les enseñe el alga equivocada durante la crianza no cambia nada. Con D_comer pasa lo mismo: X da lo mismo que E o más (s5: 0,049 frente a 0,008).
+- **La segunda cláusula de la regla (D ≥ N + ½ (E − N)) no se puede juzgar; es un error de diseño mío.** El examen empieza donde estaban los adultos del checkpoint, que ya estaban sobre su alga buena. Los recién nacidos (N), casi quietos, se quedan allí, y por eso su frac_buena es alta (0,72–0,90, mayor que E en 5/10). Con ese criterio se cumpliría en 6/10. La comparación E frente a X no tiene ese problema: mismo punto de partida.
+- **Conclusión:** lo que se aprende en vida no tiene que ver con qué alga es la suya. Es maduración: se ponen en marcha y comen distinto, igual en E, X y D. En la sonda mixta, los que aprenden pasan más tiempo sobre su alga porque se mueven y el reflejo innato de la tripa los retiene donde alimenta: un reflejo reactivo resuelve el problema sin memoria.
+- **Por la bibliografía** (`condiciones_aprendizaje.md`, C2 y C4): en niv2002evolution y pontes2020evolutionary el premio llega después de comprometerse (una flor por prueba, pasos en vacío que restan), así que hay que asociar la pista con el premio antes de elegir. Aquí probar el alga es casi gratis y la tripa responde en el acto: basta con quedarse si alimenta e irse si no.
