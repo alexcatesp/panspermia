@@ -1569,3 +1569,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Código** (`escalera-manchas`, `8743dcd`, sustrato 3.5.0): `config.ALGA_PATCH_FAMILIES`, en `world.kmax_field` y `world.algae_type_a`. Test `test_alga_patch_families`; con los de la rampa, el alga, la tripa, el freno y la comida dispersa, 8 correctos en CPU.
 - **Examen barajado** (`madura_alga.py --scatter`): las posiciones de los vivos se barajan entre ellos antes del examen. Resuelve el problema del diagnóstico de las 21:54 (los recién nacidos partían de la mancha del adulto). En el padre: E − X entre −0,021 y +0,008, la misma conclusión; aun barajados, los recién nacidos pasan el 51–78 % sobre su alga buena (el reflejo de la tripa).
 - **Cadena** `scratchpad/manchas.sh` desde las 22:08 (log `runs/fase1d/manchas_cadena.log`): suite en GPU, calibración (`manchascal.json`), viabilidad, los 10 mundos (`manchas.json`, marca `manchas_hecho`), primaria y secundarias (marca `manchas_medidas_hechas`).
+
+### 22:11 (25-10) · Nuevo modo de decidir: panel de expertos
+
+- **Decisión del responsable:** las decisiones de diseño e investigación las toma un panel de tres agentes (biología del aprendizaje, método y estadística, ingeniería de vida artificial y cómputo) que se pone de acuerdo. Claude ejecuta y le informa; él pregunta o corrige. Las salvaguardas, los principios, las acciones externas y los cambios de rumbo siguen siendo suyos. Protocolo en `docs/escalera/panel.md`.
