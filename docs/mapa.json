@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-25 22:18",
+ "actualizado": "2026-10-25 22:30",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -497,7 +497,7 @@
    "estado": "auto",
    "resultado": null,
    "anade": "un alga es venenosa",
-   "texto": "¿Aprenden a evitar el veneno? ¿Empieza aquí a compensar aprender? La fracción tóxica baja respecto al final de la rampa (épocas 41–50). Esperamos VA > 0 por primera vez. Se compara con E1b-uniforme, que además tiene química, ataque y señal.",
+   "texto": "¿Aprenden a evitar el veneno? ¿Empieza aquí a compensar aprender? La fracción tóxica baja respecto al final de la rampa (épocas 41–50). Esperamos VA > 0 por primera vez. Se compara con E1b-uniforme, que además tiene química, ataque y señal. Panel 02 (25-10, ADR-028): P5 será el veneno diferido (P5-d), con el daño 20–50 pasos después de comerlo para que el reflejo de la tripa no baste, y el veneno inmediato como contraste prerregistrado.",
    "cola": "escalera.json",
    "condicion": "P5-veneno",
    "ref": "docs/escalera/diseno.md",
@@ -1016,11 +1016,12 @@
    "id": "red",
    "padre": "fuga",
    "titulo": "Red de mundos conectados (4a)",
-   "estado": "pendiente",
+   "estado": "en curso",
    "ref": "ADR-012",
    "anade": "muchos mundos conectados",
    "principal": true,
-   "corto": "Red de mundos"
+   "corto": "Red de mundos",
+   "texto": "Panel 02 (25-10, 22:28; ADR-028, docs/escalera/hoja_de_ruta.md): la 4a se construye ya, en CPU y en paralelo (rama red), y se conecta como ciencia solo cuando un bicho aprenda de verdad (trampa ≥ 9/10, selectividad de entrada por encima del ruido, réplica en otro mapa). La migración entrará como peldaño propio (P-migra), con islas distintas. Matiza ADR-012."
   },
   {
    "id": "robot",

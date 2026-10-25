@@ -596,3 +596,13 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 6. **Primaria** (`diseno.md` v2.3): la trampa del alga invertida con el examen barajado, ≥ 9/10.
 
 **Decisión del panel 01 (25-10-2026, 22:15), sobre ADR-027 antes de calibrar.** Primera ronda: biología A (seguir) con secundarias; método C (primer contacto y nulo de ruido); ingeniería B+C (calibrar 200 épocas y selectividad de entrada). Segunda ronda: los tres aceptan la síntesis del moderador. Calibración a 200 épocas, primaria intacta, secundarias a–d y la regla del indicio (`diseno.md` v2.3b). Los tres aceptan también la objeción del moderador: un reflejo de «quedarse si suena la tripa» que no dependa del color lo aprenden igual E y X, así que no da falsos positivos en E − X. Informes en `docs/escalera/panel/`.
+
+## ADR-028 · 25-10-2026 · Hoja de ruta hasta la red P2P (decisión del panel 02)
+
+**Contexto.** El responsable pidió la hoja de ruta hasta un bicho y un mundo que justifiquen el paso al P2P (22:26). **Decisión del panel 02 (22:28), unánime en la segunda ronda:** `docs/escalera/hoja_de_ruta.md`.
+- Se construye la 4a ya, en CPU y en paralelo, y no se conecta hasta cumplir el criterio del bicho (trampa ≥ 9/10, selectividad de entrada por encima del ruido y réplica en otro mapa). Matiza ADR-012.
+- Control positivo y negativo de las medidas antes de interpretar las manchas.
+- Se integran las ramas en paralelo, con el examen limpio en `main`.
+- P5 pasa a ser el **veneno diferido** (P5-d), con el inmediato como contraste.
+- **Regla de parada:** tres diseños independientes desde hoy (manchas, P5-d y un tercero). Después, plasticidad nueva (trazas de elegibilidad) o publicar la maduración.
+- **Discrepancias resueltas:** Método quería que la réplica no contara como diseño y Biología que fuera el tercero. Queda obligatoria para confirmar, pero no gasta intento. Ingeniería pedía 4 intentos y aceptó 3.

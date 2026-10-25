@@ -1585,3 +1585,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - `manchascal.json` pasa a 200 épocas (`escalera-manchas`, `bba973e` y `04c19c8`). La calibración aún no había empezado: la suite seguía en marcha.
   - `scratchpad/madura_alga.py` gana las secundarias (selectividad de entrada, primer contacto, entradas y pasos por visita, segunda baraja E2). La versión anterior queda en `madura_alga_v1.py`. Probado en CPU con pocos pasos (`madura_alga_prueba.sh`).
 - Matiz de los tres: en X la tripa suena sobre la otra alga, así que solo una regla ligada al color separa E de X, que es lo que se busca.
+
+### 22:26–22:30 (25-10) · Panel 02: hoja de ruta hasta la red P2P (ADR-028)
+
+- Pregunta del responsable (22:26). En la primera ronda los tres coinciden: construir la red ya en CPU y conectarla después; la migración, como peldaño propio. Discrepan en el siguiente peldaño (P5 fijo o diferido), en la regla de parada (3 o 4 intentos), en la integración y en el control positivo.
+- **Segunda ronda (22:28): unanimidad** con la síntesis. Hoja de ruta en `docs/escalera/hoja_de_ruta.md` (ADR-028).
+- **Lo que se hace ahora:**
+  - H-control: control positivo y negativo de las medidas, en CPU ligera y solo observa; las manchas no se interpretan hasta tenerlo.
+  - H-red (rama `red`, CPU) y H-int (integración), sin coincidir con barridos ni entre sí.
+- **Contador de comparaciones (umbral 9/10 o 5/5, peldaños con pregunta de aprendizaje):** P2-buscar, P3-disperso, P3-coste ×3, P4-alga, P4-salto64, la tripa, comer frena, alga por bicho y manchas (en curso) = **11**.
