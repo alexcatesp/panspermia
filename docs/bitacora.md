@@ -1398,3 +1398,36 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Esa población evolucionó desde cero con el freno total, sin rampa, unas 170 épocas. Es un indicio de que el freno total desde cero puede prender, pero solo tras reinyecciones repetidas.
   - Por el criterio prerregistrado (`diseno.md` v1.9), **ese par cuenta como desfavorable**: para pasar, las otras 9 semillas tienen que ser favorables.
 - **Quedan:** 10 mundos de P3-escaso-tripa-frena-rampa (hasta ~03:30) y el padre P4-alga-tripa con las semillas 5–9 (hasta ~06:30 del 25-10).
+
+### 07:52–08:45 (25-10) · Comer frena con rampa: resultado. No pasa (6/10); la ventaja de aprender sube, pero no por distinguir dónde comer
+
+- **Mundos:** los 35 terminaron el 25-10 a las 05:20 (el padre P4-alga-tripa, semillas 5–9, desde las 02:27). Ninguno pausado. Población final: con tripa y freno 2.691–4.086; sin tripa 2.587–4.096; P3-escaso con freno 3.026–3.432; padre 2.825–3.984.
+- **Sonda mixta** (`scratchpad/sonda_mixta.py`, época 300, 1.500 pasos, GPU, 07:52–08:29; cada mundo con el código de su rama; índices de pesos ajustados a la tripa). Datos en `runs/fase1d/_sonda_frena.jsonl`; análisis en `scratchpad/analiza_frena.py` → `runs/fase1d/_analisis_frena.json`.
+
+  | Semilla | A con freno | A del padre | Par |
+  |---|---|---|---|
+  | s0 | −0,0 % | +4,8 % | desfavorable |
+  | s1 | +62,2 % | +59,6 % | favorable |
+  | s2 | +93,8 % | +0,3 % | favorable |
+  | s3 | +73,6 % | −0,7 % | favorable |
+  | s4 | +0,7 % | +10,5 % | desfavorable (además, extinguido) |
+  | s5 | +46,9 % | +8,4 % | favorable |
+  | s6 | +85,4 % | +149,5 % | desfavorable |
+  | s7 | +196,1 % | +78,7 % | favorable |
+  | s8 | +98,6 % | +11,1 % | favorable |
+  | s9 | +40,9 % | +72,1 % | desfavorable |
+
+  - **Primaria: 6 de 10 pares favorables (p = 0,38). No pasa** (hacían falta 9).
+  - Mediana de A: con freno **+68 %** (> 5 % en 8/10); padre **+11 %** (7/10); sin tripa con freno **+51 %** (8/10); **P3-escaso con freno +117 % (10/10)**, cuando sin freno solo 2 de 5 semillas aprendían (+22 a +26 %).
+  - **Nulo** (las dos mitades congeladas, 3 semillas con freno): −1,0 %, +1,2 % y −1,5 %. La sonda ajustada mide bien.
+- **Comprobación de la manipulación** (`diag_comer.py`, época 300; `runs/fase1d/_diag_comer_frena.jsonl`): **falla**.
+  - Comen menos: entre el 55 y el 89 % de los pasos con freno (54–94 % sin tripa), frente al 78–97 % del padre.
+  - Pero no distinguen: P(comer | alga buena) supera en 0,10 o más a P(comer | nada) solo en 1/10 con freno (s1) y en 0/10 sin tripa y en el padre.
+  - Algo evitan el alga vacía con freno (s1 0,61; s3 0,68; s7 0,58; s8 0,59, frente a 0,70–0,84 donde no hay nada). En el padre, no.
+  - Según el diseño v1.9, como P(comer | nada) no baja frente al alga buena, **A no se interpreta como efecto del freno**.
+- **De dónde sale la ventaja** (`scratchpad/mecanismo_frena.py`):
+  - Los congelados se quedan con el cerebro de recién nacido: comen casi siempre (0,9–1,0 en los mundos con más ventaja) y, con el freno, apenas se mueven (velocidad 2–3 frente a 6–11).
+  - Los que aprenden comen menos (0,6–0,75), se mueven más y pasan de 2 a 3 veces más tiempo sobre comida.
+  - Curva por edad: A ≈ 0 al nacer (< 10 pasos) y de +57 a +258 % a partir de 50 pasos. El cambio ocurre en vida.
+  - Los pesos que más cambian son los de los rayos (proximidad, parentesco, comida) hacia las ocultas y el empuje.
+- **Conclusión: negativo por el criterio, con indicio fuerte.** El freno hace que la plasticidad pese más (más ventaja y más linajes que la conservan, también en P3-escaso), pero lo que se aprende en vida es «comer menos y moverse más», no dónde comer. Falta saber si eso es aprendizaje por la experiencia o una maduración que la plasticidad hace igual en cualquier mundo.

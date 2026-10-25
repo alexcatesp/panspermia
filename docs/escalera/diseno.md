@@ -381,3 +381,5 @@ Escrito antes de lanzar los 30 mundos; sustituye la primaria de v1.8. **Criterio
 - **Predicción:** abierta. En P4-alga sin freno, A ya es de +28 a +71 % en 4 de 5 (s0, sin plasticidad, ≈ 0). La bibliografía (§18) predice que con el freno la decisión de comer se vuelve sensible al contexto. El listón de superar al padre en 9 de 10 es exigente, porque el padre ya aprende.
 - **Orden:** `scratchpad/frena_rampa.sh` calibra; si es viable, espera a la marca `frena_v19_ok` (visto bueno a este criterio) y lanza los 30 mundos y el padre (semillas 5–9). Marca `frena_hecho`.
 - **Duración estimada:** calibración de ~1 h (09:25–10:30) y unas 21 h para los 35 mundos.
+
+**Resultado (25-10, 08:45): no pasa.** 6/10 pares favorables (p = 0,38). Mediana de A: con freno +68 %, padre +11 %, sin tripa +51 %, P3-escaso con freno +117 % (10/10). Nulo −1,5 a +1,2 %. La comprobación de la manipulación falla: comen menos (55–89 % de los pasos), pero no distinguen el alga buena de donde no hay nada (1/10). Por este criterio, A no se interpreta como efecto del freno. La ventaja sale de comer menos y moverse más (detalle en la bitácora).
