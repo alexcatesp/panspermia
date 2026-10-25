@@ -31,6 +31,7 @@ CONFIG_OVERRIDABLE = {
     "FROZEN_PLASTICITY_TEST_EVERY", "CHECKPOINT_EVERY", "VIDEO_EVERY", "CAPABILITY_TEST_EVERY",
     "NEURON_MUTATION", "MUTATION_RATES", "CPPN_MUTATION", "REPRODUCTION", "BIRTH_PLACEMENT", "K_CUT", "REPRO_COST",
     "FOOD_JUMP_PERIOD", "ALGA_SWAP_PERIOD", "FOOD_JUMP_DIST", "EAT_MOVE_FACTOR", "EAT_MOVE_RAMP_STEPS",
+    "ALGA_PER_AGENT",
 }
 SPEC_KEYS = {"name", "description", "node", "seeds", "epochs", "n_max", "n_init", "plastic", "env",
              "config", "block"}

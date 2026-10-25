@@ -170,6 +170,14 @@ def nourishing_is_a(env: EnvParams, step: jax.Array) -> jax.Array:
     return jax.random.bernoulli(_world_draw(env, 2, step, C.ALGA_SWAP_PERIOD))
 
 
+def good_alga_a(env: EnvParams, uid: jax.Array) -> jax.Array:
+    """bool[N]: True si al bicho le alimenta el alga A (`C.ALGA_PER_AGENT`). Se sortea por su uid con la clave
+    propia del mundo: fijo para toda la vida e independiente del padre."""
+    seed = jax.lax.bitcast_convert_type(env.wave_phase[0], jnp.uint32)
+    key = jnp.stack([seed, jnp.uint32(3)])
+    return jax.vmap(lambda u: jax.random.bernoulli(jax.random.fold_in(key, u)))(uid)
+
+
 def kmax_field(env: EnvParams, step: jax.Array) -> jax.Array:
     """Kmax [RES, RES]: manchas por suma de ondas planas toroidales que derivan lentamente."""
     t = step.astype(jnp.float32) * C.DT

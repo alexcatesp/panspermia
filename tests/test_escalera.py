@@ -257,3 +257,40 @@ def test_eating_brake_ramp(monkeypatch):
     assert np.isclose(half[0], 0.5 * free[0], rtol=1e-3)        # a mitad, quien come recorre la mitad
     assert np.isclose(half[1], free[1], rtol=1e-5)              # quien no come, igual
     assert end[0] == 0 and np.isclose(end[1], free[1], rtol=1e-5)  # al final, freno total
+
+
+def test_alga_per_agent_feeds_each_its_own(monkeypatch):
+    """Alga por bicho (3.3, ADR-026): a cada bicho le alimenta una sola alga, sorteada por su uid (la mitad,
+    A), fija para toda la vida y distinta en cada mundo; sobre la otra come pero no gana nada. Apagado, como
+    siempre. No se puede encender junto al cambio global del alga."""
+    env, other = _env(seasonal=0), world.with_overrides(world.make_env(b"otro-mundo"), seasonal=0)
+    uid = jnp.arange(1, 4001, dtype=jnp.uint32)
+    g = np.asarray(world.good_alga_a(env, uid))
+    assert 0.45 < g.mean() < 0.55
+    assert np.array_equal(g, np.asarray(world.good_alga_a(env, uid)))      # fija para toda la vida
+    assert abs(np.corrcoef(g[:-1], g[1:])[0, 1]) < 0.05                    # uid vecinos (padre e hijo), sin relación
+    assert 0.4 < np.mean(g == np.asarray(world.good_alga_a(other, uid))) < 0.6
+    ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0, "metabolism": 0}
+    s = island.init_island(0, b"escalera-test", n_max=4, n_init=4, env_overrides=ov)
+    a = np.asarray(world.algae_type_a(s.env, s.step))
+    ca, cb = np.argwhere(a)[0], np.argwhere(~a)[0]
+    ga = np.asarray(world.good_alga_a(s.env, uid))
+    ua, ub = int(uid[np.argmax(ga)]), int(uid[np.argmin(ga)])               # un uid al que alimenta A y otro B
+    pos = jnp.asarray([(c + 0.5) * world.RES_CELL for c in (ca, ca, cb, cb)], jnp.float32)
+    s = s.replace(pos=pos, vel=jnp.zeros_like(s.vel), energy=jnp.full(4, 50.0),
+                  resources=jnp.full_like(s.resources, 5.0),
+                  lineage=s.lineage.replace(uid=jnp.asarray([ua, ub, ua, ub], s.lineage.uid.dtype)))
+    eat = jnp.array([1.0, 0.0, 0.0])                                        # quieto y comiendo
+    out = {}
+    for on in (1, 0):
+        monkeypatch.setattr(config, "ALGA_PER_AGENT", on)
+        s2, _ = island.world_step(s, plastic=False, births=False, control=eat)
+        out[on] = (np.asarray(s2.energy), np.asarray(s2.behavior.intake))
+    good = np.array([True, False, False, True])                             # A sobre A, B sobre A, A sobre B, B sobre B
+    assert np.all(out[1][1][good] > 0) and np.all(out[1][1][~good] == 0)
+    assert np.allclose(out[1][0][good], out[0][0][good])
+    assert np.all(out[1][0][~good] < out[0][0][~good])
+    monkeypatch.setattr(config, "ALGA_PER_AGENT", 1)
+    monkeypatch.setattr(config, "ALGA_SWAP_PERIOD", 1000)
+    with pytest.raises(ValueError):
+        island.world_step(s, plastic=False, births=False, control=eat)

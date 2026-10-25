@@ -1,0 +1,31 @@
+[
+ {
+  "name": "_calAlgaBicho",
+  "node": "fase1d-w0",
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "ALGABICHO",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_PER_AGENT": 1,
+   "EAT_MOVE_FACTOR": 0.0,
+   "EAT_MOVE_RAMP_STEPS": 100000
+  },
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 150,
+  "description": "Calibración del alga por bicho (ADR-026; responsable, 25-10): como P4-alga-tripa-frena-rampa, pero el alga buena se sortea para cada bicho al nacer, sin herencia (ALGA_PER_AGENT 1), en vez de cambiar para todos cada 2.000 pasos. Semillas 0–2, 150 épocas. Viable si las 3 terminan sin extinción y con 500 bichos o más."
+ }
+]

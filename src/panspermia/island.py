@@ -317,7 +317,13 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         empty = world.algae_type_a(state.env, state.step) != world.nourishing_is_a(state.env, state.step)
         empty_in = jnp.where(empty.ravel()[world._res_index(pos)], intake, 0.0)
         gain, intake = gain - empty_in, intake - empty_in
-    signal = jnp.where(alive0 & (state.env.signal_on > 0), actions[:, 4], 0.0)
+    if C.ALGA_PER_AGENT:  # cada bicho tiene su alga buena, sorteada al nacer (ADR-026)
+        if C.ALGA_SWAP_PERIOD > 0:
+            raise ValueError("ALGA_PER_AGENT y ALGA_SWAP_PERIOD se excluyen")
+        on_a = world.algae_type_a(state.env, state.step).ravel()[world._res_index(pos)]
+        empty_in = jnp.where(on_a != world.good_alga_a(state.env, state.lineage.uid), intake, 0.0)
+        gain, intake = gain - empty_in, intake - empty_in
+    signal =jnp.where(alive0 & (state.env.signal_on > 0), actions[:, 4], 0.0)
     rbin = _recovery_bin(pos, state.tox_since, state.step)
     nb = len(C.RECOVERY_EDGES) + 1
     recov_intake = jax.ops.segment_sum(intake, rbin, num_segments=nb)
