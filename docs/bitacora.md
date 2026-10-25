@@ -1573,3 +1573,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 ### 22:11 (25-10) · Nuevo modo de decidir: panel de expertos
 
 - **Decisión del responsable:** las decisiones de diseño e investigación las toma un panel de tres agentes (biología del aprendizaje, método y estadística, ingeniería de vida artificial y cómputo) que se pone de acuerdo. Claude ejecuta y le informa; él pregunta o corrige. Las salvaguardas, los principios, las acciones externas y los cambios de rumbo siguen siendo suyos. Protocolo en `docs/escalera/panel.md`.
+
+### 22:12–22:18 (25-10) · Panel 01: revisión de las manchas antes de calibrar
+
+- Primer uso del panel (`docs/escalera/panel.md`); informe y segunda ronda en `docs/escalera/panel/01_manchas_*.md`.
+- **Primera ronda:**
+  - Biología: A, seguir. Predice 1/10.
+  - Método: C, primer contacto y nulo de ruido. Teme falsos positivos por un reflejo reforzado. Predice 1/10.
+  - Ingeniería: B+C, calibrar 200 épocas y medir la selectividad de entrada. Ve el color legible solo en un anillo de ≤ 60 u. Predice 0–2/10 y da ~25 % de probabilidad a una extinción tardía.
+- **Segunda ronda (22:15): unanimidad** con la síntesis (`diseno.md` v2.3b).
+  - `manchascal.json` pasa a 200 épocas (`escalera-manchas`, `bba973e` y `04c19c8`). La calibración aún no había empezado: la suite seguía en marcha.
+  - `scratchpad/madura_alga.py` gana las secundarias (selectividad de entrada, primer contacto, entradas y pasos por visita, segunda baraja E2). La versión anterior queda en `madura_alga_v1.py`. Probado en CPU con pocos pasos (`madura_alga_prueba.sh`).
+- Matiz de los tres: en X la tripa suena sobre la otra alga, así que solo una regla ligada al color separa E de X, que es lo que se busca.

@@ -415,3 +415,16 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
   - Referencia del padre con el mismo examen: E − X entre −0,021 y +0,008 (`runs/fase1d/_madura_alga_scatter.jsonl`).
 - **Secundarias:** sonda mixta (A, D y `frac_buena`, aprenden frente a congelados; nulo en 3 semillas), maduración (M y D frente a N), población, neuronas, vida y comparación con el padre.
 - **Lo que predice la bibliografía:** si ir a la mancha equivocada cuesta un viaje y el color se ve antes de llegar, asociar el color con la tripa compensa (todd1991exploring; C2 y C4). El riesgo es que entrar en la mancha equivocada y salir cueste poco frente al viaje y el reflejo vuelva a bastar. C5 se cumple sobre el papel: con ~8 u por paso y vidas de ~690 pasos, decenas de manchas por vida.
+
+**v2.3b · 25-10-2026, 22:15 · Decisión del panel 01 (antes de calibrar).** Revisión unánime en la segunda ronda (`docs/escalera/panel/`):
+- **Calibración a 200 épocas.** Las dos rampas acaban en la época 100; viable si no hay extinción, quedan ≥ 500 bichos y la población media de las épocas 100–199 es < 3.900.
+- **Primaria sin cambios.**
+- **Secundarias prerregistradas** (`madura_alga.py --scatter`, los cinco cerebros):
+  - **a. Selectividad de entrada** (`sel_entrada`): de las entradas en la comida (de una casilla sin comida a otra distinta con comida; no cuenta el rebrote bajo un bicho quieto), la fracción que son de su alga buena. Es la lectura decisiva para separar aprender el color de un reflejo dentro de la mancha.
+  - **b. Primer contacto:** el tipo de la primera entrada de cada bicho tras barajar.
+  - **c. Entradas por bicho** en 500 pasos (proxy de C5) y **pasos por visita** en su alga y en la otra (permanencia y abandono).
+  - **d. Nulo de ruido:** el examen de E repetido con una segunda baraja (E2); |E − E2| por mundo, en `frac_buena` y `sel_entrada`.
+- **Interpretación, fijada antes de ver datos:**
+  - Los 10 mundos comparten mapa (`fase1d-w0`), así que la conclusión vale para este mapa.
+  - Si la primaria da entre 3 y 8 mundos favorables de 10 y la selectividad de entrada E − X es positiva en la mayoría de esos mundos favorables y mayor que |E − E2|, se contará como **indicio**, no como negativo (C8: el aprendizaje puede evolucionar solo en una parte de los linajes).
+- **Predicción del panel:** 1 de 10 favorables (rango 0–3). El riesgo es que el reflejo de la tripa vuelva a bastar, porque equivocarse de mancha cuesta unos 20 pasos de unos 690.

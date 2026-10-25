@@ -594,3 +594,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 4. **Comida:** `k_mean` 8,792, la misma comida total que el padre, con la rampa del doble a la mitad en 100 épocas.
 5. **Sustrato 3.5.0** (rama `escalera-manchas`, worktree `panspermia-manchas`, desde `escalera-algabicho`, `8743dcd`). Apagado (por defecto), idéntico bit a bit. Excluye los saltos de la comida. Test `test_alga_patch_families`.
 6. **Primaria** (`diseno.md` v2.3): la trampa del alga invertida con el examen barajado, ≥ 9/10.
+
+**Decisión del panel 01 (25-10-2026, 22:15), sobre ADR-027 antes de calibrar.** Primera ronda: biología A (seguir) con secundarias; método C (primer contacto y nulo de ruido); ingeniería B+C (calibrar 200 épocas y selectividad de entrada). Segunda ronda: los tres aceptan la síntesis del moderador. Calibración a 200 épocas, primaria intacta, secundarias a–d y la regla del indicio (`diseno.md` v2.3b). Los tres aceptan también la objeción del moderador: un reflejo de «quedarse si suena la tripa» que no dependa del color lo aprenden igual E y X, así que no da falsos positivos en E − X. Informes en `docs/escalera/panel/`.
