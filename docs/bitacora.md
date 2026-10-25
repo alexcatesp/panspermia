@@ -1498,3 +1498,31 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 
   - En s0 la población nunca baja de 1.149; la energía (8–16) es la de comer frena (12–22) o menor: hay hambre.
 - **Los 10 mundos** (`algabicho.json`) empezaron a las 15:53. Unos 36 min por mundo: fin hacia las 22:00 (marca `algabicho_hecho`).
+
+### 15:53–21:46 (25-10) · Alga por bicho: no pasa (0/10); no distinguen comiendo, pero pasan más tiempo sobre su alga buena (indicio)
+
+- **Los 10 mundos** (`P4-alga-bicho-frena-rampa`, `escalera-algabicho`, sustrato 3.4.0; 15:53–21:30): ninguno se extingue; población final 2.452–3.107.
+- **Sonda mixta** (época 300, 1.500 pasos; `scratchpad/sonda_algabicho.sh`, 21:31–21:45; datos en `runs/fase1d/_sonda_algabicho.jsonl`, nulo en `_sonda_algabicho_nulo.jsonl`, análisis `scratchpad/analiza_algabicho.py` → `_analisis_algabicho.json`). Solo observa.
+  - **Primaria (diseño v2.0): no pasa, 0/10 favorables** (p = 1,0). D = P(comer | sobre su alga buena) − P(comer | sobre la vacía).
+
+    | Semilla | D aprenden | D congelados | ΔD | A | Tiempo sobre su buena (aprenden / congelados) |
+    |---|---|---|---|---|---|
+    | s0 | +0,083 | +0,089 | −0,005 | +18,6 % | 0,73 / 0,69 |
+    | s1 | −0,002 | +0,020 | −0,022 | +113,2 % | 0,83 / 0,63 |
+    | s2 | −0,001 | +0,031 | −0,032 | +129,5 % | 0,76 / 0,60 |
+    | s3 | +0,039 | −0,003 | +0,042 | +31,3 % | 0,78 / 0,70 |
+    | s4 | +0,039 | −0,051 | +0,089 | +142,1 % | 0,80 / 0,65 |
+    | s5 | +0,020 | +0,009 | +0,011 | +166,3 % | 0,73 / 0,60 |
+    | s6 | +0,025 | −0,030 | +0,055 | +151,6 % | 0,81 / 0,62 |
+    | s7 | +0,026 | +0,011 | +0,015 | +95,1 % | 0,75 / 0,64 |
+    | s8 | +0,073 | +0,061 | +0,012 | +205,9 % | 0,73 / 0,55 |
+    | s9 | +0,050 | −0,023 | +0,073 | +215,2 % | 0,73 / 0,60 |
+
+  - Mediana ΔD +0,014. Comprobación de la manipulación (|D congelados| < 0,05): 7/10 (fallan s0, s4 y s8).
+  - **Ventaja de aprender A: mediana +136 %, la mayor de la escalera** (padre P4-alga-tripa-frena-rampa +68 %), 10/10 positiva. Nulo: +1,1, +0,2 y −5,0 %.
+  - **Secundaria no prerregistrada (indicio):** de los pasos sobre comida, los que aprenden pasan sobre su alga buena 0,73–0,83 y los congelados 0,55–0,70. Diferencia +0,04 a +0,21, positiva en 10/10 y ≥ 0,10 en 8/10; en el nulo, +0,016, +0,008 y −0,023. No eligen al comer: eligen dónde quedarse.
+  - Los congelados ya pasan más de la mitad sobre su buena (0,55–0,70): la tripa da un reflejo innato de quedarse donde alimenta. En s0 y s3, donde los congelados se mueven tanto como los que aprenden (velocidad 8,0 y 7,6 frente a 8,0 y 7,5), la diferencia es la más pequeña (+0,04 y +0,08). En los demás los congelados casi no se mueven (1,5–4,6 frente a 5,1–8,0). Buena parte del efecto puede ser que aprender les enseña a moverse y el reflejo de la tripa hace el resto; s8 (+0,18 con velocidades 5,9 y 4,6) no encaja del todo.
+- **Maduración** (`scratchpad/madura.py`, `runs/fase1d/_madura_algabicho.jsonl`): **M mediana 0,97** (0,53–1,48), M ≥ 0,7 en 9/10. Criados sin comida rinden como criados con comida: lo que ganan en vida es sobre todo maduración (el padre: 0,84). Solo s1 (0,53) depende de la experiencia.
+- **Población y cerebro** (épocas 280–299, frente al padre con la misma semilla): neuronas 1,6–6,3 (mediana 2,5; padre 1,2), más en 7/10. Vida media 370–1.684 pasos (mediana 687; padre 288), más en 10/10. Energía media 7,2–24 (mediana 13,1; padre 7,9).
+- **Conclusión: negativo para la primaria (firme).** Con el alga sorteada por bicho no aprenden a comer su alga y dejar la otra. Indicio: pasan más tiempo sobre su alga buena, pero puede ser maduración (aprenden a moverse) más el reflejo innato de la tripa. Aprender en vida compensa más que nunca (+136 %), y es sobre todo maduración (M 0,97).
+- La hora «13:30» del comentario de `config.py` y de la descripción de `algabichocal3.json` se corrigió a «entre las 13:25 y las 14:25» (`escalera-algabicho`, `405d413`). Los `run.json` de `_calAlgaBicho3` conservan la descripción antigua.

@@ -637,3 +637,9 @@ Criterio prerregistrado en `diseno.md` v1.5. Rama `escalera-tripa` (`48bb468`, s
 - **Genes** (`_genes_<mundo>.json`, época 300): hijos baratos, como en P3-escaso. Umbral 10,4–13,5 y fracción 0,21–0,45 en P4-alga con y sin tripa; P3-escaso-tripa, umbral 10,2–15,4 (s0, 27,1) y fracción 0,25–0,51.
 - **Conclusión: negativo, con indicio débil.** Siguiente paso: comer frena (ADR-025, `diseno.md` v1.7). Sonda de hambre y ablación de moduladoras: pendientes, para cuando la GPU esté libre (WSL se cayó por memoria a las 10:49).
 - Datos: `runs/fase1d/P4-alga-tripa`, `P4-alga-sin-tripa` y `P3-escaso-tripa`; análisis `runs/fase1d/_analisis_tripa.json` (`scratchpad/tripa_an.py`), `_diag_tripa.jsonl`, `_diag_comer.jsonl`.
+
+## Comer frena y alga por bicho (P4, 24–25-10)
+
+- **Comer frena** (ADR-025, sustrato 3.2.0, freno en rampa): no pasa, 6/10 pares favorables (25-10, 08:45). La ventaja de aprender (sonda mixta) sube a +68 % de mediana (padre +11 %), pero aprenden a comer menos y moverse más, no a distinguir el alga buena de donde no hay nada. Diagnóstico de maduración: M mediana 0,84 (`_madura.jsonl`).
+- **Alga por bicho** (ADR-026, sustrato 3.4.0, con rampa de comida): no pasa, 0/10 (25-10, 21:46). ΔD mediana +0,014; A mediana +136 % (nulo −5,0 a +1,1 %); M mediana 0,97. Indicio no prerregistrado: más tiempo sobre su alga buena que los congelados (0,73–0,83 frente a 0,55–0,70, 10/10), quizá por moverse más con el reflejo innato de la tripa. Neuronas 1,6–6,3 (mediana 2,5; padre 1,2); vida 370–1.684 pasos (mediana 687; padre 288).
+- Datos: `runs/fase1d/_sonda_frena.jsonl`, `_analisis_frena.json`, `_sonda_algabicho.jsonl`, `_madura_algabicho.jsonl` y `_analisis_algabicho.json`.

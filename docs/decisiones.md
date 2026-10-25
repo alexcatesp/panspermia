@@ -580,3 +580,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 3. **Sobre P4-alga-tripa-frena-rampa** (padre): tripa, freno con rampa de 100 épocas y el doble de algas (`k_mean` 3,804).
 4. **Sustrato 3.3.0** (rama `escalera-algabicho`, worktree `panspermia-algabicho`, desde `escalera-frena`). Apagado (por defecto), el código no cambia. Test `test_alga_per_agent_feeds_each_its_own`.
 5. **Criterio** en `docs/escalera/diseno.md` v2.0: discriminación aprendida con la sonda mixta, ≥ 9/10 mundos.
+
+**Adenda (25-10-2026).** Con el doble de algas vivían en el tope (4.096) y con la mitad se extinguían al arrancar. El responsable decidió una rampa de comida, del doble a la mitad (`k_mean` final 1,902) en las mismas 100 épocas que el freno (`config.K_MEAN_RAMP_STEPS`, sustrato 3.4.0; `diseno.md` v2.1–v2.2). **Resultado (21:46): no pasa (0/10).** No aprenden a comer su alga y dejar la otra (ΔD mediana +0,014). La ventaja de aprender es la mayor de la escalera (mediana +136 %), pero es sobre todo maduración (M mediana 0,97). Indicio no prerregistrado: pasan más tiempo sobre su alga buena que sus vecinos congelados (10/10).
