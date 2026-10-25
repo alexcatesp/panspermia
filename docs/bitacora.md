@@ -1431,3 +1431,25 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Curva por edad: A ≈ 0 al nacer (< 10 pasos) y de +57 a +258 % a partir de 50 pasos. El cambio ocurre en vida.
   - Los pesos que más cambian son los de los rayos (proximidad, parentesco, comida) hacia las ocultas y el empuje.
 - **Conclusión: negativo por el criterio, con indicio fuerte.** El freno hace que la plasticidad pese más (más ventaja y más linajes que la conservan, también en P3-escaso), pero lo que se aprende en vida es «comer menos y moverse más», no dónde comer. Falta saber si eso es aprendizaje por la experiencia o una maduración que la plasticidad hace igual en cualquier mundo.
+
+### 08:50–09:10 (25-10) · ¿Experiencia o maduración? Sobre todo maduración
+
+- **Pregunta** (decisión del responsable, 08:50): lo que la plasticidad cambia en vida, ¿depende de la experiencia con la comida o el cerebro madura igual en cualquier mundo?
+- **Diagnóstico** (`scratchpad/madura.py`, solo observa, GPU, 09:00–09:06; `scratchpad/madura.sh`; datos en `runs/fase1d/_madura.jsonl`; análisis en `scratchpad/analiza_madura.py`):
+  - desde la época 300, todos los vivos vuelven a su cerebro de recién nacido (w = w0, h = 0) y aprenden 200 pasos sin nacimientos ni coste de vivir: **E** en su mundo y **D** en el mismo mundo sin comida (algas a 0 en cada paso);
+  - examen: 500 pasos congelados, cada bicho en su sitio y con su energía de la época 300, con cuatro cerebros: N (recién nacido), E, D y A (el adulto real);
+  - índice M = (ingesta D − N) / (ingesta E − N). M ≈ 0: depende de la experiencia; M ≈ 1: maduración. Solo se interpreta si E supera a N en más de un 10 %.
+- **Resultado:**
+
+  | Condición | Mundos con E > N + 10 % | M, mediana (rango) | M < 0,7 |
+  |---|---|---|---|
+  | P4-alga-tripa-frena-rampa | 7/10 | 0,84 (0,45–1,02) | s2, s5 |
+  | P3-escaso-tripa-frena-rampa | 9/10 | 0,90 (0,24–1,03) | s6, s7 |
+  | P4-alga-tripa (padre, sin freno) | 5/10 | 0,92 (0,37–1,01) | s6, s7 |
+  | P4-alga-sin-tripa-frena-rampa | 6/10 | 0,76 (0,28–1,10) | s5, s7 |
+
+  - En 19 de 27 mundos con ganancia, M ≥ 0,7: criar sin comida da casi lo mismo que criar con ella. El cerebro de recién nacido apenas empuja (velocidad 1–4 en los mundos con más ganancia) y la plasticidad lo pone en marcha (8–15) haya o no comida.
+  - En 8 de 27 hay una parte clara que depende de la experiencia con la comida (M de 0,24 a 0,68).
+  - El adulto real (A) come como el criado con comida (E): 200 pasos bastan para rehacer lo que la plasticidad hace en una vida.
+- **Límites:** en D siguen los vecinos y los rayos, así que «sin comida» no es «sin experiencia» (los pesos que más cambian son los de proximidad y parentesco). Además, en el examen el recién nacido tiene la energía del adulto, no la suya.
+- **Conclusión: firme en lo principal.** Lo que se aprende en vida es sobre todo una maduración que no depende de la comida: la evolución usa la plasticidad para terminar de construir un cerebro que nace incompleto. El aprendizaje por la experiencia con la comida existe, pero es minoritario (8 de 27 mundos). Encaja con C1 de `condiciones_aprendizaje.md`: si lo que conviene se puede saber al nacer, no hace falta aprenderlo de la experiencia.
