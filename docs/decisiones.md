@@ -582,3 +582,15 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 5. **Criterio** en `docs/escalera/diseno.md` v2.0: discriminación aprendida con la sonda mixta, ≥ 9/10 mundos.
 
 **Adenda (25-10-2026).** Con el doble de algas vivían en el tope (4.096) y con la mitad se extinguían al arrancar. El responsable decidió una rampa de comida, del doble a la mitad (`k_mean` final 1,902) en las mismas 100 épocas que el freno (`config.K_MEAN_RAMP_STEPS`, sustrato 3.4.0; `diseno.md` v2.1–v2.2). **Resultado (21:46): no pasa (0/10).** No aprenden a comer su alga y dejar la otra (ΔD mediana +0,014). La ventaja de aprender es la mayor de la escalera (mediana +136 %), pero es sobre todo maduración (M mediana 0,97). Indicio no prerregistrado: pasan más tiempo sobre su alga buena que sus vecinos congelados (10/10).
+
+## ADR-027 · 25-10-2026 · Manchas lejanas de un solo tipo: elegir mancha por el color antes de probar (decisión del responsable)
+
+**Contexto.** El alga por bicho (ADR-026) no pasa (0/10). El diagnóstico con el alga invertida durante la crianza (`scratchpad/madura_alga.py`, bitácora 25-10, 21:54) muestra que no aprenden qué alga es la suya (|E − X| ≤ 0,013 en 10/10). Basta un reflejo innato de la tripa: quedarse si alimenta e irse si no, porque probar un alga cuesta casi nada y la tripa contesta en el acto. En todd1991exploring, niv2002evolution y pontes2020evolutionary hay que elegir por una pista antes de cobrar el premio, y equivocarse cuesta (C2 y C4 de `docs/escalera/condiciones_aprendizaje.md`; charnov1976optimal y stephens1986foraging: viajar entre manchas cuesta tiempo).
+
+**Decisión (responsable, 25-10-2026, entre las 21:54 y las 22:06).**
+1. **Manchas lejanas** sobre P4-alga-bicho-frena-rampa (padre): comida dispersa con `config.K_CUT`.
+2. **Un solo tipo por mancha** (`config.ALGA_PATCH_FAMILIES` = 1): las 8 ondas del campo se reparten en dos familias, pares e impares, normalizadas cada una por separado. La comida sigue a z = max(z_A, z_B) y el alga es A donde z_A ≥ z_B. Por mitades, el alga A tendría el 67 % de la comida en el mapa de `fase1d-w0`; alternas, el 50 %.
+3. **Separación:** el responsable eligió la de P3-disperso, el 9 % del suelo con comida. Con dos familias, `K_CUT` 1,5 da el 18 %, así que el corte se recalcula a **1,7**: 18 manchas de ~71 u a ~177 u de la vecina, fuera del alcance de los sensores (60 u). El 17 % de las manchas son una A y una B que se tocan; en cada punto, el color sigue diciendo qué alga hay.
+4. **Comida:** `k_mean` 8,792, la misma comida total que el padre, con la rampa del doble a la mitad en 100 épocas.
+5. **Sustrato 3.5.0** (rama `escalera-manchas`, worktree `panspermia-manchas`, desde `escalera-algabicho`, `8743dcd`). Apagado (por defecto), idéntico bit a bit. Excluye los saltos de la comida. Test `test_alga_patch_families`.
+6. **Primaria** (`diseno.md` v2.3): la trampa del alga invertida con el examen barajado, ≥ 9/10.
