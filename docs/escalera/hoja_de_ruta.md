@@ -26,7 +26,7 @@
 | **H-red** (paralelo) | La fase 4a en CPU | ¿0 corruptos en 10⁵ y 3 nodos 7 días? | 0 | Infraestructura lista y apagada | Arreglar |
 | **H-int** (paralelo) | Integrar las ramas de la escalera en una rama de integración; examen limpio (ADR-021) en `main`; formato de genoma congelado, versionado y firmado | ¿La suite pasa y P3-escaso se reproduce bit a bit antes y después? | Solo la suite, con la GPU libre | Sustrato 3.x congelado | Resolver antes de seguir |
 | **H1** manchas ✗ (26-10, 06:22: 0/10, sin indicio) | Manchas lejanas de un solo tipo (ADR-027) | ¿E − X ≥ 0,05 en 9/10? | ~8 h | Réplica en otro mapa → P6 | H2 |
-| **H2** P5-d | **Veneno diferido**: el daño llega 20–50 pasos después de comerlo, con el veneno inmediato como contraste prerregistrado si cabe (10 semillas más) | ¿Aparece la discriminación cuando el reflejo de la tripa ya no basta? | ~6–12 h | Réplica → P6 | H3 |
+| **H2** P5-d (en curso desde el 26-10, 06:33; ADR-030: sobre las manchas, el alga equivocada alimenta y cobra a los 30 pasos) | **Veneno diferido**: el daño llega 20–50 pasos después de comerlo, con el veneno inmediato como contraste prerregistrado si cabe (10 semillas más) | ¿Aparece la discriminación cuando el reflejo de la tripa ya no basta? | ~6–12 h | Réplica → P6 | H3 |
 | **H3** | Tercer diseño independiente (lo decide el panel) | — | ~6 h | Réplica → P6 | **Plan B** |
 | P6 | Veneno que cambia, de uno en uno los demás ingredientes | ¿Persiste cuando cambia? | ~6 h por rama | Larga | Aparcar la rama |
 | Larga | La mejor receta, 1.000–2.000 épocas, 10 semillas | ¿Se sostiene y crece? | ~60–100 h | P-migra | Volver a P6 |
