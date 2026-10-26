@@ -1716,3 +1716,12 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Se informa además A − E600: si es ≈ 0, la ventaja del adulto era solo duración de la crianza.
 - **Contador:** no gasta comparación (diagnóstico).
 - Datos en `runs/fase1d/_madura_alga_manchas_rear600.jsonl`. GPU libre, solo observa.
+
+### 06:28–06:30 (26-10) · Crianza larga sobre las manchas: la maduración se confirma (exploratorio)
+
+- **E600 − X600 en frac_buena:** −0,012 a +0,013, mediana +0,003. |dif| < 0,05 en 10/10. Positivo en 6/10, con mediana por debajo de 0,03: **sin indicio**.
+- **Selectividad de entrada:** −0,019 a +0,020. Ruido |E − E2| mediano 0,008.
+- **Según la regla prerregistrada, queda cerrado:** con 600 pasos de crianza tampoco hay asociación entre el alga y su valor.
+- **Más crianza mejora poco:** E600 − E200 da −0,014 a +0,047. El adulto sigue por encima de E600 (+0,002 a +0,086, mediana ≈ +0,037). Su ventaja no es solo la duración de la crianza, que no tiene nacimientos ni coste de vivir. Como E ≈ X, la parte criada no depende del alga.
+- **M600:** mediana 0,43.
+- Datos en `runs/fase1d/_madura_alga_manchas_rear600.jsonl`. No gasta comparación.
