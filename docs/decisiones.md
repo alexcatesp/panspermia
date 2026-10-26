@@ -731,3 +731,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Predicción del panel:** f_mod bajo y m sin signo (~70–80 %). C sobre el inmediato da probablemente un indicio y no el 9/10 (25–35 %). Riesgo, según Biología: que el cerebro se siga vaciando bajo C.
 
 **Decisión del responsable (26-10-2026, 22:16).** Tras ver los tres negativos y las primeras pistas de D, el responsable prefiere **solo C**: probar la modulación con signo de resultado antes de escribir nada. La publicación de la maduración (plan B 2) no se prepara por ahora.
+
+**Resultado de D (26-10-2026, 22:30).** Inmediato: f_mod ≥ 0,5 en 9/10; ρ(m, resultado) sin señal en 10/10; signo del cobro con señal en 2/10. Sin señal en (b) ni en (c) en 8/10 → **C como término aditivo**, según la regla. m está saturada (|m| > 0,99 en el 42–64 % de los pasos) porque las moduladoras también conducen. El diseño de C pasa al panel 08.

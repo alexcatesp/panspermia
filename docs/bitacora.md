@@ -1800,3 +1800,19 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Nulo: desplazamientos circulares ≥ 40 pasos; señal si la mediana supera el p97,5 y |ρ| ≥ 0,2.
   - Semillas: `PRNGKey(30000 + s)` para la muestra; `default_rng(7000 + s)` para el nulo.
 - **Responsable (22:16):** solo C. Se prueba la modulación con signo de resultado antes de escribir la maduración.
+
+### 21:56–22:30 (26-10) · Diagnóstico D: hay moduladoras, pero m no lleva el signo del resultado → C aditiva (ADR-032)
+
+- `scratchpad/diag_signo.py` y `diag_signo.sh`, GPU, ~1,5 min por mundo. Datos en `runs/fase1d/_diag_signo.jsonl` y `_diag_signo/*.npz`. La prueba de las semillas 0 está en `_diag_signo_prueba.jsonl`, idéntica.
+- **Inmediato (decide):**
+  - **(a) f_mod:** ≥ 0,5 en 9/10 (0,49–1,00; 1,0–2,8 moduladoras por bicho). Hay sustrato de modulación. Fallo de la predicción del panel, que esperaba pocas moduladoras.
+  - **(b) ρ(m(t + 1), bocado − cobro):** sin señal en 10/10. La mediana es 0 en 9/10, con cuantiles del 10 y el 90 % en ±0,2.
+  - **(c) signo del cobro:** señal en 2/10 (s0 ρ 0,26 y s1 0,30), con solo 5–13 bichos por mundo que viven ambos signos.
+  - Sin señal en (b) ni en (c): 8/10.
+  - Con solo los bichos que tienen moduladora, igual.
+- **Diferido (descriptivo):** f_mod ≥ 0,5 en 10/10. Sin señal en (b) ni en (c): 10/10.
+- **Por qué ρ = 0: m está saturada.**
+  - |m| > 0,99 en una mediana del 42 % de los pasos (inmediato) y del 64 % (diferido).
+  - Entre el 1 y el 56 % de los bichos tienen m constante en todo el recorrido.
+  - Las moduladoras también conducen (`brain.py`: «también proyectan como ocultas normales»). Su valor lo fija la conducta y queda en ±1. La modulación es tónica, un signo fijo para la regla, y no fásica.
+- **Decisión por la regla prerregistrada: f_mod ≥ 0,5 y sin señal en ≥ 7/10 → C como término aditivo.** El panel 08 la diseña.

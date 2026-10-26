@@ -1158,6 +1158,18 @@
    "condicion": "P5-diferido-manchas"
   },
   {
+   "id": "diagD",
+   "padre": "P5d",
+   "titulo": "Diagnóstico D: ¿lleva la modulación el signo del resultado?",
+   "corto": "(D) signo de m",
+   "estado": "hecho",
+   "resultado": "negativo",
+   "anade": "sobre los checkpoints de P5-d: fracción con moduladoras y correlación de m con bocado − cobro, contra desplazamientos circulares; solo observa (ADR-032)",
+   "texto": "Panel 07 (26-10, entre las 21:55 y las 21:58; regla prerregistrada). Resultado (22:30): hay moduladoras (f_mod ≥ 0,5 en 9/10 del inmediato y 10/10 del diferido), pero m no sigue al resultado (sin señal en 10/10) ni baja con el cobro (2/10). m está saturada (|m| > 0,99 en el 42–64 % de los pasos) porque las moduladoras también conducen: modulación tónica, no fásica. Regla → C como término aditivo (panel 08).",
+   "ref": "docs/decisiones.md",
+   "recurso": "GPU"
+  },
+  {
    "id": "trazas",
    "padre": "P5d",
    "titulo": "Trazas de elegibilidad (plan B 1)",
