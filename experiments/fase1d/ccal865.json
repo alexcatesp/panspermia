@@ -1,0 +1,40 @@
+[
+ {
+  "name": "_calC865",
+  "node": "fase1d-w0",
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "VENENO",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.792,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_PER_AGENT": 1,
+   "ALGA_PATCH_FAMILIES": 1,
+   "K_CUT": 1.7,
+   "EAT_MOVE_FACTOR": 0.0,
+   "EAT_MOVE_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_FROM": 2.0,
+   "POISON_FACTOR": 2.5,
+   "POISON_DELAY": 0,
+   "POISON_RAMP_STEPS": 100000,
+   "DELTA_ON": 1,
+   "DELTA_K": 8.65,
+   "DELTA_TAU": 50.0
+  },
+  "seeds": [
+   0,
+   1
+  ],
+  "epochs": 200,
+  "description": "Calibración de C (ADR-033, panel 08): P5-inmediato (F = 2,5) con m_eff = clip(m + 8.65·δ_acc, −1, 1); 2 semillas × 200 épocas, viabilidad v2.3b. Sustrato 3.8.0."
+ }
+]
