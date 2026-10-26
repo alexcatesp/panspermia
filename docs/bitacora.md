@@ -1787,3 +1787,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Conclusión, según la regla 7 de ADR-030:** el inmediato da ≤ 3/10 con viabilidad 10/10 y la trampa validada. **H2 cuenta como negativo, y el diferido no es interpretable por sí solo.** Es el tercer negativo sobre el mismo mecanismo: alga por bicho, manchas y veneno inmediato. Ni con la consecuencia inmediata y visible se aprende el valor del alga. El panel decide si salta H3 y pasa al plan B 1.
 - **Predicción del panel 05:** el diferido, 0–2/10 ✓; el inmediato, quizá un indicio de 5–7/10 (Método) ✗.
 - **Contador de comparaciones:** 13.
+
+### 21:55–21:58 (26-10) · Panel 07: se salta H3; antes del plan B 1, diagnóstico del signo de la modulación (ADR-032)
+
+- Unánime en las dos rondas. H2 negativo y se salta H3. Las trazas solas no se lanzan.
+- Orden: diagnóstico D → C (modulación con signo de resultado) sobre el inmediato → C diferido → B + C. Publicar la maduración, en paralelo.
+- **Regla de D (prerregistrada aquí, antes de ejecutar; detalle en ADR-032):**
+  - f_mod < 0,5 en ≥ 7/10 → C fija m.
+  - f_mod ≥ 0,5 sin señal de ρ(m(t + 1), bocado − cobro) ni del signo del cobro en ≥ 7/10 → C aditiva.
+  - Con señal en ≥ 7/10 → B sola.
+  - Otro patrón → C.
+  - Nulo: desplazamientos circulares ≥ 40 pasos; señal si la mediana supera el p97,5 y |ρ| ≥ 0,2.
+  - Semillas: `PRNGKey(30000 + s)` para la muestra; `default_rng(7000 + s)` para el nulo.

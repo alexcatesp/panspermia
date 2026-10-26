@@ -697,3 +697,35 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 8. **Aviso de los tres:** con λ ≈ 0,90, el crédito de un pulso de modulación aislado baja al 10 %. El total con modulación sostenida se conserva, porque Σ(1 − λ)λ^k = 1. Además, η tiene tope (`ETA_MAX` 0,1). Antes de leer un negativo como fallo de las trazas, hay que comprobar que η no está saturado y mirar el contraste inmediato.
 
 **Adenda a ADR-031 (26-10-2026, 06:45).** El control positivo del mecanismo (test c) muestra que la traza solo asigna el crédito al estímulo predictivo si la modulación está centrada en el momento del resultado (R − R̄). Con m solo positiva, premia cualquier actividad reciente; con una línea base en cada paso, castiga el estímulo lejano. Al usarlas sobre P5-d hay que medir la correlación entre m y el cambio de energía. La recompensa predicha queda aparcada, pero esta es su condición de reapertura más probable. Rama `escalera-trazas`, `1e42c1e`.
+
+## ADR-032 · 26-10-2026 · Tras H2: se salta H3; diagnóstico del signo de la modulación antes del plan B 1 (decisión del panel 07)
+
+**Contexto.** P5-d no pasa: diferido 0/10 e inmediato 0/10, H-control válido (ADR-030, resultado de las 21:52). Es el tercer negativo sobre el mismo mecanismo. Ni con el cobro inmediato aprenden a evitar el alga que daña, y lo aprendido en vida es comer más. El control positivo de las trazas (adenda a ADR-031) muestra que estas necesitan una modulación con signo de resultado. Informes en `docs/escalera/panel/07_*`.
+
+**Decisión del panel 07 (26-10-2026, entre las 21:55 y las 21:58), unánime en las dos rondas.**
+1. **H2 es negativo (regla 7) y se salta H3:** el cuello de botella está en el cerebro, no en el mundo. Cambio de mecanismo según la regla de parada (hoja de ruta §4).
+2. **Las trazas solas (B) no se lanzan ahora:** su control positivo predice el fallo con la m actual.
+3. **Orden:**
+   - D: diagnóstico, solo observa.
+   - C: m con signo de resultado, sobre P5-inmediato, con la misma trampa. Se diseña en el panel 08 con el padre, un control de error barajado en el tiempo y el H-control repetido.
+   - Si C pasa: C sobre el diferido, y después B + C.
+   - En paralelo, publicar la maduración (plan B 2).
+4. **Regla de D, fijada antes de ver datos.** Sobre los checkpoints de la época 300; decide el inmediato y el diferido se describe.
+   - **(a) f_mod:** fracción de adultos vivos con ≥ 1 oculta moduladora expresada.
+   - **(b) ρ(m, resultado):** recorrido de 500 pasos con plasticidad y sin nacimientos, 200 adultos por mundo.
+     - Spearman por bicho entre m(t + 1) y el resultado en t (bocado − cobro), en los pasos con bocado o cobro. El desfase de un paso se debe a que la tripa entra en la observación al paso siguiente.
+     - Estadístico del mundo: la mediana de ρ.
+     - Nulo: 1.000 desplazamientos circulares de m dentro de cada bicho, con un desfase de al menos 40 pasos, para respetar la autocorrelación (Biología). El nulo se forma con la mediana del mundo (Método).
+     - El mundo «tiene señal» si su mediana supera el percentil 97,5 del nulo y |ρ| ≥ 0,2.
+   - **(c) Signo del cobro (inmediato):** el mismo cálculo con el indicador «neto negativo frente a bocado positivo». La señal requiere m menor tras el neto negativo.
+   - **Decisión:**
+     - f_mod < 0,5 en ≥ 7/10 → C fija m.
+     - f_mod ≥ 0,5 y sin señal en (b) ni (c) en ≥ 7/10 → C aditiva.
+     - Señal en (b) y (c) en ≥ 7/10 → B sola, y C se replantea.
+     - Otro patrón → C.
+     - (b) y (c) se informan también solo entre los bichos con moduladora.
+   - **Semillas fijadas:** muestra de bichos con `PRNGKey(30000 + semilla)`; desplazamientos con `numpy.random.default_rng(7000 + semilla)`, solo en el análisis y fuera del núcleo.
+   - Límite: es una correlación, y no gasta comparación.
+5. **Contador:** C inmediato y su barajado cuentan como una comparación (14), declarada con dos brazos.
+
+**Predicción del panel:** f_mod bajo y m sin signo (~70–80 %). C sobre el inmediato da probablemente un indicio y no el 9/10 (25–35 %). Riesgo, según Biología: que el cerebro se siga vaciando bajo C.
