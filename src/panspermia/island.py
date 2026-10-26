@@ -63,6 +63,7 @@ class IslandState:
     signal: jax.Array       # f32[N]
     gut: jax.Array          # f32[N, GUT_WINDOW]: energía de lo comido en los últimos pasos (ADR-024)
     poison: jax.Array       # f32[N, POISON_BUFFER]: cobros pendientes del veneno diferido, por paso (ADR-030)
+    trace: jax.Array        # f32[N, N_PRE, N_POST] con TRACE_ON (ADR-031); si no, f32[N, 1, 1] sin uso
     genome: G.Genome        # eje N delante
     pheno: Phenotype        # f16[N, 134, 69] + escalares de cuerpo
     w: jax.Array            # f32[N, 134, 69]
@@ -138,6 +139,7 @@ def _place(state: IslandState, idx, genomes, pheno, pos, angle, energy, uid, par
         signal=set_(state.signal, 0.0),
         gut=set_(state.gut, 0.0),
         poison=set_(state.poison, 0.0),
+        trace=set_(state.trace, 0.0),
         genome=_scatter(state.genome, idx, genomes),
         pheno=_scatter(state.pheno, idx, pheno),
         w=set_(state.w, pheno.w0.astype(jnp.float32)),
@@ -182,6 +184,7 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         signal=jnp.zeros((n_max,)),
         gut=jnp.zeros((n_max, C.GUT_WINDOW)),
         poison=jnp.zeros((n_max, C.POISON_BUFFER)),
+        trace=jnp.zeros((n_max, C.N_PRE, C.N_POST) if C.TRACE_ON else (n_max, 1, 1)),
         genome=genomes,
         pheno=pheno,
         w=pheno.w0.astype(jnp.float32),
@@ -394,6 +397,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     state = state.replace(energy=jnp.where(alive, energy, 0.0), alive=alive,
                           gut=jnp.where(alive[:, None], state.gut, 0.0),
                           poison=jnp.where(alive[:, None], state.poison, 0.0),
+                          trace=jnp.where(alive[:, None, None], state.trace, 0.0),
                           age=jnp.where(alive, state.age + 1, 0))
 
     if births:
@@ -401,7 +405,18 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     else:
         n_births, newborn = jnp.int32(0), jnp.zeros_like(alive)
 
-    if plastic:
+    trace = state.trace
+    if plastic and C.TRACE_ON:  # trazas de elegibilidad (ADR-031)
+        lam = math.exp(-C.PLASTICITY_EVERY / C.TRACE_TAU)
+
+        def trace_fn(wt):
+            m = brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type)
+            learn = state.alive & ~newborn
+            w2, e2 = brain.plasticity_trace(state.pheno, wt[0], wt[1], pre, post, jnp.where(learn, m, 0.0), lam)
+            return jnp.where(learn[:, None, None], w2, wt[0]), jnp.where(learn[:, None, None], e2, 0.0)
+
+        w, trace = jax.lax.cond(state.step % C.PLASTICITY_EVERY == 0, trace_fn, lambda wt: wt, (state.w, state.trace))
+    elif plastic:
         def plastic_fn(w):
             m = brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type)
             m = jnp.where(state.alive & ~newborn, m, 0.0)
@@ -416,7 +431,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     patches = world.step_patches(state.env, state.tox_patches, state.step,
                                  jax.random.fold_in(k_flip, 0x70A))
     changed = patches != state.tox_patches
-    state = state.replace(w=w, resources=resources, chem=chem, step=state.step + 1,
+    state = state.replace(w=w, trace=trace, resources=resources, chem=chem, step=state.step + 1,
                           toxic_type=jnp.where(flip, 1 - state.toxic_type, state.toxic_type),
                           tox_patches=patches,
                           tox_since=jnp.where(changed, state.step + 1, state.tox_since))

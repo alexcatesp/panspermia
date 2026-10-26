@@ -76,6 +76,7 @@ def _single(env, genome, pheno, w, pos, angle, valid, resources) -> IslandState:
         energy=one(jnp.where(valid, jnp.float32(C.PROBE_ENERGY), 0.0)),
         age=jnp.zeros((1,), jnp.int32), signal=jnp.zeros((1,)), gut=jnp.zeros((1, C.GUT_WINDOW)),
         poison=jnp.zeros((1, C.POISON_BUFFER)),
+        trace=jnp.zeros((1, C.N_PRE, C.N_POST) if C.TRACE_ON else (1, 1, 1)),
         genome=jax.tree.map(one, genome), pheno=jax.tree.map(one, pheno), w=one(w),
         h=jnp.zeros((1, C.N_HIDDEN_MAX)),
         lineage=Lineage(uid=jnp.zeros((1,), jnp.uint32),

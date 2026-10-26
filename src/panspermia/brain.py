@@ -1,7 +1,7 @@
 """Red recurrente con plasticidad hebbiana ABCD modulada (spec §Cerebro). Sin retropropagación.
 
 Todas las funciones operan sobre lotes con eje N delante. Neuronas presinápticas: [obs; h]
-(N_PRE = 134); postsinápticas: [h; acciones] (N_POST = 69). La matriz de pesos vivos `w` es f32.
+(N_PRE = 144); postsinápticas: [h; acciones] (N_POST = 72). La matriz de pesos vivos `w` es f32.
 
 Paso: h' = tanh(W_hid^T [o; h]) ⊙ hid_mask, a = tanh(W_out^T [o; h']). Las conexiones directas
 obs→acción del sustrato se usan junto con h'. En la fase 0 no hay sesgo neuronal (b = 0, ADR-005).
@@ -44,3 +44,18 @@ def plasticity(pheno, w: jax.Array, pre: jax.Array, post: jax.Array, m: jax.Arra
     hebb = f32(pheno.A) * xi * xj + f32(pheno.B) * xi + f32(pheno.C) * xj + f32(pheno.D)
     dw = f32(pheno.eta) * f32(pheno.g) * m[:, None, None] * hebb
     return jnp.clip(w + dw, -C.W_MAX, C.W_MAX)
+
+
+def plasticity_trace(pheno, w: jax.Array, trace: jax.Array, pre: jax.Array, post: jax.Array, m: jax.Array,
+                     lam: float) -> tuple[jax.Array, jax.Array]:
+    """Con trazas de elegibilidad (ADR-031): e ← λ·e + (1 − λ)·hebb y Δw = η·g·m·e. Devuelve (w, e).
+
+    La traza es una media ponderada del término hebbiano, acotada por su máximo; con λ = 0 es la regla de siempre.
+    """
+    f32 = lambda x: x.astype(jnp.float32)
+    xi = pre[:, :, None]
+    xj = post[:, None, :]
+    hebb = f32(pheno.A) * xi * xj + f32(pheno.B) * xi + f32(pheno.C) * xj + f32(pheno.D)
+    trace = lam * trace + (1.0 - lam) * hebb
+    dw = f32(pheno.eta) * f32(pheno.g) * m[:, None, None] * trace
+    return jnp.clip(w + dw, -C.W_MAX, C.W_MAX), trace

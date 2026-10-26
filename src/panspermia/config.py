@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "3.6.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.7.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -17,7 +17,8 @@ SUBSTRATE_VERSION = "3.6.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 3.3: alga buena sorteada para cada bicho (ALGA_PER_AGENT), ADR-026;
                              # 3.4: rampa de comida (K_MEAN_RAMP_STEPS, K_MEAN_RAMP_FROM), ADR-026;
                              # 3.5: manchas de un solo tipo de alga (ALGA_PATCH_FAMILIES), ADR-027;
-                             # 3.6: veneno diferido (POISON_FACTOR, POISON_DELAY), P5-d, ADR-030)
+                             # 3.6: veneno diferido (POISON_FACTOR, POISON_DELAY), P5-d, ADR-030;
+                             # 3.7: trazas de elegibilidad (TRACE_ON, TRACE_TAU), ADR-031)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -274,6 +275,12 @@ POISON_FACTOR: float = 0.0
 POISON_DELAY: int = 30
 POISON_RAMP_STEPS: int = 0
 POISON_BUFFER = 64  # pasos del búfer circular de cobros pendientes (> POISON_DELAY)
+# TRACE_ON (panel 06, 26-10; ADR-031, plan B 1): trazas de elegibilidad. Si es 1, cada sinapsis guarda una traza
+# e ← λ·e + (1 − λ)·(A·xi·xj + B·xi + C·xj + D), con λ = exp(−PLASTICITY_EVERY / TRACE_TAU), y el cambio de peso es
+# Δw = η·g·m·e: la modulación premia lo que pasó hasta unos TRACE_TAU pasos antes, no solo lo de ahora (izhikevich2007;
+# gerstner2018). La traza se reinicia al nacer y al morir. 0 (por defecto) = la regla de siempre, idéntica bit a bit.
+TRACE_ON: int = 0
+TRACE_TAU: float = 40.0  # pasos; constante (el gen de τ queda aparcado, ADR-031)
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1
