@@ -1799,3 +1799,4 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Otro patrón → C.
   - Nulo: desplazamientos circulares ≥ 40 pasos; señal si la mediana supera el p97,5 y |ρ| ≥ 0,2.
   - Semillas: `PRNGKey(30000 + s)` para la muestra; `default_rng(7000 + s)` para el nulo.
+- **Responsable (22:16):** solo C. Se prueba la modulación con signo de resultado antes de escribir la maduración.

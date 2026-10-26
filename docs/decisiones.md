@@ -729,3 +729,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 5. **Contador:** C inmediato y su barajado cuentan como una comparación (14), declarada con dos brazos.
 
 **Predicción del panel:** f_mod bajo y m sin signo (~70–80 %). C sobre el inmediato da probablemente un indicio y no el 9/10 (25–35 %). Riesgo, según Biología: que el cerebro se siga vaciando bajo C.
+
+**Decisión del responsable (26-10-2026, 22:16).** Tras ver los tres negativos y las primeras pistas de D, el responsable prefiere **solo C**: probar la modulación con signo de resultado antes de escribir nada. La publicación de la maduración (plan B 2) no se prepara por ahora.
