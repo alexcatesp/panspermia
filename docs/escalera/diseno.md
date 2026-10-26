@@ -441,3 +441,9 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
 - **Predicción del panel:** diferido 0–2/10.
 - **Resultado (26-10, 21:52): no pasa ninguna condición.** Diferido 0/10 (mediana +0,004, ruido 0,008) e inmediato 0/10 (mediana +0,006, ruido 0,0065), sin indicio. H-control sobre el inmediato pasa (positivo 10/10, débil 10/10, negativo 10/10). En la crianza invertida muere el 27–46 % (diferido) y el 49–71 % (inmediato) sin aprender a irse. La sonda mixta da A +121 % y +50 %, con ΔD ≈ 0 y −0,047: lo que aprenden es comer más en general. Según la lectura prerregistrada, **H2 negativo**; el panel 07 decide el siguiente paso.
 
+
+**v2.5 · 26-10-2026, 22:36 · C: modulación con signo de resultado (ADR-033, decisión del panel 08).** Sobre P5-inmediato (F = 2,5, retardo 0). La modulación plástica es m_eff = clip(m + k·δ_acc, −1, 1), con δ = (bocado − cobro) − su EMA de 50 pasos, acumulado entre actualizaciones y k = 8,65 (regla mecánica; k/2 si no es viable). Sustrato 3.8.0 (rama `escalera-c`). Dos condiciones de 10 semillas × 300 épocas desde cero: P5-inmediato-C (δ real) y P5-inmediato-Cbar (δ barajado en el tiempo); el padre es P5-inmediato.
+- **Primaria:** la trampa del alga invertida con examen barajado: frac_buena E − X ≥ 0,05 en ≥ 9/10 en C, **y** C por encima de Cbar en la mediana de E − X.
+- **Secundarias:** sonda mixta (A, ΔD, P(comer) del alga equivocada); H-control sobre C; ρ(m_eff, resultado) como en D; fracción de actualizaciones con el signo invertido por δ; neuronas.
+- **Indicio:** como en la v2.4. **Caso aislado (exploratorio, no pasa):** un mundo de C con E − X ≥ 0,05, por encima de su Cbar y replicado con semillas nuevas.
+- **Predicción del panel:** 9/10, un 10–15 %; indicio en 1–3 mundos.

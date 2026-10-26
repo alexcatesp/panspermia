@@ -1816,3 +1816,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Entre el 1 y el 56 % de los bichos tienen m constante en todo el recorrido.
   - Las moduladoras también conducen (`brain.py`: «también proyectan como ocultas normales»). Su valor lo fija la conducta y queda en ±1. La modulación es tónica, un signo fijo para la regla, y no fásica.
 - **Decisión por la regla prerregistrada: f_mod ≥ 0,5 y sin señal en ≥ 7/10 → C como término aditivo.** El panel 08 la diseña.
+
+### 22:35–22:36 (26-10) · Panel 08: diseño de C, la modulación con signo de resultado (ADR-033)
+
+- Unánime en las dos rondas. m_eff = clip(m + k·δ_acc, −1, 1), con δ = (bocado − cobro) menos su EMA de 50 pasos.
+- **k = 8,65,** por la regla mecánica sobre los datos de D: la mediana de |δ| en los sucesos es 0,1157 (0,085–0,129 por mundo); |δ_acc| mediano, 0,209. Si no es viable, 4,33.
+- C y C-barajado sobre P5-inmediato, 10 + 10 mundos desde cero. El padre son los P5-inmediato ya hechos, si el test bit a bit pasa. C solo cuenta si supera al barajado.
+- Sustrato 3.8.0, rama `escalera-c` desde `escalera-trazas`.
+- Predicción: 9/10, un 10–15 %.

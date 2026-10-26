@@ -733,3 +733,44 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Decisión del responsable (26-10-2026, 22:16).** Tras ver los tres negativos y las primeras pistas de D, el responsable prefiere **solo C**: probar la modulación con signo de resultado antes de escribir nada. La publicación de la maduración (plan B 2) no se prepara por ahora.
 
 **Resultado de D (26-10-2026, 22:30).** Inmediato: f_mod ≥ 0,5 en 9/10; ρ(m, resultado) sin señal en 10/10; signo del cobro con señal en 2/10. Sin señal en (b) ni en (c) en 8/10 → **C como término aditivo**, según la regla. m está saturada (|m| > 0,99 en el 42–64 % de los pasos) porque las moduladoras también conducen. El diseño de C pasa al panel 08.
+
+## ADR-033 · 26-10-2026 · C: modulación con signo de resultado, aditiva (decisión del panel 08)
+
+**Contexto.** D (ADR-032) dio C aditiva. El responsable eligió solo C (22:16) y preguntó cómo se construye el cerebro en la bibliografía, si el «chivato» es aprendizaje por refuerzo y por qué a pontes2020evolutionary sí le salió. Informes en `docs/escalera/panel/08_*`.
+
+**Decisión del panel 08 (26-10-2026, entre las 22:35 y las 22:36), unánime en la segunda ronda.**
+1. **m_eff = clip(m + k·δ_acc, −1, 1)** en cada actualización plástica:
+   - r = gain − due: bocado menos el cobro que vence, sin metabolismo ni empuje.
+   - δ = r − r̄, con r̄ una EMA de τ_δ = 50 pasos (α = 1/50).
+   - δ_acc es la suma de δ desde la última actualización (cada 4 pasos).
+   - δ se calcula fuera de la red: un circuito fijo al estilo del VUM de Montague. k y τ_δ son constantes, no genes.
+   - Se aparcan para después, como peldaños propios: C1b (δ como entrada), C2 (moduladoras dedicadas) y C3 (modulación local).
+2. **k por regla mecánica, sin mirar E − X:** k = 1 / mediana de |δ| en los pasos con suceso, sobre los datos de D (`_diag_signo/*.npz` del inmediato, la misma EMA).
+   - Resultado (22:33): mediana 0,1157 (0,085–0,129 por mundo) → **k = 8,65**. La mediana de |δ_acc| es 0,209, así que k·δ_acc ≈ 1,8: cruza la saturación.
+   - **Si no es viable** (criterio de la v2.3b), k / 2 = 4,33. Fijado ahora; no es una rejilla.
+3. **Sustrato 3.8.0 menor** desde `escalera-trazas`, con TRACE_ON = 0. Interruptores:
+   - `config.DELTA_ON` (0 apagado, 1 real, 2 barajado), `DELTA_K` y `DELTA_TAU`.
+   - Campos nuevos: `rbar`, `dacc` f32[N] y, solo en el barajado, el búfer `dbuf` f32[N, 64]. Todos se reinician al nacer y al morir.
+4. **Barajado:** δ_bar(t) = δ(t − L), con L sorteado en [32, 63] en cada paso (`fold_in`). Se permuta δ, no δ_acc.
+5. **Tests:**
+   - apagado, bit a bit igual que 3.6.0 en las condiciones de P5-inmediato;
+   - δ a mano;
+   - acumulación entre pasos plásticos;
+   - reinicios;
+   - determinismo;
+   - el barajado conserva media y varianza y rompe la correlación;
+   - con m saturada en +1 y un δ típico negativo, Δw cambia de signo;
+   - control positivo de `test_trazas` (c) con m = δ real.
+6. **Primaria (`diseno.md` v2.5):** P5-inmediato con C y con C-barajado, 10 semillas × 300 épocas desde cero, con la trampa del alga invertida (E − X ≥ 0,05 en ≥ 9/10).
+   - **C solo cuenta si supera también al barajado.**
+   - El padre son los mundos P5-inmediato ya hechos, si el test bit a bit pasa; si no, se repite.
+   - H-control repetido sobre C.
+   - Diagnóstico (Biología): la fracción de actualizaciones en que k·δ_acc invierte el signo de m. Si es casi nula, un negativo no cierra la modulación aditiva.
+7. **Exploratorio, declarado ahora:**
+   - Reanudación desde la época 300 de P5-inmediato con C (2–1), después de la primaria.
+   - Un «caso aislado» (E − X ≥ 0,05, por encima de su barajado y replicado con semillas nuevas) **no cuenta como pasa**; solo justifica «Larga».
+   - En el artículo, 9/10 mide aprendizaje robusto, no aprendizaje posible (C8).
+8. **Para el artículo:** «dado un sistema de valor fijo (δ), ¿evoluciona la plasticidad que lo explota?». δ lo ponemos nosotros. Lo evolutivo son los pesos, las reglas ABCD, η, qué neuronas modulan y cómo se usa la señal. El principio 1 (δ es el propio flujo de energía) y el 5 (sin retropropagación) quedan intactos.
+9. **Contador:** C y su barajado, 1 comparación (14). La reanudación no cuenta.
+
+**Predicción del panel:** 9/10, un 10–15 %. Lo más probable es un indicio en 1–3 mundos, con el barajado plano.

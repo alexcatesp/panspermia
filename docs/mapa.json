@@ -1170,6 +1170,19 @@
    "recurso": "GPU"
   },
   {
+   "id": "modC",
+   "padre": "P5d",
+   "titulo": "C: modulación con signo de resultado",
+   "corto": "+ δ (error de predicción)",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "la modulación plástica recibe δ = (bocado − cobro) − su media móvil de 50 pasos: m_eff = clip(m + 8,65·δ, −1, 1); circuito fijo, como el de la dopamina (ADR-033)",
+   "texto": "Panel 08 (26-10, entre las 22:35 y las 22:36), unánime, tras el diagnóstico D (m saturada y sin signo). Sobre P5-inmediato: C y C con δ barajado en el tiempo, 10 + 10 mundos desde cero; el padre es P5-inmediato. Primaria (diseno v2.5): trampa del alga invertida, ≥ 9/10 y por encima del barajado. Sustrato 3.8.0, rama escalera-c. Predicción: 9/10, un 10–15 %.",
+   "ref": "docs/decisiones.md",
+   "recurso": "GPU",
+   "principal": true
+  },
+  {
    "id": "trazas",
    "padre": "P5d",
    "titulo": "Trazas de elegibilidad (plan B 1)",
