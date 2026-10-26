@@ -1751,3 +1751,39 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **F = 1,5 y F = 1,25 no se probaron:** el orden era de la más dañina a la menos, y la primera ya fue viable. No hay F descartadas.
 - **Los 20 mundos (P5-diferido-manchas y P5-inmediato-manchas, 10 semillas × 300 épocas, F = 2,5) empiezan a las 07:55.** Cola `experiments/fase1d/veneno.json`, log `runs/fase1d/veneno.log`, marca `veneno_hecho`. Las medidas (trampa con `--scatter`, sonda mixta y nulo, H-control sobre el inmediato) se lanzan aparte, al terminar.
 - Datos en `runs/fase1d/_calVeneno25/` y `runs/fase1d/veneno_cadena.log`.
+
+### 07:55–21:52 (26-10) · P5-d, veneno diferido e inmediato: no pasa ninguno (0/10 y 0/10); H2 negativo (ADR-030)
+
+- **Mundos** (cola `veneno.json`, F = 2,5; 07:55–19:38): 20 de 20 viables, población final 2.336–2.787.
+- **Medidas** (`scratchpad/veneno_medidas.sh`, GPU, 19:43–21:52): WSL se cerró solo entre las 19:46 y las 21:21, con la primaria del inmediato en la semilla 4; sin registro de la causa. Se reanudó con las que faltaban (`veneno_medidas2.sh`, 21:22). Análisis en `scratchpad/analiza_veneno.py` → `runs/fase1d/_analisis_veneno.json`.
+- **Primaria, trampa del alga invertida con examen barajado (frac_buena E − X ≥ 0,05 en ≥ 9/10):**
+  - **Diferido: 0/10.** De −0,006 a +0,014, mediana +0,004; positivos 6/10; ruido |E − E2| mediano 0,008. **Sin indicio.**
+  - **Inmediato: 0/10.** De −0,013 a +0,026, mediana +0,006; positivos 7/10; ruido 0,0065. **Sin indicio:** la mediana no llega a 0,03 ni a 2 × ruido.
+  - Secundarias E − X en el examen: selectividad de entrada (diferido −0,026 a +0,011; inmediato −0,009 a +0,065, con un solo mundo por encima de 0,05), D_comer, primer contacto e ingesta, todas ≈ 0.
+- **H-control sobre el inmediato (regla 7):** positivo 10/10 en frac_buena (+0,18 a +0,36) y en selectividad (+0,15 a +0,32); dosis débil 10/10; negativo con cerebros barajados 10/10. **La trampa ve el aprendizaje en estos mundos; el negativo es real.**
+- **Muertes durante la crianza** (fracción viva tras 200 pasos):
+
+  | Crianza | Diferido | Inmediato |
+  |---|---|---|
+  | E | 0,92–0,96 | 0,92–0,96 |
+  | D (sin comida) | 0,96–0,99 | 1,00 |
+  | X | **0,54–0,73** | **0,29–0,51** |
+
+  - En X los bichos empiezan donde estaban al guardar el mundo: sobre su alga de verdad, que en la crianza invertida envenena. La mayoría se queda y muere. Ni con el cobro inmediato, que la tripa ve como neto negativo, aprenden a irse en 200 pasos.
+  - Caveat: en X el examen incluye los cerebros de los que murieron durante la crianza, criados menos pasos. No cambia el veredicto: E ≈ X con un 50–70 % de supervivientes.
+- **Maduración y sonda mixta:**
+
+  | Medida | Diferido | Inmediato |
+  |---|---|---|
+  | frac_buena media (N → D → E ≈ X → A) | 0,70 → 0,78 → 0,82 ≈ 0,81 → 0,83 | 0,75 → 0,82 → 0,84 ≈ 0,84 → 0,85 |
+  | A − E | −0,011 a +0,047 | −0,020 a +0,023 |
+  | M (mediana) | 0,53 | 0,73 |
+  | Ventaja de ingesta A | +26 a +293 % (mediana +121 %) | +22 a +184 % (mediana +50 %) |
+  | Nulo | −5 a +6 % | −4 a 0 % |
+  | ΔD | −0,06 a +0,10 (mediana +0,014) | −0,10 a +0,07 (mediana −0,047; negativo en 7/10) |
+
+  - **Secundaria prerregistrada, P(comer) del alga equivocada, plástico − congelado:** diferido mediana +0,07 (la buena, +0,11); inmediato mediana +0,07 (la buena, +0,03).
+  - **Lo que aprenden en vida es comer más en general**, no evitar el alga que les daña. Con el cobro inmediato comen proporcionalmente más de la equivocada que sus vecinos congelados.
+- **Conclusión, según la regla 7 de ADR-030:** el inmediato da ≤ 3/10 con viabilidad 10/10 y la trampa validada. **H2 cuenta como negativo, y el diferido no es interpretable por sí solo.** Es el tercer negativo sobre el mismo mecanismo: alga por bicho, manchas y veneno inmediato. Ni con la consecuencia inmediata y visible se aprende el valor del alga. El panel decide si salta H3 y pasa al plan B 1.
+- **Predicción del panel 05:** el diferido, 0–2/10 ✓; el inmediato, quizá un indicio de 5–7/10 (Método) ✗.
+- **Contador de comparaciones:** 13.

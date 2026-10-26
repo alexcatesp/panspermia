@@ -439,4 +439,5 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
   - Inmediato ≤ 3/10 (viable y con la trampa validada): H2 negativo, el diferido no es interpretable y el panel decide si salta a las trazas.
   - Inmediato sí y diferido no: la plasticidad no cubre el retardo. Siguiente paso, el malestar o las trazas.
 - **Predicción del panel:** diferido 0–2/10.
+- **Resultado (26-10, 21:52): no pasa ninguna condición.** Diferido 0/10 (mediana +0,004, ruido 0,008) e inmediato 0/10 (mediana +0,006, ruido 0,0065), sin indicio. H-control sobre el inmediato pasa (positivo 10/10, débil 10/10, negativo 10/10). En la crianza invertida muere el 27–46 % (diferido) y el 49–71 % (inmediato) sin aprender a irse. La sonda mixta da A +121 % y +50 %, con ΔD ≈ 0 y −0,047: lo que aprenden es comer más en general. Según la lectura prerregistrada, **H2 negativo**; el panel 07 decide el siguiente paso.
 

@@ -670,6 +670,8 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 
 **Calibración (26-10, 07:07–07:55).** F = 2,5 es viable a la primera (2 semillas × 200 épocas): población final 2.445 y 2.360, media de las épocas 100–199 2.430 y 2.292, sin extinción. Mueren por época 1.063–1.291 bichos con cobro de veneno pendiente. F = 1,5 y 1,25 no se probaron; no hay F descartadas. Los 20 mundos empiezan a las 07:55 con F = 2,5.
 
+**Resultado (26-10, 21:52).** Diferido 0/10 e inmediato 0/10 en la primaria, sin indicio. H-control pasa sobre el inmediato. Por la regla 7, **H2 es negativo** y el diferido no se interpreta solo; es el tercer negativo sobre el mismo mecanismo. Ni con el cobro inmediato aprenden a evitar el alga que daña: en la crianza invertida la mitad muere sin irse, y lo aprendido en vida es comer más en general (P(comer el alga equivocada) +0,07 frente a los congelados). El siguiente paso lo decide el panel 07. Detalle en la bitácora (26-10, 21:52).
+
 ## ADR-031 · 26-10-2026 · Trazas de elegibilidad, listas en paralelo (decisión del panel 06; plan B 1)
 
 **Contexto.** El panel 05 (ADR-030) pidió dejar construida, solo con código y tests en CPU, la plasticidad con trazas de elegibilidad, por si P5-d da negativo. Informes en `docs/escalera/panel/06_*`.
