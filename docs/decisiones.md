@@ -667,3 +667,27 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 10. **Diagnóstico de crianza larga (600 pasos)** sobre las manchas: exploratorio, prerregistrado en la bitácora (26-10, 06:28). No gasta comparación.
 
 **Predicción del panel:** el diferido no pasa (0–2/10, 80–85 %). El inmediato quizá da un indicio (5–7/10, según Método). **Contador:** 13 (diferido e inmediato).
+
+## ADR-031 · 26-10-2026 · Trazas de elegibilidad, listas en paralelo (decisión del panel 06; plan B 1)
+
+**Contexto.** El panel 05 (ADR-030) pidió dejar construida, solo con código y tests en CPU, la plasticidad con trazas de elegibilidad, por si P5-d da negativo. Informes en `docs/escalera/panel/06_*`.
+
+**Decisión del panel 06 (26-10-2026, entre las 06:36 y las 06:38), unánime en la segunda ronda.**
+1. **Regla de tres factores sobre el hebbiano completo, con traza normalizada:**
+   - e ← λ·e + (1 − λ)·(A·xi·xj + B·xi + C·xj + D);
+   - Δw = η·g·m·e, recortado a W_MAX.
+   - Está acotada por max|hebb| sin un E_MAX nuevo (propuesta de Ingeniería; Método y Biología ceden).
+   - Con λ = 0 coincide con la regla actual.
+2. **Cadencia:** cada `PLASTICITY_EVERY` = 4 pasos, con λ = exp(−4/τ).
+3. **τ constante:** `config.TRACE_TAU` = 40 pasos (2–1). Biología quería un gen escalar. Queda aparcado, con la reapertura prerregistrada: un gemelo con τ fijo frente a τ evolucionable.
+4. **Interruptor `config.TRACE_ON`** (estático). La traza vive en el estado y se reinicia al nacer y al morir. Sustrato 3.7.0 (menor; el genoma no cambia), rama `escalera-trazas` desde `escalera-veneno`.
+5. **Tests en CPU antes de cualquier GPU:**
+   - (a) apagado, idéntico bit a bit; encendido con λ = 0, idéntico;
+   - (b) crédito diferido a mano, con k contado en actualizaciones: a 30 pasos son 7 actualizaciones y Δw = (1 − λ)·λ^7·hebb; sin traza, 0; a 300 pasos, ≈ 0;
+   - (c) control positivo del mecanismo: condicionamiento con retardo de 30 pasos y pesos fijos, sin evolución, que se aprende con traza y no sin ella;
+   - (d) acotación sin NaN;
+   - (e) determinismo y reinicios;
+   - (f) memoria medida con N ≤ 256 y extrapolada (unos 170 MB de traza más transitorios, > 0,5 GB con N = 4.096).
+6. **Se aparca:** la recompensa predicha, λ por sinapsis, las trazas por término y las dos escalas.
+7. **Primer uso**, cuando lo pida la regla de parada: P5-d diferido con un solo cambio (las trazas), 10 semillas y la misma primaria. El control es el P5-d actual. Junto a la primaria se miden la fracción de moduladoras expresadas y M.
+8. **Aviso de los tres:** con λ ≈ 0,90, el crédito de un pulso de modulación aislado baja al 10 %. El total con modulación sostenida se conserva, porque Σ(1 − λ)λ^k = 1. Además, η tiene tope (`ETA_MAX` 0,1). Antes de leer un negativo como fallo de las trazas, hay que comprobar que η no está saturado y mirar el contraste inmediato.
