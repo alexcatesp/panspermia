@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-26 02:57",
+ "actualizado": "2026-10-26 02:52",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -1042,7 +1042,7 @@
    "estado": "hecho",
    "resultado": "negativo",
    "anade": "tasa de altas al archivo de novedad (épocas 151–300) frente al nulo de deriva P0-escalera; solo lee JSON, exploratorio",
-   "texto": "Panel 04 (26-10, 02:51; prerregistro en decisiones.md sobre ADR-029, bd3743b). Resultado (02:56): no vale. Control positivo: P4-salto64 2/5 y P4-alga 0/5 por encima de la mediana estable 4,96 (normalizada 4/5 y 1/5). Dirección frente a P0: 2,17 frente a 1,97, por poco. La tasa alta es la de P2 (8,0), un mundo estable, con repro_age censurado alto (0,43): probablemente infla la novedad. En 600 épocas la tasa baja (mediana 3,7 en 300–600). Hará falta otra medida con datos que hoy no se guardan.",
+   "texto": "Panel 04 (26-10, 02:51; prerregistro en decisiones.md sobre ADR-029, bd3743b). Resultado (02:52): no vale. Control positivo: P4-salto64 2/5 y P4-alga 0/5 por encima de la mediana estable 4,96 (normalizada 4/5 y 1/5). Dirección frente a P0: 2,17 frente a 1,97, por poco. La tasa alta es la de P2 (8,0), un mundo estable, con repro_age censurado alto (0,43): probablemente infla la novedad. En 600 épocas la tasa baja (mediana 3,7 en 300–600). Hará falta otra medida con datos que hoy no se guardan.",
    "ref": "docs/bitacora.md",
    "recurso": "CPU"
   },

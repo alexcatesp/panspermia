@@ -1645,7 +1645,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - Datos en `runs/fase1d/_control_algabicho.jsonl`.
 - Las manchas van por el mundo 5/10, unos 41 min por mundo. Los mundos 1–4 terminan con 2.472–2.699 bichos.
 
-### 02:51–02:56 (26-10) · (b0): la tasa de novedad no vale como medida de crecimiento abierto (exploratorio)
+### 02:51–02:52 (26-10) · (b0): la tasa de novedad no vale como medida de crecimiento abierto (exploratorio)
 
 - **Panel 04.** Unánime en la segunda ronda, con tres ajustes. Prerregistro en `decisiones.md`, sobre ADR-029, subido en `bd3743b` antes de abrir las series.
 - **Análisis:** `scratchpad/b0_novedad.py`, que solo lee `summary.json`. Datos en `runs/fase1d/_b0_novedad.json`.
