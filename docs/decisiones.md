@@ -611,3 +611,25 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 
 **Contexto.** El responsable concibe la red como computación voluntaria tipo BOINC y pregunta si estamos preparados para convencer a la gente (22:33). **Decisión del panel 03 (22:35), unánime en la segunda ronda:** no estamos preparados. Hace falta un paquete de cinco pruebas: aprendizaje real; crecimiento abierto frente a nulos; escalado de una capacidad válida con el cómputo, con un efecto mínimo prerregistrado; reproducibilidad entre máquinas; y un resultado comprensible. No se afirmará ser «más relevante que los LLM». El escalado espera a tener una C válida; ya se hacen la validación exploratoria del crecimiento abierto (b0) y, si hay máquina, el determinismo entre GPU (d0). Detalle en `docs/escalera/hoja_de_ruta.md` §6.
 - Biología quería lanzar ya la escalera de N. Retiró la propuesta ante el argumento de Método: escalar maduración daría una curva sin interpretación. Añadió el nulo de escalado.
+
+**Decisión del panel 04 (26-10-2026, 02:51), sobre ADR-029: el diseño de (b0), prerregistrado antes de abrir las series.** Unánime en la segunda ronda, con tres ajustes compatibles que se incorporan. Informes en `docs/escalera/panel/04_b0_*`.
+- **Medida primaria.** Tasa de altas al archivo de novedad: la media de `novelty_added` por época en las épocas 150–300, por semilla. Se da también dividida por la población media de la ventana.
+- **Solo descriptivas, sin decidir:**
+  - `bp_new_activity` normalizada por la población;
+  - el índice de saturación, que es la tasa de 225–300 dividida por la de 150–225 (< 0,5 = se satura);
+  - la pendiente de `hidden_mean + synapses_mean`;
+  - el número de descriptores `desc_*` que varían;
+  - `desc_repro_age`;
+  - las ejecuciones de 600 épocas en 300–600 frente a su propia ventana 150–300.
+- **Nulo de deriva:** P0-escalera. Se declara que difiere en población (4.096), no tiene muertes y tiene el artefacto de `repro_age`.
+- **«La medida vale»** si se cumplen las dos condiciones:
+  - **(i) Control positivo:** P4-salto64 y P4-alga tienen cada una ≥ 4/5 semillas por encima de la mediana del conjunto estable (P2-escalera y P3-escaso, 10 semillas). Es un umbral descriptivo: con n = 5, p ≈ 0,19.
+  - **(ii) Dirección frente al nulo:** la mediana de los mundos con selección (P1-escalera, P2-escalera y P3-escaso) supera la de P0. Que P2 tenga ≥ 4/5 por encima de la mediana de P0 se informa solo como descriptivo (ajuste de Biología).
+- **«No vale»:** falla (i), o P0 iguala o supera a los mundos con selección. La medida mediría deriva.
+- **«No se puede saber»:** basta una de estas condiciones.
+  - La mediana es < 1 alta por época en todas las ejecuciones (es el suelo).
+  - Hay menos de 512 adultos en la ventana.
+  - (i) cambia de resultado al normalizar por la población (ajuste de Método).
+  - P0 supera a los mundos con selección y, a la vez, la mediana de `desc_repro_age` de P0 supera la de todos ellos. Con solo JSON no se puede recalcular el archivo sin ese descriptor (ajuste de Ingeniería).
+- **Alcance:** exploratorio, con n = 5 y datos ya vistos en otros contextos. Solo dice si la medida es utilizable, no si hay crecimiento abierto. CPU ligera (`scratchpad/b0_novedad.py`).
+- **Predicción de los tres:** «no vale» o «no se puede saber», por saturación del archivo.
