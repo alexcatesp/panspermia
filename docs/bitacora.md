@@ -1725,3 +1725,18 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Más crianza mejora poco:** E600 − E200 da −0,014 a +0,047. El adulto sigue por encima de E600 (+0,002 a +0,086, mediana ≈ +0,037). Su ventaja no es solo la duración de la crianza, que no tiene nacimientos ni coste de vivir. Como E ≈ X, la parte criada no depende del alga.
 - **M600:** mediana 0,43.
 - Datos en `runs/fase1d/_madura_alga_manchas_rear600.jsonl`. No gasta comparación.
+
+### 06:38–06:45 (26-10) · Trazas de elegibilidad construidas (ADR-031; rama `escalera-trazas`, sustrato 3.7.0)
+
+- **Panel 06:** unánime en la segunda ronda (06:38). Traza normalizada e ← λ·e + (1 − λ)·hebb, con τ = 40 pasos constante y `config.TRACE_ON`.
+- **Tests en CPU** (`tests/test_trazas.py`, N = 64): 5 correctos, más los 2 de plasticidad de `test_units.py`.
+  - (a) Apagado, y encendido con λ = 0: idéntico bit a bit tras 40 pasos (w, h, energía, posición y vivos).
+  - (b) Crédito diferido a mano: Δw = (1 − λ)·λ⁷·hebb a los 28 pasos. Sin traza, 0. A los 300 pasos, ≈ 0.
+  - (d) Acotada con entradas adversarias.
+  - (e) Determinista; se borra al morir.
+  - (f) Memoria: la traza ocupa 162 MB con N = 4.096. El pico del proceso de tests con N = 64 fue de 1,26 GB, casi todo de JAX.
+- **(c) Control positivo del mecanismo. Hallazgo al escribirlo:**
+  - Con una modulación solo positiva (m = 1 al llegar la recompensa), la traza premia la actividad reciente, sea cual sea. Un distractor al azar gana casi tanto como el estímulo que anuncia la recompensa (0,96 frente a 1,28).
+  - Con una línea base restada en cada paso, el estímulo, que llega 28 pasos antes, sale **castigado** (−0,45).
+  - Solo funciona si m dice «mejor o peor de lo esperado» **en el momento del resultado** (+½ si hubo recompensa, −½ si no). Así el estímulo gana 0,137 y el distractor −0,033. Sin traza, el estímulo se queda en 0.
+- **Consecuencia para el primer uso (sobre P5-d):** las trazas solo darán crédito al alga si la modulación evolucionada lleva signo de resultado (la energía que baja con el cobro del veneno, frente a la que sube al comer). Si no, reforzarán cualquier actividad reciente. Es la razón de la recompensa predicha (Niv; Soltoggio), aparcada por el panel 06. Hay que medirlo junto a la primaria: la correlación entre m y el cambio de energía.

@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-26 06:34",
+ "actualizado": "2026-10-26 06:46",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -1156,6 +1156,18 @@
    "principal": true,
    "cola": "veneno.json",
    "condicion": "P5-diferido-manchas"
+  },
+  {
+   "id": "trazas",
+   "padre": "P5d",
+   "titulo": "Trazas de elegibilidad (plan B 1)",
+   "corto": "+ trazas",
+   "estado": "pendiente",
+   "resultado": null,
+   "anade": "cada sinapsis guarda una huella que se apaga en ~40 pasos; la modulación premia lo que pasó antes, no solo lo de ahora (ADR-031)",
+   "texto": "Panel 06 (26-10, 06:38): traza normalizada e ← λ·e + (1 − λ)·hebb, τ = 40 constante, sustrato 3.7.0, rama escalera-trazas (1e42c1e). Construida y probada en CPU: idéntica bit a bit apagada y con λ = 0; crédito diferido exacto; acotada; determinista. Hallazgo del control positivo: solo da el crédito al estímulo que anuncia el resultado si la modulación dice «mejor o peor de lo esperado» en el momento del resultado; con m solo positiva premia cualquier actividad reciente. Primer uso (cuando lo pida la regla de parada): P5-d diferido con trazas, 10 semillas, misma primaria; medir moduladoras, M y la correlación de m con el cambio de energía.",
+   "ref": "docs/decisiones.md",
+   "recurso": "CPU"
   }
  ],
  "hipotesis": [
