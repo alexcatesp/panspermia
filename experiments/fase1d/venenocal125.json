@@ -1,0 +1,37 @@
+[
+ {
+  "name": "_calVeneno125",
+  "node": "fase1d-w0",
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "VENENO",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.792,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_PER_AGENT": 1,
+   "ALGA_PATCH_FAMILIES": 1,
+   "K_CUT": 1.7,
+   "EAT_MOVE_FACTOR": 0.0,
+   "EAT_MOVE_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_FROM": 2.0,
+   "POISON_FACTOR": 1.25,
+   "POISON_DELAY": 30,
+   "POISON_RAMP_STEPS": 100000
+  },
+  "seeds": [
+   0,
+   1
+  ],
+  "epochs": 200,
+  "description": "Calibración del veneno diferido (ADR-030, panel 05, 26-10): sobre las manchas, el alga equivocada alimenta y cobra 1.25 × lo que dio a los 30 pasos; el factor sube en rampa en 100 épocas. Viable con el criterio de diseno.md v2.3b (sin extinción, ≥ 500 bichos, población media de las épocas 100–199 < 3.900)."
+ }
+]

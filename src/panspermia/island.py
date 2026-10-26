@@ -62,6 +62,7 @@ class IslandState:
     age: jax.Array          # int32[N]
     signal: jax.Array       # f32[N]
     gut: jax.Array          # f32[N, GUT_WINDOW]: energía de lo comido en los últimos pasos (ADR-024)
+    poison: jax.Array       # f32[N, POISON_BUFFER]: cobros pendientes del veneno diferido, por paso (ADR-030)
     genome: G.Genome        # eje N delante
     pheno: Phenotype        # f16[N, 134, 69] + escalares de cuerpo
     w: jax.Array            # f32[N, 134, 69]
@@ -136,6 +137,7 @@ def _place(state: IslandState, idx, genomes, pheno, pos, angle, energy, uid, par
         age=set_(state.age, 0),
         signal=set_(state.signal, 0.0),
         gut=set_(state.gut, 0.0),
+        poison=set_(state.poison, 0.0),
         genome=_scatter(state.genome, idx, genomes),
         pheno=_scatter(state.pheno, idx, pheno),
         w=set_(state.w, pheno.w0.astype(jnp.float32)),
@@ -179,6 +181,7 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         age=jnp.zeros((n_max,), jnp.int32),
         signal=jnp.zeros((n_max,)),
         gut=jnp.zeros((n_max, C.GUT_WINDOW)),
+        poison=jnp.zeros((n_max, C.POISON_BUFFER)),
         genome=genomes,
         pheno=pheno,
         w=pheno.w0.astype(jnp.float32),
@@ -310,6 +313,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         move = actions.at[:, 0].multiply(brake)
     pos, vel, angle, thrust = world.physics(state, move, cand)
     toxic = world.toxic_cells(state.env, state.step, state.toxic_type, state.tox_patches)
+    due, poison = jnp.zeros_like(state.energy), state.poison  # veneno diferido que vence en este paso
     toxicity = jnp.clip(state.step.astype(jnp.float32) / C.TOXIC_RAMP_STEPS, 0.0, 1.0)
     gain, intake, toxic_in, nutrient, resources, chem = world.eat(
         state.resources, state.chem, pos, alive0, actions, toxic, toxicity)
@@ -322,7 +326,21 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
             raise ValueError("ALGA_PER_AGENT y ALGA_SWAP_PERIOD se excluyen")
         on_a = world.algae_type_a(state.env, state.step).ravel()[world._res_index(pos)]
         empty_in = jnp.where(on_a != world.good_alga_a(state.env, state.lineage.uid), intake, 0.0)
-        gain, intake = gain - empty_in, intake - empty_in
+        if C.POISON_FACTOR > 0:  # veneno diferido (ADR-030): alimenta ahora y cobra después
+            factor = jnp.float32(C.POISON_FACTOR)
+            if C.POISON_RAMP_STEPS > 0:
+                factor = factor * jnp.clip(state.step.astype(jnp.float32) / C.POISON_RAMP_STEPS, 0.0, 1.0)
+            debt = jnp.where(alive0, factor * empty_in, 0.0)
+            if C.POISON_DELAY == 0:
+                gain = gain - debt
+            else:
+                assert 0 < C.POISON_DELAY < C.POISON_BUFFER, "POISON_DELAY debe ser menor que POISON_BUFFER"
+                now = state.step % C.POISON_BUFFER
+                due = state.poison[:, now]
+                poison = state.poison.at[:, now].set(0.0).at[:, (state.step + C.POISON_DELAY) % C.POISON_BUFFER].add(debt)
+            intake = intake - empty_in
+        else:
+            gain, intake = gain - empty_in, intake - empty_in
     signal =jnp.where(alive0 & (state.env.signal_on > 0), actions[:, 4], 0.0)
     rbin = _recovery_bin(pos, state.tox_since, state.step)
     nb = len(C.RECOVERY_EDGES) + 1
@@ -330,11 +348,11 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     recov_toxic = jax.ops.segment_sum(toxic_in, rbin, num_segments=nb)
     gut = state.gut.at[:, state.step % C.GUT_WINDOW].set(jnp.where(alive0, gain, 0.0))
     state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
-                          signal=signal, gut=gut)
+                          signal=signal, gut=gut, poison=poison)
     atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
     emit_cost, emitted, chem = world.emit(chem, pos, alive0, actions, state.env.chem_on)
     tox_dmg, chem, resources = world.toxin(chem, resources, pos, alive0, state.energy)
-    energy = world.energy_update(state, thrust, gain - emit_cost - tox_dmg, atk_delta, attempt)
+    energy = world.energy_update(state, thrust, gain - emit_cost - tox_dmg - due, atk_delta, attempt)
 
     # Observación (no afecta a la dinámica): conducta acumulada y comunicación
     f = alive0.astype(jnp.float32)
@@ -370,11 +388,12 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     # veneno: sin la toxina ni la pérdida neta por alga tóxica de este paso habría sobrevivido
     # (la intoxicación lenta, repartida en muchos pasos, cuenta como hambre)
     toxic_loss = jnp.maximum(toxic_in * (toxicity * (1.0 + C.TOXIC_FACTOR) - 1.0), 0.0)
-    by_poison = died & ~old & ~by_attack & (energy + tox_dmg + toxic_loss > 0)
+    by_poison = died & ~old & ~by_attack & (energy + tox_dmg + toxic_loss + due > 0)
     by_age = died & ~by_attack & ~by_poison & (old | (state.age >= C.SENESCENCE_START))
     alive = alive0 & ~died
     state = state.replace(energy=jnp.where(alive, energy, 0.0), alive=alive,
                           gut=jnp.where(alive[:, None], state.gut, 0.0),
+                          poison=jnp.where(alive[:, None], state.poison, 0.0),
                           age=jnp.where(alive, state.age + 1, 0))
 
     if births:

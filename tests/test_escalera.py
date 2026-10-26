@@ -309,6 +309,53 @@ def test_alga_per_agent_feeds_each_its_own(monkeypatch):
         island.world_step(s, plastic=False, births=False, control=eat)
 
 
+def test_poison_delayed(monkeypatch):
+    """Veneno diferido (3.6, ADR-030): con alga por bicho, la equivocada alimenta al comerla igual que la buena (la
+    tripa la registra) y cobra POISON_FACTOR × lo que dio exactamente POISON_DELAY pasos después; el neto es negativo.
+    Con retardo 0 el cobro llega en el mismo paso y la tripa ve el neto."""
+    ov = {"seasonal": 0, "attack_on": 0, "chem_on": 0, "signal_on": 0, "metabolism": 0}
+    s = island.init_island(0, b"escalera-test", n_max=4, n_init=4, env_overrides=ov)
+    a = np.asarray(world.algae_type_a(s.env, s.step))
+    ca, cb = np.argwhere(a)[0], np.argwhere(~a)[0]
+    uid = jnp.arange(1, 4001, dtype=jnp.uint32)
+    ga = np.asarray(world.good_alga_a(s.env, uid))
+    ua, ub = int(uid[np.argmax(ga)]), int(uid[np.argmin(ga)])
+    pos = jnp.asarray([(c + 0.5) * world.RES_CELL for c in (ca, ca, cb, cb)], jnp.float32)
+    s = s.replace(pos=pos, vel=jnp.zeros_like(s.vel), energy=jnp.full(4, 50.0),
+                  resources=jnp.full_like(s.resources, 5.0),
+                  lineage=s.lineage.replace(uid=jnp.asarray([ua, ub, ua, ub], s.lineage.uid.dtype)))
+    eat = jnp.array([1.0, 0.0, 0.0])
+    good = np.array([True, False, False, True])
+    monkeypatch.setattr(config, "ALGA_PER_AGENT", 1)
+
+    def run(factor, delay, steps):
+        monkeypatch.setattr(config, "POISON_FACTOR", factor)
+        monkeypatch.setattr(config, "POISON_DELAY", delay)
+        c, energy, gut = s, [], None
+        for i in range(steps):
+            c, _ = island.world_step(c, plastic=False, births=False, control=eat)
+            if i == 0:
+                gut = np.asarray(c.gut).sum(1)
+                c = c.replace(resources=jnp.zeros_like(c.resources))      # un solo bocado
+            energy.append(np.asarray(c.energy))
+        return np.array(energy), gut, c
+
+    d = 3
+    ref, gut_ref, _ = run(0.0, d, d + 2)                                    # sin veneno: la equivocada no alimenta
+    pz, gut_p, c = run(2.0, d, d + 2)
+    bite = pz[0] - ref[0]                                                  # lo que dio el alga equivocada
+    assert np.all(bite[~good] > 0) and np.allclose(bite[good], 0.0)
+    assert np.all(gut_p[~good] > gut_ref[~good])                            # la tripa la registra como buena
+    for i in range(1, d):                                                  # nada hasta el paso d
+        assert np.allclose(pz[i] - ref[i], bite, atol=1e-3)                 # (salvo el rebrote, ~1e-4)
+    assert np.allclose(pz[d] - ref[d], bite - 2.0 * bite, atol=1e-3)        # cobra 2 × lo que dio en el paso d
+    assert np.all((pz[d] - ref[d])[~good] < 0)                              # neto negativo
+    assert np.allclose(np.asarray(c.poison)[:, :d], 0.0, atol=1e-3)        # lo vencido se ha borrado
+    imm, gut_i, _ = run(2.0, 0, 2)                                          # contraste inmediato
+    assert np.allclose(imm[0] - ref[0], -bite, atol=1e-3)
+    assert np.all(gut_i[~good] < 0)                                         # la tripa ve el neto
+
+
 def test_alga_patch_families(monkeypatch):
     """Manchas de un solo tipo (3.5, ADR-027): el alga es A donde manda la familia de ondas pares y la comida sigue
     a la mayor de las dos familias; con corte, cada casilla con comida tiene el tipo de la familia que la levanta.
