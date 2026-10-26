@@ -1704,3 +1704,15 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Se cumple la predicción del panel (1/10, rango 0–3).
   - Datos en `runs/fase1d/_madura_alga_manchas.jsonl`, `_sonda_manchas.jsonl` y `_sonda_manchas_nulo.jsonl`.
 - **Contador de comparaciones:** 11. Primer diseño de los tres de la regla de parada (ADR-028): **H1 gastado, negativo.**
+
+### 06:31 (26-10) · Diagnóstico de crianza larga sobre las manchas (prerregistro, exploratorio)
+
+- **Panel 05:** unánime en la primera ronda. Prerregistrado antes de lanzar.
+- **Pregunta:** el adulto supera a E (200 pasos de crianza) en 9/10. ¿Esa parte extra depende del alga?
+- **Montaje:** la trampa del alga invertida con examen barajado (`scratchpad/madura_alga.py --scatter --rear 600`) sobre los 10 mundos de manchas en la época 300.
+- **Regla, fijada antes de lanzar:**
+  - Si E600 − X600 ≥ 0,05 en frac_buena en ≥ 9/10, o se cumple la regla del indicio de la ronda 2 del panel 05, se anota como **indicio de dosis**. No reabre H1 y exige réplica en otro mapa.
+  - Si |E600 − X600| < 0,05 en ≥ 9/10, la maduración larga se confirma y queda cerrado que no hay asociación entre alga y valor con 600 pasos.
+  - Se informa además A − E600: si es ≈ 0, la ventaja del adulto era solo duración de la crianza.
+- **Contador:** no gasta comparación (diagnóstico).
+- Datos en `runs/fase1d/_madura_alga_manchas_rear600.jsonl`. GPU libre, solo observa.
