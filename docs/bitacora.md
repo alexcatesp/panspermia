@@ -1740,3 +1740,14 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Con una línea base restada en cada paso, el estímulo, que llega 28 pasos antes, sale **castigado** (−0,45).
   - Solo funciona si m dice «mejor o peor de lo esperado» **en el momento del resultado** (+½ si hubo recompensa, −½ si no). Así el estímulo gana 0,137 y el distractor −0,033. Sin traza, el estímulo se queda en 0.
 - **Consecuencia para el primer uso (sobre P5-d):** las trazas solo darán crédito al alga si la modulación evolucionada lleva signo de resultado (la energía que baja con el cobro del veneno, frente a la que sube al comer). Si no, reforzarán cualquier actividad reciente. Es la razón de la recompensa predicha (Niv; Soltoggio), aparcada por el panel 06. Hay que medirlo junto a la primaria: la correlación entre m y el cambio de energía.
+
+### 06:33–07:55 (26-10) · P5-d: suite y calibración del veneno (ADR-030; rama `escalera-veneno`, `9952e78`, sustrato 3.6.0)
+
+- **Suite en GPU:** 91 correctos y 1 omitido (33 min 42 s).
+- **Calibración con F = 2,5** (la más dañina, primera del orden prerregistrado; 2 semillas × 200 épocas, rampa de F en 100 épocas, cobro diferido a 30 pasos): **viable**.
+  - s0: población final 2.445, media de las épocas 100–199 2.430, energía media 24,2. Por época mueren 1.063 bichos con cobro de veneno pendiente y 2.162 de hambre.
+  - s1: 2.360 final, media 2.292, energía 24,5; 1.291 y 2.470 muertes.
+  - Sin extinción, ≥ 500 al final y media < 3.900. El veneno muerde: la población queda algo por debajo de las manchas (2.472–2.699).
+- **F = 1,5 y F = 1,25 no se probaron:** el orden era de la más dañina a la menos, y la primera ya fue viable. No hay F descartadas.
+- **Los 20 mundos (P5-diferido-manchas y P5-inmediato-manchas, 10 semillas × 300 épocas, F = 2,5) empiezan a las 07:55.** Cola `experiments/fase1d/veneno.json`, log `runs/fase1d/veneno.log`, marca `veneno_hecho`. Las medidas (trampa con `--scatter`, sonda mixta y nulo, H-control sobre el inmediato) se lanzan aparte, al terminar.
+- Datos en `runs/fase1d/_calVeneno25/` y `runs/fase1d/veneno_cadena.log`.
