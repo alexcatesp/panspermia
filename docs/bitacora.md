@@ -1846,3 +1846,4 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - 20 mundos (`c.json`: P5-inmediato-C y P5-inmediato-Cbar);
   - medidas: trampa, sonda mixta y nulo, signo de m (`scratchpad/diag_signo_c.py`) y H-control.
   - Logs en `runs/fase1d/c_cadena.log` y `c.log`; marcas `c_hecho` y `c_medidas_hechas`.
+- **23:25 · La suite falló (6 de 104):** `test_escalera` heredaba la configuración del veneno, porque `ref_p5i.run` la ponía con `setattr` sin restaurarla. Corregido (`8d726c7`: el test la pone con monkeypatch). `test_c` y `test_escalera`: 23 correctos. **La cadena se relanza a las 23:38.**
