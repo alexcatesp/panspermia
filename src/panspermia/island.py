@@ -64,6 +64,9 @@ class IslandState:
     gut: jax.Array          # f32[N, GUT_WINDOW]: energía de lo comido en los últimos pasos (ADR-024)
     poison: jax.Array       # f32[N, POISON_BUFFER]: cobros pendientes del veneno diferido, por paso (ADR-030)
     trace: jax.Array        # f32[N, N_PRE, N_POST] con TRACE_ON (ADR-031); si no, f32[N, 1, 1] sin uso
+    rbar: jax.Array         # f32[N]: media móvil del flujo comido r (DELTA_ON, ADR-033)
+    dacc: jax.Array         # f32[N]: δ acumulado desde la última actualización plástica
+    dbuf: jax.Array         # f32[N, DELTA_BUFFER] con DELTA_ON = 2 (δ de los últimos pasos); si no, f32[N, 1]
     genome: G.Genome        # eje N delante
     pheno: Phenotype        # f16[N, 134, 69] + escalares de cuerpo
     w: jax.Array            # f32[N, 134, 69]
@@ -140,6 +143,9 @@ def _place(state: IslandState, idx, genomes, pheno, pos, angle, energy, uid, par
         gut=set_(state.gut, 0.0),
         poison=set_(state.poison, 0.0),
         trace=set_(state.trace, 0.0),
+        rbar=set_(state.rbar, 0.0),
+        dacc=set_(state.dacc, 0.0),
+        dbuf=set_(state.dbuf, 0.0),
         genome=_scatter(state.genome, idx, genomes),
         pheno=_scatter(state.pheno, idx, pheno),
         w=set_(state.w, pheno.w0.astype(jnp.float32)),
@@ -185,6 +191,9 @@ def _init(key: jax.Array, env: EnvParams, n_max: int, n_init: int) -> IslandStat
         gut=jnp.zeros((n_max, C.GUT_WINDOW)),
         poison=jnp.zeros((n_max, C.POISON_BUFFER)),
         trace=jnp.zeros((n_max, C.N_PRE, C.N_POST) if C.TRACE_ON else (n_max, 1, 1)),
+        rbar=jnp.zeros((n_max,)),
+        dacc=jnp.zeros((n_max,)),
+        dbuf=jnp.zeros((n_max, C.DELTA_BUFFER if C.DELTA_ON == 2 else 1)),
         genome=genomes,
         pheno=pheno,
         w=pheno.w0.astype(jnp.float32),
@@ -286,6 +295,11 @@ def _context(obs: jax.Array) -> jax.Array:
     return jnp.where(kin >= C.KIN_THRESHOLD, 2, jnp.where(kin > 0, 3, jnp.where(food, 1, 0)))
 
 
+def _with_delta(m: jax.Array, dacc: jax.Array) -> jax.Array:
+    """m_eff = clip(m + DELTA_K·δ_acc, −1, 1) con DELTA_ON (ADR-033); si no, m sin tocar."""
+    return jnp.clip(m + C.DELTA_K * dacc, -1.0, 1.0) if C.DELTA_ON else m
+
+
 def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool = True,
                control: jax.Array | None = None):
     """sensores → cerebro → física → comer/atacar/emitir/toxina → energía → muertes → nacimientos
@@ -352,6 +366,15 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
     gut = state.gut.at[:, state.step % C.GUT_WINDOW].set(jnp.where(alive0, gain, 0.0))
     state = state.replace(pos=pos, vel=vel, angle=angle, h=jnp.where(alive0[:, None], h_new, 0.0),
                           signal=signal, gut=gut, poison=poison)
+    if C.DELTA_ON:  # error de predicción del flujo comido, fuera de la red (ADR-033)
+        r = jnp.where(alive0, gain - due, 0.0)
+        delta = r - state.rbar
+        dbuf = state.dbuf
+        if C.DELTA_ON == 2:  # control: el δ de hace L pasos, L al azar por bicho y paso
+            dbuf = dbuf.at[:, state.step % C.DELTA_BUFFER].set(delta)
+            lag = jax.random.randint(jax.random.fold_in(key, 0xDE17A), delta.shape, C.DELTA_LAG_MIN, C.DELTA_BUFFER)
+            delta = dbuf[jnp.arange(delta.shape[0]), (state.step - lag) % C.DELTA_BUFFER]
+        state = state.replace(rbar=state.rbar + (r - state.rbar) / C.DELTA_TAU, dacc=state.dacc + delta, dbuf=dbuf)
     atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
     emit_cost, emitted, chem = world.emit(chem, pos, alive0, actions, state.env.chem_on)
     tox_dmg, chem, resources = world.toxin(chem, resources, pos, alive0, state.energy)
@@ -398,6 +421,9 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
                           gut=jnp.where(alive[:, None], state.gut, 0.0),
                           poison=jnp.where(alive[:, None], state.poison, 0.0),
                           trace=jnp.where(alive[:, None, None], state.trace, 0.0),
+                          rbar=jnp.where(alive, state.rbar, 0.0),
+                          dacc=jnp.where(alive, state.dacc, 0.0),
+                          dbuf=jnp.where(alive[:, None], state.dbuf, 0.0),
                           age=jnp.where(alive, state.age + 1, 0))
 
     if births:
@@ -410,7 +436,7 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         lam = math.exp(-C.PLASTICITY_EVERY / C.TRACE_TAU)
 
         def trace_fn(wt):
-            m = brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type)
+            m = _with_delta(brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type), state.dacc)
             learn = state.alive & ~newborn
             w2, e2 = brain.plasticity_trace(state.pheno, wt[0], wt[1], pre, post, jnp.where(learn, m, 0.0), lam)
             return jnp.where(learn[:, None, None], w2, wt[0]), jnp.where(learn[:, None, None], e2, 0.0)
@@ -418,13 +444,15 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
         w, trace = jax.lax.cond(state.step % C.PLASTICITY_EVERY == 0, trace_fn, lambda wt: wt, (state.w, state.trace))
     elif plastic:
         def plastic_fn(w):
-            m = brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type)
+            m = _with_delta(brain.modulation(h_new, state.genome.hid_mask, state.genome.hid_type), state.dacc)
             m = jnp.where(state.alive & ~newborn, m, 0.0)
             return brain.plasticity(state.pheno, w, pre, post, m)
 
         w = jax.lax.cond(state.step % C.PLASTICITY_EVERY == 0, plastic_fn, lambda w: w, state.w)
     else:
         w = state.w
+    if C.DELTA_ON:  # δ se consume en cada actualización plástica (también con plastic=False, para no acumularlo)
+        state = state.replace(dacc=jnp.where(state.step % C.PLASTICITY_EVERY == 0, 0.0, state.dacc))
     resources = world.resources_step(state.resources, state.env, state.step)
     chem, resources = world.chem_step(state.chem, resources)
     flip = jax.random.uniform(k_flip) < C.TOXIC_FLIP_PROB

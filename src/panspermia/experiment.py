@@ -33,6 +33,7 @@ CONFIG_OVERRIDABLE = {
     "FOOD_JUMP_PERIOD", "ALGA_SWAP_PERIOD", "FOOD_JUMP_DIST", "EAT_MOVE_FACTOR", "EAT_MOVE_RAMP_STEPS",
     "ALGA_PER_AGENT", "K_MEAN_RAMP_STEPS", "K_MEAN_RAMP_FROM", "ALGA_PATCH_FAMILIES",
     "POISON_FACTOR", "POISON_DELAY", "POISON_RAMP_STEPS", "TRACE_ON", "TRACE_TAU",
+    "DELTA_ON", "DELTA_K", "DELTA_TAU",
 }
 SPEC_KEYS = {"name", "description", "node", "seeds", "epochs", "n_max", "n_init", "plastic", "env",
              "config", "block"}

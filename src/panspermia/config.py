@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "3.7.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.8.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -18,7 +18,8 @@ SUBSTRATE_VERSION = "3.7.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 3.4: rampa de comida (K_MEAN_RAMP_STEPS, K_MEAN_RAMP_FROM), ADR-026;
                              # 3.5: manchas de un solo tipo de alga (ALGA_PATCH_FAMILIES), ADR-027;
                              # 3.6: veneno diferido (POISON_FACTOR, POISON_DELAY), P5-d, ADR-030;
-                             # 3.7: trazas de elegibilidad (TRACE_ON, TRACE_TAU), ADR-031)
+                             # 3.7: trazas de elegibilidad (TRACE_ON, TRACE_TAU), ADR-031;
+                             # 3.8: modulación con signo de resultado (DELTA_ON, DELTA_K, DELTA_TAU), ADR-033)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -281,6 +282,17 @@ POISON_BUFFER = 64  # pasos del búfer circular de cobros pendientes (> POISON_D
 # gerstner2018). La traza se reinicia al nacer y al morir. 0 (por defecto) = la regla de siempre, idéntica bit a bit.
 TRACE_ON: int = 0
 TRACE_TAU: float = 40.0  # pasos; constante (el gen de τ queda aparcado, ADR-031)
+# DELTA_ON (panel 08, 26-10; ADR-033): modulación con signo de resultado. Un circuito fijo, fuera de la red (como el
+# VUM de montague1995bee), calcula δ = r − r̄ con r = bocado − cobro que vence y r̄ su media móvil exponencial de
+# DELTA_TAU pasos; δ se acumula entre actualizaciones plásticas y la modulación pasa a ser
+# m_eff = clip(m + DELTA_K·δ_acc, −1, 1). 1 = δ real; 2 = control con δ barajado en el tiempo dentro de cada bicho
+# (δ de hace L pasos, L al azar en [DELTA_LAG_MIN, DELTA_BUFFER)); 0 (por defecto) = idéntico bit a bit.
+# DELTA_K = 1 / mediana de |δ| en los pasos con bocado o cobro de P5-inmediato (regla del panel 08; k/2 si no es viable).
+DELTA_ON: int = 0
+DELTA_K: float = 8.65
+DELTA_TAU: float = 50.0  # pasos; constante (el gen queda aparcado, ADR-033)
+DELTA_BUFFER = 64
+DELTA_LAG_MIN = 32
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1
