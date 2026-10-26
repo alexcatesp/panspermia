@@ -22,7 +22,7 @@
 
 | Hito | Qué añade | Pregunta | GPU | Si sí → | Si no → |
 |---|---|---|---|---|---|
-| **H-control** (ya) | Control positivo y negativo de las medidas | ¿La trampa detecta un aprendizaje impuesto a mano (E − X > 0,05) y da ≈ 0 con los pesos barajados entre E y X? | 0 (CPU ligera) | Las medidas valen | Rehacer las medidas; las manchas quedan en suspenso |
+| **H-control** ✓ (26-10, 02:44: pasa; positivo 10/10, débil 9/10, negativo 10/10) | Control positivo y negativo de las medidas | ¿La trampa detecta un aprendizaje impuesto a mano (E − X > 0,05) y da ≈ 0 con los pesos barajados entre E y X? | 0 (CPU ligera) | Las medidas valen | Rehacer las medidas; las manchas quedan en suspenso |
 | **H-red** (paralelo) | La fase 4a en CPU | ¿0 corruptos en 10⁵ y 3 nodos 7 días? | 0 | Infraestructura lista y apagada | Arreglar |
 | **H-int** (paralelo) | Integrar las ramas de la escalera en una rama de integración; examen limpio (ADR-021) en `main`; formato de genoma congelado, versionado y firmado | ¿La suite pasa y P3-escaso se reproduce bit a bit antes y después? | Solo la suite, con la GPU libre | Sustrato 3.x congelado | Resolver antes de seguir |
 | **H1** manchas (en curso) | Manchas lejanas de un solo tipo (ADR-027) | ¿E − X ≥ 0,05 en 9/10? | ~8 h | Réplica en otro mapa → P6 | H2 |
@@ -44,7 +44,7 @@
 ## 5. Riesgos que vigilar
 
 1. **El reflejo basta.** Mientras la tripa resuelva el problema, aprender no compensa. Señal: M ≥ 0,9 con E − X ≈ 0.
-2. **La medida no ve el aprendizaje.** Lo resuelve H-control.
+2. **La medida no ve el aprendizaje.** Resuelto por H-control (26-10): frac_buena y sel_entrada lo ven; D_comer no sirve para un aprendizaje de acercarse y el primer contacto es poco sensible.
 3. **Muchas comparaciones y un umbral exigente.** Con un efecto en una parte de los linajes (C8), 9/10 casi nunca pasa. Por eso hay tamaños de efecto, contador y regla del indicio.
 4. **Mapa único.** Todo vale para `fase1d-w0` hasta la réplica.
 5. **Deuda de ramas y deriva del sustrato.** 17 ramas sin integrar. Señal: más de 60 commits por delante de `main` → integrar (H-int).

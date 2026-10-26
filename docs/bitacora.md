@@ -1626,3 +1626,21 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - La dosis débil y el ruido de la segunda baraja se informan sin umbral.
 - **Transparencia:** una prueba de 60 pasos con k = 1 en s0 dio señales débiles y mezcladas (frac_buena +0,053, sel_entrada −0,047). Por eso la dosis fuerte se fijó en 4 antes de la ejecución completa.
 - **CPU ligera** (`taskset 0-5`, `scratchpad/control.sh`) mientras la GPU corre las manchas. Datos en `runs/fase1d/_control_algabicho.jsonl`, log `control.log`, marca `control_hecho`.
+
+### 02:44 (26-10) · H-control: las medidas ven el aprendizaje impuesto (pasa)
+
+- **Positivo (k = 4): 10/10 en las dos medidas.**
+  - frac_buena E+ − X−: mediana +0,635 (0,136–0,683).
+  - sel_entrada: mediana +0,465 (0,106–0,643).
+  - Prueba de signos, p = 0,002.
+- **Dosis débil (k = 1): 9/10** (s7 no). frac_buena +0,255 y sel_entrada +0,141.
+- **Negativo: 10/10.** Con los cerebros barajados, |dif| ≤ 0,028 en todas las medidas.
+- **Ruido de la segunda baraja:** ≤ 0,017.
+- **Sin inyectar:** E − X ≈ 0 (|dif| ≤ 0,013), que reproduce la trampa del alga por bicho.
+- **Matices:**
+  - D_comer no sirve para un aprendizaje de acercarse: con el positivo baja a −0,26.
+  - El primer contacto es poco sensible: 7/10 con la dosis fuerte.
+  - La ingesta solo sube +0,04: en el mundo del alga por bicho, ir al alga correcta apenas paga. Encaja con «el reflejo basta».
+- **Conclusión (firme):** frac_buena y sel_entrada detectan una regla asociativa de acercamiento, incluso suave, y no dan falsos positivos. La primaria de las manchas se podrá interpretar.
+- Datos en `runs/fase1d/_control_algabicho.jsonl`.
+- Las manchas van por el mundo 5/10, unos 41 min por mundo. Los mundos 1–4 terminan con 2.472–2.699 bichos.

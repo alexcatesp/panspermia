@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-25 22:36",
+ "actualizado": "2026-10-26 02:50",
  "nota": "Árbol de posibilidades del proyecto para el panel local (python -m panspermia.panel). Se mantiene a mano con cada experimento, resultado o decisión, como la bitácora. Cada nodo cuelga de 'padre'. resultado: positivo (✓) | indicio (◐) | negativo (✗) | descartado (✗, error de diseño o de medida) | no concluyente (~) | aparcado (⏸) | null si aún no hay. estado: hecho | en curso | pendiente | decision | auto (lo calcula el panel a partir de 'cola' o 'jsonl'). 'anade': qué añade la rama respecto a su padre (escalera de complejidad: idealmente una sola cosa por paso). 'camino_principal': de lo más sencillo a lo más complejo. 'salto': true si la rama añadió varias cosas a la vez (difícil saber cuál causó el efecto). 'corto': nombre bajo el nodo en el dibujo del árbol.",
  "arbol": [
   {
@@ -1105,6 +1105,18 @@
    "condicion": "P4-alga-bicho-frena-rampa"
   },
   {
+   "id": "hcontrol",
+   "padre": "P4atfb",
+   "titulo": "Control positivo y negativo de la trampa del alga invertida",
+   "corto": "control de las medidas",
+   "estado": "hecho",
+   "resultado": "positivo",
+   "anade": "a los cerebros E y X del alga por bicho se les impone a mano una taxia hacia su alga (E+) o hacia la contraria (X−); solo observa",
+   "texto": "Hoja de ruta H-control (ADR-028). scratchpad/madura_control.py, época 300, examen barajado y congelado; 26-10, 00:01–02:44, CPU. Regla fijada antes de la ejecución completa: positivo ≥ 0,05 en frac_buena y sel_entrada en ≥ 9/10; negativo (E+ y X− repartidos al azar) |dif| < 0,05 en ≥ 9/10. Resultado: positivo (k = 4) frac_buena mediana +0,635 (0,136–0,683) y sel_entrada +0,465 (0,106–0,643), 10/10; dosis débil (k = 1) +0,255 y +0,141, 9/10 (s7 no); negativo |dif| ≤ 0,028, 10/10; ruido de la segunda baraja ≤ 0,017; sin inyectar ≈ 0 (reproduce la trampa). D_comer no sirve para un aprendizaje de acercarse (−0,26 con el positivo) y el primer contacto es poco sensible (7/10). La ingesta solo sube +0,04: en ese mundo acertar el alga apenas paga. Las medidas valen.",
+   "ref": "docs/bitacora.md",
+   "recurso": "CPU"
+  },
+  {
    "id": "P4atfbm",
    "padre": "P4atfb",
    "titulo": "Manchas lejanas, cada una de un solo tipo de alga",
@@ -1112,7 +1124,7 @@
    "estado": "en curso",
    "resultado": null,
    "anade": "la comida en manchas separadas (K_CUT 1,7, ~177 u), cada una de un tipo de alga que se ve de lejos: ir a la equivocada cuesta el viaje (ADR-027)",
-   "texto": "Diagnóstico del alga por bicho (25-10, 21:54): un reflejo innato de la tripa basta, porque probar un alga es casi gratis. En todd1991exploring, niv2002evolution y pontes2020evolutionary hay que elegir por una pista antes de cobrar (C2 y C4 de condiciones_aprendizaje.md). Responsable (entre las 21:54 y las 22:06): manchas lejanas, un solo tipo por mancha (dos familias de ondas, pares e impares; 50 % de la comida para cada alga), la separación de P3-disperso (9 % del suelo: K_CUT 1,7, 18 manchas de ~71 u a ~177 u) y la misma comida total (k_mean 8,792, con la rampa). Sustrato 3.5.0, rama escalera-manchas. Primaria (diseno v2.3): trampa del alga invertida con el examen barajado, frac_buena(E) − frac_buena(X) ≥ 0,05 en ≥ 9/10 (padre: −0,021 a +0,008). Cadena desde las 22:08 (scratchpad/manchas.sh): suite, calibración, 10 mundos y medidas. Panel 01 (22:15, unánime en la segunda ronda): calibración a 200 épocas; secundarias prerregistradas (selectividad de entrada, la lectura decisiva; primer contacto; entradas y pasos por visita; segunda baraja); 3–8/10 con la selectividad a favor cuenta como indicio (diseno v2.3b). Predicción del panel: 1/10.",
+   "texto": "Diagnóstico del alga por bicho (25-10, 21:54): un reflejo innato de la tripa basta, porque probar un alga es casi gratis. En todd1991exploring, niv2002evolution y pontes2020evolutionary hay que elegir por una pista antes de cobrar (C2 y C4 de condiciones_aprendizaje.md). Responsable (entre las 21:54 y las 22:06): manchas lejanas, un solo tipo por mancha (dos familias de ondas, pares e impares; 50 % de la comida para cada alga), la separación de P3-disperso (9 % del suelo: K_CUT 1,7, 18 manchas de ~71 u a ~177 u) y la misma comida total (k_mean 8,792, con la rampa). Sustrato 3.5.0, rama escalera-manchas. Primaria (diseno v2.3): trampa del alga invertida con el examen barajado, frac_buena(E) − frac_buena(X) ≥ 0,05 en ≥ 9/10 (padre: −0,021 a +0,008). Cadena desde las 22:08 (scratchpad/manchas.sh): suite, calibración, 10 mundos y medidas. Panel 01 (22:15, unánime en la segunda ronda): calibración a 200 épocas; secundarias prerregistradas (selectividad de entrada, la lectura decisiva; primer contacto; entradas y pasos por visita; segunda baraja); 3–8/10 con la selectividad a favor cuenta como indicio (diseno v2.3b). Predicción del panel: 1/10. H-control (26-10, 00:01–02:44): las medidas ven un aprendizaje impuesto a mano (frac_buena y sel_entrada 10/10; negativo ≈ 0, 10/10), así que la primaria de las manchas se podrá interpretar.",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
    "principal": true,
