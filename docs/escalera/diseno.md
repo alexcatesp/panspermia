@@ -430,3 +430,13 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
 - **Predicción del panel:** 1 de 10 favorables (rango 0–3). El riesgo es que el reflejo de la tripa vuelva a bastar, porque equivocarse de mancha cuesta unos 20 pasos de unos 690.
 
 **Resultado de v2.3/v2.3b (26-10-2026, 06:22): no pasa (0/10).** Primaria frac_buena E − X entre −0,021 y +0,012, con mediana −0,004. Selectividad de entrada E − X entre −0,013 y +0,016: por encima del ruido |E − E2| en 1/10, sin indicio. El primer contacto, las entradas y los pasos por visita son iguales en E y X. M mediana 0,49; sonda A +135 %, ΔD ≈ 0. Detalle en la bitácora.
+
+**v2.4 · 26-10-2026, 06:28 · P5-d: veneno diferido (ADR-030, decisión del panel 05).** Sobre las manchas (padre P4-manchas-bicho-frena-rampa). El alga equivocada de cada bicho alimenta al comerla igual que la buena y, 30 pasos después, cobra F × lo que dio (sustrato 3.6.0, rama `escalera-veneno`). F se calibra antes de lanzar (1,5 y 2,5 con rampa de 100 épocas; si no son viables, 1,25), con el criterio de viabilidad de la v2.3b. Dos condiciones de 10 semillas × 300 épocas: P5-diferido (retardo 30) y P5-inmediato (retardo 0, contraste).
+- **Primaria:** la trampa del alga invertida con examen barajado (`madura_alga.py --scatter`): frac_buena E − X ≥ 0,05 en ≥ 9/10, por condición. En X, durante la crianza alimenta y daña la contraria.
+- **Secundarias:** selectividad de entrada, primer contacto, entradas y pasos por visita, E2 (como en la v2.3b); ingestas del alga equivocada tras la crianza; sonda mixta (A y ΔD); y H-control sobre los mundos del inmediato.
+- **Indicio:** E − X > 0 en ≥ 7/10, con mediana ≥ 0,03 y > 2 × la mediana de |E − E2|, y los cerebros barajados ≈ 0. Exige réplica que reproduzca el signo.
+- **Lectura:**
+  - Inmediato ≤ 3/10 (viable y con la trampa validada): H2 negativo, el diferido no es interpretable y el panel decide si salta a las trazas.
+  - Inmediato sí y diferido no: la plasticidad no cubre el retardo. Siguiente paso, el malestar o las trazas.
+- **Predicción del panel:** diferido 0–2/10.
+

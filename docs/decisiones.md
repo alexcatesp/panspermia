@@ -633,3 +633,37 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
   - P0 supera a los mundos con selección y, a la vez, la mediana de `desc_repro_age` de P0 supera la de todos ellos. Con solo JSON no se puede recalcular el archivo sin ese descriptor (ajuste de Ingeniería).
 - **Alcance:** exploratorio, con n = 5 y datos ya vistos en otros contextos. Solo dice si la medida es utilizable, no si hay crecimiento abierto. CPU ligera (`scratchpad/b0_novedad.py`).
 - **Predicción de los tres:** «no vale» o «no se puede saber», por saturación del archivo.
+
+## ADR-030 · 26-10-2026 · P5-d: veneno diferido (decisión del panel 05; H2 de la hoja de ruta)
+
+**Contexto.** Las manchas (ADR-027) no pasan (0/10, 26-10, 06:22). E y X son indistinguibles: la mejora en vida es maduración y experiencia general con la comida (M 0,49), y el reflejo de la tripa evita el alga equivocada porque no da energía. H-control valida la trampa. Informes en `docs/escalera/panel/05_*`.
+
+**Decisión del panel 05 (26-10-2026, entre las 06:26 y las 06:28), unánime en la segunda ronda con matices.**
+1. **Padre:** manchas (P4-manchas-bicho-frena-rampa). Votación 2–1: Biología prefería el alga mezclada, un cambio cada vez.
+2. **Veneno diferido, como un solo mecanismo con dos partes declaradas:**
+   - El alga equivocada de cada bicho **alimenta al comerla igual que la buena**. La tripa la registra como buena: es el reflejo engañado de García. Esto cambia ADR-026.
+   - **A los 30 pasos exactos** cobra F × la ganancia registrada en un búfer.
+   - Retardo fijo; el variable queda aparcado.
+   - Daño en energía, sin señal de malestar. Votación 2–1: Biología pedía un brazo con malestar, y queda como siguiente paso.
+3. **Contraste inmediato** dentro de H2: retardo 0, la misma F y 10 semillas. En el inmediato la tripa ve el neto; en el diferido, solo el bocado.
+4. **Calibración antes de abrir datos:**
+   - Se prueban F = 1,5 y F = 2,5 con rampa de F de 0 al valor final en 100 épocas, y se toma la F más dañina que sea viable con el criterio de la v2.3b.
+   - Si ninguna es viable, F = 1,25 antes de tocar la comida.
+   - Se registran las F descartadas.
+5. **Sustrato 3.6.0** (rama `escalera-veneno`, desde `escalera-manchas`):
+   - búfer circular `pending f32[N, 64]`, que se reinicia al nacer y al morir;
+   - apagado, idéntico bit a bit;
+   - tests de que el cobro cae en el paso exacto y de que el neto es negativo.
+6. **Primaria (`diseno.md` v2.4):** la trampa del alga invertida con examen barajado, frac_buena E − X ≥ 0,05 en ≥ 9/10. En X, durante la crianza alimenta y daña la contraria.
+7. **Interpretación:**
+   - Si el inmediato da ≤ 3/10 con viabilidad 10/10 y la trampa validada sobre sus mundos (H-control), H2 cuenta como negativo y el diferido no es interpretable. Saltar H3 e ir al plan B 1 lo decide el panel, no es automático.
+   - Si el inmediato pasa y el diferido no, el negativo apunta a la plasticidad. Prerregistrado: el siguiente paso es el malestar o las trazas de elegibilidad.
+8. **Regla del indicio:**
+   - E − X > 0 en ≥ 7/10;
+   - mediana ≥ 0,03 y mayor que 2 × la mediana de |E − E2|;
+   - cerebros barajados ≈ 0;
+   - réplica que reproduzca el signo.
+9. **Trazas de elegibilidad en paralelo:** solo código y tests en CPU, en rama propia y sustrato 4.0.0. No se lanzan mundos hasta que la regla lo pida. Hay que vigilar la RAM de WSL.
+10. **Diagnóstico de crianza larga (600 pasos)** sobre las manchas: exploratorio, prerregistrado en la bitácora (26-10, 06:28). No gasta comparación.
+
+**Predicción del panel:** el diferido no pasa (0–2/10, 80–85 %). El inmediato quizá da un indicio (5–7/10, según Método). **Contador:** 13 (diferido e inmediato).

@@ -1705,7 +1705,7 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Datos en `runs/fase1d/_madura_alga_manchas.jsonl`, `_sonda_manchas.jsonl` y `_sonda_manchas_nulo.jsonl`.
 - **Contador de comparaciones:** 11. Primer diseño de los tres de la regla de parada (ADR-028): **H1 gastado, negativo.**
 
-### 06:31 (26-10) · Diagnóstico de crianza larga sobre las manchas (prerregistro, exploratorio)
+### 06:28 (26-10) · Diagnóstico de crianza larga sobre las manchas (prerregistro, exploratorio)
 
 - **Panel 05:** unánime en la primera ronda. Prerregistrado antes de lanzar.
 - **Pregunta:** el adulto supera a E (200 pasos de crianza) en 9/10. ¿Esa parte extra depende del alga?

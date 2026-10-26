@@ -1,4 +1,4 @@
-# Panel 05 · Segunda ronda: síntesis de P5-d (26-10-2026, 06:30)
+# Panel 05 · Segunda ronda: síntesis de P5-d (26-10-2026, 06:27)
 
 ## Coincidencias (los tres)
 - **Diagnóstico de crianza larga: sí.** Se prerregistra como exploratorio y se hace en paralelo. No bloquea P5-d ni gasta comparación.
