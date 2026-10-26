@@ -1644,3 +1644,31 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Conclusión (firme):** frac_buena y sel_entrada detectan una regla asociativa de acercamiento, incluso suave, y no dan falsos positivos. La primaria de las manchas se podrá interpretar.
 - Datos en `runs/fase1d/_control_algabicho.jsonl`.
 - Las manchas van por el mundo 5/10, unos 41 min por mundo. Los mundos 1–4 terminan con 2.472–2.699 bichos.
+
+### 02:51–02:56 (26-10) · (b0): la tasa de novedad no vale como medida de crecimiento abierto (exploratorio)
+
+- **Panel 04.** Unánime en la segunda ronda, con tres ajustes. Prerregistro en `decisiones.md`, sobre ADR-029, subido en `bd3743b` antes de abrir las series.
+- **Análisis:** `scratchpad/b0_novedad.py`, que solo lee `summary.json`. Datos en `runs/fase1d/_b0_novedad.json`.
+- **Tasa de altas en las épocas 151–300** (mediana de las semillas):
+
+  | Ejecución | Tasa | Por mil bichos |
+  |---|---|---|
+  | P0 (nulo de deriva) | 1,97 | 0,48 |
+  | P1 | 1,99 | — |
+  | P2 | 8,01 | 1,96 |
+  | P3-escaso | 1,41 | — |
+  | P4-salto64 | 4,78 | 2,09 |
+  | P4-alga | 1,90 | — |
+
+- **(i) Control positivo: falla.**
+  - Sobre la mediana estable (4,96), P4-salto64 tiene 2/5 semillas por encima y P4-alga 0/5.
+  - Normalizada por la población: 4/5 y 1/5. Falla igual, así que no cambia el resultado.
+- **(ii) Dirección frente al nulo:** se cumple por poco. Los mundos con selección dan 2,17 frente a 1,97 de P0; P2 queda 5/5 por encima de la mediana de P0.
+- No se da ninguna condición de «no se puede saber»: no hay suelo, la población es ≥ 512, (i) no cambia al normalizar y no hay artefacto de `repro_age` en P0.
+- **Veredicto prerregistrado: no vale.** Los mundos cambiantes no producen más novedad que los estables.
+- **Descriptivo:**
+  - La tasa alta es la de P2, un mundo estable con comida fácil. Coincide con un `desc_repro_age` alto (0,43 frente a 0,05–0,08 en los demás). Es probable que el descriptor censurado, que crece con la edad mientras el bicho no se reproduce, infle la novedad.
+  - En las ejecuciones de 600 épocas, la tasa baja de 8,0 a 2,9–8,2 en las épocas 300–600 (mediana 3,7).
+  - El cerebro mengua en todas.
+  - Solo varían 5–6 descriptores de 12.
+- **Conclusión, aparcado:** el archivo de novedad actual no sirve para la prueba (b) de la puerta BOINC. Hará falta otra medida con datos que hoy no se guardan, como las muestras de descriptores o descriptores sin censura. Se rediseñará cuando haya una capacidad que valga la pena seguir. La predicción de los tres expertos se cumple.
