@@ -1672,3 +1672,35 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - El cerebro mengua en todas.
   - Solo varían 5–6 descriptores de 12.
 - **Conclusión, aparcado:** el archivo de novedad actual no sirve para la prueba (b) de la puerta BOINC. Hará falta otra medida con datos que hoy no se guardan, como las muestras de descriptores o descriptores sin censura. Se rediseñará cuando haya una capacidad que valga la pena seguir. La predicción de los tres expertos se cumple.
+
+### 23:56 (25-10) – 06:22 (26-10) · Manchas lejanas de un solo tipo (ADR-027): no pasa (0/10)
+
+- **Mundos:** 10 × 300 épocas, de 23:56 a 06:08, unos 41 min cada uno. Todos viables: población final 2.472–2.699 (padre 2.411–3.107), vida mediana 642 pasos (padre 707) y 3,0 neuronas de mediana (padre 2,5; más en 6/10).
+- **Primaria (diseño v2.3):** trampa del alga invertida con el examen barajado, frac_buena E − X ≥ 0,05.
+  - Resultado: −0,021 a +0,012, mediana −0,004. **0/10 favorables. NO PASA.**
+  - Ruido de la segunda baraja: |E − E2| entre 0,003 y 0,019.
+- **Secundarias (v2.3b):**
+  - **Selectividad de entrada E − X:** −0,013 a +0,016, por encima del ruido en 1/10. Sin indicio: la regla exigía entre 3 y 8 mundos favorables en la primaria.
+  - **Primer contacto E − X:** −0,010 a +0,008.
+  - **Entradas por bicho:** N 2,7; E 7,0; X 7,0; D 4,7.
+  - **Pasos por visita:** en su alga 19 (E) y 19 (X); en la otra, 13,5 (E) y 13,9 (X).
+  - E y X son indistinguibles en todo. Criarse comiendo el alga equivocada no cambia lo que eligen.
+- **Lo que sí cambia con la crianza** (medianas de frac_buena y sel_entrada):
+
+  | Cerebro | frac_buena | sel_entrada |
+  |---|---|---|
+  | N (recién nacido) | 0,55 | 0,52 |
+  | D (criado sin comida) | 0,62 | 0,56 |
+  | E (criado con comida) | 0,71 | 0,64 |
+  | X (crianza invertida) | 0,72 | 0,64 |
+  | A (adulto real) | 0,77 | 0,67 |
+
+  - **M baja a 0,49 de mediana** (rango −1,19 a 0,88; padre 0,97): aquí la experiencia con comida pesa, pero no la de *su* alga.
+  - El adulto A supera a E en frac_buena en 9/10 (+0,03 a +0,08). Vive unos 640 pasos frente a 200 de crianza, así que la maduración sigue más allá de 200 pasos. Sin un adulto criado con el alga invertida, no se sabe si esa parte depende del alga.
+- **Sonda mixta:** ventaja de aprender A mediana +135 % (63–705 %).
+  - Nulo: +0,6, +2,7 y +12,8 %. El de s2 es más alto que en peldaños anteriores (≤ ±5 %).
+  - ΔD (discriminación al comer) −0,039 a +0,089, mediana ≈ +0,003.
+- **Conclusión (firme para este mapa):** las manchas no hacen aprender el color del alga. Ponen precio a equivocarse de mancha, pero la mejora en vida sigue sin depender del alga que alimentó al bicho. Es maduración, más la experiencia general con la comida, más el reflejo de la tripa.
+  - Se cumple la predicción del panel (1/10, rango 0–3).
+  - Datos en `runs/fase1d/_madura_alga_manchas.jsonl`, `_sonda_manchas.jsonl` y `_sonda_manchas_nulo.jsonl`.
+- **Contador de comparaciones:** 11. Primer diseño de los tres de la regla de parada (ADR-028): **H1 gastado, negativo.**

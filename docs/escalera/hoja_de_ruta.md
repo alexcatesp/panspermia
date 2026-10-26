@@ -25,7 +25,7 @@
 | **H-control** ✓ (26-10, 02:44: pasa; positivo 10/10, débil 9/10, negativo 10/10) | Control positivo y negativo de las medidas | ¿La trampa detecta un aprendizaje impuesto a mano (E − X > 0,05) y da ≈ 0 con los pesos barajados entre E y X? | 0 (CPU ligera) | Las medidas valen | Rehacer las medidas; las manchas quedan en suspenso |
 | **H-red** (paralelo) | La fase 4a en CPU | ¿0 corruptos en 10⁵ y 3 nodos 7 días? | 0 | Infraestructura lista y apagada | Arreglar |
 | **H-int** (paralelo) | Integrar las ramas de la escalera en una rama de integración; examen limpio (ADR-021) en `main`; formato de genoma congelado, versionado y firmado | ¿La suite pasa y P3-escaso se reproduce bit a bit antes y después? | Solo la suite, con la GPU libre | Sustrato 3.x congelado | Resolver antes de seguir |
-| **H1** manchas (en curso) | Manchas lejanas de un solo tipo (ADR-027) | ¿E − X ≥ 0,05 en 9/10? | ~8 h | Réplica en otro mapa → P6 | H2 |
+| **H1** manchas ✗ (26-10, 06:22: 0/10, sin indicio) | Manchas lejanas de un solo tipo (ADR-027) | ¿E − X ≥ 0,05 en 9/10? | ~8 h | Réplica en otro mapa → P6 | H2 |
 | **H2** P5-d | **Veneno diferido**: el daño llega 20–50 pasos después de comerlo, con el veneno inmediato como contraste prerregistrado si cabe (10 semillas más) | ¿Aparece la discriminación cuando el reflejo de la tripa ya no basta? | ~6–12 h | Réplica → P6 | H3 |
 | **H3** | Tercer diseño independiente (lo decide el panel) | — | ~6 h | Réplica → P6 | **Plan B** |
 | P6 | Veneno que cambia, de uno en uno los demás ingredientes | ¿Persiste cuando cambia? | ~6 h por rama | Larga | Aparcar la rama |

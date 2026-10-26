@@ -428,3 +428,5 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
   - Los 10 mundos comparten mapa (`fase1d-w0`), así que la conclusión vale para este mapa.
   - Si la primaria da entre 3 y 8 mundos favorables de 10 y la selectividad de entrada E − X es positiva en la mayoría de esos mundos favorables y mayor que |E − E2|, se contará como **indicio**, no como negativo (C8: el aprendizaje puede evolucionar solo en una parte de los linajes).
 - **Predicción del panel:** 1 de 10 favorables (rango 0–3). El riesgo es que el reflejo de la tripa vuelva a bastar, porque equivocarse de mancha cuesta unos 20 pasos de unos 690.
+
+**Resultado de v2.3/v2.3b (26-10-2026, 06:22): no pasa (0/10).** Primaria frac_buena E − X entre −0,021 y +0,012, con mediana −0,004. Selectividad de entrada E − X entre −0,013 y +0,016: por encima del ruido |E − E2| en 1/10, sin indicio. El primer contacto, las entradas y los pasos por visita son iguales en E y X. M mediana 0,49; sonda A +135 %, ΔD ≈ 0. Detalle en la bitácora.
