@@ -1824,3 +1824,25 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - C y C-barajado sobre P5-inmediato, 10 + 10 mundos desde cero. El padre son los P5-inmediato ya hechos, si el test bit a bit pasa. C solo cuenta si supera al barajado.
 - Sustrato 3.8.0, rama `escalera-c` desde `escalera-trazas`.
 - Predicción: 9/10, un 10–15 %.
+
+### 22:37–22:45 (26-10) · C construida y lanzada (ADR-033; rama `escalera-c`, `e9853b8` y `09206d4`, sustrato 3.8.0)
+
+- **Código:** `config.DELTA_ON` (0, 1 o 2 barajado), `DELTA_K` 8,65 y `DELTA_TAU` 50.
+  - Campos nuevos: `rbar`, `dacc` y `dbuf` (este último de [N, 64] solo en el barajado).
+  - `island._with_delta`: m_eff = clip(m + k·δ_acc, −1, 1), en la regla de siempre y en la de trazas. δ_acc se vacía en cada paso plástico.
+- **Tests (`tests/test_c.py`, 7 correctos en GPU):**
+  - **Apagado, bit a bit igual que 3.6.0** con las condiciones de P5-inmediato sin rampas, contra referencias generadas con `escalera-veneno` en CPU y GPU (`tests/ref_p5i.py`, `tests/data/`). La primera referencia falló por generarse sin `setup_determinism()`; se regeneró.
+  - δ y su acumulación paso a paso, comprobados a mano.
+  - Reinicios y determinismo.
+  - Con plastic=False, encendido y apagado dan el mismo mundo.
+  - El barajado es exactamente el δ real de hace 32–63 pasos en el 100 % de los casos, con la misma distribución. corr(δ, r) es 0,957 con el real y −0,029 con el barajado.
+  - Con m = +1 y δ_acc = −0,209, m_eff < −0,5 y Δw cambia de signo.
+- **Control positivo del mecanismo (inmediato):** el estímulo que anuncia un buen bocado llega a 4,0 (W_MAX). Un distractor al azar baja a −1,10.
+  - **Hallazgo:** cuando no se come, δ = −r̄. Con k = 8,65, m_eff es −1 casi siempre que no se come y +1 tras un buen bocado: la modulación pasa a ser casi binaria, comer bien o lo demás. La parte negativa empuja hacia abajo lo que esté activo sin premio.
+  - Con trazas (B + C) esto castigaría al estímulo, como se vio en ADR-031. Habrá que tenerlo en cuenta antes de combinarlas.
+- **Cadena `scratchpad/c.sh` desde las 22:45:**
+  - suite;
+  - calibración de k (8,65 y, si no es viable, 4,325; colas `ccal865.json` y `ccal433.json`);
+  - 20 mundos (`c.json`: P5-inmediato-C y P5-inmediato-Cbar);
+  - medidas: trampa, sonda mixta y nulo, signo de m (`scratchpad/diag_signo_c.py`) y H-control.
+  - Logs en `runs/fase1d/c_cadena.log` y `c.log`; marcas `c_hecho` y `c_medidas_hechas`.

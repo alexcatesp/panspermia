@@ -1153,7 +1153,7 @@
    "texto": "Panel 05 (26-10, entre las 06:26 y las 06:28; ADR-030), unánime en la segunda ronda con matices: padre manchas (2–1), sin señal de malestar (2–1), retardo fijo de 30 pasos y contraste inmediato dentro de H2. Sustrato 3.6.0, rama escalera-veneno (búfer circular de cobros por bicho; test del paso exacto). F calibrada antes de lanzar (2,5, luego 1,5, luego 1,25; rampa de 100 épocas). Primaria (diseno v2.4): trampa del alga invertida con el examen barajado, ≥ 9/10 por condición; indicio: ≥ 7/10, mediana ≥ 0,03 y > 2 × ruido, con réplica. Cadena scratchpad/veneno.sh desde las 06:33: suite 91 correctos; F = 2,5 viable a la primera (población 2.292–2.430, 1.063–1.291 muertes con veneno por época); los 20 mundos empiezan a las 07:55. Predicción del panel: el diferido no pasa (0–2/10). Antes, la crianza larga (600 pasos) sobre las manchas confirmó la maduración (E ≈ X 10/10). Resultado (26-10, 21:52): diferido 0/10 e inmediato 0/10 (medianas E − X +0,004 y +0,006), sin indicio; H-control pasa (10/10). En la crianza invertida muere el 27–71 % sin aprender a irse; la sonda mixta da A +121 % y +50 % con ΔD ≈ 0 y −0,047: aprenden a comer más, no a evitar el daño. H2 negativo (regla 7); el panel 07 decide.",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
-   "principal": true,
+   "principal": false,
    "cola": "veneno.json",
    "condicion": "P5-diferido-manchas"
   },
@@ -1174,13 +1174,15 @@
    "padre": "P5d",
    "titulo": "C: modulación con signo de resultado",
    "corto": "+ δ (error de predicción)",
-   "estado": "pendiente",
+   "estado": "en curso",
    "resultado": null,
    "anade": "la modulación plástica recibe δ = (bocado − cobro) − su media móvil de 50 pasos: m_eff = clip(m + 8,65·δ, −1, 1); circuito fijo, como el de la dopamina (ADR-033)",
-   "texto": "Panel 08 (26-10, entre las 22:35 y las 22:36), unánime, tras el diagnóstico D (m saturada y sin signo). Sobre P5-inmediato: C y C con δ barajado en el tiempo, 10 + 10 mundos desde cero; el padre es P5-inmediato. Primaria (diseno v2.5): trampa del alga invertida, ≥ 9/10 y por encima del barajado. Sustrato 3.8.0, rama escalera-c. Predicción: 9/10, un 10–15 %.",
+   "texto": "Panel 08 (26-10, entre las 22:35 y las 22:36), unánime, tras el diagnóstico D (m saturada y sin signo). Sobre P5-inmediato: C y C con δ barajado en el tiempo, 10 + 10 mundos desde cero; el padre es P5-inmediato. Primaria (diseno v2.5): trampa del alga invertida, ≥ 9/10 y por encima del barajado. Sustrato 3.8.0, rama escalera-c. Predicción: 9/10, un 10–15 %. Construida y probada (22:37–22:45; apagada, bit a bit igual que 3.6.0). Cadena scratchpad/c.sh desde las 22:45: suite, calibración de k, 20 mundos y medidas.",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
-   "principal": true
+   "principal": true,
+   "cola": "c.json",
+   "condicion": "P5-inmediato-C"
   },
   {
    "id": "trazas",

@@ -27,7 +27,8 @@
 | **H-int** (paralelo) | Integrar las ramas de la escalera en una rama de integración; examen limpio (ADR-021) en `main`; formato de genoma congelado, versionado y firmado | ¿La suite pasa y P3-escaso se reproduce bit a bit antes y después? | Solo la suite, con la GPU libre | Sustrato 3.x congelado | Resolver antes de seguir |
 | **H1** manchas ✗ (26-10, 06:22: 0/10, sin indicio) | Manchas lejanas de un solo tipo (ADR-027) | ¿E − X ≥ 0,05 en 9/10? | ~8 h | Réplica en otro mapa → P6 | H2 |
 | **H2** P5-d ✗ (26-10, 21:52: diferido 0/10 e inmediato 0/10, sin indicio; H-control pasa; ADR-030) | **Veneno diferido**: el daño llega 20–50 pasos después de comerlo, con el veneno inmediato como contraste prerregistrado si cabe (10 semillas más) | ¿Aparece la discriminación cuando el reflejo de la tripa ya no basta? | ~6–12 h | Réplica → P6 | H3 |
-| **H3** | Tercer diseño independiente (lo decide el panel) | — | ~6 h | Réplica → P6 | **Plan B** |
+| **H3** (saltado, panel 07, ADR-032) | Tercer diseño independiente | — | — | — | **Plan B** |
+| **Plan B 1 · C** (en curso desde el 26-10, 22:45; ADR-033) | Modulación con signo de resultado: m + k·δ, δ = (bocado − cobro) − su media | ¿E − X ≥ 0,05 en 9/10 sobre P5-inmediato, y por encima del δ barajado? | ~14 h | C diferido → B + C | Publicar la maduración |
 | P6 | Veneno que cambia, de uno en uno los demás ingredientes | ¿Persiste cuando cambia? | ~6 h por rama | Larga | Aparcar la rama |
 | Larga | La mejor receta, 1.000–2.000 épocas, 10 semillas | ¿Se sostiene y crece? | ~60–100 h | P-migra | Volver a P6 |
 | P-migra | 3 islas distintas conectadas frente a aisladas | ¿Mejora el aprendizaje o la diversidad (3 islas frente a 1 con N × 3)? | ~18 h | Granja «fuga» y 4a real | La red solo para diversidad |
