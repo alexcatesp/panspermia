@@ -37,8 +37,8 @@ def _series(monkeypatch, delta_on, steps, plastic=True):
 
 def test_off_matches_360(monkeypatch):
     ref = np.load(DATA / f"p5i_360_{jax.default_backend()}.npz")
-    monkeypatch.setattr(config, "DELTA_ON", 0)
-    got = run(config, island)
+    _setup(monkeypatch, 0)
+    got = run(config, island, apply=False)
     for f in FIELDS:
         assert np.array_equal(ref[f], got[f]), f
 

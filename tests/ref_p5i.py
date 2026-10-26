@@ -10,8 +10,9 @@ CFG = dict(ALGA_PER_AGENT=1, ALGA_PATCH_FAMILIES=1, K_CUT=1.7, EAT_MOVE_FACTOR=0
 FIELDS = ("w", "h", "energy", "pos", "alive", "gut")
 
 
-def run(config, island, steps=60):
-    for k, v in CFG.items():
+def run(config, island, steps=60, apply=True):
+    """Con apply=False la configuración ya la ha puesto quien llama (en los tests, con monkeypatch, para no contaminar)."""
+    for k, v in (CFG.items() if apply else ()):
         cur = getattr(config, k)
         setattr(config, k, float(v) if cur is None else type(cur)(v))
     jax.clear_caches()
