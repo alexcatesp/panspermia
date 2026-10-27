@@ -1847,3 +1847,13 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - medidas: trampa, sonda mixta y nulo, signo de m (`scratchpad/diag_signo_c.py`) y H-control.
   - Logs en `runs/fase1d/c_cadena.log` y `c.log`; marcas `c_hecho` y `c_medidas_hechas`.
 - **23:25 · La suite falló (6 de 104):** `test_escalera` heredaba la configuración del veneno, porque `ref_p5i.run` la ponía con `setattr` sin restaurarla. Corregido (`8d726c7`: el test la pone con monkeypatch). `test_c` y `test_escalera`: 23 correctos. **La cadena se relanza a las 23:38.**
+
+### 23:38–01:05 (26/27-10) · C: suite y calibración de k (ADR-033)
+
+- **Suite en GPU:** 103 correctos y 1 omitido (38 min 33 s).
+- **Calibración k = 8,65** (P5-inmediato con C, 2 semillas × 200 épocas): **viable a la primera.**
+  - s0: población final 2.524, media de las épocas 100–199 2.529, energía media 19,3.
+  - s1: 2.549 final, media 2.463, energía 18,9.
+  - Mueren de hambre 4.788–5.204 por época. Con cobro inmediato no hay muertes contadas como veneno: el cobro va dentro del bocado.
+  - k = 4,325 no se probó.
+- **Los 20 mundos (P5-inmediato-C y P5-inmediato-Cbar, k = 8,65) empiezan a las 01:05.** Datos de la calibración en `runs/fase1d/_calC865/`.

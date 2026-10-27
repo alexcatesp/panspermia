@@ -1177,7 +1177,7 @@
    "estado": "en curso",
    "resultado": null,
    "anade": "la modulación plástica recibe δ = (bocado − cobro) − su media móvil de 50 pasos: m_eff = clip(m + 8,65·δ, −1, 1); circuito fijo, como el de la dopamina (ADR-033)",
-   "texto": "Panel 08 (26-10, entre las 22:35 y las 22:36), unánime, tras el diagnóstico D (m saturada y sin signo). Sobre P5-inmediato: C y C con δ barajado en el tiempo, 10 + 10 mundos desde cero; el padre es P5-inmediato. Primaria (diseno v2.5): trampa del alga invertida, ≥ 9/10 y por encima del barajado. Sustrato 3.8.0, rama escalera-c. Predicción: 9/10, un 10–15 %. Construida y probada (22:37–22:45; apagada, bit a bit igual que 3.6.0). Cadena scratchpad/c.sh desde las 22:45: suite, calibración de k, 20 mundos y medidas.",
+   "texto": "Panel 08 (26-10, entre las 22:35 y las 22:36), unánime, tras el diagnóstico D (m saturada y sin signo). Sobre P5-inmediato: C y C con δ barajado en el tiempo, 10 + 10 mundos desde cero; el padre es P5-inmediato. Primaria (diseno v2.5): trampa del alga invertida, ≥ 9/10 y por encima del barajado. Sustrato 3.8.0, rama escalera-c. Predicción: 9/10, un 10–15 %. Construida y probada (22:37–22:45; apagada, bit a bit igual que 3.6.0). Cadena scratchpad/c.sh desde las 22:45: suite, calibración de k, 20 mundos y medidas. Suite 103 correctos; k = 8,65 viable a la primera (población 2.463–2.529); los 20 mundos empiezan el 27-10 a la 01:05.",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
    "principal": true,

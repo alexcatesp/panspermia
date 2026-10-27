@@ -774,3 +774,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 9. **Contador:** C y su barajado, 1 comparación (14). La reanudación no cuenta.
 
 **Predicción del panel:** 9/10, un 10–15 %. Lo más probable es un indicio en 1–3 mundos, con el barajado plano.
+
+**Calibración (27-10-2026, 00:17–01:05).** k = 8,65 es viable a la primera: población media de las épocas 100–199 de 2.529 y 2.463, sin extinción. Suite: 103 correctos. Los 20 mundos empiezan a la 01:05.
