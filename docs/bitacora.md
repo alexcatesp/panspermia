@@ -1873,3 +1873,17 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
 - **Signo de m (D repetido):** en C, ρ(m_eff, resultado) da señal en 10/10 (mediana 0,68–0,80), en parte por construcción; en Cbar, 0/10 (0,014–0,051). δ invierte el signo de m en el 28–38 % de las actualizaciones en los dos. **La evolución reduce las moduladoras propias con δ real:** f_mod ≥ 0,5 en 5/10 en C (0,19–0,81) frente a 9/10 en Cbar (0,45–0,97).
 - **Conclusión: primaria negativa; indicio firme (no prerregistrado como primaria) de aprendizaje de consecuencias en vida.** Con δ real, los bichos aprenden a comer su alga buena y a no comer en vacío cuando están encima de la comida; con δ barajado no. Lo aprendido es *qué comer*, no *a dónde ir*: la trampa mide el sitio donde pasan el tiempo con el cerebro congelado y no lo ve. Siguiente: confirmar con la crianza invertida con δ apagado y sin plasticidad, y panel 09.
 
+
+### 18:21 (27-10) · C: diagnóstico de la crianza invertida (`scratchpad/crianza_c.py`, solo observa)
+
+- **Pregunta:** ¿la mejor supervivencia de C criado con el alga invertida (X/E 0,78 frente a 0,43 en Cbar) viene del aprendizaje guiado por δ, o de cerebros innatos distintos?
+- **Método:** los cerebros de recién nacido de la época 300 se crían 200 pasos en E y en X, como en la trampa, con cinco variantes: C con δ real, C sin δ, C congelado (lo innato), Cbar con su δ barajado y Cbar con δ real (exploratoria). Una semilla por proceso; r̄ y δ_acc a cero al empezar. Comprobación con s0 de C con δ real: X/E 0,822 frente a 0,817 en la medida original.
+- **Regla, fijada antes de ver datos:** es aprendizaje guiado por δ si X/E con δ real supera a X/E sin δ en ≥ 9/10 semillas, con mediana de la diferencia ≥ 0,10, y la crianza congelada no supera a la de δ real en ninguna.
+- Cadena `scratchpad/crianza_c.sh` desde las 18:21; log `runs/fase1d/crianza_c.log`, datos `_crianza_c.jsonl`, marca `crianza_c_hecha`.
+- **21:04 · El lanzamiento de las 18:21 no llegó a arrancar** (log vacío, ningún proceso; el proceso desacoplado murió sin dejar error). Se relanza atado a la sesión a las 21:04; el primer resultado (s0 de C con δ real) coincide con la prueba. Unos 40 s por semilla.
+- **Resultado (21:35): la regla no se cumple. La mejor supervivencia de C en la crianza invertida es innata, no aprendida.** X/E (mediana): C con δ real 0,795; **C congelado 0,807**; C sin δ 0,689; Cbar con su barajado 0,373; Cbar con δ real 0,409.
+  - δ real frente a sin δ: mejor en 10/10, mediana +0,103 (cumple). Pero el cerebro congelado de recién nacido iguala o supera al que aprende con δ en 6/10 (no cumple).
+  - Lectura: los genomas de C nacen ya sabiendo protegerse del alga que daña (probablemente el reflejo de la tripa, que con cobro inmediato avisa en el acto). Su plasticidad, evolucionada con δ, no añade supervivencia, y sin δ la estropea (−0,10): la plasticidad de C depende de δ para no hacer daño.
+  - Con δ real, los genomas de Cbar apenas ganan (+0,033, 9/10): la señal sola no basta; hace falta haber evolucionado con ella.
+  - **Lo que sigue en pie de C:** la sonda mixta (ΔD +0,176, 9/10), que compara en el mismo mundo a los que aprenden con sus gemelos congelados, es aprendizaje en vida. **Lo que cae:** la supervivencia en la crianza invertida como prueba de aprendizaje. Datos en `runs/fase1d/_crianza_c.jsonl`.
+
