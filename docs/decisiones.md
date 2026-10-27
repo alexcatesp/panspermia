@@ -804,3 +804,4 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 
 **Ejecución:** ablación desde las 21:38 (`scratchpad/sonda_ablacion_c.sh`). Cadena `scratchpad/c_rep.sh` desde las 21:43: espera a la ablación y solo sigue si confirma (si no, marca `c_rep_no`); después determinismo, 10 mundos y sonda mixta. Logs en `runs/fase1d/c_rep_cadena.log` y `c_rep_mundos.log`; marcas `c_rep_hecho` y `c_rep_medidas_hechas`.
 
+**Ablación (27-10, 21:52): confirma.** ΔD con δ apagado, mediana −0,073 (por debajo de δ real en 10/10). La réplica sigue según lo previsto.

@@ -1192,7 +1192,7 @@
    "estado": "en curso",
    "resultado": null,
    "anade": "nada: el mismo C con semillas nuevas 10–19; la primaria pasa a ser el ΔD de la sonda mixta (ADR-034)",
-   "texto": "Panel 09 (27-10, 21:37–21:43), unánime. Antes, ablación de δ en la sonda (si ΔD no depende de δ, no hay réplica y se publica la maduración). Primaria (diseno v2.6): ΔD > 0 en ≥ 9/10, mediana ≥ 0,08, diferencia frente a los Cbar existentes > 0,08 y Mann-Whitney p < 0,01. Predicción: 35–45 %. Cadena scratchpad/c_rep.sh desde las 21:43 (determinismo, 10 mundos, sonda). Después, b′ (B + C con δ por sucesos), intento 15.",
+   "texto": "Panel 09 (27-10, 21:37–21:43), unánime. Antes, ablación de δ en la sonda (si ΔD no depende de δ, no hay réplica y se publica la maduración). Primaria (diseno v2.6): ΔD > 0 en ≥ 9/10, mediana ≥ 0,08, diferencia frente a los Cbar existentes > 0,08 y Mann-Whitney p < 0,01. Predicción: 35–45 %. Cadena scratchpad/c_rep.sh desde las 21:43 (determinismo, 10 mundos, sonda). Después, b′ (B + C con δ por sucesos), intento 15. Ablación (21:52): confirma; sin δ, ΔD mediana −0,073 (10/10 por debajo). Determinismo y réplica en marcha.",
    "ref": "docs/decisiones.md",
    "recurso": "GPU",
    "principal": true,
