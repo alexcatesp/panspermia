@@ -778,3 +778,29 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Calibración (27-10-2026, 00:17–01:05).** k = 8,65 es viable a la primera: población media de las épocas 100–199 de 2.529 y 2.463, sin extinción. Suite: 103 correctos. Los 20 mundos empiezan a la 01:05.
 
 **Resultado (27-10-2026, 14:37). Primaria: no pasa (0/10; mediana E − X 0,000, igual que Cbar). H-control pasa (10/10).** Secundarias, con δ real frente al barajado y al padre: ΔD de la sonda mixta +0,176 frente a −0,011 y −0,046 (9/10 positivos; p = 0,0008 y 0,0004); P(comer el alga buena) plástico − congelado +0,138 (10/10); supervivencia en la crianza invertida 0,78 frente a 0,43 y 0,40. δ invierte el signo de m en el 28–38 % de las actualizaciones; las moduladoras propias bajan (f_mod ≥ 0,5 en 5/10 frente a 9/10 en Cbar). **Lectura:** C produce aprendizaje de consecuencias en vida (qué comer al estar encima), no aprendizaje del alga a distancia (a dónde ir), que es lo que mide la trampa. **Diagnóstico de la crianza invertida (27-10, 21:35):** la supervivencia es innata (X/E congelado 0,807 frente a 0,795 con δ real; sin δ, 0,689). Solo la sonda mixta queda como aprendizaje en vida. Panel 09 convocado.
+
+## ADR-034 · 27-10-2026 · Réplica de C con la sonda mixta como primaria (decisión del panel 09)
+
+**Contexto.** C (ADR-033) es negativo en la primaria (0/10) y tiene un indicio fuerte en la secundaria ΔD de la sonda mixta: +0,176 en 9/10, frente a −0,011 en Cbar (p = 0,0008). La supervivencia en la crianza invertida resultó innata (bitácora, 27-10, 21:35). Informes en `docs/escalera/panel/09_*`.
+
+**Decisión del panel 09 (27-10-2026, entre las 21:37 y las 21:43), unánime en el cierre.**
+1. **Veredicto de C:** negativo en la primaria. El ΔD es un indicio fuerte, exploratorio y sin confirmar. ΔD, P(comer buena) y la ventaja de ingesta salen de la misma sonda: no son tres confirmaciones. ρ(m_eff, resultado) no se cita, porque es en parte por construcción. No se habla de «aprendizaje de consecuencias» hasta la réplica.
+2. **Ablación de δ en la sonda mixta**, sobre los 10 genomas de C con DELTA_ON=0 (solo observa). Regla fijada antes de ver los datos: ΔD sin δ menor que con δ real en ≥ 9/10 y mediana ≤ 0,088. **Si no confirma:** no hay réplica; el ΔD pasa a ser un efecto del genoma; (f) publicar la maduración, con b′ en espera.
+3. **Si confirma, réplica:** P5-inmediato-C con semillas nuevas 10–19, mismo código (`escalera-c`, sustrato 3.8.0) y mismos parámetros (cola `c_rep.json`). Se compara con los **10 Cbar existentes**, que no se repiten, declarado antes de lanzar. Antes, comprobación de determinismo: C s0 a 100 épocas contra su checkpoint 100.
+4. **Primaria (`diseno.md` v2.6)**, deben cumplirse todas:
+   - ΔD > 0 en ≥ 9/10;
+   - mediana de ΔD ≥ 0,08;
+   - diferencia de medianas frente a Cbar > 0,08;
+   - Mann-Whitney unilateral frente a Cbar, p < 0,01.
+   Negativo con ≤ 7/10 positivos o con diferencia ≤ 0,08. 8/10 cuenta como indicio no confirmado. P(comer buena) y la ventaja de ingesta son descriptivas. Nulo: 3 semillas.
+5. **b′ = B + C con δ solo en sucesos** (|r| > ε; r̄ se actualiza siempre; trazas `TRACE_TAU` 40). Será el **intento 15**. Ahora solo se construye y se prueba en CPU con pruebas ligeras; la suite completa va en la GPU libre.
+   - Control positivo con una pista 40 pasos antes del bocado y un señuelo con la misma frecuencia.
+   - ε se fija con el control positivo; k = 8,65 queda fijado por construcción.
+   - Control: δ barajado solo en sucesos.
+   - **Nada de b′ se calibra ni se lanza hasta que acabe la réplica.** Tocar δ es un diseño nuevo y gasta intento.
+6. **Para el artículo (provisional):** «con una señal de valor fija puesta por nosotros, la plasticidad evolucionada aprende en vida qué comer entre alternativas ya a la vista, pero no a dónde ir; la supervivencia ante el alga dañina es innata». Si la ablación muestra un efecto parcial, se diría «la evolución con δ produce genomas que aprenden».
+
+**Predicciones:** réplica con mediana de ΔD ≈ +0,10–0,12 y 7–8/10 positivos; P(pasa) ≈ 35–45 %. b′: P(pasa) ≈ 12 %.
+
+**Ejecución:** ablación desde las 21:38 (`scratchpad/sonda_ablacion_c.sh`). Cadena `scratchpad/c_rep.sh` desde las 21:43: espera a la ablación y solo sigue si confirma (si no, marca `c_rep_no`); después determinismo, 10 mundos y sonda mixta. Logs en `runs/fase1d/c_rep_cadena.log` y `c_rep_mundos.log`; marcas `c_rep_hecho` y `c_rep_medidas_hechas`.
+

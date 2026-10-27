@@ -448,3 +448,9 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
 - **Indicio:** como en la v2.4. **Caso aislado (exploratorio, no pasa):** un mundo de C con E − X ≥ 0,05, por encima de su Cbar y replicado con semillas nuevas.
 - **Predicción del panel:** 9/10, un 10–15 %; indicio en 1–3 mundos.
 - **Resultado (27-10, 14:37): no pasa (0/10), sin indicio en la primaria; H-control pasa.** Secundarias a favor de C frente a Cbar y al padre: ΔD +0,176 (9/10), P(comer el alga buena) +0,138 (10/10), supervivencia en la crianza invertida 0,78 frente a 0,43. Aprenden qué comer, no a dónde ir (bitácora, 27-10).
+
+**v2.6 · 27-10-2026, 21:43 · Réplica de C (ADR-034, decisión del panel 09).** Depende de la ablación de δ en la sonda mixta: ΔD con δ apagado menor que con δ real en ≥ 9/10 y mediana ≤ 0,088. Si no confirma, no hay réplica. P5-inmediato-C con semillas nuevas 10–19 (sustrato 3.8.0, mismos parámetros), comparado con los 10 Cbar existentes.
+- **Primaria:** ΔD de la sonda mixta (aprende − congelado) > 0 en ≥ 9/10, **y** mediana ≥ 0,08, **y** diferencia de medianas frente a Cbar > 0,08, **y** Mann-Whitney unilateral frente a Cbar p < 0,01.
+- **Negativo:** ≤ 7/10 o diferencia ≤ 0,08. **Indicio:** 8/10.
+- **Descriptivas:** P(comer buena), ventaja de ingesta; nulo con 3 semillas.
+- **Predicción del panel:** mediana ≈ +0,10–0,12; P(pasa) ≈ 35–45 %.

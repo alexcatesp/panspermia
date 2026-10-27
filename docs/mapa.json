@@ -1185,6 +1185,21 @@
    "condicion": "P5-inmediato-C"
   },
   {
+   "id": "repC",
+   "padre": "modC",
+   "titulo": "Réplica de C (sonda mixta)",
+   "corto": "ΔD con semillas nuevas",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "nada: el mismo C con semillas nuevas 10–19; la primaria pasa a ser el ΔD de la sonda mixta (ADR-034)",
+   "texto": "Panel 09 (27-10, 21:37–21:43), unánime. Antes, ablación de δ en la sonda (si ΔD no depende de δ, no hay réplica y se publica la maduración). Primaria (diseno v2.6): ΔD > 0 en ≥ 9/10, mediana ≥ 0,08, diferencia frente a los Cbar existentes > 0,08 y Mann-Whitney p < 0,01. Predicción: 35–45 %. Cadena scratchpad/c_rep.sh desde las 21:43 (determinismo, 10 mundos, sonda). Después, b′ (B + C con δ por sucesos), intento 15.",
+   "ref": "docs/decisiones.md",
+   "recurso": "GPU",
+   "principal": true,
+   "cola": "c_rep.json",
+   "condicion": "P5-inmediato-C"
+  },
+  {
    "id": "trazas",
    "padre": "P5d",
    "titulo": "Trazas de elegibilidad (plan B 1)",

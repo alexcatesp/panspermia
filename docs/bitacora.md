@@ -1887,3 +1887,11 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Con δ real, los genomas de Cbar apenas ganan (+0,033, 9/10): la señal sola no basta; hace falta haber evolucionado con ella.
   - **Lo que sigue en pie de C:** la sonda mixta (ΔD +0,176, 9/10), que compara en el mismo mundo a los que aprenden con sus gemelos congelados, es aprendizaje en vida. **Lo que cae:** la supervivencia en la crianza invertida como prueba de aprendizaje. Datos en `runs/fase1d/_crianza_c.jsonl`.
 
+
+### 21:38–21:42 (27-10) · Panel 09, ronda 1, y ablación de δ en la sonda mixta
+
+- **Ronda 1:** Biología y Método recomiendan (a), la réplica prerregistrada del ΔD con 10 semillas nuevas. Ingeniería recomienda (b′), B + C con δ solo en sucesos de comer, porque con δ negativo en vacío las trazas no pueden dar crédito a la pista lejana. Los tres coinciden en tres puntos: C es negativo en la primaria con un indicio fuerte en el ΔD; cambiar δ es un diseño nuevo que gasta intento; y k se fija sin mirar E − X.
+- **Ablación (propuesta de Método; solo observa):** la sonda mixta sobre los genomas de C con δ apagado (`scratchpad/sonda_ablacion_c.sh`, datos `_sonda_c_C_sin_delta.jsonl`, marca `sonda_ablacion_hecha`).
+- **Regla fijada antes de ver datos:** el ΔD es aprendizaje en vida guiado por δ si, con δ apagado, ΔD queda por debajo del de δ real en ≥ 9/10 semillas y su mediana es ≤ 0,088 (la mitad de +0,176).
+- **21:39–21:43 · Panel 09, ronda 2 y cierre: unánime (ADR-034).** Ablación; si confirma, réplica de C (semillas 10–19) con el ΔD como primaria (≥ 9/10, mediana ≥ 0,08, diferencia frente a los Cbar existentes > 0,08, Mann-Whitney p < 0,01). Después, b′ como intento 15. Cadena `scratchpad/c_rep.sh` lanzada a las 21:43 y comprobada viva; espera a la ablación.
+
