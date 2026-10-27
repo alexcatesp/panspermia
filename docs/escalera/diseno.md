@@ -447,3 +447,4 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
 - **Secundarias:** sonda mixta (A, ΔD, P(comer) del alga equivocada); H-control sobre C; ρ(m_eff, resultado) como en D; fracción de actualizaciones con el signo invertido por δ; neuronas.
 - **Indicio:** como en la v2.4. **Caso aislado (exploratorio, no pasa):** un mundo de C con E − X ≥ 0,05, por encima de su Cbar y replicado con semillas nuevas.
 - **Predicción del panel:** 9/10, un 10–15 %; indicio en 1–3 mundos.
+- **Resultado (27-10, 14:37): no pasa (0/10), sin indicio en la primaria; H-control pasa.** Secundarias a favor de C frente a Cbar y al padre: ΔD +0,176 (9/10), P(comer el alga buena) +0,138 (10/10), supervivencia en la crianza invertida 0,78 frente a 0,43. Aprenden qué comer, no a dónde ir (bitácora, 27-10).

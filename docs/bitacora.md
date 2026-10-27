@@ -1857,3 +1857,19 @@ Los datos (`runs/`) no están en git porque ocupan mucho. Conviene hacer una cop
   - Mueren de hambre 4.788–5.204 por época. Con cobro inmediato no hay muertes contadas como veneno: el cobro va dentro del bocado.
   - k = 4,325 no se probó.
 - **Los 20 mundos (P5-inmediato-C y P5-inmediato-Cbar, k = 8,65) empiezan a las 01:05.** Datos de la calibración en `runs/fase1d/_calC865/`.
+
+### 01:05–14:37 (27-10) · C: los 20 mundos y sus medidas (ADR-033; datos en `runs/fase1d/_analisis_c.json`)
+
+- **Mundos:** P5-inmediato-C y P5-inmediato-Cbar, 10 + 10 × 300 épocas, de la 01:05 a las 12:49, sin extinciones.
+- **12:49–12:51 · Las medidas fallaron por memoria de la GPU (OOM):** varias semillas en el mismo proceso, y Windows (Bambu Studio, Chrome) retiene ~3,3 GB de VRAM. Cadena parada; salidas parciales en `runs/fase1d/_c_parcial_oom/`. **Relanzadas a las 12:53 con una semilla por proceso** (`scratchpad/c_medidas.sh`, log `runs/fase1d/c_medidas.log`); terminan a las 14:37 sin errores (marca `c_medidas_hechas`). Análisis: `scratchpad/analiza_c.py`.
+- **Primaria (trampa del alga invertida): no pasa, 0/10.** E − X en C: +0,040, −0,002, −0,038, +0,027, −0,073, +0,002, −0,003, +0,007, +0,024, −0,088 (mediana 0,000; ruido E − E2 0,007). Cbar: mediana +0,001; C − Cbar en la mediana, −0,0006. Sin indicio. Ninguna semilla llega a 0,05, así que no hay «caso aislado».
+- **H-control sobre C: pasa** (positivo 10/10 en frac_buena y en selectividad de entrada; negativo 10/10). La trampa ve un aprendizaje impuesto en estos cerebros.
+- **Secundarias: aprendizaje de consecuencias en vida, ausente en el barajado y en el padre.**
+  - **Sonda mixta, ΔD** (discriminar comiendo su alga buena frente a la otra, plástico − congelado): C mediana **+0,176** (positivo en 9/10); Cbar −0,011 (3/10); padre −0,046. C > Cbar, p = 0,0008; C > padre, p = 0,0004 (Mann-Whitney); Cbar ≈ padre (p = 0,73).
+  - **P(comer el alga buena), plástico − congelado:** C +0,138 (10/10 positivos); Cbar +0,036; padre +0,033 (C > Cbar p = 0,006).
+  - **P(comer en vacío), plástico − congelado:** C −0,041; Cbar +0,042; padre +0,073 (C < padre p = 0,03).
+  - **Ventaja de ingesta A:** C +76 %; Cbar +27 %; padre +50 % (C > Cbar p = 0,017). Nulo: −6 a +1 %.
+  - **Supervivencia en la crianza invertida (X/E):** C mediana 0,78 (0,52–0,91); Cbar 0,43; padre 0,40 (p = 0,0002, no prerregistrada).
+- **Signo de m (D repetido):** en C, ρ(m_eff, resultado) da señal en 10/10 (mediana 0,68–0,80), en parte por construcción; en Cbar, 0/10 (0,014–0,051). δ invierte el signo de m en el 28–38 % de las actualizaciones en los dos. **La evolución reduce las moduladoras propias con δ real:** f_mod ≥ 0,5 en 5/10 en C (0,19–0,81) frente a 9/10 en Cbar (0,45–0,97).
+- **Conclusión: primaria negativa; indicio firme (no prerregistrado como primaria) de aprendizaje de consecuencias en vida.** Con δ real, los bichos aprenden a comer su alga buena y a no comer en vacío cuando están encima de la comida; con δ barajado no. Lo aprendido es *qué comer*, no *a dónde ir*: la trampa mide el sitio donde pasan el tiempo con el cerebro congelado y no lo ve. Siguiente: confirmar con la crianza invertida con δ apagado y sin plasticidad, y panel 09.
+
