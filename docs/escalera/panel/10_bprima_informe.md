@@ -1,4 +1,4 @@
-# Panel 10 · b′ construido: primaria y lanzamiento (28-10-2026, 07:40)
+# Panel 10 · b′ construido: primaria y lanzamiento (28-10-2026, 07:29)
 
 ## Lo que lo motiva
 - **Réplica de C (ADR-034, 28-10, 04:16): pasa 4/4.** ΔD de la sonda mixta en las semillas 10–19: 10/10 > 0, mediana +0,124; Cbar −0,011; diferencia +0,134; Mann-Whitney p = 9·10⁻⁵; nulo ≈ 0. Aprender qué comer con δ está confirmado. La primaria de C (trampa del alga invertida, a dónde ir) fue 0/10.
