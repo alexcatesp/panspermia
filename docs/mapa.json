@@ -1200,6 +1200,21 @@
    "condicion": "P5-inmediato-C"
   },
   {
+   "id": "bprima",
+   "padre": "repC",
+   "titulo": "b′: δ por sucesos + trazas",
+   "corto": "a dónde ir (intento 15)",
+   "estado": "en curso",
+   "resultado": null,
+   "anade": "trazas de elegibilidad (τ 40) y δ solo en los pasos con bocado o cobro (|r| > 0,05), sobre C",
+   "texto": "Panel 10 (28-10, 07:29–07:31), unánime. Control positivo: A − B +0,60 frente a +0,05 de C (sin trazas, −0,09). Primaria (diseno v2.7): H-control pasa; E − X (trampa del alga invertida, examen barajado) > 0 en ≥ 9/10 mundos de b′ y mediana ≥ +0,04; Mann-Whitney unilateral b′ > b′bar con p < 0,01 y diferencia de medianas ≥ +0,03. Guarda ΔD ≥ 9/10. Predicción 12–15 %. Cadena scratchpad/bprima.sh desde las 07:37 (suite, calibración de viabilidad, 20 mundos, medidas).",
+   "ref": "docs/decisiones.md",
+   "recurso": "GPU",
+   "principal": true,
+   "cola": "bprima.json",
+   "condicion": "P5-inmediato-bprima"
+  },
+  {
    "id": "trazas",
    "padre": "P5d",
    "titulo": "Trazas de elegibilidad (plan B 1)",

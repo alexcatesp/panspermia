@@ -807,3 +807,25 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Ablación (27-10, 21:52): confirma.** ΔD con δ apagado, mediana −0,073 (por debajo de δ real en 10/10). La réplica sigue según lo previsto.
 
 **Réplica (28-10, 04:16): pasa.** ΔD de la sonda mixta (aprende − congelado) en las semillas 10–19: +0,080, +0,087, +0,210, +0,048, +0,156, +0,169, +0,157, +0,086, +0,252, +0,091 (**10/10 > 0**, mediana **+0,124**); Cbar existentes, mediana −0,011; diferencia de medianas **+0,134**; Mann-Whitney unilateral **p = 9·10⁻⁵**; nulo −0,021 a +0,015. El aprendizaje en vida de qué comer con δ queda confirmado. Siguiente: b′ (punto 5).
+
+## ADR-035 · 28-10-2026 · b′: primaria y lanzamiento (decisión del panel 10)
+
+**Contexto.** La réplica de C pasa (ADR-034). b′ está construido (punto 5 de ADR-034; intento 15): rama `escalera-bprima` (worktree `panspermia-bprima`, sustrato 3.9.0), con `DELTA_EVENT_EPS` (δ solo en los pasos con |r| > ε; r̄ se actualiza siempre). Con ε = 0 es C bit a bit.
+- **Medida de r en P5-inmediato-C:** |r| es bimodal. Las migajas (< 0,001) son el 66 % de los sucesos; los bocados buenos completos (+0,5), el 31 %; los malos (−0,75), el 1,2 %. **ε = 0,05**: el control positivo da lo mismo con 0,01 y con 0,2.
+- **Control positivo** (`tests/test_bprima.py`): A − B +0,60 con b′ y trazas, frente a +0,05 de C con trazas y −0,09 de b′ sin trazas. El orden es A > señuelo > B.
+- **Dos pegas:** todos los pesos suben a la vez (deriva común), y la k = 8,65 «por construcción» se apoyaba en migajas: con ella, cada bocado completo satura m a ±1.
+- Informes en `docs/escalera/panel/10_*`.
+
+**Decisión del panel 10 (28-10-2026, 07:29–07:31), unánime.**
+1. **b′ tal cual:** ε = 0,05, k = 8,65 (m binaria con el signo del resultado en los sucesos), TRACE_TAU 40. No se toca δ: tocarlo gasta intento. La deriva común se mide como descriptiva.
+2. **Tanda:** P5-inmediato con b′ (DELTA_ON 1) y b′bar (DELTA_ON 2, δ filtrado y barajado), los dos con trazas y ε; 10 + 10 mundos con las semillas 0–9 (el mismo mundo inicial que C y Cbar, que no son independientes de C), 300 épocas, desde cero. Colas `bprimacal865.json`, `bprimacal433.json` y `bprima.json` (esta la genera la cadena).
+3. **Calibración solo de viabilidad:** 3 mundos (s0–s2) × 100 épocas. Es viable si no hay extinción, la población media de las épocas 50–100 es ≥ 1.000 y la mediana de la fracción de pesos plásticos en W_MAX en la época 100 es < 50 %. Si no es viable, un único ajuste: k/2 para los 20 mundos. No se mira ninguna medida de aprendizaje.
+4. **Primaria (`diseno.md` v2.7), deben cumplirse todas:** H-control pasa; E − X (trampa del alga invertida, examen barajado) > 0 en ≥ 9/10 mundos de b′ y mediana ≥ +0,04; Mann-Whitney unilateral b′ > b′bar con p < 0,01 y diferencia de medianas ≥ +0,03.
+5. **Negativo:** E − X > 0 en ≤ 6/10, o mediana ≤ +0,02. 7–8/10, o una mediana entre +0,02 y +0,04, es indicio no concluyente, sin segunda tanda automática.
+6. **Guarda:** ΔD de la sonda mixta > 0 en ≥ 9/10 (en C fue 10/10). No es vía de éxito; si falla, se registra «las trazas dañan lo de C».
+7. **No interpretable:** mediana de mundos > 50 % de pesos plásticos en W_MAX en la época 300. La calibración lo mira en la época 100 y puede crecer con la edad (Ingeniería).
+8. **Descriptivas, sin puerta:** |w| medio, fracción en W_MAX (referencia: C 1–13 %, Cbar ≈ 1 %, `_wmax_c.jsonl`), f_mod, fracción de m saturada, fracción de pasos con suceso y P(comer buena). Sin crianza (en C era innata). La ablación de las trazas en la sonda se hace solo si b′ pasa.
+
+**Predicciones:** P(pasa) ≈ 12–15 % (Método da un rango de 8–20 %); la guarda ΔD, ≈ 80 %.
+
+**Ejecución:** cadena `scratchpad/bprima.sh`, lanzada a las 07:37 y comprobada viva. Espera a la suite en GPU (`runs/fase1d/suite_bprima.log`, desde las 07:29), calibra, lanza los 20 mundos y mide (trampa en los dos brazos, H-control, sonda mixta, nulo y saturación con `scratchpad/wmax.py`). Logs en `runs/fase1d/bprima_cadena.log` y `bprima.log`; marcas `bprima_hecho` y `bprima_medidas_hechas`. `madura_alga.with_brain` pone la traza a cero, como al nacer; sin `TRACE_ON` no cambia nada.

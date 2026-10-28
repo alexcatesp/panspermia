@@ -455,3 +455,10 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
 - **Descriptivas:** P(comer buena), ventaja de ingesta; nulo con 3 semillas.
 - **Predicción del panel:** mediana ≈ +0,10–0,12; P(pasa) ≈ 35–45 %.
 - **Resultado (28-10, 04:16): pasa (4/4 condiciones).** ΔD de la sonda mixta (aprende − congelado) en las semillas 10–19: +0,080, +0,087, +0,210, +0,048, +0,156, +0,169, +0,157, +0,086, +0,252, +0,091 (**10/10 > 0**, mediana **+0,124**); Cbar existentes, mediana −0,011; diferencia de medianas **+0,134**; Mann-Whitney unilateral **p = 9·10⁻⁵**. Nulo −0,021 a +0,015.
+
+**v2.7 · 28-10-2026, 07:31 · b′: δ solo en sucesos + trazas (ADR-035, decisión del panel 10; intento 15).** P5-inmediato con TRACE_ON 1 (τ 40), DELTA_EVENT_EPS 0,05 y k 8,65 (k/2 si la calibración de viabilidad falla). b′ (δ real) y b′bar (δ filtrado y barajado), semillas 0–9 × 300 épocas.
+- **Primaria:** H-control pasa; E − X (trampa del alga invertida, examen barajado) > 0 en ≥ 9/10 mundos de b′ y mediana ≥ +0,04; Mann-Whitney unilateral b′ > b′bar con p < 0,01 y diferencia de medianas ≥ +0,03.
+- **Negativo:** ≤ 6/10 o mediana ≤ +0,02. **Indicio no concluyente:** 7–8/10, o mediana entre +0,02 y +0,04.
+- **Guarda:** ΔD de la sonda mixta > 0 en ≥ 9/10 (no es vía de éxito). **No interpretable:** mediana > 50 % de pesos plásticos en W_MAX en la época 300.
+- **Descriptivas:** |w|, W_MAX, f_mod, m saturada, fracción de pasos con suceso, P(comer buena).
+- **Predicción del panel:** P(pasa) ≈ 12–15 %; guarda ≈ 80 %.
