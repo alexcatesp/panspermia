@@ -454,3 +454,4 @@ Escrito antes de lanzar. **Pregunta:** cuando lo que conviene comer no se puede 
 - **Negativo:** ≤ 7/10 o diferencia ≤ 0,08. **Indicio:** 8/10.
 - **Descriptivas:** P(comer buena), ventaja de ingesta; nulo con 3 semillas.
 - **Predicción del panel:** mediana ≈ +0,10–0,12; P(pasa) ≈ 35–45 %.
+- **Resultado (28-10, 04:16): pasa (4/4 condiciones).** ΔD de la sonda mixta (aprende − congelado) en las semillas 10–19: +0,080, +0,087, +0,210, +0,048, +0,156, +0,169, +0,157, +0,086, +0,252, +0,091 (**10/10 > 0**, mediana **+0,124**); Cbar existentes, mediana −0,011; diferencia de medianas **+0,134**; Mann-Whitney unilateral **p = 9·10⁻⁵**. Nulo −0,021 a +0,015.

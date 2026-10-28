@@ -805,3 +805,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Ejecución:** ablación desde las 21:38 (`scratchpad/sonda_ablacion_c.sh`). Cadena `scratchpad/c_rep.sh` desde las 21:43: espera a la ablación y solo sigue si confirma (si no, marca `c_rep_no`); después determinismo, 10 mundos y sonda mixta. Logs en `runs/fase1d/c_rep_cadena.log` y `c_rep_mundos.log`; marcas `c_rep_hecho` y `c_rep_medidas_hechas`.
 
 **Ablación (27-10, 21:52): confirma.** ΔD con δ apagado, mediana −0,073 (por debajo de δ real en 10/10). La réplica sigue según lo previsto.
+
+**Réplica (28-10, 04:16): pasa.** ΔD de la sonda mixta (aprende − congelado) en las semillas 10–19: +0,080, +0,087, +0,210, +0,048, +0,156, +0,169, +0,157, +0,086, +0,252, +0,091 (**10/10 > 0**, mediana **+0,124**); Cbar existentes, mediana −0,011; diferencia de medianas **+0,134**; Mann-Whitney unilateral **p = 9·10⁻⁵**; nulo −0,021 a +0,015. El aprendizaje en vida de qué comer con δ queda confirmado. Siguiente: b′ (punto 5).
