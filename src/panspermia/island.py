@@ -295,6 +295,14 @@ def _context(obs: jax.Array) -> jax.Array:
     return jnp.where(kin >= C.KIN_THRESHOLD, 2, jnp.where(kin > 0, 3, jnp.where(food, 1, 0)))
 
 
+def _delta(r: jax.Array, rbar: jax.Array):
+    """δ = r − r̄ y el r̄ nuevo (ADR-033); con DELTA_EVENT_EPS > 0, δ = 0 fuera de los sucesos |r| > ε (b′, ADR-034)."""
+    delta = r - rbar
+    if C.DELTA_EVENT_EPS > 0:
+        delta = jnp.where(jnp.abs(r) > C.DELTA_EVENT_EPS, delta, 0.0)
+    return delta, rbar + (r - rbar) / C.DELTA_TAU
+
+
 def _with_delta(m: jax.Array, dacc: jax.Array) -> jax.Array:
     """m_eff = clip(m + DELTA_K·δ_acc, −1, 1) con DELTA_ON (ADR-033); si no, m sin tocar."""
     return jnp.clip(m + C.DELTA_K * dacc, -1.0, 1.0) if C.DELTA_ON else m
@@ -368,13 +376,13 @@ def world_step(state: IslandState, _=None, *, plastic: bool = True, births: bool
                           signal=signal, gut=gut, poison=poison)
     if C.DELTA_ON:  # error de predicción del flujo comido, fuera de la red (ADR-033)
         r = jnp.where(alive0, gain - due, 0.0)
-        delta = r - state.rbar
+        delta, rbar = _delta(r, state.rbar)
         dbuf = state.dbuf
         if C.DELTA_ON == 2:  # control: el δ de hace L pasos, L al azar por bicho y paso
             dbuf = dbuf.at[:, state.step % C.DELTA_BUFFER].set(delta)
             lag = jax.random.randint(jax.random.fold_in(key, 0xDE17A), delta.shape, C.DELTA_LAG_MIN, C.DELTA_BUFFER)
             delta = dbuf[jnp.arange(delta.shape[0]), (state.step - lag) % C.DELTA_BUFFER]
-        state = state.replace(rbar=state.rbar + (r - state.rbar) / C.DELTA_TAU, dacc=state.dacc + delta, dbuf=dbuf)
+        state = state.replace(rbar=rbar, dacc=state.dacc + delta, dbuf=dbuf)
     atk_delta, drained, attempt, resources = world.attack(state, actions, cand, resources)
     emit_cost, emitted, chem = world.emit(chem, pos, alive0, actions, state.env.chem_on)
     tox_dmg, chem, resources = world.toxin(chem, resources, pos, alive0, state.energy)

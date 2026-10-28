@@ -1,6 +1,6 @@
 """Constantes globales de la especificación (docs/spec.md). Única fuente de números."""
 
-SUBSTRATE_VERSION = "3.8.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
+SUBSTRATE_VERSION = "3.9.0"  # major distinto => migrantes rechazados (2.x: química + algas estacionales, ADR-008;
                              # 2.1: interruptores de la escalera de complejidad en EnvParams, ADR-014;
                              # 2.2: física de la mutación de neuronas elegible, ADR-015;
                              # 2.3: tasas de mutación fijas y CPPN neutral elegibles, ADR-016;
@@ -19,7 +19,8 @@ SUBSTRATE_VERSION = "3.8.0"  # major distinto => migrantes rechazados (2.x: quí
                              # 3.5: manchas de un solo tipo de alga (ALGA_PATCH_FAMILIES), ADR-027;
                              # 3.6: veneno diferido (POISON_FACTOR, POISON_DELAY), P5-d, ADR-030;
                              # 3.7: trazas de elegibilidad (TRACE_ON, TRACE_TAU), ADR-031;
-                             # 3.8: modulación con signo de resultado (DELTA_ON, DELTA_K, DELTA_TAU), ADR-033)
+                             # 3.8: modulación con signo de resultado (DELTA_ON, DELTA_K, DELTA_TAU), ADR-033;
+                             # 3.9: δ solo en sucesos (DELTA_EVENT_EPS), b′, ADR-034)
 
 # --- Mundo 2D (fases 0-1) ---
 WORLD_L = 1024.0
@@ -293,6 +294,12 @@ DELTA_K: float = 8.65
 DELTA_TAU: float = 50.0  # pasos; constante (el gen queda aparcado, ADR-033)
 DELTA_BUFFER = 64
 DELTA_LAG_MIN = 32
+# DELTA_EVENT_EPS (b′, panel 09, ADR-034): si es > 0, δ solo cuenta en los pasos con suceso, |r| > ε (bocado o cobro);
+# en el resto δ = 0 y la modulación es la del cerebro, sin el castigo tónico δ = −r̄. r̄ se actualiza en todos los pasos.
+# En P5-inmediato-C |r| es bimodal: migajas < 0,001 (66 % de los sucesos) y bocados completos de +0,5 o −0,75 (31 % y
+# 1,2 %); el control positivo da lo mismo con ε en [0,01, 0,2]: se fija ε = 0,05, el 10 % de un bocado (EAT_RATE·DT).
+# Con DELTA_ON = 2, el barajado se aplica al δ ya filtrado. 0 (por defecto) = C, idéntico bit a bit.
+DELTA_EVENT_EPS: float = 0.0
 
 # Biogeografía: ±10 % derivado del node_id
 BIOGEO_SPREAD = 0.1

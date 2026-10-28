@@ -1,0 +1,44 @@
+[
+ {
+  "name": "_calBp433",
+  "node": "fase1d-w0",
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "VENENO",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.792,
+   "gut_sense": 1
+  },
+  "config": {
+   "ALGA_PER_AGENT": 1,
+   "ALGA_PATCH_FAMILIES": 1,
+   "K_CUT": 1.7,
+   "EAT_MOVE_FACTOR": 0.0,
+   "EAT_MOVE_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_STEPS": 100000,
+   "K_MEAN_RAMP_FROM": 2.0,
+   "POISON_FACTOR": 2.5,
+   "POISON_DELAY": 0,
+   "POISON_RAMP_STEPS": 100000,
+   "DELTA_ON": 1,
+   "DELTA_K": 4.325,
+   "DELTA_TAU": 50.0,
+   "TRACE_ON": 1,
+   "TRACE_TAU": 40.0,
+   "DELTA_EVENT_EPS": 0.05
+  },
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 100,
+  "description": "Calibración de viabilidad de b′ (ADR-035, panel 10, 28-10): P5-inmediato con trazas (τ 40) y δ solo en sucesos (|r| > 0,05), k = 4.325. Viable si no hay extinción, la población media de las épocas 50–100 es ≥ 1.000 y la mediana de la fracción de pesos plásticos en W_MAX en la época 100 es < 50 %. Sustrato 3.9.0. Solo viabilidad."
+ }
+]
