@@ -1,0 +1,28 @@
+[
+ {
+  "name": "P3cal-disperso",
+  "node": "fase1d-w0",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "P3DCAL",
+  "description": "Calibración de P3-disperso: misma comida total que P3-escaso (k_mean 8,686 con K_CUT 1,5; fracción 0,219).",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5
+  }
+ }
+]

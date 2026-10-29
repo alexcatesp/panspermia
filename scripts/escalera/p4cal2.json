@@ -1,0 +1,130 @@
+[
+ {
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "name": "P4cal-alga2000-doble",
+  "block": "P4CAL2",
+  "description": "P4-alga con el doble de algas (decisión del responsable, 22-10, 12:08): k_mean 3,804, así que la comida útil media es la de P3-escaso; el alga que alimenta se sortea cada 2.000 pasos.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 3.804
+  },
+  "config": {
+   "ALGA_SWAP_PERIOD": 2000
+  }
+ },
+ {
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "name": "P4cal-salto64-1000",
+  "block": "P4CAL2",
+  "description": "P4-sitio con salto corto (decisión del responsable, 22-10, 12:08): P3-disperso con todo el campo de comida desplazado 64 u en dirección al azar, respecto a su sitio de siempre, cada 1000 pasos.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 1000,
+   "FOOD_JUMP_DIST": 64.0
+  }
+ },
+ {
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "name": "P4cal-salto128-1000",
+  "block": "P4CAL2",
+  "description": "P4-sitio con salto corto (decisión del responsable, 22-10, 12:08): P3-disperso con todo el campo de comida desplazado 128 u en dirección al azar, respecto a su sitio de siempre, cada 1000 pasos.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 1000,
+   "FOOD_JUMP_DIST": 128.0
+  }
+ },
+ {
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "name": "P4cal-salto64-150",
+  "block": "P4CAL2",
+  "description": "P4-sitio con salto corto (decisión del responsable, 22-10, 12:08): P3-disperso con todo el campo de comida desplazado 64 u en dirección al azar, respecto a su sitio de siempre, cada 150 pasos.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 150,
+   "FOOD_JUMP_DIST": 64.0
+  }
+ },
+ {
+  "node": "fase1d-w0",
+  "seeds": [
+   0
+  ],
+  "epochs": 100,
+  "n_max": 4096,
+  "n_init": 512,
+  "name": "P4cal-salto128-150",
+  "block": "P4CAL2",
+  "description": "P4-sitio con salto corto (decisión del responsable, 22-10, 12:08): P3-disperso con todo el campo de comida desplazado 128 u en dirección al azar, respecto a su sitio de siempre, cada 150 pasos.",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 150,
+   "FOOD_JUMP_DIST": 128.0
+  }
+ }
+]
