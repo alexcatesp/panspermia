@@ -3,7 +3,7 @@
 # épocas 100–149 < 3.900); si lo es, los 10 mundos; después, la primaria (trampa del alga invertida con el examen
 # barajado, diseno.md v2.3) y las secundarias (sonda mixta y su nulo). Las medidas solo observan.
 R=/mnt/d/Development/panspermia/runs/fase1d
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 CFG="ALGA_PER_AGENT=1 ALGA_PATCH_FAMILIES=1 K_CUT=1.7 EAT_MOVE_FACTOR=0 EAT_MOVE_RAMP_STEPS=100000 K_MEAN_RAMP_STEPS=100000 K_MEAN_RAMP_FROM=2"
 source ~/.venvs/panspermia/bin/activate
 export PYTHONPATH=src

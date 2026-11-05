@@ -2,7 +2,7 @@
 # Cada mundo con el código de su rama: 3.2.0 (escalera-frena) para la rampa, 3.0.0 (escalera-tripa) para el padre.
 # Después, la comprobación de la manipulación (diag_comer.py) y un nulo de control en 3 semillas con freno.
 source ~/.venvs/panspermia/bin/activate
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 R=/mnt/d/Development/panspermia/runs/fase1d
 FRENA=/mnt/d/Development/panspermia-frena/src
 TRIPA=/mnt/d/Development/panspermia-tripa/src

@@ -2,7 +2,7 @@
 # la calibración). ¿Había aprendizaje individual escondido tras un VA de población ≈ 0? Código de escalera-masa
 # (2.11.0, idéntico bit a bit a 2.6–2.10 con sus interruptores apagados).
 source ~/.venvs/panspermia/bin/activate
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 R=/mnt/d/Development/panspermia/runs/fase1d
 cd $S
 export PYTHONPATH=/mnt/d/Development/panspermia-masa/src

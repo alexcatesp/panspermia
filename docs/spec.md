@@ -1,6 +1,6 @@
 # Especificación: ecosistema evolutivo distribuido
 
-15-10-2026 · Alejandro Catalá Espí · Versión viva: https://claude.ai/code/artifact/21816b0f-bb95-495b-8604-7c95eeebdcb1
+15-10-2026 · Alejandro Catalá Espí
 
 ## Objetivo y principios
 

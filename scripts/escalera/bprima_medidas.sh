@@ -1,6 +1,6 @@
 # Solo las medidas de b′ (ADR-035), tras la caída de WSL del 30-10 a las 20:16; los 20 mundos ya están (bprima_hecho).
 R=/mnt/d/Development/panspermia/runs/fase1d
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 W=/mnt/d/Development/panspermia-bprima
 source ~/.venvs/panspermia/bin/activate
 export PYTHONPATH=$W/src

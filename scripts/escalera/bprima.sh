@@ -2,7 +2,7 @@
 # espera a la suite en GPU; calibración solo de viabilidad (3 mundos × 100 épocas, k 8,65 y, si no es viable, k/2 una vez);
 # los 20 mundos (P5-inmediato-bprima y -bprimabar, semillas 0–9 × 300 épocas); y las medidas de diseno.md v2.7.
 R=/mnt/d/Development/panspermia/runs/fase1d
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 W=/mnt/d/Development/panspermia-bprima
 source ~/.venvs/panspermia/bin/activate
 export PYTHONPATH=$W/src

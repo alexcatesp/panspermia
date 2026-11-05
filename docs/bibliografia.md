@@ -1,6 +1,6 @@
 # Evolución artificial hacia la IA: revisión bibliográfica
 
-15-10-2026 · Alejandro Catalá Espí · Versión viva: https://claude.ai/code/artifact/1c2abcde-c54e-4ba1-93fa-3d9260b78b8f
+15-10-2026 · Alejandro Catalá Espí
 
 † = identificador de memoria, no comprobado: verificar antes de citar. El resto se comprobó el 15-10-2026.
 

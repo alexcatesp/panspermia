@@ -2,7 +2,7 @@
 # no se solapa con la suite de tests de comer frena. Al acabar los grandes, para sonda_mixta.sh (que iba a
 # seguir con los chicos) y espera a que la cadena de frena pase de los tests a la calibración.
 source ~/.venvs/panspermia/bin/activate
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 R=/mnt/d/Development/panspermia/runs/fase1d
 until grep -q "== grande termina" $R/sonda_mixta.log; do sleep 20; done
 pkill -f "bash -l $S/sonda_mixta.sh"; pkill -f "sonda_mixta.py $R/P4-salto64-chico"

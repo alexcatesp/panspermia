@@ -1,6 +1,6 @@
 # Sonda mixta (responsable, 23-10, 23:20): ¿qué aprenden los grandes? CPU, una copia del mundo cada vez.
 source ~/.venvs/panspermia/bin/activate
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 R=/mnt/d/Development/panspermia/runs/fase1d
 cd $S
 export JAX_PLATFORMS=cpu PYTHONPATH=/mnt/d/Development/panspermia-masa/src

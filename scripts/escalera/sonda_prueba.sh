@@ -1,5 +1,5 @@
 source ~/.venvs/panspermia/bin/activate
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 cd $S
 free -g | head -2
 JAX_PLATFORMS=cpu PYTHONPATH=/mnt/d/Development/panspermia-masa/src /usr/bin/time -f "seg %e  RSS_MB %M" taskset -c 0-7 \

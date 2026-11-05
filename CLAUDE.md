@@ -8,7 +8,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 - `docs/bibliografia.md`: referencias. Las marcadas con † no están verificadas.
 - `docs/bibliografia/<fase>/`: bibliografía por fase para un posible artículo (README con síntesis, hueco y fichas; `refs.bib` con DOI comprobados; `pdf/` solo local y en `.gitignore`). Al citar en un ADR, usar estas claves.
 - `docs/bitacora.md`: **cuaderno de laboratorio cronológico**. Añadir una entrada por cada experimento, prueba o diagnóstico (qué, commit, datos en `runs/`, resultado con números y conclusión: firme, indicio, descartado o aparcado), incluido lo que falla. Es la base de la publicación.
-- **Artículo divulgativo vivo** para el responsable («Panspermia: el experimento explicado», Claude Docs: https://claude.ai/code/artifact/3d0eb38d-366f-4a32-9c08-f218d7f6768a). Actualizarlo con cada decisión, resultado o cambio de plan acordado, y anotarlo en su historial.
+- **Artículo divulgativo vivo** para el responsable («Panspermia: el experimento explicado»). Actualizarlo con cada decisión, resultado o cambio de plan acordado, y anotarlo en su historial.
 - `docs/mapa.json`: **árbol de posibilidades** para el panel local. Cada nodo tiene su padre, lo que añade respecto a él («escalera de complejidad»: idealmente una sola cosa por paso) y su resultado (✓ positivo, ◐ indicio, ✗ negativo o descartado, ~ no concluyente, ⏸ aparcado). Actualizarlo con cada experimento, resultado o decisión, junto con la bitácora. Se ve con `python -m panspermia.panel` (http://127.0.0.1:8766; desde Windows, `PYTHONPATH=src`), que relee cada minuto colas, mundos, sondas y GPU.
 - `docs/caminos.md`: registro de caminos descartados, aparcados (con su condición de reapertura) y en estudio. Actualizarlo cada vez que una opción se pruebe y falle o funcione.
 - `src/panspermia/config.py` concentra todas las constantes numéricas de la spec. No hardcodees números en otros módulos.
@@ -25,7 +25,7 @@ Ecosistema evolutivo distribuido: agentes encarnados que evolucionan por selecci
 
 - Python ≥ 3.11, JAX con CUDA 12. En Windows: **WSL2** (JAX con GPU no corre nativo en Windows). GPU de referencia: RTX 5070 12 GB (solo un objetivo de la spec: esa máquina no existe, responsable, 25-10); la única máquina es la de desarrollo, con una RTX 5070 Ti 16 GB.
 - Al arrancar cualquier simulación llamar a `panspermia.island.setup_determinism()` antes de usar JAX: fija `XLA_FLAGS=--xla_gpu_deterministic_ops=true`, `jax_default_matmul_precision="highest"` y desactiva la preasignación de VRAM.
-- Distro WSL: `Ubuntu-24.04` (en `D:\WSL\Ubuntu-24.04`, usuario `aleja`); venv en `~/.venvs/panspermia`. Instalar: `bash scripts/setup_wsl.sh` (usa pip; `uv pip install` falla con las ruedas NVIDIA, ver ADR-005).
+- Distro WSL: `Ubuntu-24.04` (en `D:\WSL\Ubuntu-24.04`, usuario `<usuario>`); venv en `~/.venvs/panspermia`. Instalar: `bash scripts/setup_wsl.sh` (usa pip; `uv pip install` falla con las ruedas NVIDIA, ver ADR-005).
 - Ejecutar desde Windows: `wsl -d Ubuntu-24.04 --cd /mnt/d/Development/panspermia -- bash -lc 'source ~/.venvs/panspermia/bin/activate; python -m pytest -q'`.
 - Tests: `pytest` (~20 min en GPU) y `pytest --runslow` (incluye 5 semillas × 100 épocas). `XLA_PYTHON_CLIENT_PREALLOCATE` y `XLA_FLAGS` se fijan en `panspermia/__init__.py` antes de importar JAX.
 - Ejecutar una isla: `python -m panspermia.run --seed 0 --epochs 100 --out runs/s0`; benchmark: `python scripts/bench.py`.

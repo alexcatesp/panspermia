@@ -1,7 +1,7 @@
 # Medidas de C (diseno.md v2.5), una semilla por proceso: la cadena c.sh se quedó sin memoria de GPU (27-10, 12:49–12:51)
 # al encadenar semillas en un mismo proceso. Solo observan.
 R=/mnt/d/Development/panspermia/runs/fase1d
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 source ~/.venvs/panspermia/bin/activate
 BASE="ALGA_PER_AGENT=1 ALGA_PATCH_FAMILIES=1 K_CUT=1.7 EAT_MOVE_FACTOR=0 EAT_MOVE_RAMP_STEPS=100000 K_MEAN_RAMP_STEPS=100000 K_MEAN_RAMP_FROM=2 POISON_FACTOR=2.5 POISON_RAMP_STEPS=100000 POISON_DELAY=0 DELTA_K=8.65 DELTA_TAU=50"
 export PYTHONPATH=/mnt/d/Development/panspermia-c/src

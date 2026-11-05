@@ -1,6 +1,6 @@
 # Control nulo de la sonda mixta (24-10, 09:15): las dos mitades congeladas; la diferencia debe ser ≈ 0.
 source ~/.venvs/panspermia/bin/activate
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 R=/mnt/d/Development/panspermia/runs/fase1d
 cd $S; export PYTHONPATH=/mnt/d/Development/panspermia-masa/src
 echo "== empieza $(date '+%F %H:%M')"

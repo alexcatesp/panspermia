@@ -30,7 +30,7 @@ El peldaño P4-manchas-bicho-frena-rampa (ADR-027, `docs/escalera/diseno.md` v2.
 - `D:\Development\panspermia\docs\bitacora.md` (las entradas del 25-10, al final)
 - `D:\Development\panspermia\docs\bibliografia\escalera\README.md` (§18–§20)
 - Código: `D:\Development\panspermia-manchas\src\panspermia\world.py` (`kmax_field`, `_family_fields`, `algae_type_a`), `island.py` (busca `ALGA_PER_AGENT`) y `config.py`.
-- Medidas: `C:\Users\aleja\AppData\Local\Temp\claude\D--Development-panspermia\ddea0d1c-f251-40d2-8e99-9e07c65f2199\scratchpad\madura_alga.py` y `sonda_mixta.py`.
+- Medidas: `C:\Users\<usuario>\AppData\Local\Temp\claude\D--Development-panspermia\ddea0d1c-f251-40d2-8e99-9e07c65f2199\scratchpad\madura_alga.py` y `sonda_mixta.py`.
 
 ## Formato de tu respuesta (máximo ~400 palabras, en español)
 1. **Voto:** A, B, C o D (con el cambio concreto si es B, C o D).

@@ -1,7 +1,7 @@
 # Réplica de C (panel 09, ADR-034). Espera a la ablación de δ en la sonda; solo sigue si confirma (regla fijada a las 21:40).
 # Después: determinismo (C s0, 100 épocas, contra el checkpoint 100 original), 10 mundos nuevos (semillas 10–19) y sonda mixta.
 R=/mnt/d/Development/panspermia/runs/fase1d
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 source ~/.venvs/panspermia/bin/activate
 export PYTHONPATH=/mnt/d/Development/panspermia-c/src
 cd /mnt/d/Development/panspermia-c

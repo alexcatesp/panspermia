@@ -1,7 +1,7 @@
 # H-control (ADR-028): control positivo y negativo de la trampa del alga invertida sobre el alga por bicho, época 300.
 # CPU ligera (taskset 0-5) mientras la GPU corre las manchas. Solo observa.
 source ~/.venvs/panspermia/bin/activate
-cd /mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+cd /mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 R=/mnt/d/Development/panspermia/runs/fase1d
 echo "== control empieza $(date '+%F %H:%M')"
 JAX_PLATFORMS=cpu PYTHONPATH=/mnt/d/Development/panspermia-algabicho/src taskset -c 0-5 python madura_control.py \

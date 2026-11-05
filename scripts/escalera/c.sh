@@ -2,7 +2,7 @@
 # calibración de k (8,65 y, si no es viable, 4,325) con 2 semillas × 200 épocas y el criterio de diseno.md v2.3b;
 # los 20 mundos (P5-inmediato-C y P5-inmediato-Cbar, 10 × 300 épocas); y las medidas de diseno.md v2.5.
 R=/mnt/d/Development/panspermia/runs/fase1d
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 source ~/.venvs/panspermia/bin/activate
 export PYTHONPATH=src
 cd /mnt/d/Development/panspermia-c

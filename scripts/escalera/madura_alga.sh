@@ -1,6 +1,6 @@
 # Alga por bicho: ¿el tiempo sobre su alga buena es experiencia o maduración? (responsable, 25-10, entre las 21:46 y las 21:52; solo observa)
 source ~/.venvs/panspermia/bin/activate
-S=/mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+S=/mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 R=/mnt/d/Development/panspermia/runs/fase1d
 export PYTHONPATH=/mnt/d/Development/panspermia-algabicho/src
 cd $S

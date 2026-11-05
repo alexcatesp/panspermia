@@ -1,6 +1,6 @@
 # Prueba ligera en CPU del control positivo y negativo (pocos pasos; la GPU está ocupada con las manchas)
 source ~/.venvs/panspermia/bin/activate
-cd /mnt/c/Users/aleja/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
+cd /mnt/c/Users/<usuario>/AppData/Local/Temp/claude/D--Development-panspermia/ddea0d1c-f251-40d2-8e99-9e07c65f2199/scratchpad
 rm -f /tmp/prueba_control.jsonl
 date '+%T'
 JAX_PLATFORMS=cpu PYTHONPATH=/mnt/d/Development/panspermia-algabicho/src taskset -c 0-5 python madura_control.py \
