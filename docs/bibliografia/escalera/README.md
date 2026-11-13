@@ -194,3 +194,22 @@ En la calibración de comer frena (ADR-025), el freno total desde cero extingue 
 - **Ya en la bibliografía:** holling1959some (tiempo de manipulación: mientras se come no se busca); charnov1976optimal y stephens1986foraging (con tiempo de manipulación compensa ser selectivo).
 
 **Implicación (decisión del responsable, 24-10):** endurecer el freno en rampa (`config.EAT_MOVE_RAMP_STEPS`, sustrato 3.2.0): de 1 a 0 en las primeras 100 épocas, para que en las épocas 151–300 el freno ya sea total.
+
+## 21. Modelo del mundo, curiosidad y poda (entrevista a Karl Friston traída por el responsable, 14-11, 00:25)
+
+El responsable preguntó si conviene dar a los bichos un modelo del mundo y más neuronas de las necesarias para que la evolución pode. Todos los DOI están comprobados en Crossref (14-11, 00:32). Ninguna referencia se ha leído completa: lo que sigue sale del resumen y de lo ya conocido.
+
+- **friston2010free, friston2017active:** principio de energía libre e inferencia activa. El agente lleva un modelo generativo de las causas de sus sensaciones, ajusta sus creencias y actúa para reducir el error de predicción. Minimizar la sorpresa *esperada* da un valor epistémico: buscar lo que reduce la incertidumbre (curiosidad).
+- **rao1999predictive:** codificación predictiva en la corteza visual. Cada nivel predice la actividad del nivel inferior y solo sube el error.
+- **whittington2017approximation:** una red de codificación predictiva con plasticidad hebbiana local aproxima la retropropagación. Es compatible con el principio 5 (sin retropropagación dentro del agente).
+- **seth2013interoceptive:** inferencia interoceptiva. Las predicciones sobre el propio cuerpo (energía, vísceras) están en la base del modelo del mundo. En Panspermia, la tripa (ADR-024) y la energía son esas señales.
+- **gottlieb2013information:** la búsqueda de información y la curiosidad, con sus mecanismos computacionales y neurales. La información tiene valor cuando el agente puede elegir qué observar y equivocarse cuesta.
+- **chechik1998synaptic:** la poda sináptica en el desarrollo (sobreproducir sinapsis y luego eliminar las débiles) es óptima cuando la energía es limitada y da redes con más memoria por sinapsis.
+- **Críticas: bruineberg2022emperor, colombo2021first.** El aparato formal del principio de energía libre (mantas de Markov) se usa con dos sentidos distintos, y como principio es difícil de falsar. Se toma como marco y fuente de ideas, no como teoría probada.
+- **Lectura para Panspermia:**
+  - Seleccionar solo por seguir vivo ya es, en sus términos, mantenerse en los estados viables.
+  - δ (ADR-033) es un modelo del mundo de un solo número («cuánto espero comer»). Su versión más rica predeciría las sensaciones.
+  - Nuestros mundos rara vez hacen valiosa la incertidumbre, porque probar es casi gratis (alga por bicho, ADR-026).
+  - Evolución, maduración y plasticidad son tres escalas de tiempo del mismo ajuste.
+  - El cerebro de sobra ya existe (64 huecos, 8 al nacer, `C_NEURON`) y la evolución ya poda cuando no hay nada que aprender. La poda de Friston es la de la vida de cada bicho (chechik1998synaptic).
+  - Propuestas en `docs/caminos.md` (14-11).
