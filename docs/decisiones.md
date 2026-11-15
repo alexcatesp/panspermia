@@ -843,3 +843,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Primer paso ejecutado: prueba del tope de w0** (recomendación 1a). `scripts/escalera/wclip.py` y `wclip_c.sh`: recorta a ±1 los pesos de la mitad de los adultos de C y examina las dos mitades congeladas en el mismo mundo. Regla fijada antes de ver datos (cabecera de `wclip.py`): el tope explica la maduración si con ±1, D_recortado ≤ 0,5·D_intacto y la ingesta cae ≥ 20 % en ≥ 8/10 semillas; control negativo con ±4. Lanzada el 15-11 a las 22:41 (log `runs/fase1d/wclip_c.log`, datos `_wclip_c.jsonl`, marca `wclip_c_hecho`). Humo de 30 pasos (no es resultado): el 85 % de los bichos de C s0 tiene algún peso fuera de ±1.
 
 **Pendiente:** cerrar b′ (17 medidas), integrar `escalera-bprima` en `main`, copia externa de `runs/`, réplica de C en segundo mapa, medida de apertura.
+
+**Addenda ADR-036 (16-11, 00:55).** Prueba del tope de w0: no explica la ventaja de aprender (D recortado 0,90 del intacto; regla 0/10). b′ cerrado: no pasa (E − X +0,026 frente a +0,030 de b′bar, p = 0,45). La escalera queda cerrada. Siguiente: medida de apertura evolutiva con nulo (rec. 3).
