@@ -97,8 +97,8 @@ def weight_change(s, step0):
     return res
 
 
-def probe(s, T):
-    step0 = int(s.step)
+def probe(s, T, step0=None):
+    step0 = int(s.step) if step0 is None else step0  # step0=0: cuentan también los que ya estaban vivos
     f = lambda c, x: body(c, x, step0)
     s2, (acc, births) = jax.jit(lambda st: jax.lax.scan(f, st, None, length=T))(s)
     acc = {k: np.asarray(v).sum(0).reshape(2, NB) for k, v in acc.items()}

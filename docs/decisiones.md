@@ -829,3 +829,17 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Predicciones:** P(pasa) ≈ 12–15 % (Método da un rango de 8–20 %); la guarda ΔD, ≈ 80 %.
 
 **Ejecución:** cadena `scratchpad/bprima.sh`, lanzada a las 07:37 y comprobada viva. Espera a la suite en GPU (`runs/fase1d/suite_bprima.log`, desde las 07:29), calibra, lanza los 20 mundos y mide (trampa en los dos brazos, H-control, sonda mixta, nulo y saturación con `scratchpad/wmax.py`). Logs en `runs/fase1d/bprima_cadena.log` y `bprima.log`; marcas `bprima_hecho` y `bprima_medidas_hechas`. `madura_alga.with_brain` pone la traza a cero, como al nacer; sin `TRACE_ON` no cambia nada.
+
+## ADR-036 · 15-11-2026 · Respuesta a la auditoría independiente (`docs/auditoria_informe.md`)
+
+**Contexto.** Auditoría de solo lectura del 15-11 (Claude Fable 5.2): camino parcial, confianza media-alta. Hallazgos principales: deriva de objetivo (la apertura evolutiva no se mide desde el 16-10), posible artefacto del tope de w0 (`W_INIT_SCALE` 1,0 frente a `W_MAX` 4,0) en la «maduración», C con señal de valor cableada y sin ventaja absoluta, b′ sin cerrar desde el 30-10.
+
+**Decisión del responsable (15-11, 22:3x–22:4x), con la recomendación del auditor:**
+1. **Se cierra la escalera tras b′, sin intento 16.** «A dónde ir por el color» deja de ser la puerta de la hoja de ruta.
+2. **La medida de la apertura evolutiva (con nulo P0 como sombra, ejecuciones largas) pasa a ser el objetivo principal.**
+3. **Se congela el trabajo de red P2P y BOINC** hasta tener un fenómeno replicado en dos mapas; **el panel pasa a ser consultivo** (los cambios de rumbo y los resultados «firmes» los revisa una persona externa u otro modelo sin el contexto del moderador).
+4. **La spec se enmienda** para admitir δ (ADR-033) como **recompensa dada por el diseñador**, no emergente: C es un experimento con señal de valor fija. Pendiente de redactar en `spec.md` §Cerebro.
+
+**Primer paso ejecutado: prueba del tope de w0** (recomendación 1a). `scripts/escalera/wclip.py` y `wclip_c.sh`: recorta a ±1 los pesos de la mitad de los adultos de C y examina las dos mitades congeladas en el mismo mundo. Regla fijada antes de ver datos (cabecera de `wclip.py`): el tope explica la maduración si con ±1, D_recortado ≤ 0,5·D_intacto y la ingesta cae ≥ 20 % en ≥ 8/10 semillas; control negativo con ±4. Lanzada el 15-11 a las 22:41 (log `runs/fase1d/wclip_c.log`, datos `_wclip_c.jsonl`, marca `wclip_c_hecho`). Humo de 30 pasos (no es resultado): el 85 % de los bichos de C s0 tiene algún peso fuera de ±1.
+
+**Pendiente:** cerrar b′ (17 medidas), integrar `escalera-bprima` en `main`, copia externa de `runs/`, réplica de C en segundo mapa, medida de apertura.
