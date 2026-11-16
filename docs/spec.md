@@ -119,7 +119,7 @@ El cerebro es una red recurrente de tiempo discreto. Sus pesos cambian durante l
 h_{t+1} = \tanh\left(W_t^{\top} [o_t; h_t] + b\right), \quad a_t = \tanh\left(W_t^{out\top} h_{t+1}\right)
 ```
 
-**Señal moduladora**: m_t es la media de la activación de las neuronas ocultas de tipo modulador. El genoma decide qué neuronas modulan; no existe una recompensa externa.
+**Señal moduladora**: m_t es la media de la activación de las neuronas ocultas de tipo modulador. El genoma decide qué neuronas modulan; no existe una recompensa externa. **Enmienda (ADR-036, 16-11-2026):** el experimento C (ADR-033, `config.DELTA_ON`) añade, como opción apagada por defecto, una señal de valor δ cableada por el diseñador (bocado − cobro − media) que modula la plasticidad; es una recompensa dada, no emergente, y los resultados obtenidos con ella no cuentan como emergencia de la señal de valor.
 
 **Regla de plasticidad** por sinapsis i→j:
 
