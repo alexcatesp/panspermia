@@ -1951,3 +1951,8 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 - **CPU (sin GPU):** `scripts/escalera/apertura_datos.py` sobre las estadísticas por época de los mundos de 300. `novelty_added` por tramos de 100 épocas (medianas): P0-escalera 6,4 → 2,7 → 1,6; C 9,0 → 8,0 → 6,0; Cbar 11,7 → 10,4 → 5,8; b′ 9,8 → 10,9 → 6,8; P3-escaso 18 → 2,3 → 0,8. C y Cbar decaen menos que el nulo, pero C ≈ Cbar (indicio de que lo sostiene el mundo, no el aprendizaje). `bp_new_activity` no es comparable con el nulo (≈ 330 clados vivos frente a ≈ 90).
 - **Prerregistro:** `docs/escalera/apertura.md` (reglas fijadas antes de lanzar).
 - **Lanzado 00:58:** `scripts/escalera/apertura.sh`: ap-C, ap-Cbar y ap-P0 × semillas 30–32 × 2.000 épocas, un mundo cada vez (~3,1 h cada uno a 5,6 s/época; ~28 h en total), con reintentos si WSL cae. Log `runs/fase1d/apertura_cadena.log` y `apertura_mundos.log`; marca `apertura_hecho`.
+
+### 12:45 (16-11) · Apertura: resultado intermedio de la semilla 30 (indicio, 1 semilla; `scripts/escalera/apertura_regla.py`)
+
+- `novelty_added` medio (épocas 101–300 → 701–1000 → 1501–2000): ap-C 7,96 → 1,50 → 0,52 (T/E 0,07); ap-Cbar 8,12 → 1,32 → 0,38 (0,05); ap-P0 1,03 → 0,10 → 0,07 (0,07).
+- Frente a la regla: T(C) > 2·T(P0) se cumple (0,52 frente a 0,14), pero T/E ≥ 0,5 **no** (0,07): la novedad decae más de un 90 % en 2.000 épocas. C/Cbar = 1,37 (> 1,25, una sola semilla). Lectura provisional: sin apertura sostenida; el cuello parece el mundo. Falta confirmar con las semillas 31 y 32.
