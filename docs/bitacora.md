@@ -1945,3 +1945,9 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 - **Qué:** las 17 medidas que faltaban, un proceso por semilla (`bprima_medidas2.sh`); sin caídas de WSL.
 - **Primaria (`diseno.md` v2.7): no pasa.** E − X de `frac_buena` > 0 en 9/10, pero mediana +0,026 (< +0,04); b′bar da mediana +0,030 (8/10); Mann-Whitney unilateral p = 0,45, diferencia de medianas −0,004. Con `D_comer`: 7/10, mediana +0,018. Guarda: ΔD de la sonda mixta > 0 en 9/10 (mediana +0,083; b′bar 7/10, +0,045). Pesos en W_MAX: mediana 10 % (b′bar 18 %), interpretable.
 - **Conclusión (firme, negativo):** las trazas y δ por sucesos no producen aprender «a dónde ir»; el barajado hace lo mismo. **Escalera cerrada, sin intento 16** (ADR-036). Datos `_madura_alga_bp_*.jsonl`, `_sonda_bp_*.jsonl`, `_wmax_bp.jsonl`, `_control_bp.jsonl`.
+
+### 00:5x (16-11) · Medida de apertura evolutiva: prerregistro y lanzamiento (ADR-036, rec. 3)
+
+- **CPU (sin GPU):** `scripts/escalera/apertura_datos.py` sobre las estadísticas por época de los mundos de 300. `novelty_added` por tramos de 100 épocas (medianas): P0-escalera 6,4 → 2,7 → 1,6; C 9,0 → 8,0 → 6,0; Cbar 11,7 → 10,4 → 5,8; b′ 9,8 → 10,9 → 6,8; P3-escaso 18 → 2,3 → 0,8. C y Cbar decaen menos que el nulo, pero C ≈ Cbar (indicio de que lo sostiene el mundo, no el aprendizaje). `bp_new_activity` no es comparable con el nulo (≈ 330 clados vivos frente a ≈ 90).
+- **Prerregistro:** `docs/escalera/apertura.md` (reglas fijadas antes de lanzar).
+- **Lanzado 00:58:** `scripts/escalera/apertura.sh`: ap-C, ap-Cbar y ap-P0 × semillas 30–32 × 2.000 épocas, un mundo cada vez (~3,1 h cada uno a 5,6 s/época; ~28 h en total), con reintentos si WSL cae. Log `runs/fase1d/apertura_cadena.log` y `apertura_mundos.log`; marca `apertura_hecho`.
