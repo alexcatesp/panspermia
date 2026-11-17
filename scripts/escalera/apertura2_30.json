@@ -1,0 +1,77 @@
+[
+ {
+  "name": "ap2-salto",
+  "node": "fase1d-w0",
+  "seeds": [
+   30
+  ],
+  "epochs": 2000,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "APERTURA2",
+  "description": "Apertura en un mundo que cambia (ADR-036): P4-salto64 a 2.000 épocas",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 1000,
+   "FOOD_JUMP_DIST": 64.0
+  }
+ },
+ {
+  "name": "ap2-salto-fijo",
+  "node": "fase1d-w0",
+  "seeds": [
+   30
+  ],
+  "epochs": 2000,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "APERTURA2",
+  "description": "Mismo mundo con plasticidad apagada (control sin aprendizaje en vida)",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 1000,
+   "FOOD_JUMP_DIST": 64.0
+  },
+  "plastic": false
+ },
+ {
+  "name": "ap2-P0",
+  "node": "fase1d-w0",
+  "seeds": [
+   30
+  ],
+  "epochs": 2000,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "APERTURA2",
+  "description": "Nulo sin selección en el sustrato 2.10.0",
+  "env": {
+   "attack_on": 0,
+   "chem_on": 0,
+   "signal_on": 0,
+   "seasonal": 0,
+   "metabolism": 0,
+   "k_mean": 0.0,
+   "repro_mode": "edad",
+   "max_age": 600
+  }
+ }
+]

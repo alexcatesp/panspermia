@@ -1962,3 +1962,9 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 - La cadena acabó a las 07:14 sin una sola caída de WSL ni pausa de la batería (3,9 h por mundo con selección, 1,9 h el nulo).
 - **Resultado (firme para este mundo): no hay apertura por la regla fijada.** La novedad cae un 91–97 % entre las épocas 101–300 y 1.501–2.000 en C, Cbar y P0 (T/E 0,03–0,17; se exigía ≥ 0,5). C mantiene 2× el nulo y ~1,8× Cbar en la cola (0,67 frente a 0,38), con 3 semillas: indicio débil de que δ ayuda un poco, no de apertura.
 - **Cautela:** la medida de novedad puede saturar por construcción y el nulo deriva igual en las variables por época; hace falta modelo sombra (Bedau-Packard) antes de concluir más. Detalle en `apertura.md`.
+
+### 12:51 (17-11) · Apertura, parte 2: mundo que cambia (prerregistro en `apertura.md`)
+
+- **Por qué:** en el mundo estático la novedad decae igual con y sin aprendizaje. En los datos de 300 épocas, P4-salto64 (comida desplazada cada 1.000 pasos) es el peldaño que más novedad conserva (T/E 0,42) y E1/E2 con toxicidad cambiante la mantienen en el techo de la medida (32 altas/época).
+- **Intento fallido (12:49):** C con salto de comida no arranca: el código excluye `ALGA_PATCH_FAMILIES` con `FOOD_JUMP_PERIOD` (`world.py`, `algae_type_a`). Sin cambiar de sustrato, se usa la rama `escalera-p4` (2.10.0).
+- **Lanzado 12:51:** `scripts/escalera/apertura2.sh`: ap2-salto (plástico), ap2-salto-fijo (sin plasticidad) y ap2-P0 (nulo), semillas 30–32 × 2.000 épocas (~22 h). Log `runs/fase1d/apertura2_cadena.log` y `apertura2_mundos.log`.
