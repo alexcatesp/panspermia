@@ -15,3 +15,13 @@ Por mundo: T = media de `novelty_added` en las épocas 1.501–2.000; E = media 
 
 **Datos previos (CPU, 300 épocas, medianas; `apertura_datos.py`):** `novelty_added` por tramos de 100 épocas: P0-escalera 6,4 → 2,7 → 1,6; P0-feliz-neutral 8,7 → 1,6 → 1,6; C 9,0 → 8,0 → 6,0; Cbar 11,7 → 10,4 → 5,8; b′ 9,8 → 10,9 → 6,8; P3-escaso 18 → 2,3 → 0,8. C y Cbar decaen menos que el nulo y que los peldaños anteriores, pero C ≈ Cbar: si sigue así, no es el aprendizaje.
 **Limitación:** una sola métrica de novedad (archivo de descriptores medios); MODES y Bedau-Packard con modelo sombra siguen sin implementar.
+
+## Resultado (17-11-2026, 12:55; 9 mundos terminados, `apertura_regla.py`)
+
+`novelty_added` medio: E (101–300) → T (1.501–2.000), T/E.
+- ap-C: 7,96 → 0,52 (0,07); 9,59 → 0,83 (0,09); 7,78 → 0,67 (0,09).
+- ap-Cbar: 8,12 → 0,38 (0,05); 8,57 → 0,23 (0,03); 8,05 → 0,68 (0,08).
+- ap-P0: 1,03 → 0,07 (0,07); 1,69 → 0,16 (0,09); 2,19 → 0,36 (0,17).
+
+**Veredicto por la regla fijada: no hay apertura.** T(C) > 2·mediana T(P0) (0,32) se cumple en 3/3, pero T/E ≥ 0,5 en 0/3: la novedad cae un 91–93 % en C. Cola de C frente a Cbar: mediana 0,67 frente a 0,38 (×1,76 > 1,25), pero con 3 semillas y solapamiento (0,68 de Cbar s32 frente a 0,52 de C s30); indicio débil, sin potencia. Lectura de la regla: todos decaen → el cuello está en el mundo, no en el aprendizaje.
+**Cautelas:** (1) `novelty_added` mide entradas nuevas en un archivo de descriptores medios; un archivo que se llena y la rampa de comida (épocas 1–100) pueden bajarla sin que la evolución se pare. (2) Las variables por época (cerebro, masa, distancia de genomas, descriptores) siguen derivando al final en los tres tipos de mundo, también en el nulo P0 (deriva neutral), y las pruebas z por época están inflados por la autocorrelación (`apertura_deriva.py`): no discriminan. Falta un modelo sombra (Bedau-Packard completo) para separar deriva de novedad adaptativa.

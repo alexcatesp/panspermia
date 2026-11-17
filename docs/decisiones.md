@@ -845,3 +845,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Pendiente:** cerrar b′ (17 medidas), integrar `escalera-bprima` en `main`, copia externa de `runs/`, réplica de C en segundo mapa, medida de apertura.
 
 **Addenda ADR-036 (16-11, 00:55).** Prueba del tope de w0: no explica la ventaja de aprender (D recortado 0,90 del intacto; regla 0/10). b′ cerrado: no pasa (E − X +0,026 frente a +0,030 de b′bar, p = 0,45). La escalera queda cerrada. Siguiente: medida de apertura evolutiva con nulo (rec. 3).
+
+**Addenda ADR-036 (17-11, 12:55).** Medida de apertura: 0/3 semillas conservan ≥ 50 % de la novedad inicial en 2.000 épocas (T/E 0,07–0,09 en C). Conclusión: con este mundo no hay novedad abierta, aprenda o no; el siguiente paso es separar medida y mundo (modelo sombra) y enriquecer el mundo (coevolución, varios retos), no más variantes de plasticidad.

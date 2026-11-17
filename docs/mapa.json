@@ -1215,6 +1215,21 @@
    "condicion": "P5-inmediato-bprima"
   },
   {
+   "id": "apertura",
+   "padre": "bprima",
+   "titulo": "Medida de apertura evolutiva (2.000 épocas)",
+   "corto": "¿sigue habiendo novedad?",
+   "estado": "negativo",
+   "resultado": "✗",
+   "anade": "nada al mundo: 2.000 épocas en lugar de 300, con nulo P0 y control Cbar, y una medida de novedad tardía prerregistrada (ADR-036)",
+   "texto": "16–17-11-2026, 9 mundos (ap-C, ap-Cbar, ap-P0 × semillas 30–32). Regla en docs/escalera/apertura.md. Resultado: la novedad (novelty_added) cae un 91–97 % entre las épocas 101–300 y 1.501–2.000 (T/E 0,07–0,09 en C, 0,03–0,08 en Cbar, 0,07–0,17 en P0); no se cumple T/E ≥ 0,5 en 0/3. C supera a 2·P0 en 3/3 y a Cbar por 1,76× en la cola (mediana 0,67 frente a 0,38), pero con 3 semillas. Sin apertura sostenida: el cuello está en el mundo.",
+   "ref": "docs/escalera/apertura.md",
+   "recurso": "GPU",
+   "principal": true,
+   "cola": "apertura_30.json",
+   "condicion": "ap-C"
+  },
+  {
    "id": "trazas",
    "padre": "P5d",
    "titulo": "Trazas de elegibilidad (plan B 1)",
