@@ -44,3 +44,7 @@ Por mundo: T = media de `novelty_added` en las épocas 1.501–2.000; E = media 
 - **Aprendizaje en vida contribuye: sí por la regla** (0,48 > 1,25 × 0,20, ×2,4), y ap2-salto supera a 2·P0 en 2/3 semillas (no en s32, donde el nulo sube a 0,41). Solo 3 semillas y valores absolutos pequeños: indicio, no conclusión. Mismo patrón que en C (≈ ×1,8).
 - Los clados vivos son ~72 en los mundos con selección y ~343 en el nulo (menos diversidad con selección); la actividad Bedau-Packard simplificada es mayor en el nulo (6,9 frente a ~1): sin modelo sombra no distingue novedad adaptativa de deriva.
 - Script: `scripts/escalera/apertura2_regla.py`.
+
+### Réplica de la parte 2 (prerregistro, 18-11-2026, 18:57)
+
+El único indicio positivo (aprendizaje en vida ×2,4) se replica con **semillas 33–35** de `ap2-salto` y `ap2-salto-fijo` (sin nuevo P0; cadena `scripts/escalera/apertura2b.sh`, marca `apertura2b_hecho`). Regla: con las 6 semillas de cada tipo (30–35), el aprendizaje contribuye si mediana T(salto) > 1,25·mediana T(salto-fijo) **y** T(salto) > T(salto-fijo) en ≥ 5 de 6 pares por semilla. Si no se cumple, el indicio se descarta. No cambia la conclusión de apertura (0/3).

@@ -1975,3 +1975,7 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 - **Resultado (firme para este mundo): no hay apertura.** T/E 0,05–0,20 en ap2-salto (se exigía ≥ 0,5 en 3/3). Mediana T: salto 0,48, salto-fijo 0,20, P0 0,17.
 - **Indicio:** el aprendizaje en vida contribuye (×2,4 sobre el control sin plasticidad, regla 1,25×), como en C (×1,8); pero ap2-salto supera 2·P0 en solo 2/3 semillas y los valores son pequeños.
 - Conclusión: ni con mundo estático ni con salto de comida hay novedad sostenida; el siguiente paso es la medida sombra (Bedau-Packard con modelo nulo) y un mundo más rico (coevolución, varios retos), no más variantes de plasticidad.
+
+### 18:50 (18-11) · Réplica de la parte 2 lanzada (semillas 33–35)
+
+- Lanzado 18:48: `scripts/escalera/apertura2b.sh` (ap2-salto y ap2-salto-fijo, semillas 33–35, ~24 h). Regla prerregistrada en `apertura.md`: el indicio de aprendizaje contribuye se confirma solo si mediana ×1,25 y salto > fijo en ≥ 5/6 semillas. Marca `apertura2b_hecho`.
