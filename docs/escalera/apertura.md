@@ -31,3 +31,16 @@ Por mundo: T = media de `novelty_added` en las épocas 1.501–2.000; E = media 
 **Motivo:** con el mundo estático todo decae (parte 1). En los mundos de 300 épocas, el que más novedad conservó fue P4-salto64 (comida desplazada 64 u cada 1.000 pasos: 11,3 → 4,7, T/E 0,42), y los E1/E2 con toxicidad cambiante la mantuvieron en el techo (32 altas por época, `NOVELTY_MAX_ADD`; no comparable en magnitud). Hipótesis: un mundo que cambia exige novedad sostenida. (El código excluye `ALGA_PATCH_FAMILIES` con `FOOD_JUMP_PERIOD`, así que no se puede añadir el salto al mundo de C sin un sustrato nuevo.)
 **Mundos (rama `escalera-p4`, sustrato 2.10.0; semillas 30–32, 2.000 épocas; cadena `scripts/escalera/apertura2.sh`, marca `apertura2_hecho`):** `ap2-salto` (P4-salto64 con plasticidad), `ap2-salto-fijo` (mismo mundo con plasticidad apagada: control sin aprendizaje en vida) y `ap2-P0` (nulo sin selección en el mismo sustrato).
 **Reglas (las de la parte 1):** abierto si T(ap2-salto) > 2·mediana T(ap2-P0) y T/E ≥ 0,5 en 3/3; el aprendizaje en vida contribuye si mediana T(ap2-salto) > 1,25·mediana T(ap2-salto-fijo). Una extinción se anota y no se reintenta.
+
+### Resultado de la parte 2 (18-11-2026, 18:50; mundos terminados a las 17:49, sin caídas)
+
+| mundo | T/E por semilla (30, 31, 32) | T (épocas 1.501–2.000) | mediana T |
+|---|---|---|---|
+| ap2-salto (plástico) | 0,09 · 0,20 · 0,05 | 0,48 · 0,77 · 0,33 | 0,48 |
+| ap2-salto-fijo (sin plasticidad) | 0,04 · 0,03 · 0,04 | 0,20 · 0,11 · 0,34 | 0,20 |
+| ap2-P0 (nulo) | 0,06 · 0,09 · 0,20 | 0,06 · 0,17 · 0,41 | 0,17 |
+
+- **Apertura: no** (T/E ≥ 0,5 en 0/3; el máximo es 0,20). Aun con el mundo cambiando cada 1.000 pasos, la novedad cae un 80–95 % entre las épocas 101–300 y la cola.
+- **Aprendizaje en vida contribuye: sí por la regla** (0,48 > 1,25 × 0,20, ×2,4), y ap2-salto supera a 2·P0 en 2/3 semillas (no en s32, donde el nulo sube a 0,41). Solo 3 semillas y valores absolutos pequeños: indicio, no conclusión. Mismo patrón que en C (≈ ×1,8).
+- Los clados vivos son ~72 en los mundos con selección y ~343 en el nulo (menos diversidad con selección); la actividad Bedau-Packard simplificada es mayor en el nulo (6,9 frente a ~1): sin modelo sombra no distingue novedad adaptativa de deriva.
+- Script: `scripts/escalera/apertura2_regla.py`.

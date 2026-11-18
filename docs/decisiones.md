@@ -847,3 +847,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Addenda ADR-036 (16-11, 00:55).** Prueba del tope de w0: no explica la ventaja de aprender (D recortado 0,90 del intacto; regla 0/10). b′ cerrado: no pasa (E − X +0,026 frente a +0,030 de b′bar, p = 0,45). La escalera queda cerrada. Siguiente: medida de apertura evolutiva con nulo (rec. 3).
 
 **Addenda ADR-036 (17-11, 12:55).** Medida de apertura: 0/3 semillas conservan ≥ 50 % de la novedad inicial en 2.000 épocas (T/E 0,07–0,09 en C). Conclusión: con este mundo no hay novedad abierta, aprenda o no; el siguiente paso es separar medida y mundo (modelo sombra) y enriquecer el mundo (coevolución, varios retos), no más variantes de plasticidad.
+
+**Addenda ADR-036 (18-11, 18:50).** Apertura, parte 2 (mundo con salto de comida, 3 semillas × 2.000 épocas): 0/3 con T/E ≥ 0,5 (máx. 0,20). El aprendizaje en vida contribuye según la regla (mediana T 0,48 frente a 0,20 sin plasticidad), como indicio. Se mantiene la conclusión: sin apertura en estos mundos; siguiente, modelo sombra y mundo con coevolución.

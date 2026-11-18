@@ -1968,3 +1968,10 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 - **Por qué:** en el mundo estático la novedad decae igual con y sin aprendizaje. En los datos de 300 épocas, P4-salto64 (comida desplazada cada 1.000 pasos) es el peldaño que más novedad conserva (T/E 0,42) y E1/E2 con toxicidad cambiante la mantienen en el techo de la medida (32 altas/época).
 - **Intento fallido (12:49):** C con salto de comida no arranca: el código excluye `ALGA_PATCH_FAMILIES` con `FOOD_JUMP_PERIOD` (`world.py`, `algae_type_a`). Sin cambiar de sustrato, se usa la rama `escalera-p4` (2.10.0).
 - **Lanzado 12:51:** `scripts/escalera/apertura2.sh`: ap2-salto (plástico), ap2-salto-fijo (sin plasticidad) y ap2-P0 (nulo), semillas 30–32 × 2.000 épocas (~22 h). Log `runs/fase1d/apertura2_cadena.log` y `apertura2_mundos.log`.
+
+### 18:50 (18-11) · Apertura, parte 2 terminada: mundo que cambia, sin apertura (ADR-036)
+
+- La cadena acabó a las 17:49 (9 mundos × 2.000 épocas, sin caídas de WSL). Regla de `apertura.md` aplicada con `scripts/escalera/apertura2_regla.py`.
+- **Resultado (firme para este mundo): no hay apertura.** T/E 0,05–0,20 en ap2-salto (se exigía ≥ 0,5 en 3/3). Mediana T: salto 0,48, salto-fijo 0,20, P0 0,17.
+- **Indicio:** el aprendizaje en vida contribuye (×2,4 sobre el control sin plasticidad, regla 1,25×), como en C (×1,8); pero ap2-salto supera 2·P0 en solo 2/3 semillas y los valores son pequeños.
+- Conclusión: ni con mundo estático ni con salto de comida hay novedad sostenida; el siguiente paso es la medida sombra (Bedau-Packard con modelo nulo) y un mundo más rico (coevolución, varios retos), no más variantes de plasticidad.
