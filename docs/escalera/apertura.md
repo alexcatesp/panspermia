@@ -54,3 +54,9 @@ El único indicio positivo (aprendizaje en vida ×2,4) se replica con **semillas
 T (épocas 1.501–2.000) por semilla 30–35. ap2-salto: 0,48 · 0,77 · 0,33 · 0,15 · 0,50 · 0,64 (mediana 0,49). ap2-salto-fijo: 0,20 · 0,11 · 0,34 · 0,81 · 0,52 · 0,78 (mediana 0,43). T/E de ap2-salto: 0,02–0,24 (máx. 0,24, otra vez < 0,5).
 - **El indicio de la parte 2 no se replica:** mediana ×1,14 (< 1,25) y salto > fijo en 2/6 pares (se exigían ≥ 5/6). **Descartado**: el ×2,4 de 3 semillas era ruido de muestra pequeña. La novedad tardía es igual con y sin plasticidad en vida en este mundo.
 - La conclusión de apertura no cambia: 0/6 semillas con T/E ≥ 0,5. Script: `scripts/escalera/apertura2b_regla.py`.
+
+## Parte 3: coevolución (prerregistro, 19-11-2026, 18:58)
+
+**Motivo:** ni el mundo estático (0/3) ni el que cambia (0/6) dan novedad sostenida, y el aprendizaje no la explica. Último eje barato con los interruptores existentes: una presión que cambia porque los propios bichos cambian (depredación, `attack_on=1`; ADR-036: coevolución).
+**Mundos (rama `escalera-p4`, sustrato 2.10.0):** `ap3-ataque` = `ap2-salto` + `attack_on=1`; semillas 30–32, 2.000 épocas; cadena `scripts/escalera/apertura3.sh`, marca `apertura3_hecho`. Nulo: los `ap2-P0` ya existentes (mismo sustrato).
+**Regla (la de la parte 1):** abierto si T(ap3-ataque) > 2·mediana T(ap2-P0) y T/E ≥ 0,5 en 3/3. Si el mundo se extingue o la batería lo pausa, se anota y no se reintenta ni se tocan umbrales.
