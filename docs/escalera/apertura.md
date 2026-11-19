@@ -48,3 +48,9 @@ Por mundo: T = media de `novelty_added` en las épocas 1.501–2.000; E = media 
 ### Réplica de la parte 2 (prerregistro, 18-11-2026, 18:57)
 
 El único indicio positivo (aprendizaje en vida ×2,4) se replica con **semillas 33–35** de `ap2-salto` y `ap2-salto-fijo` (sin nuevo P0; cadena `scripts/escalera/apertura2b.sh`, marca `apertura2b_hecho`). Regla: con las 6 semillas de cada tipo (30–35), el aprendizaje contribuye si mediana T(salto) > 1,25·mediana T(salto-fijo) **y** T(salto) > T(salto-fijo) en ≥ 5 de 6 pares por semilla. Si no se cumple, el indicio se descarta. No cambia la conclusión de apertura (0/3).
+
+### Resultado de la réplica (19-11-2026, 18:55; mundos terminados a las 17:47)
+
+T (épocas 1.501–2.000) por semilla 30–35. ap2-salto: 0,48 · 0,77 · 0,33 · 0,15 · 0,50 · 0,64 (mediana 0,49). ap2-salto-fijo: 0,20 · 0,11 · 0,34 · 0,81 · 0,52 · 0,78 (mediana 0,43). T/E de ap2-salto: 0,02–0,24 (máx. 0,24, otra vez < 0,5).
+- **El indicio de la parte 2 no se replica:** mediana ×1,14 (< 1,25) y salto > fijo en 2/6 pares (se exigían ≥ 5/6). **Descartado**: el ×2,4 de 3 semillas era ruido de muestra pequeña. La novedad tardía es igual con y sin plasticidad en vida en este mundo.
+- La conclusión de apertura no cambia: 0/6 semillas con T/E ≥ 0,5. Script: `scripts/escalera/apertura2b_regla.py`.

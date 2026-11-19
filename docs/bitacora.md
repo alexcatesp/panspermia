@@ -1979,3 +1979,8 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 ### 18:50 (18-11) · Réplica de la parte 2 lanzada (semillas 33–35)
 
 - Lanzado 18:48: `scripts/escalera/apertura2b.sh` (ap2-salto y ap2-salto-fijo, semillas 33–35, ~24 h). Regla prerregistrada en `apertura.md`: el indicio de aprendizaje contribuye se confirma solo si mediana ×1,25 y salto > fijo en ≥ 5/6 semillas. Marca `apertura2b_hecho`.
+
+### 18:55 (19-11) · Réplica de la parte 2 terminada: el indicio de aprendizaje se descarta
+
+- Cadena acabada a las 17:47 sin caídas. Con 6 semillas por tipo: mediana T 0,49 (plástico) frente a 0,43 (sin plasticidad), ×1,14; salto > fijo en 2/6 pares. Regla prerregistrada (×1,25 y ≥ 5/6): **no se cumple, indicio descartado.** T/E de ap2-salto ≤ 0,24 en 6/6: sin apertura.
+- Corrige el 18-11 (18:50): el ×2,4 con 3 semillas era ruido. En este mundo la novedad tardía no depende del aprendizaje en vida. Queda el ×1,8 de C frente a Cbar (3 semillas) sin replicar.

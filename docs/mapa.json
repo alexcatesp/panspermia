@@ -1237,7 +1237,7 @@
    "estado": "negativo",
    "resultado": "✗",
    "anade": "al mundo de la apertura, un salto de comida de 64 u cada 1.000 pasos; con control sin plasticidad y nulo P0",
-   "texto": "17–18-11-2026, 9 mundos (ap2-salto, ap2-salto-fijo, ap2-P0 × semillas 30–32). Resultado: sin apertura, T/E 0,05–0,20 (se exigía ≥ 0,5). Indicio: el aprendizaje en vida contribuye (mediana T 0,48 frente a 0,20 sin plasticidad, ×2,4); ap2-salto supera 2·P0 en 2/3. Siguiente: modelo sombra (Bedau-Packard) y mundo con coevolución.",
+   "texto": "17–18-11-2026, 9 mundos (ap2-salto, ap2-salto-fijo, ap2-P0 × semillas 30–32). Resultado: sin apertura, T/E 0,05–0,20 (se exigía ≥ 0,5). Réplica (6 semillas, 19-11): T/E ≤ 0,24 en 6/6; el indicio de que aprender contribuye (×2,4 con 3 semillas) se descarta (×1,14; 2/6 pares). Siguiente: modelo sombra (Bedau-Packard) y mundo con coevolución.",
    "ref": "docs/escalera/apertura.md",
    "recurso": "GPU",
    "principal": true,
