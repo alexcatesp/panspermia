@@ -1252,7 +1252,7 @@
    "estado": "indicio",
    "resultado": "◐",
    "anade": "a P4-salto64, depredación (attack_on=1): una presión que cambia porque cambian los propios bichos",
-   "texto": "19–20-11-2026, ap3-ataque × semillas 30–32 × 2.000 épocas. Sin apertura por la regla (T/E 0,13–0,28 < 0,5), pero la novedad tardía es ≈ 3× la del mundo sin ataque (1,2–1,4 frente a 0,5) y > 2·P0 en 3/3. Indicio de que la coevolución mantiene más novedad en valor absoluto; falta modelo sombra y réplica.",
+   "texto": "19–20-11-2026, ap3-ataque × semillas 30–32 × 2.000 épocas. Sin apertura por la regla (T/E 0,13–0,28 < 0,5), pero la novedad tardía es ≈ 3× la del mundo sin ataque (1,2–1,4 frente a 0,5) y > 2·P0 en 3/3. Réplica (6 semillas, 20-11): efecto confirmado, T 0,68–1,40 en 6/6 (mediana 1,27 frente a 0,49 sin ataque), pero T/E ≤ 0,28: sin apertura. Falta modelo sombra para saber si es adaptativo o saturación del archivo.",
    "ref": "docs/escalera/apertura.md",
    "recurso": "GPU",
    "principal": true,

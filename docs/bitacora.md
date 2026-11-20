@@ -1996,3 +1996,8 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 ### 08:58 (20-11) · Réplica de la parte 3 lanzada (semillas 33–35)
 
 - Tras la lección de la parte 2 (indicio que no replicó), se replica el indicio de la depredación antes de usarlo. Regla en `apertura.md`; cadena `apertura3b.sh` (~12 h), marca `apertura3b_hecho`.
+
+### 20:50 (20-11) · Réplica de la parte 3 terminada: la depredación sostiene más novedad (confirmado), sin apertura
+
+- Cadena acabada a las 20:31 sin caídas. T = 0,68–1,40 en 6/6 semillas (regla: > 0,34 y > 0,49 en ≥ 5/6): **indicio confirmado**; mediana 1,27 frente a 0,49 sin ataque (×2,6). T/E ≤ 0,28 en 6/6: **sin apertura** por la regla.
+- Primer efecto replicado de todo el programa de apertura: coevolución (depredación) > mundo que cambia > mundo estático, en novedad absoluta. Falta el modelo sombra para saber si es adaptativa o saturación del archivo.

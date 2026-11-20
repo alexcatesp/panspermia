@@ -75,3 +75,9 @@ T (épocas 1.501–2.000) por semilla 30–35. ap2-salto: 0,48 · 0,77 · 0,33 �
 ### Réplica de la parte 3 (prerregistro, 20-11-2026, 08:58)
 
 Semillas 33–35 de `ap3-ataque` (`scripts/escalera/apertura3b.sh`, marca `apertura3b_hecho`). Con las 6 semillas (30–35), el indicio de que la depredación sostiene más novedad se confirma si T(ap3-ataque) > 2·mediana T(ap2-P0) (= 0,34) **y** T(ap3-ataque) > mediana T(ap2-salto, 6 semillas) (= 0,49) en ≥ 5/6 semillas. Si no, se descarta. La apertura (T/E ≥ 0,5) se evalúa aparte, con la regla original.
+
+### Resultado de la réplica de la parte 3 (20-11-2026, 20:50; terminada a las 20:31)
+
+T de ap3-ataque, semillas 30–35: 1,34 · 1,40 · 1,21 · 1,35 · 0,68 · 0,81 (mediana 1,27). T/E: 0,13 · 0,28 · 0,15 · 0,19 · 0,22 · 0,05.
+- **El indicio se confirma** por la regla prerregistrada: 6/6 semillas con T > 0,34 (2·mediana P0) y > 0,49 (mediana ap2-salto); mínimo 0,68. La depredación sostiene ≈ 2,6× más novedad tardía absoluta que el mismo mundo sin ataque (mediana 1,27 frente a 0,49) y ≈ 7× el nulo.
+- **Apertura: no** (T/E ≥ 0,5 en 0/6; máx. 0,28). Sigue siendo una novedad que decae en proporción, aunque a un nivel más alto. Queda abierto si ese nivel es adaptativo o saturación del archivo (se llena hasta ~8,6 mil entradas): hace falta el modelo sombra. Script: `scripts/escalera/apertura3b_regla.py`.

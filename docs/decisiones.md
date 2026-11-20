@@ -853,3 +853,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Addenda ADR-036 (19-11, 18:55).** La réplica con semillas 33–35 descarta el indicio de que el aprendizaje en vida sostiene la novedad (×1,14 con 6 semillas, 2/6 pares). Sin apertura en 0/6 semillas del mundo con salto y 0/3 del estático. Siguiente: modelo sombra de Bedau-Packard y un mundo con coevolución; no más variantes de plasticidad.
 
 **Addenda ADR-036 (20-11, 08:55).** Apertura, parte 3 (P4-salto64 + depredación): 0/3 con T/E ≥ 0,5 (máx. 0,28), pero novedad tardía ≈ 3× la del mundo sin ataque y > 2·P0 en 3/3. Indicio de que la coevolución ayuda; sin confirmar. Siguiente: medida sombra (Bedau-Packard con modelo nulo) y réplica con más semillas antes de cualquier conclusión.
+
+**Addenda ADR-036 (20-11, 20:50).** La réplica (semillas 33–35) confirma que la depredación sostiene más novedad tardía absoluta (mediana T 1,27 frente a 0,49 sin ataque, 6/6 semillas), pero no hay apertura (T/E ≤ 0,28 en 6/6). Siguiente: modelo sombra (¿adaptativa o saturación del archivo?) y más presión coevolutiva (p. ej. depredación con algas cambiantes), no más plasticidad.
