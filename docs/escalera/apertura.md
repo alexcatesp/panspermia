@@ -71,3 +71,7 @@ T (épocas 1.501–2.000) por semilla 30–35. ap2-salto: 0,48 · 0,77 · 0,33 �
 - **Apertura por la regla: no** (T/E ≥ 0,5 en 0/3; máx. 0,28). La novedad inicial también sube (E 5–10 frente a 4–6 sin ataque), y el cociente sigue siendo bajo.
 - **Indicio (no prerregistrado como criterio de éxito, pero la regla lo mide):** T(ap3-ataque) > 2·T(P0) en 3/3, y la novedad tardía absoluta es ≈ 3× la de ap2-salto (1,2–1,4 frente a 0,5) y ≈ 8× la del nulo. La depredación mantiene más novedad en valor absoluto, aunque decae igual en proporción. Clados vivos ~110–130 (frente a ~72 sin ataque y ~343 en el nulo).
 - Siguiente: no un cuarto mundo al azar; implementar la medida sombra (Bedau-Packard con modelo nulo) y comprobar si ese resto es novedad adaptativa o saturación del archivo (el archivo crece 7–8 mil entradas). Script: `scripts/escalera/apertura3_regla.py`.
+
+### Réplica de la parte 3 (prerregistro, 20-11-2026, 08:58)
+
+Semillas 33–35 de `ap3-ataque` (`scripts/escalera/apertura3b.sh`, marca `apertura3b_hecho`). Con las 6 semillas (30–35), el indicio de que la depredación sostiene más novedad se confirma si T(ap3-ataque) > 2·mediana T(ap2-P0) (= 0,34) **y** T(ap3-ataque) > mediana T(ap2-salto, 6 semillas) (= 0,49) en ≥ 5/6 semillas. Si no, se descarta. La apertura (T/E ≥ 0,5) se evalúa aparte, con la regla original.

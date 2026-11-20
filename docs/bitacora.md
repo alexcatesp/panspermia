@@ -1992,3 +1992,7 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 ### 08:55 (20-11) · Apertura, parte 3 terminada: depredación, sin apertura pero con más novedad absoluta
 
 - Cadena acabada a las 06:51 sin extinciones. T/E 0,13–0,28 (< 0,5): **no hay apertura por la regla.** Pero T = 1,21–1,40, > 2·P0 en 3/3 y ≈ 3× el mundo sin ataque: indicio de que la coevolución (depredación) sostiene más novedad en términos absolutos, sin sostenerla en proporción. Falta separar novedad adaptativa de saturación del archivo (modelo sombra).
+
+### 08:58 (20-11) · Réplica de la parte 3 lanzada (semillas 33–35)
+
+- Tras la lección de la parte 2 (indicio que no replicó), se replica el indicio de la depredación antes de usarlo. Regla en `apertura.md`; cadena `apertura3b.sh` (~12 h), marca `apertura3b_hecho`.
