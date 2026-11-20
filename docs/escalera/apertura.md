@@ -81,3 +81,9 @@ Semillas 33–35 de `ap3-ataque` (`scripts/escalera/apertura3b.sh`, marca `apert
 T de ap3-ataque, semillas 30–35: 1,34 · 1,40 · 1,21 · 1,35 · 0,68 · 0,81 (mediana 1,27). T/E: 0,13 · 0,28 · 0,15 · 0,19 · 0,22 · 0,05.
 - **El indicio se confirma** por la regla prerregistrada: 6/6 semillas con T > 0,34 (2·mediana P0) y > 0,49 (mediana ap2-salto); mínimo 0,68. La depredación sostiene ≈ 2,6× más novedad tardía absoluta que el mismo mundo sin ataque (mediana 1,27 frente a 0,49) y ≈ 7× el nulo.
 - **Apertura: no** (T/E ≥ 0,5 en 0/6; máx. 0,28). Sigue siendo una novedad que decae en proporción, aunque a un nivel más alto. Queda abierto si ese nivel es adaptativo o saturación del archivo (se llena hasta ~8,6 mil entradas): hace falta el modelo sombra. Script: `scripts/escalera/apertura3b_regla.py`.
+
+## Parte 4: depredación y señales (prerregistro, 20-11-2026, 20:55)
+
+**Motivo:** la depredación es lo único que movió la novedad tardía (×2,6, 6/6 semillas), sin llegar a apertura (T/E ≤ 0,28). Más coevolución con el mismo interruptor barato: señales entre bichos (`signal_on=1`), que abren un canal de interacción evolucionable.
+**Mundos (rama `escalera-p4`):** `ap4-ataque-senal` = `ap3-ataque` + `signal_on=1`; semillas 30–32 × 2.000 épocas (`scripts/escalera/apertura4.sh`, marca `apertura4_hecho`). (Un control P0 con depredación se descartó: sin metabolismo los ataques ya son selección.)
+**Regla:** abierto si T > 2·mediana T(ap2-P0) y T/E ≥ 0,5 en 3/3. Efecto secundario: la señal añade novedad si mediana T(ap4) > 1,5·mediana T(ap3-ataque, 6 semillas = 1,27) en ≥ 2/3. Extinción o pausa: se anota, sin reintento ni cambio de umbrales.

@@ -2001,3 +2001,7 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 
 - Cadena acabada a las 20:31 sin caídas. T = 0,68–1,40 en 6/6 semillas (regla: > 0,34 y > 0,49 en ≥ 5/6): **indicio confirmado**; mediana 1,27 frente a 0,49 sin ataque (×2,6). T/E ≤ 0,28 en 6/6: **sin apertura** por la regla.
 - Primer efecto replicado de todo el programa de apertura: coevolución (depredación) > mundo que cambia > mundo estático, en novedad absoluta. Falta el modelo sombra para saber si es adaptativa o saturación del archivo.
+
+### 20:56 (20-11) · Apertura, parte 4: depredación + señales (prerregistro en `apertura.md`)
+
+- Lanzado 20:55: `scripts/escalera/apertura4.sh`, `ap4-ataque-senal`, semillas 30–32 × 2.000 épocas (~12 h), marca `apertura4_hecho`. Se descartó un nulo P0 con depredación: sin metabolismo los ataques ya seleccionan (no es nulo).
