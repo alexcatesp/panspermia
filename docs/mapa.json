@@ -1245,6 +1245,21 @@
    "condicion": "ap2-salto"
   },
   {
+   "id": "apertura3",
+   "padre": "apertura2",
+   "titulo": "Apertura, parte 3: coevolución (salto + depredación)",
+   "corto": "¿y con depredadores?",
+   "estado": "indicio",
+   "resultado": "◐",
+   "anade": "a P4-salto64, depredación (attack_on=1): una presión que cambia porque cambian los propios bichos",
+   "texto": "19–20-11-2026, ap3-ataque × semillas 30–32 × 2.000 épocas. Sin apertura por la regla (T/E 0,13–0,28 < 0,5), pero la novedad tardía es ≈ 3× la del mundo sin ataque (1,2–1,4 frente a 0,5) y > 2·P0 en 3/3. Indicio de que la coevolución mantiene más novedad en valor absoluto; falta modelo sombra y réplica.",
+   "ref": "docs/escalera/apertura.md",
+   "recurso": "GPU",
+   "principal": true,
+   "cola": "apertura3_30.json",
+   "condicion": "ap3-ataque"
+  },
+  {
    "id": "trazas",
    "padre": "P5d",
    "titulo": "Trazas de elegibilidad (plan B 1)",

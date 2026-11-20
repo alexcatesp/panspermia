@@ -60,3 +60,14 @@ T (épocas 1.501–2.000) por semilla 30–35. ap2-salto: 0,48 · 0,77 · 0,33 �
 **Motivo:** ni el mundo estático (0/3) ni el que cambia (0/6) dan novedad sostenida, y el aprendizaje no la explica. Último eje barato con los interruptores existentes: una presión que cambia porque los propios bichos cambian (depredación, `attack_on=1`; ADR-036: coevolución).
 **Mundos (rama `escalera-p4`, sustrato 2.10.0):** `ap3-ataque` = `ap2-salto` + `attack_on=1`; semillas 30–32, 2.000 épocas; cadena `scripts/escalera/apertura3.sh`, marca `apertura3_hecho`. Nulo: los `ap2-P0` ya existentes (mismo sustrato).
 **Regla (la de la parte 1):** abierto si T(ap3-ataque) > 2·mediana T(ap2-P0) y T/E ≥ 0,5 en 3/3. Si el mundo se extingue o la batería lo pausa, se anota y no se reintenta ni se tocan umbrales.
+
+### Resultado de la parte 3 (20-11-2026, 08:55; mundos terminados a las 06:51, sin extinciones ni caídas)
+
+| mundo | T/E (s30, s31, s32) | T (épocas 1.501–2.000) | mediana T |
+|---|---|---|---|
+| ap3-ataque | 0,13 · 0,28 · 0,15 | 1,34 · 1,40 · 1,21 | 1,34 |
+| ap2-P0 (nulo) | 0,06 · 0,09 · 0,20 | 0,06 · 0,17 · 0,41 | 0,17 |
+
+- **Apertura por la regla: no** (T/E ≥ 0,5 en 0/3; máx. 0,28). La novedad inicial también sube (E 5–10 frente a 4–6 sin ataque), y el cociente sigue siendo bajo.
+- **Indicio (no prerregistrado como criterio de éxito, pero la regla lo mide):** T(ap3-ataque) > 2·T(P0) en 3/3, y la novedad tardía absoluta es ≈ 3× la de ap2-salto (1,2–1,4 frente a 0,5) y ≈ 8× la del nulo. La depredación mantiene más novedad en valor absoluto, aunque decae igual en proporción. Clados vivos ~110–130 (frente a ~72 sin ataque y ~343 en el nulo).
+- Siguiente: no un cuarto mundo al azar; implementar la medida sombra (Bedau-Packard con modelo nulo) y comprobar si ese resto es novedad adaptativa o saturación del archivo (el archivo crece 7–8 mil entradas). Script: `scripts/escalera/apertura3_regla.py`.

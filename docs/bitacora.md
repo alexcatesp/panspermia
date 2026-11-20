@@ -1988,3 +1988,7 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 ### 18:58 (19-11) · Apertura, parte 3: coevolución (prerregistro en `apertura.md`)
 
 - Lanzado 18:48: `scripts/escalera/apertura3.sh`, `ap3-ataque` (P4-salto64 + `attack_on=1`), semillas 30–32 × 2.000 épocas (~12 h en total). Regla: la de la parte 1 frente a los `ap2-P0` existentes. Marca `apertura3_hecho`. (El primer arranque se perdió por lanzar con `disown`; relanzado sin él.)
+
+### 08:55 (20-11) · Apertura, parte 3 terminada: depredación, sin apertura pero con más novedad absoluta
+
+- Cadena acabada a las 06:51 sin extinciones. T/E 0,13–0,28 (< 0,5): **no hay apertura por la regla.** Pero T = 1,21–1,40, > 2·P0 en 3/3 y ≈ 3× el mundo sin ataque: indicio de que la coevolución (depredación) sostiene más novedad en términos absolutos, sin sostenerla en proporción. Falta separar novedad adaptativa de saturación del archivo (modelo sombra).
