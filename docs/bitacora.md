@@ -2010,3 +2010,7 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 
 - `ap4-ataque-senal` × 3 semillas × 2.000 épocas, 09:48, sin incidencias. T = 3,46–5,54 (mediana 3,89 frente a 1,27 de ap3-ataque), T/E 0,13–0,25 < 0,5: **sin apertura** por la regla; **efecto secundario de las señales: sí (3/3)**. Datos en `runs/fase1d/ap4-ataque-senal`, análisis `scripts/escalera/apertura4_regla.py`.
 - Conclusión: más coevolución → más novedad absoluta, pero la caída relativa (T/E) persiste. Indicio, sin réplica. Siguiente: modelo sombra Bedau-Packard para separar adaptación de saturación del archivo.
+
+### 12:47 (21-11) · Réplica de la parte 4 lanzada (semillas 33–35)
+
+- GPU libre; se replica el indicio de las señales antes de usarlo (lección de la parte 2). `scripts/escalera/apertura4b.sh`, ~13 h, marca `apertura4b_hecho`; regla en `apertura.md`.

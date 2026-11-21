@@ -95,3 +95,7 @@ T (épocas 1501–2000) = 3,46 / 3,89 / 5,54; E = 27,4 / 15,5 / 30,4; T/E = 0,13
 - **Apertura: no** (T/E < 0,5 en 3/3; T sí > 2·P0 = 0,34 en 3/3).
 - **Las señales añaden novedad absoluta: sí** (mediana T 3,89 > 1,5·1,27 = 1,9 en 3/3; ×3,1 sobre ap3-ataque, ×≈ 20 sobre P0).
 - Cautela: el archivo llega a ~18.500 entradas; la novedad absoluta puede ser saturación. T/E sigue bajando. Pendiente: modelo sombra.
+
+### Réplica de la parte 4 (prerregistro, 21-11-2026, 12:55)
+
+`ap4-ataque-senal` con semillas 33–35 (`scripts/escalera/apertura4b.sh`, marca `apertura4b_hecho`). Regla: el efecto de las señales se confirma si mediana T(6 semillas) > 1,5·1,27 y T > 1,27 en ≥ 5/6; apertura solo si T/E ≥ 0,5 en todas. Sin reintentos ni cambios de umbrales.
