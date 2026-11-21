@@ -87,3 +87,11 @@ T de ap3-ataque, semillas 30–35: 1,34 · 1,40 · 1,21 · 1,35 · 0,68 · 0,81 
 **Motivo:** la depredación es lo único que movió la novedad tardía (×2,6, 6/6 semillas), sin llegar a apertura (T/E ≤ 0,28). Más coevolución con el mismo interruptor barato: señales entre bichos (`signal_on=1`), que abren un canal de interacción evolucionable.
 **Mundos (rama `escalera-p4`):** `ap4-ataque-senal` = `ap3-ataque` + `signal_on=1`; semillas 30–32 × 2.000 épocas (`scripts/escalera/apertura4.sh`, marca `apertura4_hecho`). (Un control P0 con depredación se descartó: sin metabolismo los ataques ya son selección.)
 **Regla:** abierto si T > 2·mediana T(ap2-P0) y T/E ≥ 0,5 en 3/3. Efecto secundario: la señal añade novedad si mediana T(ap4) > 1,5·mediana T(ap3-ataque, 6 semillas = 1,27) en ≥ 2/3. Extinción o pausa: se anota, sin reintento ni cambio de umbrales.
+
+### Resultado de la parte 4 (21-11-2026, 10:50)
+
+Cadena acabada a las 09:48 sin caídas ni extinciones (pob. final 3.189 en s32). `scripts/escalera/apertura4_regla.py`:
+T (épocas 1501–2000) = 3,46 / 3,89 / 5,54; E = 27,4 / 15,5 / 30,4; T/E = 0,13 / 0,25 / 0,18. clados vivos ≈ 107–131 (P0 ≈ 345).
+- **Apertura: no** (T/E < 0,5 en 3/3; T sí > 2·P0 = 0,34 en 3/3).
+- **Las señales añaden novedad absoluta: sí** (mediana T 3,89 > 1,5·1,27 = 1,9 en 3/3; ×3,1 sobre ap3-ataque, ×≈ 20 sobre P0).
+- Cautela: el archivo llega a ~18.500 entradas; la novedad absoluta puede ser saturación. T/E sigue bajando. Pendiente: modelo sombra.
