@@ -99,3 +99,7 @@ T (épocas 1501–2000) = 3,46 / 3,89 / 5,54; E = 27,4 / 15,5 / 30,4; T/E = 0,13
 ### Réplica de la parte 4 (prerregistro, 21-11-2026, 12:55)
 
 `ap4-ataque-senal` con semillas 33–35 (`scripts/escalera/apertura4b.sh`, marca `apertura4b_hecho`). Regla: el efecto de las señales se confirma si mediana T(6 semillas) > 1,5·1,27 y T > 1,27 en ≥ 5/6; apertura solo si T/E ≥ 0,5 en todas. Sin reintentos ni cambios de umbrales.
+
+### Resultado de la réplica de la parte 4 (22-11-2026, 04:50)
+
+Terminó a las 03:09 sin incidencias. T = 2,04 / 5,45 / 4,25; T/E = 0,09 / 0,17 / 0,15. Con las 6 semillas: T 2,04–5,54, mediana 4,07 > 1,9 y T > 1,27 en 6/6: **efecto de las señales confirmado**. Apertura: no (T/E ≤ 0,25 en 6/6).

@@ -1267,7 +1267,7 @@
      "estado": "indicio",
      "resultado": "◐",
      "anade": "a la depredación, señales entre bichos (signal_on=1): un canal de coevolución más",
-     "texto": "20–21-11-2026, ap4-ataque-senal × semillas 30–32 × 2.000 épocas. Sin apertura (T/E 0,13–0,25 < 0,5), pero la novedad tardía sube a mediana 3,89 (×3,1 sobre depredación sola, 3/3). Sin réplica; falta modelo sombra para separar adaptación de saturación del archivo (~18.500 entradas).",
+     "texto": "20–21-11-2026, ap4-ataque-senal × semillas 30–32 × 2.000 épocas. Sin apertura (T/E 0,13–0,25 < 0,5), pero la novedad tardía sube a mediana 3,89 (×3,1 sobre depredación sola, 3/3). Réplica (22-11, 6 semillas): confirmado, mediana T 4,07 en 6/6 (×3,2), T/E ≤ 0,25: sin apertura. Falta modelo sombra para separar adaptación de saturación del archivo (~18.500 entradas).",
      "ref": "docs/escalera/apertura.md",
      "recurso": "GPU",
      "principal": true,
