@@ -2023,3 +2023,7 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 ### 05:00 (22-11) · Apertura parte 5 lanzada: ap4 a 5.000 épocas (1 mundo)
 
 - GPU libre; se prerregistra en `apertura.md` y se lanza `apertura5.sh` (semilla 30, ~12–14 h) para ver si la caída de novedad relativa continúa o hay meseta.
+
+### 17:50 (22-11) · Apertura parte 5 terminada: la novedad decae despacio, sin apertura; la actividad BP queda plana
+
+- 1 mundo × 5.000 épocas: T5/T = 0,59, T5/E = 0,07. La novedad con cola larga (≈ 2 por época a las 4.500) no se extingue, pero no hay apertura. `bp_new_activity` ≈ 1,2–1,4 constante (sin sombra no se puede interpretar). Una sola semilla: indicio.

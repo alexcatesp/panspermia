@@ -859,3 +859,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Addenda ADR-036 (21-11, 10:50).** Parte 4 (depredación + señales, 3 semillas): sin apertura (T/E 0,13–0,25); la novedad absoluta tardía sube a mediana 3,89 (×3,1 sobre depredación sola, 3/3). Sin réplica todavía. Siguiente: modelo sombra (adaptativa o saturación del archivo).
 
 **Addenda ADR-036 (22-11, 04:50).** La réplica (semillas 33–35) confirma que las señales elevan la novedad tardía (mediana T 4,07 en 6/6 frente a 1,27), sin apertura (T/E ≤ 0,25). Más coevolución → más novedad absoluta, pero la caída relativa persiste. Siguiente: modelo sombra en CPU con los datos existentes.
+
+**Addenda ADR-036 (22-11, 17:50).** Parte 5 (depredación + señales, 5.000 épocas, 1 semilla): T5/T 0,59, T5/E 0,07: sin apertura; la novedad decae despacio y no llega a cero, y la actividad BP simplificada es plana. Siguiente: modelo sombra para decidir si esa cola es adaptativa.

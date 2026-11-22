@@ -108,3 +108,7 @@ Terminó a las 03:09 sin incidencias. T = 2,04 / 5,45 / 4,25; T/E = 0,09 / 0,17 
 
 **Motivo:** con depredación + señales, T/E ≤ 0,25 en 6/6 a 2.000 épocas, pero la novedad absoluta es alta. ¿Es una meseta o sigue cayendo? **Mundo:** `ap4-largo` = `ap4-ataque-senal`, semilla 30, 5.000 épocas (un solo mundo; `scripts/escalera/apertura5.sh`, marca `apertura5_hecho`).
 **Medida:** novedad media por época en 1501–2000 (T) y 4501–5000 (T5), y E (101–300). Lectura (descriptiva, no decide apertura): T5/T ≥ 0,8 → meseta; < 0,5 → sigue decayendo. Apertura solo si T5/E ≥ 0,5. Sin reintentos ni cambios de umbrales.
+
+### Resultado de la parte 5 (22-11-2026, 17:50)
+
+`ap4-largo` s30 terminó a las 17:12 (5.000 épocas, sin incidencias; `scripts/escalera/apertura5_regla.py`). Novedad media por época: E (101–300) 27,4; T (1501–2000) 3,46; T5 (4501–5000) 2,03. T5/T = 0,59 (entre meseta y caída: ni ≥ 0,8 ni < 0,5); **T5/E = 0,07: sin apertura**. Por tramos de 500 épocas: 24,4 · 7,8 · 4,0 · 3,5 · 3,4 · 2,5 · 2,2 · 2,0 · 1,6 · 2,0 (decae despacio, sin llegar a cero). La actividad BP simplificada (`bp_new_activity`) es casi plana, 1,1–1,5 en todo el recorrido.
