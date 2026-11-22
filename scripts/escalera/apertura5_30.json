@@ -1,0 +1,28 @@
+[
+ {
+  "name": "ap4-largo",
+  "node": "fase1d-w0",
+  "seeds": [
+   30
+  ],
+  "epochs": 5000,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "APERTURA4",
+  "description": "Apertura con coevolución y señales (ADR-036): P4-salto64 + depredación + signal_on",
+  "env": {
+   "attack_on": 1,
+   "chem_on": 0,
+   "signal_on": 1,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 1000,
+   "FOOD_JUMP_DIST": 64.0
+  }
+ }
+]

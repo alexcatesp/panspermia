@@ -2019,3 +2019,7 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 
 - Semillas 33–35: T 2,04–5,45, T/E 0,09–0,17. Con las 6: mediana T 4,07 frente a 1,27 de depredación sola (×3,2), 6/6 por encima. **Firme:** depredación + señales sostienen más novedad absoluta que depredación sola. **Sin apertura:** T/E ≤ 0,25 en 6/6.
 - Orden de novedad tardía: P0 ≪ salto estático ≈ 0,5 < depredación 1,27 < depredación + señales 4,07. Queda saber si es adaptativo o saturación del archivo (modelo sombra).
+
+### 05:00 (22-11) · Apertura parte 5 lanzada: ap4 a 5.000 épocas (1 mundo)
+
+- GPU libre; se prerregistra en `apertura.md` y se lanza `apertura5.sh` (semilla 30, ~12–14 h) para ver si la caída de novedad relativa continúa o hay meseta.

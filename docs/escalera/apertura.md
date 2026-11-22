@@ -103,3 +103,8 @@ T (épocas 1501–2000) = 3,46 / 3,89 / 5,54; E = 27,4 / 15,5 / 30,4; T/E = 0,13
 ### Resultado de la réplica de la parte 4 (22-11-2026, 04:50)
 
 Terminó a las 03:09 sin incidencias. T = 2,04 / 5,45 / 4,25; T/E = 0,09 / 0,17 / 0,15. Con las 6 semillas: T 2,04–5,54, mediana 4,07 > 1,9 y T > 1,27 en 6/6: **efecto de las señales confirmado**. Apertura: no (T/E ≤ 0,25 en 6/6).
+
+## Parte 5: ¿la caída relativa continúa? (prerregistro, 22-11-2026, 05:00)
+
+**Motivo:** con depredación + señales, T/E ≤ 0,25 en 6/6 a 2.000 épocas, pero la novedad absoluta es alta. ¿Es una meseta o sigue cayendo? **Mundo:** `ap4-largo` = `ap4-ataque-senal`, semilla 30, 5.000 épocas (un solo mundo; `scripts/escalera/apertura5.sh`, marca `apertura5_hecho`).
+**Medida:** novedad media por época en 1501–2000 (T) y 4501–5000 (T5), y E (101–300). Lectura (descriptiva, no decide apertura): T5/T ≥ 0,8 → meseta; < 0,5 → sigue decayendo. Apertura solo si T5/E ≥ 0,5. Sin reintentos ni cambios de umbrales.
