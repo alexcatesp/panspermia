@@ -120,3 +120,14 @@ Terminó a las 03:09 sin incidencias. T = 2,04 / 5,45 / 4,25; T/E = 0,09 / 0,17 
 ### Resultado de la parte 5b (24-11-2026, 22:51)
 
 `ap4-largo` s31 y s32 terminaron las 5.000 épocas sin extinción (`scripts/escalera/apertura5b_regla.py`). s32 se cortó por un apagón de luz en la época 4.740 (23-11, 18:06) y se reanudó desde su último checkpoint (24-11, 11:43–12:23); su `result.json` solo cuenta las horas del tramo reanudado. Con las 3 semillas: T5/T 0,59 · 0,38 · 0,35 (< 0,5 en 2/3: la novedad sigue decayendo; mediana 0,38); T5/E 0,07 · 0,10 · 0,06: **sin apertura en 3/3**. T5 absoluta 1,5–2,0 por época, sin llegar a cero. La cola decae, no hay meseta (solo s30 se acerca).
+
+## Parte 6: modelo sombra neutral (prerregistro, 24-11-2026, 23:50)
+
+**Pregunta (sí/no):** la novedad tardía de `ap4-largo` (T5 ≈ 1,5–2 por época), ¿es mayor que la que daría el mismo mundo sin selección, o es deriva y saturación del archivo?
+**Diseño:** se bifurca cada mundo (s30–s32) en la época 5000 con su archivo de novedad y su actividad, y se corren 500 épocas (hasta la 5500) de dos maneras desde el mismo checkpoint: `sombra-real` (la dinámica de siempre) y `sombra-neutral`. En la sombra (`config.NEUTRAL_MODE`, sustrato 2.10.1, apagado = idéntico bit a bit a 2.10.0, comprobado con `scripts/escalera/bitwise_hash.py`) la muerte y la reproducción no dependen del genoma ni de la energía: muerte al azar con riesgo por paso solo según la edad (menores de 200 pasos y adultos), padres al azar entre los adultos y población objetivo. Los riesgos y la población se calibran por semilla con la edad real del checkpoint (`scripts/escalera/sombra_calibra.py`): población 2.898 · 3.193 · 3.281; riesgo juvenil 0,0236 · 0,0230 · 0,0207; adulto 0,000185 · 0,000175 · 0,000289 (solo el 1–1,6 % de los nacidos llega a adulto, como en el mundo real). Colas `scripts/escalera/sombra_<semilla>.json`, cadena `sombra.sh`, marca `sombra_hecho`, log `runs/fase1d/sombra_mundos.log`. Cada época se vuelca también la población por clado (`clades.jsonl`).
+**Medida (solo observa):** R = media de `novelty_added` en 5001–5500 del real; S = ídem de la sombra, misma semilla. Actividad de Bedau-Packard por clado A_c = Σ población en 5001–5500; umbral = percentil 99 de A_c de la sombra de esa semilla; se cuentan los clados reales por encima.
+**Reglas (fijadas antes de lanzar):**
+- **Novedad adaptativa:** R/S ≥ 1,5 en 3/3 semillas.
+- **Deriva o saturación:** R/S ≤ 1,2 en al menos 2/3.
+- Cualquier otro caso: no concluyente. La actividad de Bedau-Packard (clados reales sobre el umbral de la sombra) es descriptiva, sin puerta.
+**Limitaciones:** la sombra neutral es un nulo entre varios posibles (sin selección también cambia la demografía: una cola larga de adultos); la novedad es una sola medida; 3 semillas. Sin reintentos ni cambios de umbrales.

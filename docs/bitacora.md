@@ -2036,3 +2036,10 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 
 - Un apagón cortó s32 en la época 4.740 (23-11, 18:06); reanudada desde el checkpoint (24-11, 11:43–12:23, `scripts/escalera/apertura5b_resume.sh`). La reanudación bit a bit no se ha verificado contra una ejecución sin corte.
 - Con 3 semillas × 5.000 épocas: T5/T 0,59 · 0,38 · 0,35; T5/E 0,07 · 0,10 · 0,06 (< 0,5 en 3/3). **Firme: sin apertura a 5.000 épocas**; indicio: la novedad sigue decayendo (T5/T < 0,5 en 2/3), no hay meseta. T5 ≈ 1,5–2,0 por época. Análisis: `scripts/escalera/apertura5b_regla.py`.
+
+### 23:40 (24-11) · Apertura, parte 6: modelo sombra neutral lanzado (ADR-036; prerregistro en `apertura.md`)
+
+- **Qué:** bifurcar `ap4-largo` s30–s32 en la época 5000 y correr 500 épocas con selección (`sombra-real`) y con muerte y reproducción independientes del genoma y la energía (`sombra-neutral`), desde el mismo checkpoint y archivo de novedad. Sustrato 2.10.1 (rama `apertura-sombra`, worktree `panspermia-sombra`, `a028586`): `config.NEUTRAL_MODE` apagado = idéntico bit a bit a 2.10.0 (hash `44ca9b4a…` en ambos con `scripts/escalera/bitwise_hash.py`); 3 tests nuevos en `tests/test_sombra.py`. Volcado de población por clado (`clades.jsonl`).
+- **Calibración** (`scripts/escalera/sombra_calibra.py`, del checkpoint 5000): solo el 1–1,6 % de los nacidos llega a adulto (riesgo juvenil 0,021–0,024 por paso, adulto 0,0002–0,0003); población 2.898 · 3.193 · 3.281. Con una sola tasa de muerte (primer borrador) quedaban casi sin adultos: descartada.
+- **Incidencia:** el primer arranque (23:32) falló por un salto de línea mal escapado en `run.py` (los tests no importaban ese módulo); arreglado y con test de importación. Sin datos perdidos.
+- **Lanzado 23:36:** `scripts/escalera/sombra.sh` (6 mundos × 500 épocas, ~8 s/época, ~7–8 h), marca `sombra_hecho`, logs `runs/fase1d/sombra_cadena.log` y `sombra_mundos.log`. Regla en `apertura.md` (R/S ≥ 1,5 en 3/3 → adaptativa; ≤ 1,2 en ≥ 2/3 → deriva o saturación).
