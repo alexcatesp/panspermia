@@ -116,3 +116,7 @@ Terminó a las 03:09 sin incidencias. T = 2,04 / 5,45 / 4,25; T/E = 0,09 / 0,17 
 ### Parte 5b: réplica de la cola larga (prerregistro, 22-11-2026, 18:55)
 
 `ap4-largo` con semillas 31 y 32 (`scripts/escalera/apertura5b.sh`, marca `apertura5b_hecho`), para saber si T5/T ≈ 0,59 y T5/E ≈ 0,07 se repiten. Misma lectura descriptiva; apertura solo si T5/E ≥ 0,5. Sin reintentos ni cambios de umbrales.
+
+### Resultado de la parte 5b (24-11-2026, 22:51)
+
+`ap4-largo` s31 y s32 terminaron las 5.000 épocas sin extinción (`scripts/escalera/apertura5b_regla.py`). s32 se cortó por un apagón de luz en la época 4.740 (23-11, 18:06) y se reanudó desde su último checkpoint (24-11, 11:43–12:23); su `result.json` solo cuenta las horas del tramo reanudado. Con las 3 semillas: T5/T 0,59 · 0,38 · 0,35 (< 0,5 en 2/3: la novedad sigue decayendo; mediana 0,38); T5/E 0,07 · 0,10 · 0,06: **sin apertura en 3/3**. T5 absoluta 1,5–2,0 por época, sin llegar a cero. La cola decae, no hay meseta (solo s30 se acerca).

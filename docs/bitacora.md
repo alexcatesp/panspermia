@@ -2031,3 +2031,8 @@ Ronda 1 a las 07:29–07:30; ronda 2 y cierre a las 07:31 (`docs/escalera/panel/
 ### 18:55 (22-11) · Parte 5b lanzada: cola larga con semillas 31 y 32
 
 - GPU libre; se replica la cola de 5.000 épocas (1 semilla = indicio) con dos semillas más, ~24–26 h en total. Regla en `apertura.md`.
+
+### 22:51 (24-11) · Parte 5b terminada: la cola larga se repite, decae sin apertura (apagón en s32)
+
+- Un apagón cortó s32 en la época 4.740 (23-11, 18:06); reanudada desde el checkpoint (24-11, 11:43–12:23, `scripts/escalera/apertura5b_resume.sh`). La reanudación bit a bit no se ha verificado contra una ejecución sin corte.
+- Con 3 semillas × 5.000 épocas: T5/T 0,59 · 0,38 · 0,35; T5/E 0,07 · 0,10 · 0,06 (< 0,5 en 3/3). **Firme: sin apertura a 5.000 épocas**; indicio: la novedad sigue decayendo (T5/T < 0,5 en 2/3), no hay meseta. T5 ≈ 1,5–2,0 por época. Análisis: `scripts/escalera/apertura5b_regla.py`.
