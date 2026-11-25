@@ -1267,7 +1267,7 @@
      "estado": "indicio",
      "resultado": "◐",
      "anade": "a la depredación, señales entre bichos (signal_on=1): un canal de coevolución más",
-     "texto": "20–21-11-2026, ap4-ataque-senal × semillas 30–32 × 2.000 épocas. Sin apertura (T/E 0,13–0,25 < 0,5), pero la novedad tardía sube a mediana 3,89 (×3,1 sobre depredación sola, 3/3). Réplica (22-11, 6 semillas): confirmado, mediana T 4,07 en 6/6 (×3,2), T/E ≤ 0,25: sin apertura. A 5.000 épocas (3 semillas, 24-11): T5/E 0,06–0,10 (sin apertura en 3/3), T5/T 0,35–0,59: decae sin meseta en 2/3. Modelo sombra neutral (bifurcación en la época 5000, 6 mundos × 500 épocas) terminado el 25-11 (07:01): R/S 0,05–0,08 en 3/3, deriva o saturación; la sombra sin selección da 13–22 veces más novedad que el mundo real (la selección la poda).",
+     "texto": "20–21-11-2026, ap4-ataque-senal × semillas 30–32 × 2.000 épocas. Sin apertura (T/E 0,13–0,25 < 0,5), pero la novedad tardía sube a mediana 3,89 (×3,1 sobre depredación sola, 3/3). Réplica (22-11, 6 semillas): confirmado, mediana T 4,07 en 6/6 (×3,2), T/E ≤ 0,25: sin apertura. A 5.000 épocas (3 semillas, 24-11): T5/E 0,06–0,10 (sin apertura en 3/3), T5/T 0,35–0,59: decae sin meseta en 2/3. Modelo sombra neutral (bifurcación en la época 5000, 6 mundos × 500 épocas) terminado el 25-11 (07:01): R/S 0,05–0,08 en 3/3, deriva o saturación; la sombra sin selección da 13–22 veces más novedad que el mundo real (la selección la poda). Siguientes (25-11): mundo rico ap6-rico (química + algas tóxicas) lanzado; medida genética exploratoria: el cambio genético apenas decae y con selección es mayor que sin ella (no separa adaptación de deriva neutral).",
      "ref": "docs/escalera/apertura.md",
      "recurso": "GPU",
      "principal": true,

@@ -135,3 +135,25 @@ Terminó a las 03:09 sin incidencias. T = 2,04 / 5,45 / 4,25; T/E = 0,09 / 0,17 
 ### Resultado de la parte 6 (25-11-2026, 07:26)
 
 R/S = 0,045 · 0,072 · 0,079 (R 1,34 · 1,27 · 1,40; S 29,97 · 17,58 · 17,70). Por la regla fijada de antemano: **deriva o saturación** (≤ 1,2 en 3/3). La sombra neutral genera 13–22 veces más novedad que el mundo con selección: la selección poda la novedad, no la crea. Clados reales sobre el p99 de la sombra: 153 · 163 · 138 (la propia sombra: 149 · 154 · 198), sin señal clara. Script `scripts/escalera/sombra_regla.py`; datos `runs/fase1d/_sombra_regla.json`. Limitaciones: un solo nulo, una sola medida, 3 semillas.
+
+## Parte 7: mundo rico (prerregistro, 25-11-2026)
+
+**Motivo:** la parte 6 mostró que la novedad que queda en `ap4-largo` es deriva filtrada por la selección (R/S 0,05–0,08). Primera de las dos vías abiertas: enriquecer el mundo (más retos a la vez), a ver si la presión sostenida abre la evolución.
+**Mundo:** `ap6-rico` = `ap4-ataque-senal` (P4-salto64 + depredación + señales) con **química** (`chem_on=1`: los bichos emiten y huelen sustancias) y **algas tóxicas** (`seasonal=1`: franjas de alga dañina que se mueven). Interruptores que ya existían; sin código nuevo (rama `escalera-p4`, sustrato 2.10.0; comparable con `ap4-ataque-senal`). Semillas 30–32, 2.000 épocas. Colas `scripts/escalera/apertura6_<semilla>.json`, cadena `apertura6.sh`, marca `apertura6_hecho`, log `runs/fase1d/apertura6_mundos.log`.
+**Medida (solo observa):** T/E como en las partes anteriores (`apertura6_regla.py`).
+**Reglas (fijadas antes de lanzar):**
+- **Abierto:** T/E ≥ 0,5 en 3/3 semillas.
+- **Sostiene más novedad que el mundo de la parte 4:** mediana T(rico) > 1,25 · mediana T(ap4-ataque-senal) y T(rico) > T(ap4) en 3/3 pares por semilla. Es descriptivo: con la parte 6 en la mano, más novedad absoluta no implica novedad adaptativa.
+- Una extinción se anota y no se reintenta. Sin cambios de umbral.
+**Limitaciones:** se añaden dos canales a la vez (no se separa cuál pesa); 3 semillas; la novedad es conductual y puede inflarse por deriva (parte 6).
+
+## Parte 8: novedad genética (exploratoria, 25-11-2026, 09:13)
+
+**Motivo:** la medida conductual (`novelty_added`, 8 descriptores de conducta) no distingue deriva de adaptación, y la parte 6 la dejó en «deriva o saturación». Segunda vía: medir el cambio **en los genomas** (CPU, solo observa; `scripts/escalera/geno_medida.py`, `geno_carga.py`). **Estado: exploratoria.** Se miró antes de fijar una regla, así que no tiene puerta; sirve para formular la regla de la réplica.
+**Medida:** de cada checkpoint, genomas de hasta 1.000 vivos (muestra fija por semilla) como vector [W enmascarada, sesgos, cuerpo, vida, nº de ocultas, nº de aristas], cada rasgo dividido por max(desv. típica de la población de referencia, 0,05); distancia = RMS. `desp` = distancia media al vecino más cercano de la población de referencia; `div` = ídem dentro de la misma población.
+**Resultado 1, real frente a sombra neutral desde la época 5000** (`_geno_sombra.json`; `desp` en la 5500, real · neutral): s30 2,52 · 1,77; s31 2,58 · 1,25; s32 2,17 · 1,96 (cociente 1,42 · 2,06 · 1,11). Al revés que la novedad conductual (R/S 0,05–0,08): con selección los genomas se alejan *más* de la población de partida que sin ella.
+**Resultado 2, ritmo de cambio de `ap4-largo`** (cada muestra frente a la de 300 épocas antes, `_geno_ritmo.json`): `desp` mediana 2,36 → 1,67 (s30), 1,56 → 1,59 (s31), 2,26 → 1,58 (s32), entre las épocas 200–1.700 y 3.500–5.000; pendiente −0,15 · +0,02 · −0,14 por 1.000 épocas. El cambio genético **no decae** como el conductual (que cae un 90 %).
+**Lectura:** los genomas siguen cambiando a ritmo casi constante, y más con selección, mientras la conducta ya no produce novedad. O bien hay adaptación que no se ve en los 8 descriptores, o bien deriva genética neutral en genes sin efecto conductual (el genoma tiene ~1.000 dimensiones, casi todas probablemente neutrales). **Esta medida no separa las dos:** mide cambio, no cambio adaptativo.
+**Siguiente (por decidir):** una regla prerregistrada que ligue cambio genético con efecto en la conducta (p. ej. repetir los genomas en un entorno fijo y comparar descriptores) o con aptitud relativa (trasplantar genomas de épocas distintas al mismo mundo).
+
+**Estado de la parte 7 (09:13, 25-11):** lanzada con la cadena `apertura6.sh` (log `runs/fase1d/apertura6_cadena.log`, ~3,4 s por época al principio; 3 mundos × 2.000 épocas). Regla de análisis: `scripts/escalera/apertura6_regla.py`.
