@@ -131,3 +131,7 @@ Terminó a las 03:09 sin incidencias. T = 2,04 / 5,45 / 4,25; T/E = 0,09 / 0,17 
 - **Deriva o saturación:** R/S ≤ 1,2 en al menos 2/3.
 - Cualquier otro caso: no concluyente. La actividad de Bedau-Packard (clados reales sobre el umbral de la sombra) es descriptiva, sin puerta.
 **Limitaciones:** la sombra neutral es un nulo entre varios posibles (sin selección también cambia la demografía: una cola larga de adultos); la novedad es una sola medida; 3 semillas. Sin reintentos ni cambios de umbrales.
+
+### Resultado de la parte 6 (25-11-2026, 07:26)
+
+R/S = 0,045 · 0,072 · 0,079 (R 1,34 · 1,27 · 1,40; S 29,97 · 17,58 · 17,70). Por la regla fijada de antemano: **deriva o saturación** (≤ 1,2 en 3/3). La sombra neutral genera 13–22 veces más novedad que el mundo con selección: la selección poda la novedad, no la crea. Clados reales sobre el p99 de la sombra: 153 · 163 · 138 (la propia sombra: 149 · 154 · 198), sin señal clara. Script `scripts/escalera/sombra_regla.py`; datos `runs/fase1d/_sombra_regla.json`. Limitaciones: un solo nulo, una sola medida, 3 semillas.

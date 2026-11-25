@@ -865,3 +865,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Addenda ADR-036 (24-11, 22:51).** Parte 5b (3 semillas × 5.000 épocas): T5/E 0,06–0,10, sin apertura en 3/3; T5/T 0,35–0,59: la novedad decae sin meseta en 2/3. s32 se reanudó tras un apagón. Siguiente: modelo sombra.
 
 **Addenda ADR-036 (24-11, 23:40).** Parte 6: modelo sombra neutral por bifurcación en la época 5000 (decisión del responsable entre tres diseños). Sustrato 2.10.1 con `NEUTRAL_MODE` (apagado = idéntico bit a bit). Prerregistro y reglas en `apertura.md`; 6 mundos × 500 épocas en marcha.
+
+**Addenda ADR-036 (25-11, 07:26).** Parte 6 (modelo sombra neutral): R/S 0,05–0,08 en 3/3 → «deriva o saturación» por la regla prerregistrada; el nulo sin selección da 13–22 veces más novedad, así que la cola de `ap4-largo` es deriva filtrada, no apertura. Siguiente (a decidir con el responsable): enriquecer el mundo o cambiar de medida.
