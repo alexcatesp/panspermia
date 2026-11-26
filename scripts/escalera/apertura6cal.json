@@ -1,0 +1,54 @@
+[
+ {
+  "name": "ap6-quimica",
+  "node": "fase1d-w0",
+  "seeds": [
+   30
+  ],
+  "epochs": 150,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "APERTURA6CAL",
+  "description": "Apertura, parte 7 (ADR-036): ap4 + qu\u00edmica (chem_on) + algas t\u00f3xicas (seasonal)",
+  "env": {
+   "attack_on": 1,
+   "chem_on": 1,
+   "signal_on": 1,
+   "seasonal": 0,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 1000,
+   "FOOD_JUMP_DIST": 64.0
+  }
+ },
+ {
+  "name": "ap6-toxica",
+  "node": "fase1d-w0",
+  "seeds": [
+   30
+  ],
+  "epochs": 150,
+  "n_max": 4096,
+  "n_init": 512,
+  "block": "APERTURA6CAL",
+  "description": "Apertura, parte 7 (ADR-036): ap4 + qu\u00edmica (chem_on) + algas t\u00f3xicas (seasonal)",
+  "env": {
+   "attack_on": 1,
+   "chem_on": 0,
+   "signal_on": 1,
+   "seasonal": 1,
+   "repro_mode": "energia",
+   "drift": 0.0,
+   "k_mean": 8.686
+  },
+  "config": {
+   "K_CUT": 1.5,
+   "FOOD_JUMP_PERIOD": 1000,
+   "FOOD_JUMP_DIST": 64.0
+  }
+ }
+]

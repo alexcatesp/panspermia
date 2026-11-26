@@ -157,3 +157,7 @@ R/S = 0,045 · 0,072 · 0,079 (R 1,34 · 1,27 · 1,40; S 29,97 · 17,58 · 17,70
 **Siguiente (por decidir):** una regla prerregistrada que ligue cambio genético con efecto en la conducta (p. ej. repetir los genomas en un entorno fijo y comparar descriptores) o con aptitud relativa (trasplantar genomas de épocas distintas al mismo mundo).
 
 **Estado de la parte 7 (09:13, 25-11):** lanzada con la cadena `apertura6.sh` (log `runs/fase1d/apertura6_cadena.log`, ~3,4 s por época al principio; 3 mundos × 2.000 épocas). Regla de análisis: `scripts/escalera/apertura6_regla.py`.
+
+### Resultado de la parte 7 y enmienda (26-11-2026, 22:25)
+
+`ap6-rico` **no es viable**: se extinguió en las épocas 24–25 en 3/3 semillas (la cadena terminó el 25-11 a las 09:22; no se vio hasta el 26-11 a las 22:00, con la GPU parada ~36 h). Por la regla, no se reintenta. **Decisión del responsable (26-11): un canal cada vez.** Calibración de 150 épocas (semilla 30, `apertura6cal.json`): `ap6-quimica` viable (1.811 bichos en la 150); `ap6-toxica` se extingue en la época 29 (**las algas tóxicas son lo que mata el mundo**; queda descartada en este mundo). **Parte 7b:** `ap6-quimica` = ap4 + `chem_on=1`, semillas 30–32 × 2.000 épocas, cadena `apertura6q.sh` (marca `apertura6q_hecho`, log `runs/fase1d/apertura6q_mundos.log`) desde las 22:25; mismas reglas que la parte 7, análisis `apertura6q_regla.py`.

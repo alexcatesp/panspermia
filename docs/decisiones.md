@@ -869,3 +869,5 @@ En el código, comer no cuesta energía ni tiempo, no excluye moverse y el alga 
 **Addenda ADR-036 (25-11, 07:26).** Parte 6 (modelo sombra neutral): R/S 0,05–0,08 en 3/3 → «deriva o saturación» por la regla prerregistrada; el nulo sin selección da 13–22 veces más novedad, así que la cola de `ap4-largo` es deriva filtrada, no apertura. Siguiente (a decidir con el responsable): enriquecer el mundo o cambiar de medida.
 
 **Addenda ADR-036 (25-11, 09:13).** Por indicación del responsable, se implementan las dos vías abiertas por la parte 6, en orden. Parte 7: mundo rico `ap6-rico` (+ química + algas tóxicas sobre ap4), lanzado, regla prerregistrada. Parte 8: medida genética exploratoria; el cambio genético no decae y con selección es mayor que sin ella, pero no separa adaptación de deriva neutral; se prerregistrará una regla para la réplica.
+
+**Addenda ADR-036 (26-11, 22:25).** Parte 7: `ap6-rico` se extingue en 3/3 (no se reintenta). Por decisión del responsable, un canal cada vez: la química sola es viable y se lanza (3 × 2.000 épocas); las algas tóxicas se extinguen en la calibración y se descartan en este mundo.
